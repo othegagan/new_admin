@@ -1,0 +1,73 @@
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import { AUTH_ROUTES, PAGE_ROUTES } from './constants/routes';
+import { auth } from './lib/auth';
+import { createRouterMatcher } from './lib/routeMatcher';
+
+const routeMatcher = createRouterMatcher([
+    { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
+    { matcher: AUTH_ROUTES.SIGN_IN, auth: false }
+]);
+
+export async function middleware(request: NextRequest) {
+    const session = await auth();
+    const { pathname } = request.nextUrl;
+
+    const isLoggedIn = !!session?.user;
+    const userRole = session?.userRole;
+
+    // Check for sign-in page access first
+    if (pathname === AUTH_ROUTES.SIGN_IN) {
+        if (isLoggedIn) {
+            const redirectedFrom = request.nextUrl.searchParams.get('redirectedFrom');
+            if (redirectedFrom !== 'home') {
+                const redirectUrl = new URL('/', request.url);
+                redirectUrl.searchParams.set('redirectedFrom', 'signin');
+                return NextResponse.redirect(redirectUrl);
+            }
+            return NextResponse.next();
+        }
+        return NextResponse.next();
+    }
+
+    const matchedRoute = routeMatcher(pathname);
+
+    if (!matchedRoute) {
+        // If no route matches, continue or handle as needed (e.g., redirect to 404)
+        return NextResponse.next();
+    }
+
+    if (matchedRoute.auth && !isLoggedIn) {
+        // Redirect unauthenticated users to sign-in
+        const callbackUrl = encodeURIComponent(pathname);
+        return NextResponse.redirect(new URL(`/sign-in?callbackUrl=${callbackUrl}`, request.url));
+    }
+
+    if (matchedRoute.role) {
+        const roles = Array.isArray(matchedRoute.role) ? matchedRoute.role : [matchedRoute.role];
+        if (userRole && !roles.includes(userRole)) {
+            // Redirect users without the required role
+            return NextResponse.redirect(new URL('/', request.url));
+        }
+    }
+
+    // Handle home redirection from sign-in
+    if (pathname === '/' && isLoggedIn) {
+        const redirectedFrom = request.nextUrl.searchParams.get('redirectedFrom');
+        if (redirectedFrom === 'signin') {
+            const cleanUrl = new URL('/', request.url);
+            return NextResponse.redirect(cleanUrl);
+        }
+    }
+
+    return NextResponse.next();
+}
+
+export const config = {
+    matcher: [
+        // Skip Next.js internals and all static files, unless found in search params
+        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        // Always run for API routes
+        '/(api|trpc)(.*)'
+    ]
+};

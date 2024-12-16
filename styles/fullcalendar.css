@@ -1,0 +1,49 @@
+/* Full Calendar Styling */
+
+.fc .fc-col-header-cell-cushion {
+    display: inline-block;
+    padding: 2px 4px;
+    font-size: 12px;
+    color: hsl(25 5.3% 44.7%) !important;
+}
+
+.fc .fc-scroller-liquid-absolute {
+    height: 350px !important;
+}
+
+.fc .fc-view-harness {
+    max-height: 350px !important;
+}
+
+.fc-day {
+    margin: 2rem;
+}
+
+.fc-scrollgrid-sync-table {
+    width: 100%;
+}
+
+.fc-h-event {
+    border: 0;
+    padding: 0 6px !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: transparent;
+}
+
+.fc-daygrid-day-number {
+    width: 100%;
+    padding: 0;
+}
+
+.fc-daygrid-day-top {
+    display: flex;
+    flex-direction: column;
+}
+
+.fc .fc-daygrid-day-number {
+    padding: 0px;
+    position: relative;
+    z-index: 4;
+}

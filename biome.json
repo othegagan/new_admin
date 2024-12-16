@@ -1,0 +1,109 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "files": {
+        "ignore": [".biome/cache", "next.config.js", "node_modules/*", "public/*", ".next/*", "next-env.d.ts"]
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "a11y": {
+                "all": true,
+                "noSvgWithoutTitle": "off",
+                "noPositiveTabindex": "off",
+                "useKeyWithClickEvents": "off"
+            },
+            "complexity": {
+                "all": true,
+                "noForEach": "off",
+                "useLiteralKeys": "info",
+                "noMultipleSpacesInRegularExpressionLiterals": "warn",
+                "useSimplifiedLogicExpression": "off",
+                "noExcessiveCognitiveComplexity": "off"
+            },
+            "correctness": {
+                "useExhaustiveDependencies": "off",
+                "noUnusedImports": "warn",
+                "noUnusedVariables": "warn",
+                "useHookAtTopLevel": "off",
+                "noUndeclaredVariables": "off"
+            },
+            "nursery": {
+                "useSortedClasses": {
+                    "level": "info",
+                    "fix": "safe",
+                    "options": {}
+                }
+            },
+            "security": {
+                "noDangerouslySetInnerHtmlWithChildren": "error"
+            },
+            "style": {
+                "useTemplate": "warn",
+                "useImportType": "warn",
+                "noUselessElse": "info",
+                "noNonNullAssertion": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "off",
+                "noDoubleEquals": "warn",
+                "noArrayIndexKey": "off",
+                "noConsoleLog": "warn",
+                "noEmptyBlockStatements": "info"
+            }
+        }
+    },
+    "formatter": {
+        "enabled": true,
+        "indentWidth": 4,
+        "indentStyle": "space",
+        "lineWidth": 120,
+        "lineEnding": "lf",
+        "attributePosition": "auto",
+        "formatWithErrors": false
+    },
+    "javascript": {
+        "formatter": {
+            "indentWidth": 4,
+            "indentStyle": "space",
+            "lineWidth": 140,
+            "lineEnding": "lf",
+            "arrowParentheses": "always",
+            "bracketSameLine": true,
+            "bracketSpacing": true,
+            "quoteStyle": "single",
+            "jsxQuoteStyle": "single",
+            "quoteProperties": "asNeeded",
+            "semicolons": "always",
+            "trailingCommas": "none"
+        }
+    },
+    "css": {
+        "formatter": {
+            "indentWidth": 4,
+            "indentStyle": "space",
+            "lineWidth": 160,
+            "quoteStyle": "single"
+        }
+    },
+    "json": {
+        "formatter": {
+            "trailingCommas": "none",
+            "indentStyle": "space",
+            "lineWidth": 160,
+            "lineEnding": "lf",
+            "indentWidth": 4
+        }
+    },
+    "overrides": [
+        {
+            "include": ["*.json"],
+            "formatter": {
+                "indentWidth": 4
+            }
+        }
+    ]
+}
