@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
     const session = await auth();
     const { pathname } = request.nextUrl;
 
-    const isLoggedIn = !!session?.user;
+    const isLoggedIn = session;
     const userRole = session?.userRole;
 
     // Check for sign-in page access first
@@ -40,21 +40,21 @@ export async function middleware(request: NextRequest) {
     if (matchedRoute.auth && !isLoggedIn) {
         // Redirect unauthenticated users to sign-in
         const callbackUrl = encodeURIComponent(pathname);
-        return NextResponse.redirect(new URL(`/sign-in?callbackUrl=${callbackUrl}`, request.url));
+        return NextResponse.redirect(new URL(`${AUTH_ROUTES.SIGN_IN}?callbackUrl=${callbackUrl}`, request.url));
     }
 
     if (matchedRoute.role) {
         const roles = Array.isArray(matchedRoute.role) ? matchedRoute.role : [matchedRoute.role];
         if (userRole && !roles.includes(userRole)) {
             // Redirect users without the required role
-            return NextResponse.redirect(new URL('/', request.url));
+            return NextResponse.redirect(new URL(PAGE_ROUTES.DASHBOARD, request.url));
         }
     }
 
     // Handle home redirection from sign-in
     if (pathname === '/' && isLoggedIn) {
         const redirectedFrom = request.nextUrl.searchParams.get('redirectedFrom');
-        if (redirectedFrom === 'signin') {
+        if (redirectedFrom === AUTH_ROUTES.SIGN_IN) {
             const cleanUrl = new URL('/', request.url);
             return NextResponse.redirect(cleanUrl);
         }

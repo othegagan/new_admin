@@ -6,5 +6,13 @@ export const AUTH_ROUTES = {
 
 export const PAGE_ROUTES = {
     DASHBOARD: '/',
-    MASTERS: '/masters'
+    PROFILE: '/profile',
+    TRIPS: '/trips',
+    VEHICLES: '/vehicles',
+    ADD_VEHICLE: '/add-vehicle',
+    CONFIGURATIONS: '/configurations',
+    HOSTS: '/hosts',
+    EMPLOYEES: '/employees',
+    GUESTS: '/guests',
+    FIND_MY_CAR: '/find-my-car'
 };

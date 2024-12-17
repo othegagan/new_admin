@@ -1,4 +1,3 @@
-import type { RouteConfig } from '@/types';
 import { parseZonedDateTime } from '@internationalized/date';
 import { type ClassValue, clsx } from 'clsx';
 import moment from 'moment-timezone';
@@ -22,6 +21,7 @@ export function roundToTwoDecimalPlaces(num: number) {
     try {
         return Number.parseFloat(num.toString()).toFixed(2);
     } catch (error) {
+        console.error('Error rounding to two decimal places:', error);
         return 0;
     }
 }
@@ -132,28 +132,4 @@ export function splitFormattedDateAndTime(input: string): React.ReactElement | s
         React.createElement('br'),
         React.createElement('span', null, timePart)
     );
-}
-
-export function createRouteMatcher(routes: RouteConfig[]) {
-    return (pathname: string, userPermissions: string[] = []) => {
-        for (const route of routes) {
-            let regex: RegExp;
-
-            if (typeof route.matcher === 'string') {
-                const pattern = route.matcher.replace(/:\w+/g, '[^/]+');
-                regex = new RegExp(`^${pattern}$`);
-            } else {
-                regex = route.matcher;
-            }
-
-            if (regex.test(pathname)) {
-                if (route.auth === false) return { requiresAuth: false };
-                if (route.permissions && !route.permissions.every((perm) => userPermissions.includes(perm))) {
-                    return { requiresAuth: true, hasPermission: false };
-                }
-                return { requiresAuth: true, hasPermission: true };
-            }
-        }
-        return { requiresAuth: true, hasPermission: true };
-    };
 }

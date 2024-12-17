@@ -8,15 +8,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useIsMobile } from '@/hooks/utils/use-mobile';
 import { cn } from '@/lib/utils';
+import { MenuIcon } from '@/public/icons';
 import { Slot } from '@radix-ui/react-slot';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { Menu } from 'lucide-react';
 import * as React from 'react';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = '16rem';
+const SIDEBAR_WIDTH = '14rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
@@ -154,7 +154,7 @@ const Sidebar = React.forwardRef<
         return (
             <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
                 <SheetContent
-                    aria-describedby='menu'
+                    aria-describedby='sidebar'
                     data-sidebar='sidebar'
                     data-mobile='true'
                     className='w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden'
@@ -232,7 +232,7 @@ const SidebarTrigger = React.forwardRef<React.ElementRef<typeof Button>, React.C
                     toggleSidebar();
                 }}
                 {...props}>
-                <Menu />
+                <MenuIcon />
                 <span className='sr-only'>Toggle Sidebar</span>
             </Button>
         );
@@ -383,7 +383,7 @@ const SidebarMenu = React.forwardRef<HTMLUListElement, React.ComponentProps<'ul'
 SidebarMenu.displayName = 'SidebarMenu';
 
 const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(({ className, ...props }, ref) => (
-    <li ref={ref} data-sidebar='menu-item' className={cn('group/menu-item relative', className)} {...props} />
+    <li ref={ref} data-sidebar='menu-item' className={cn('group/menu-item relative list-none', className)} {...props} />
 ));
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 

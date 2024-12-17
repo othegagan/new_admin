@@ -1,12 +1,11 @@
 'use client';
 
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { Cross2Icon } from '@radix-ui/react-icons';
 import { type VariantProps, cva } from 'class-variance-authority';
+import { X } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 const Sheet = SheetPrimitive.Root;
 
@@ -54,21 +53,11 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
     ({ side = 'right', className, children, ...props }, ref) => (
         <SheetPortal>
             <SheetOverlay />
-            <SheetPrimitive.Content
-                ref={ref}
-                className={cn(sheetVariants({ side }), className)}
-                aria-describedby='modal-description-id'
-                {...props}>
+            <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
                 <SheetPrimitive.Close className='absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary'>
-                    <Cross2Icon className='h-4 w-4' />
+                    <X className='h-4 w-4' />
                     <span className='sr-only'>Close</span>
                 </SheetPrimitive.Close>
-                <VisuallyHidden>
-                    <SheetHeader>
-                        <SheetTitle>Sidebar</SheetTitle>
-                        <SheetDescription>Sidebar</SheetDescription>
-                    </SheetHeader>
-                </VisuallyHidden>
                 {children}
             </SheetPrimitive.Content>
         </SheetPortal>
@@ -102,4 +91,4 @@ const SheetDescription = React.forwardRef<
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
-export { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger };
+export { Sheet, SheetPortal, SheetOverlay, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription };

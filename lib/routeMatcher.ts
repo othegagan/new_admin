@@ -9,7 +9,9 @@ type RouteConfig = {
 export function createRouterMatcher(routes: RouteConfig[]) {
     return (pathname: string): RouteConfig | null => {
         for (const route of routes) {
-            const match = typeof route.matcher === 'string' ? pathname === route.matcher : route.matcher.test(pathname);
+            const matcher = typeof route.matcher === 'string' ? route.matcher : route.matcher.source;
+            const regex = new RegExp(`^${matcher}`);
+            const match = regex.test(pathname);
 
             if (match) {
                 return route;

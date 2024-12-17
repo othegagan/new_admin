@@ -38,7 +38,7 @@ export const authConfig: NextAuthConfig = {
                         vehicleowner: true,
                         updateddate: '2023-03-01 12:00:00',
                         userimage: null,
-                        userRole: 'Driver',
+                        userRole: 'Host',
                         channelName: 'Bundee',
                         bundeeToken: '1234567890'
                     };
@@ -73,6 +73,17 @@ export const authConfig: NextAuthConfig = {
                 session = { ...session, ...token };
             }
             return session;
+        }
+    },
+    cookies: {
+        sessionToken: {
+            name: 'mybudee-host-session',
+            options: {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                path: '/'
+            }
         }
     }
 };
