@@ -94,7 +94,7 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                 <ul data-sidebar='menu' className='mb-3 flex w-full min-w-0 flex-col gap-1'>
                     <li data-sidebar='menu-item' className='group/menu-item relative'>
                         <div className=' flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left '>
-                            <Avatar className='relative flex h-8 w-8 shrink-0 overflow-hidden rounded-none '>
+                            <Avatar className='relative flex h-8 w-8 shrink-0 overflow-hidden rounded-md '>
                                 <AvatarImage src={session?.userimage || ''} alt={session?.name ?? ''} className='aspect-square' />
                                 <AvatarFallback className='rounded-lg uppercase'>{session?.name?.[0]}</AvatarFallback>
                             </Avatar>

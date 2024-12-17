@@ -10,11 +10,14 @@ declare module 'next-auth' {
         name: string;
         employee: boolean;
         vehicleowner: boolean;
+        mobilephone?: string;
         userimage: string | null;
         userRole: Role | null;
         channelName: string;
         bundeeToken: string;
         expires: string;
+        firstname?: string;
+        lastname?: string;
     }
 
     interface User {
@@ -23,10 +26,13 @@ declare module 'next-auth' {
         name: string;
         employee: boolean;
         vehicleowner: boolean;
+        mobilephone?: string;
         userimage: string | null;
         userRole: Role | null;
         channelName: string;
         bundeeToken: string;
+        firstname?: string;
+        lastname?: string;
     }
 
     interface JWT extends User {}

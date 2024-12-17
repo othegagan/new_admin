@@ -13,3 +13,13 @@ export interface NavItem {
     items?: NavItem[];
     roles?: Role[];
 }
+
+export interface CreateUserProps {
+    email: string;
+    firstName: string;
+    lastName: string;
+    mobilePhone: string;
+    channelName: string;
+    employee?: boolean;
+    hostId?: number | null;
+}

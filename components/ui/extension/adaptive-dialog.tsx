@@ -152,7 +152,7 @@ interface AdaptiveFooterProps {
 }
 
 function AdaptiveFooter({ children, className }: AdaptiveFooterProps) {
-    return <div className={cn('ml-auto grid grid-cols-2 gap-4', className)}>{children}</div>;
+    return <div className={cn('ml-auto flex-end gap-4', className)}>{children}</div>;
 }
 
 export { AdaptiveBody, AdaptiveDialog, AdaptiveFooter };

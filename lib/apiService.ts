@@ -95,61 +95,71 @@ class ApiService {
     private getErrorMessage(error: AxiosError): string {
         if (error.response) {
             // Server responded with an error status
-            switch (error.response.status) {
-                case 400:
-                    return 'Bad Request';
-                case 401:
-                    return 'Unauthorized';
-                case 403:
-                    return 'Forbidden';
-                case 404:
-                    return 'Not Found';
-                case 500:
-                    return 'Internal Server Error';
-                case 502:
-                    return 'Bad Gateway';
-                case 503:
-                    return 'Service Unavailable';
-                case 504:
-                    return 'Gateway Timeout';
-                default:
-                    return `Server Error: ${error.response.status}`;
-            }
+            const errorStatus = error.response.status;
+            const errorMessages: any = {
+                400: 'Bad Request',
+                401: 'Unauthorized',
+                403: 'Forbidden',
+                404: 'Not Found',
+                500: 'Internal Server Error',
+                502: 'Bad Gateway',
+                503: 'Service Unavailable',
+                504: 'Gateway Timeout'
+            };
+
+            return errorMessages[errorStatus] || `Server Error: ${errorStatus}`;
         }
         return 'Unknown error occurred';
     }
 
     private transformResponse(response: AxiosResponse): ApiResponse<any> {
         try {
-            // Check if response.data exists and is an object
             const data = response.data || {};
-
-            // Handle cases where codes might not exist
-            const codes = Array.isArray(data.codes) ? data.codes : [];
+            const codes = data.codes || [];
             const successCode = codes.find((code: any) => code.key === 'SUCCESS');
 
-            // Check for success conditions
-            const isSuccessful =
-                (successCode && successCode.key === 'SUCCESS') ||
-                data.errorCode === '0' ||
-                (response.status >= 200 && response.status < 300);
-
-            if (isSuccessful) {
+            // Case 1: Explicit success conditions
+            if (successCode && data.errorCode === '0') {
                 return {
                     success: true,
-                    data: data,
+                    data,
                     message: data.errorMessage || 'Success',
-                    errorCode: data.errorCode || response.status.toString()
+                    errorCode: data.errorCode
                 };
             }
-            const errorCodes = codes.map((code: any) => code.key).join(', ');
+
+            // Case 2: Explicit failure conditions with errorCode = 1
+            if (data.errorCode === '1') {
+                return {
+                    success: false,
+                    data: null,
+                    message: data.errorMessage || 'An error occurred',
+                    errorCode: data.errorCode
+                };
+            }
+
+            // Case 3: Handle errors based on `codes` array
+            if (codes.length > 0) {
+                // const errorCodes = codes.map((code: any) => code.key).join(', ');
+                const errorMessage = codes.map((code: any) => code.message).join('; ');
+
+                return {
+                    success: false,
+                    data: null,
+                    message: `${errorMessage}`,
+                    errorCode: codes[0]?.key || 'UNKNOWN_ERROR'
+                };
+            }
+
+            // Case 4: Fallback for unknown errors
             return {
                 success: false,
                 data: null,
-                message: data.errorMessage || (errorCodes ? `Error: ${errorCodes}` : 'Unknown error occurred'),
-                errorCode: data.errorCode || response.status.toString()
+                message: 'An unknown error occurred',
+                errorCode: 'UNKNOWN_ERROR'
             };
         } catch (error: any) {
+            // Unexpected error handling
             return {
                 success: false,
                 data: null,

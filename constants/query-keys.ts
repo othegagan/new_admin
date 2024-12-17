@@ -1,7 +1,21 @@
 export const QUERY_KEYS = {
-    MENUS: 'menus',
-    PAGES: 'pages',
-    MENU_DROPDOWN: 'menu_dropdown',
-    PAGE_DROPDOWN: 'page_dropdown',
-    MENU_PAGE_MAPPING: 'menu_page_mapping'
+    allTripsOfHost: 'allTripsOfHost',
+    bookingDetails: 'bookingDetails',
+    allMasterHostCheckList: 'allMasterHostCheckList',
+    allChannels: 'allChannels',
+    chatHistory: 'chatHistory',
+    allDriversOfHost: 'allDriversOfHost',
+    driverRentalHistory: 'driverRentalHistory',
+    driverLicenseDetails: 'driverLicenseDetails',
+    hostConstraints: 'hostConstraints',
+    allHosts: 'allHosts',
+    allEmployees: 'allEmployees',
+    allNotifications: 'allNotifications',
+    telematicsDataByVehicleId: 'telematicsDataByVehicleId',
+    telematicsEventsOfTripById: 'telematicsEventsOfTripById',
+    allVechiclesUnderHost: 'allVechiclesUnderHost',
+    vehiclesByVin: 'vehiclesByVin',
+    vehicleFeaturesById: 'vehicleFeaturesById',
+    vehicleUpdateLogsById: 'vehicleUpdateLogsById',
+    vehicleTripById: 'vehicleTripById'
 };
