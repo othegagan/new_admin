@@ -8,10 +8,8 @@ declare module 'next-auth' {
         email: string;
         iduser: number;
         name: string;
-        isactive: boolean;
         employee: boolean;
         vehicleowner: boolean;
-        updateddate: string;
         userimage: string | null;
         userRole: Role | null;
         channelName: string;
@@ -23,10 +21,8 @@ declare module 'next-auth' {
         email: string;
         iduser: number;
         name: string;
-        isactive: boolean;
         employee: boolean;
         vehicleowner: boolean;
-        updateddate: string;
         userimage: string | null;
         userRole: Role | null;
         channelName: string;

@@ -46,19 +46,34 @@ export default function SigninForm() {
                 const email = values.email as string;
                 const password = values.password as string;
 
+                // Firebase Authentication
                 const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
                 const firebaseToken = await userCredential.user.getIdToken();
 
                 const loginValues = { ...values, firebaseToken };
 
+                // Custom backend login
                 const result = await login({ values: loginValues, callbackUrl: callbackUrl });
                 if (result?.error) {
                     reset({ password: '' });
                     setError('root', { type: 'custom', message: result.error });
                 }
-            } catch (error) {
+            } catch (error: any) {
                 reset({ password: '' });
-                handleAuthError(error as AuthError);
+
+                if (error?.code) {
+                    // Handle Firebase specific errors
+                    handleAuthError(error as AuthError);
+                } else if (error.message?.includes('NEXT_REDIRECT') || error.status === 303) {
+                    // Handle Redirect Errors (303 status or NEXT_REDIRECT)
+                    // console.warn('Redirection error encountered:', error);
+                } else {
+                    // Handle Generic Errors
+                    setError('root', {
+                        type: 'custom',
+                        message: 'Something went wrong. Please try again later.'
+                    });
+                }
             }
         });
     };

@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import { auth, signOut } from '@/lib/auth';
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
@@ -30,9 +31,7 @@ class ApiService {
             async (config) => {
                 try {
                     const session = await auth();
-                    if (session?.bundeeToken) {
-                        config.headers.bundee_auth_token = session.bundeeToken;
-                    }
+                    config.headers.bundee_auth_token = session?.bundeeToken || env.NEXT_PUBLIC_FALLBACK_BUNDEE_AUTH_TOKEN;
                     return config;
                 } catch (error) {
                     console.error('Error in request interceptor:', error);

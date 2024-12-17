@@ -2,7 +2,6 @@ import { AppHeader } from '@/components/layout/app-header';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { UserNav } from '@/components/layout/user-nav';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import ThemeToggleSwitch from '@/components/ui/theme-toggle';
 import { getNavItems } from '@/constants';
 import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
@@ -27,7 +26,6 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                     'flex h-svh flex-col'
                 )}>
                 <AppHeader sticky>
-                    <ThemeToggleSwitch />
                     <div className='ml-auto flex items-center space-x-4'>
                         <UserNav session={session} />
                     </div>

@@ -133,3 +133,29 @@ export function splitFormattedDateAndTime(input: string): React.ReactElement | s
         React.createElement('span', null, timePart)
     );
 }
+
+/**
+ * Function to check if a string is a URL or a Base64 string
+ * @param str - The input string to validate
+ * @returns { 'url' | 'base64' | 'invalid' } - Returns 'url', 'base64', or 'invalid'
+ */
+export function checkStringType(str: string): 'url' | 'base64' | 'invalid' {
+    // Regular expression to validate URLs
+    const urlPattern = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-./?%&=]*)?$/i;
+
+    // Regular expression to validate Base64 strings
+    const base64Pattern = /^(data:(?:[a-z]+\/[a-z0-9.-]+)?;base64,)?[A-Za-z0-9+/]+={0,2}$/;
+
+    // Check if the string is a valid URL
+    if (urlPattern.test(str)) {
+        return 'url';
+    }
+
+    // Check if the string is a valid Base64 string
+    if (base64Pattern.test(str)) {
+        return 'base64';
+    }
+
+    // Return 'invalid' if neither condition is met
+    return 'invalid';
+}
