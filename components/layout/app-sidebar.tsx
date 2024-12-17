@@ -25,7 +25,6 @@ import type { NavItem } from '@/types';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { ChevronRight } from 'lucide-react';
 import type { Session } from 'next-auth';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type * as React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -67,7 +66,7 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                                             {item.items.map((subItem) => (
                                                 <SidebarMenuItem key={subItem.title}>
                                                     <SidebarMenuButton asChild isActive={isActive(subItem.href || '')}>
-                                                        <Link href={subItem.href || '#'}>{subItem.title}</Link>
+                                                        <a href={subItem.href || '#'}>{subItem.title}</a>
                                                     </SidebarMenuButton>
                                                 </SidebarMenuItem>
                                             ))}
@@ -80,7 +79,7 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                         <SidebarMenuItem key={item.title} className='px-2'>
                             <SidebarMenuButton asChild className='px-2' isActive={isActive(item.href || '')}>
                                 <div className='flex items-center gap-3'>
-                                    {item.icon} <Link href={item.href || '#'}>{item.title}</Link>
+                                    {item.icon} <a href={item.href || '#'}>{item.title}</a>
                                 </div>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

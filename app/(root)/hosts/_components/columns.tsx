@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown } from 'lucide-react';
 import type { User } from 'next-auth';
-import DisableEmployeeForm from './DisableEmployeeForm';
-import UpdateEmployeeForm from './UpdateEmployeeForm';
+import DisableHostForm from './DisableHostForm';
+import UpdateHostForm from './UpdateHostForm';
 
 export const columns: ColumnDef<User>[] = [
     {
@@ -42,7 +42,7 @@ export const columns: ColumnDef<User>[] = [
     },
 
     {
-        accessorFn: (row) => `${row.firstname} ${row.lastname}`.trim(),
+        accessorFn: (row) => `${row.firstname || ''} ${row.lastname || ''}`.trim(),
         id: 'fullName',
         header: ({ column }) => (
             <div className='flex-center py-1'>
@@ -127,8 +127,8 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ cell }: { cell: any }) => {
             return (
                 <div className='flex-start gap-2'>
-                    <UpdateEmployeeForm cell={cell} />
-                    <DisableEmployeeForm cell={cell} />
+                    <UpdateHostForm cell={cell} />
+                    <DisableHostForm cell={cell} />
                 </div>
             );
         }

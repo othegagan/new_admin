@@ -27,11 +27,11 @@ const buttonVariants = cva(
                 black: 'bg-black text-white shadow-sm hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-900'
             },
             size: {
-                default: 'h-9 px-4 py-2',
+                default: 'h-9 px-4 py-2 w-full',
                 xs: 'h-6 px-2 py-1 text-[10px]',
                 sm: 'h-8 rounded-md px-3 text-xs',
                 lg: 'h-10 rounded-md px-8',
-                icon: 'h-8 w-8'
+                icon: 'h-8 w-8 w-full'
             },
             shape: {
                 default: '',

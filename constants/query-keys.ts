@@ -5,7 +5,7 @@ export const QUERY_KEYS = {
     allChannels: 'allChannels',
     chatHistory: 'chatHistory',
     allDriversOfHost: 'allDriversOfHost',
-    driverRentalHistory: 'driverRentalHistory',
+    guestsRentalHistory: 'guestsRentalHistory',
     driverLicenseDetails: 'driverLicenseDetails',
     hostConstraints: 'hostConstraints',
     allHosts: 'allHosts',
