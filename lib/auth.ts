@@ -87,6 +87,7 @@ export const authConfig: NextAuthConfig = {
                 token.userimage = user.userimage;
                 token.userRole = user.userRole;
                 token.channelName = user.channelName;
+                token.bundeeToken = user.bundeeToken;
             }
             if (trigger === 'update' && session) {
                 token = { ...token, ...session };

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
@@ -44,11 +43,9 @@ export function UserNav({ session }: { session: Session | null }) {
 
                 <DropdownMenuItem>Profile</DropdownMenuItem>
 
-                <DropdownMenuGroup>
-                    <DropdownMenuItem className='flex-between gap-2'>
-                        Theme <ThemeToggleSwitch />
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
+                <DropdownMenuItem className='flex-between gap-2 text-accent-foreground'>
+                    Theme <ThemeToggleSwitch />
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <SignOut />
             </DropdownMenuContent>
@@ -56,7 +53,7 @@ export function UserNav({ session }: { session: Session | null }) {
     );
 }
 
-function SignOut() {
+export function SignOut() {
     const [isSigningOut, setIsSigningOut] = useState(false);
 
     const handleSignOut = async () => {

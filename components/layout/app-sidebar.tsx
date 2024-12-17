@@ -2,8 +2,16 @@
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -14,26 +22,33 @@ import {
     SidebarRail
 } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
+import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { ChevronRight } from 'lucide-react';
+import type { Session } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type * as React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Button } from '../ui/button';
+import ThemeToggleSwitch from '../ui/theme-toggle';
 import Logo from './logo';
+import { SignOut } from './user-nav';
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
     navItems: NavItem[];
+    session: Session | null;
 }
 
-export function AppSidebar({ navItems, ...props }: AppSidebarProps) {
+export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
     const pathname = usePathname();
 
     const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
     return (
         <Sidebar {...props}>
-            <SidebarHeader>
+            <SidebarHeader className='mt-4'>
                 <Logo />
             </SidebarHeader>
-            <SidebarContent className='my-4 flex flex-col gap-2'>
+            <SidebarContent className='my-4 flex flex-col gap-4'>
                 {navItems.map((item) =>
                     item.items && item.items.length > 0 ? (
                         <Collapsible key={item.title} title={item.title} defaultOpen className='group/collapsible'>
@@ -64,7 +79,7 @@ export function AppSidebar({ navItems, ...props }: AppSidebarProps) {
                     ) : (
                         <SidebarMenuItem key={item.title} className='px-2'>
                             <SidebarMenuButton asChild className='px-2' isActive={isActive(item.href || '')}>
-                                <div className='flex items-center gap-2'>
+                                <div className='flex items-center gap-3'>
                                     {item.icon} <Link href={item.href || '#'}>{item.title}</Link>
                                 </div>
                             </SidebarMenuButton>
@@ -72,6 +87,38 @@ export function AppSidebar({ navItems, ...props }: AppSidebarProps) {
                     )
                 )}
             </SidebarContent>
+            <SidebarFooter>
+                <div className='mx-auto mb-4 flex-center gap-5'>
+                    <span className='text-md text-muted-foreground'>Theme</span> <ThemeToggleSwitch />
+                </div>
+                <ul data-sidebar='menu' className='mb-3 flex w-full min-w-0 flex-col gap-1'>
+                    <li data-sidebar='menu-item' className='group/menu-item relative'>
+                        <div className=' flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left '>
+                            <Avatar className='relative flex h-8 w-8 shrink-0 overflow-hidden rounded-none '>
+                                <AvatarImage src={session?.userimage || ''} alt={session?.name ?? ''} className='aspect-square' />
+                                <AvatarFallback className='rounded-lg uppercase'>{session?.name?.[0]}</AvatarFallback>
+                            </Avatar>
+                            <div className='grid flex-1 text-left text-sm leading-tight'>
+                                <span className='truncate font-semibold'>{session?.name}</span>
+                                <span className='truncate text-xs'>{session?.email}</span>
+                            </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant='ghost' size='icon'>
+                                        <DotsVerticalIcon />
+                                        <span className='sr-only'>Toggle user menu</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align='end'>
+                                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <SignOut />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </li>
+                </ul>
+            </SidebarFooter>
             <SidebarRail />
         </Sidebar>
     );
