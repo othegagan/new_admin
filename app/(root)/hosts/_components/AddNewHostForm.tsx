@@ -133,20 +133,17 @@ export default function AddNewHostForm() {
                                     control={control}
                                     name='channelName'
                                     defaultValue='Bundee'
-                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
-                                        <>
-                                            <Select onValueChange={onChange} value={value} defaultValue={value}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder='Select channel' />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value='Bundee'>Bundee</SelectItem>
-                                                    <SelectItem value='Flux'>Flux</SelectItem>
-                                                    <SelectItem value='Turo'>Turo</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            {error}
-                                        </>
+                                    render={({ field: { onChange, value } }) => (
+                                        <Select onValueChange={onChange} value={value} defaultValue={value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder='Select channel' />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value='Bundee'>Bundee</SelectItem>
+                                                <SelectItem value='Flux'>Flux</SelectItem>
+                                                <SelectItem value='Turo'>Turo</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     )}
                                 />
                                 <FormError>{errors.channelName?.message}</FormError>

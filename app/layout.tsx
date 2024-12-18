@@ -33,7 +33,7 @@ interface RootLayoutProps {
 export default async function RootLayout({ children }: Readonly<RootLayoutProps>) {
     const session = await auth();
     return (
-        <html lang='en' suppressHydrationWarning={true}>
+        <html lang='en' suppressHydrationWarning>
             <body className={cn('min-w-[360px] bg-background font-sans antialiased', geistSans.variable, geistMono.variable)}>
                 <Providers session={session}>{children}</Providers>
                 <Toaster position='bottom-right' closeButton={true} duration={3000} richColors className={`${geistSans.className}`} />
