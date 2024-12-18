@@ -5,7 +5,6 @@ import { UserNav } from '@/components/layout/user-nav';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { getNavItems } from '@/constants';
 import { auth } from '@/lib/auth';
-import { cn } from '@/lib/utils';
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -17,15 +16,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     return (
         <SidebarProvider>
             <AppSidebar navItems={navItems} session={session} />
-            <div
-                id='content'
-                className={cn(
-                    'ml-auto w-full max-w-full',
-                    'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon))]',
-                    'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
-                    'transition-[width] duration-200 ease-linear',
-                    'flex h-svh flex-col'
-                )}>
+            <div id='content' className='ml-auto flex h-svh w-full max-w-full flex-col'>
                 <AppHeader sticky>
                     <Logo className='md:hidden' />
                     <div className='ml-auto flex items-center space-x-4'>
