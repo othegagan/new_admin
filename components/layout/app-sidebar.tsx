@@ -56,7 +56,7 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                                     asChild
                                     className='group/label text-sidebar-foreground text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'>
                                     <CollapsibleTrigger>
-                                        {item.title}{' '}
+                                        {item.title}
                                         <ChevronRight className='ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90' />
                                     </CollapsibleTrigger>
                                 </SidebarGroupLabel>
@@ -66,7 +66,9 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                                             {item.items.map((subItem) => (
                                                 <SidebarMenuItem key={subItem.title}>
                                                     <SidebarMenuButton asChild isActive={isActive(subItem.href || '')}>
-                                                        <a href={subItem.href || '#'}>{subItem.title}</a>
+                                                        <a href={item.href || '#'} className='flex items-center gap-3'>
+                                                            {item.icon} {item.title}
+                                                        </a>
                                                     </SidebarMenuButton>
                                                 </SidebarMenuItem>
                                             ))}
@@ -78,9 +80,9 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                     ) : (
                         <SidebarMenuItem key={item.title} className='px-2'>
                             <SidebarMenuButton asChild className='px-2' isActive={isActive(item.href || '')}>
-                                <div className='flex items-center gap-3'>
-                                    {item.icon} <a href={item.href || '#'}>{item.title}</a>
-                                </div>
+                                <a href={item.href || '#'} className='flex items-center gap-3'>
+                                    {item.icon} {item.title}
+                                </a>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     )

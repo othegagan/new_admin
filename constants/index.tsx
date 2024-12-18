@@ -1,5 +1,6 @@
-import { ConfigurationsIcon, EmployeesIcon, FindMyCarIcon, GuestsIcon, HomeIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
+import { EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
 import type { NavItem, Role } from '@/types';
+import { LucideHome, UserCog } from 'lucide-react';
 import { PAGE_ROUTES } from './routes';
 
 export const ROLES = {
@@ -25,7 +26,7 @@ const navItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: PAGE_ROUTES.DASHBOARD,
-        icon: <HomeIcon />,
+        icon: <LucideHome />,
         roles: [ROLES.EMPLOYEE, ROLES.HOST]
     },
     {
@@ -67,7 +68,7 @@ const navItems: NavItem[] = [
     {
         title: 'Configurations',
         href: PAGE_ROUTES.CONFIGURATIONS,
-        icon: <ConfigurationsIcon />,
+        icon: <UserCog />,
         roles: [ROLES.EMPLOYEE, ROLES.HOST]
     }
 ];
