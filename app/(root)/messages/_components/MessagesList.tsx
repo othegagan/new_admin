@@ -3,8 +3,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { SearchInput } from '@/components/ui/search-input';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { useAllNotifications, useMarkMessageNotificationAsRead } from '@/hooks/useNotifications';
-import { cn, toTitleCase } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import Fuse from 'fuse.js';
 import { usePathname, useRouter } from 'next/navigation';
@@ -12,12 +13,12 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 
 export default function MessagesList() {
     const pathname = usePathname();
-    const showMobileDetail = pathname !== '/messages';
+    const showMobileDetail = pathname !== PAGE_ROUTES.MESSAGES;
 
     const { data: response, isLoading: loading, error } = useAllNotifications();
     const messageNotificationsData = response?.data?.messageNotifications || [];
 
-    if (loading) return <div className='block md:w-1/3 lg:w-1/4'>Loading...</div>;
+    if (loading) return <div className='block'>Loading...</div>;
 
     if (error) return <div>Error: {error.message}</div>;
 
@@ -28,11 +29,7 @@ export default function MessagesList() {
     );
 
     return (
-        <div className={`flex w-full flex-col md:w-1/3 lg:w-1/4 ${showMobileDetail ? 'hidden border-r lg:block' : 'block'}`}>
-            {/* Header */}
-            <div className='-mx-4 z-10 bg-background sm:z-auto sm:mx-0 sm:p-0 sm:shadow-none'>
-                <h3>Messages</h3>
-            </div>
+        <div className={`h-full w-full flex-none sm:w-56 lg:w-72 2xl:w-80 ${showMobileDetail ? 'hidden sm:block' : 'block'}`}>
             <FilterMessageList messageNotificatonsData={modifiedMessageNotificationsData} />
         </div>
     );
@@ -96,7 +93,7 @@ function FilterMessageList({
         const filtered = searchTerm
             ? fuse
                   .search(searchTerm)
-                  .map((result) => result.item) // Fuzzy search with Fuse.js
+                  .map((result: any) => result.item) // Fuzzy search with Fuse.js
             : messageNotificatonsData;
 
         setFilteredMessageNotificationsData(filtered);
@@ -112,30 +109,30 @@ function FilterMessageList({
 
     return (
         <>
-            {/* Search bar */}
-            <div className='p-3 pl-0'>
-                <SearchInput
-                    placeholder='Search by guest name, vehicle, trip ID'
-                    className='w-full'
-                    value={searchTerm}
-                    onChange={setSearchTerm}
-                />
+            {/* Header */}
+            <div className='-mx-4 sticky top-0 z-10 bg-background px-4 pb-3 shadow-md sm:static sm:z-auto sm:mx-0 sm:p-0 sm:shadow-none'>
+                <h3>Messages</h3>
+                {/* Search bar */}
+                <div className='p-3 pl-0'>
+                    <SearchInput
+                        placeholder='Search by guest name, vehicle, trip ID'
+                        className='w-full'
+                        value={searchTerm}
+                        onChange={setSearchTerm}
+                    />
+                </div>
             </div>
 
             {/* Conversation list */}
-            <div dir='ltr' className='-mx-3 relative h-full overflow-x-hidden p-3'>
-                <div className='h-full w-full rounded-[inherit]' style={{ overflow: 'hidden scroll' }}>
-                    <div ref={messageListRef} style={{ minWidth: '100%', display: 'table' }}>
-                        {filteredMessageNotificationsData.map((notification: any) => (
-                            <MessageItem
-                                key={notification.id}
-                                data={notification}
-                                isSelected={notification.tripId.toString() === selectedTripId}
-                                ref={notification.tripId.toString() === selectedTripId ? selectedMessageRef : null}
-                            />
-                        ))}
-                    </div>
-                </div>
+            <div ref={messageListRef} className='h-[calc(100svh-200px)] overflow-y-auto overflow-x-hidden pt-2 '>
+                {filteredMessageNotificationsData.map((notification: any) => (
+                    <MessageItem
+                        key={notification.id}
+                        data={notification}
+                        isSelected={notification.tripId.toString() === selectedTripId}
+                        ref={notification.tripId.toString() === selectedTripId ? selectedMessageRef : null}
+                    />
+                ))}
             </div>
         </>
     );
@@ -145,7 +142,7 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
     const router = useRouter();
     const { tripId, message, isViewed, createdDate } = data;
 
-    const vehicleName = toTitleCase(`${data.branchResponses[0]?.make} ${data.branchResponses[0]?.model} ${data.branchResponses[0]?.year}`);
+    // const vehicleName = toTitleCase(`${data.branchResponses[0]?.make} ${data.branchResponses[0]?.model} ${data.branchResponses[0]?.year}`);
     const plate = `${data.branchResponses[0]?.vehicleNumber}`;
     const driverName = `${data.userResponses[0]?.firstname} ${data.userResponses[0]?.lastname}`;
     const driverImage = `${data.userResponses[0]?.userimage}`;
@@ -172,7 +169,7 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
             ref={ref}
             className={cn(
                 'block w-full cursor-pointer border-b py-4 hover:bg-muted',
-                isSelected ? 'rounded-md border border-primary bg-muted px-3' : ''
+                isSelected ? 'border border-primary bg-muted px-3 hover:rounded-md' : ''
             )}>
             <div className='flex items-center space-x-2'>
                 <div className='relative'>
@@ -188,16 +185,15 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
 
                 <div>
                     <h3 className='max-w-[280px] truncate text-left font-semibold text-lg'>{driverName}</h3>
-                    <p className='max-w-[280px] truncate text-left text-muted-foreground text-sm'>
-                        {plate} • {vehicleName}
-                    </p>
+                    <p className='max-w-[280px] truncate text-left text-muted-foreground text-sm'>{message}</p>
                 </div>
             </div>
             <div className='mt-2.5 flex w-full items-center justify-between space-x-2 pr-3'>
-                <Badge variant='secondary'>Trip: {tripId}</Badge>
+                <Badge variant='secondary'>
+                    Trip: {tripId} - {plate}
+                </Badge>
                 <span className='text-muted-foreground text-sm'>{notificationDate}</span>
             </div>
-            <div className='mt-1 max-w-[250px] truncate text-left text-muted-foreground text-sm'>{message}</div>
         </div>
     );
 });

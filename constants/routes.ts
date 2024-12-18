@@ -14,5 +14,6 @@ export const PAGE_ROUTES = {
     HOSTS: '/hosts',
     EMPLOYEES: '/employees',
     GUESTS: '/guests',
-    FIND_MY_CAR: '/find-my-car'
+    FIND_MY_CAR: '/find-my-car',
+    MESSAGES: '/messages'
 };
