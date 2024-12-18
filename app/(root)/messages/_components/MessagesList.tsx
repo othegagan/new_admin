@@ -168,8 +168,8 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
             onClick={handleLinkClick}
             ref={ref}
             className={cn(
-                'block w-full cursor-pointer border-b py-4 hover:bg-muted',
-                isSelected ? 'border border-primary bg-muted px-3 hover:rounded-md' : ''
+                'block w-full cursor-pointer border-b py-4 hover:rounded-md hover:bg-muted',
+                isSelected ? 'rounded-md border border-primary bg-muted px-3' : ''
             )}>
             <div className='flex items-center space-x-2'>
                 <div className='relative'>

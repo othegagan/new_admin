@@ -1,0 +1,262 @@
+'use client';
+import { ChatSkeleton } from '@/components/skeletons';
+import { Button } from '@/components/ui/button';
+import { useBookingDetails } from '@/hooks/useBookings';
+import useChat from '@/hooks/useChat';
+import { auth } from '@/lib/firebase';
+import { cn, formatDateAndTime, getFullAddress } from '@/lib/utils';
+import type { Booking } from '@/types';
+import { format } from 'date-fns';
+import { Send } from 'lucide-react';
+import { type Key, useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
+
+interface MainMessageComponentProps {
+    tripId: number;
+    className?: string;
+}
+
+const AUTHOR_TYPE = {
+    SYSTEM: 'system',
+    HOST: 'HOST',
+    CLIENT: 'CLIENT'
+};
+
+// Custom hook for authentication token
+const useAuthToken = () => {
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const idToken = await user.getIdToken();
+                    setToken(idToken);
+                } catch (error) {
+                    console.error('Error retrieving token:', error);
+                    toast.error('Failed to retrieve token. Please reload the page and try again.');
+                }
+            } else {
+                setToken('');
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return token;
+};
+
+export default function MainMessageComponent({ tripId, className }: MainMessageComponentProps) {
+    const token = useAuthToken();
+    const chatWindowRef = useRef(null);
+
+    const { inputMessage, setInputMessage, sendMessageMutation, messageList, loadingMessages, messageError } = useChat(tripId, token);
+
+    const { data: response, isLoading: loadingBookingDetails, error } = useBookingDetails(tripId);
+    const bookingData = response?.data?.activetripresponse[0];
+
+    // Handle sending a message
+    const handleSendMessage = (event: { preventDefault: () => void }) => {
+        event.preventDefault();
+        sendMessageMutation.mutate();
+    };
+
+    // Scroll chat window to bottom
+    const scrollToBottom = () => {
+        if (chatWindowRef.current) {
+            //@ts-ignore
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+        }
+    };
+
+    // Effect hooks for scrolling
+    useEffect(scrollToBottom, [messageList]);
+    useEffect(scrollToBottom, [sendMessageMutation.isPending]);
+    useEffect(scrollToBottom, []);
+
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        if (textareaRef.current) {
+            // Reset height to auto to shrink the textarea when text is removed
+            textareaRef.current.style.height = 'auto';
+            // Adjust the height based on the scroll height (content size)
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+    }, [inputMessage]);
+
+    return (
+        <>
+            {/* Chat window */}
+            <div
+                className={cn(
+                    'h-[calc(100dvh-220px)] space-y-4 overflow-y-auto pt-2 pb-2 lg:h-[calc(100dvh-120px)] lg:pr-4 lg:pb-4',
+                    className
+                )}
+                ref={chatWindowRef}>
+                {loadingMessages || loadingBookingDetails ? (
+                    <ChatSkeleton />
+                ) : (
+                    <>
+                        {/* @ts-ignore */}
+                        {error ||
+                            messageError ||
+                            (!response?.success && <div>Error: {error?.message || messageError?.message || response?.message}</div>)}
+
+                        {messageList.map((message: any, index: Key | null | undefined) => (
+                            <MessageItem key={index} message={message} bookingData={bookingData} />
+                        ))}
+                    </>
+                )}
+            </div>
+
+            {/* Message input form */}
+            <div className='flex items-center py-2'>
+                <form className='flex w-full items-end space-x-2' onSubmit={handleSendMessage}>
+                    <textarea
+                        ref={textareaRef}
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        placeholder='Type your message...'
+                        className='flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
+                        rows={1}
+                        style={{ overflow: 'hidden' }} // Prevent scrollbars from appearing
+                    />
+                    <Button
+                        variant='black'
+                        type='submit'
+                        className='px-3'
+                        disabled={!inputMessage.trim() || sendMessageMutation.isPending}
+                        loading={sendMessageMutation.isPending}>
+                        <Send className='size-4' />
+
+                        <span className='sr-only'>Send</span>
+                    </Button>
+                </form>
+            </div>
+        </>
+    );
+}
+
+function MessageItem({
+    message,
+    bookingData
+}: {
+    message: any;
+    bookingData: Booking;
+}) {
+    const authorImage = {
+        [AUTHOR_TYPE.SYSTEM]: '/images/robot.png',
+        [AUTHOR_TYPE.HOST]: bookingData.hostImage || '/images/dummy_avatar.png',
+        [AUTHOR_TYPE.CLIENT]: bookingData.userImage || '/images/dummy_avatar.png'
+    };
+
+    const isClientMessage = message.author === AUTHOR_TYPE.CLIENT;
+
+    const isHostMessage = message.author === AUTHOR_TYPE.HOST;
+
+    // const images = bookingData?.vehicleImages;
+
+    if (isClientMessage) {
+        return (
+            <div className='flex'>
+                {message.author !== AUTHOR_TYPE.HOST && (
+                    <img
+                        src={authorImage[message.author]}
+                        alt={message.author}
+                        width={32}
+                        height={32}
+                        className='mr-2 size-8 rounded-full border object-cover object-center'
+                    />
+                )}
+
+                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-[#E1EFFE] px-3 py-2 font-medium text-sm'>
+                    {message.message}
+                    <p className='flex items-center justify-end text-[10px] text-black'>
+                        {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    if (isHostMessage) {
+        return (
+            <div className='ml-auto flex w-max max-w-[75%] flex-col gap-2 rounded-lg rounded-br-none bg-primary/40 px-3 py-2 font-medium text-sm'>
+                {message?.message}
+                <p className='flex items-center justify-end text-[10px]'> {format(new Date(message.deliveryDate), 'PP | hh:mm a')}</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className='flex'>
+            {message.author !== AUTHOR_TYPE.CLIENT && (
+                <img
+                    src={authorImage[message.author]}
+                    alt={message.author}
+                    width={32}
+                    height={32}
+                    className='mr-2 size-8 rounded-full border'
+                />
+            )}
+
+            {message.message.toLocaleLowerCase() === 'a new reservation was requested' ? (
+                <div className='flex flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm'>
+                    <span>{message.message}</span>
+                    {/*
+                    {images.length > 0 ? (
+                        <div className='relative max-w-md sm:overflow-hidden md:max-w-lg md:rounded-lg'>
+                            <EmblaCarousel slides={images} />
+                        </div>
+                    ) : (
+                        <div className='embla__slide max-h-80 max-w-md overflow-hidden md:rounded-md'>
+                            <img
+                                src='../images/image_not_available.png'
+                                alt='image_not_found'
+                                className='h-full w-full min-w-full object-cover md:rounded-md'
+                            />
+                        </div>
+                    )} */}
+
+                    <p className='font-semibold text-16 capitalize'>
+                        {bookingData?.vehmake} {bookingData?.vehmodel} {bookingData?.vehyear}
+                    </p>
+
+                    <div className='text-12'>
+                        Start Date :
+                        <span className='font-medium text-gray-800'>
+                            {' '}
+                            {formatDateAndTime(bookingData?.starttime, bookingData?.vehzipcode)}
+                        </span>
+                    </div>
+
+                    <div className='text-12'>
+                        End Date :{' '}
+                        <span className='font-medium text-gray-800'>
+                            {' '}
+                            {formatDateAndTime(bookingData?.endtime, bookingData?.vehzipcode)}
+                        </span>
+                    </div>
+
+                    <div className='text-12'>
+                        Pickup & Return :
+                        <span className='font-medium text-gray-800 capitalize'>{getFullAddress({ tripDetails: bookingData })}</span>
+                    </div>
+
+                    <p className='flex items-center justify-end text-[10px] text-black'>
+                        {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
+                    </p>
+                </div>
+            ) : (
+                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-muted px-3 py-2 font-medium text-sm'>
+                    {message.message}
+                    <p className='flex items-center justify-end text-[10px] text-black'>
+                        {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
+                    </p>
+                </div>
+            )}
+        </div>
+    );
+}
