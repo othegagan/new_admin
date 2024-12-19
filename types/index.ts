@@ -24,7 +24,7 @@ export interface CreateUserProps {
     hostId?: number | null;
 }
 
-export interface Booking {
+export interface Trip {
     tripid: number;
     statusCode: string;
     reservationid: number;

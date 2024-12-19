@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
-import { getBookingChatHistory, sendMessageToCustomer } from '@/server/bookings';
+import { getTripChatHistory, sendMessageToCustomer } from '@/server/trips';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -30,10 +30,11 @@ const useChat = (bookingId: number, token: string) => {
     const {
         data: messageList = [],
         isLoading: loadingMessages,
-        error: messageError
+        error: messageError,
+        isError: isMessageError
     } = useQuery({
         queryKey: [QUERY_KEYS.chatHistory, bookingId],
-        queryFn: async () => await getBookingChatHistory(bookingId, token),
+        queryFn: async () => await getTripChatHistory(bookingId, token),
         enabled: !!bookingId && !!token,
         refetchInterval: 8000
     });
@@ -44,7 +45,8 @@ const useChat = (bookingId: number, token: string) => {
         sendMessageMutation,
         messageList,
         loadingMessages,
-        messageError
+        messageError,
+        isMessageError
     };
 };
 

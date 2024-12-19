@@ -1,13 +1,12 @@
 'use client';
-import { ChatSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
-import { useBookingDetails } from '@/hooks/useBookings';
 import useChat from '@/hooks/useChat';
+import { useTripDetails } from '@/hooks/useTrips';
 import { auth } from '@/lib/firebase';
-import { cn, formatDateAndTime, getFullAddress } from '@/lib/utils';
-import type { Booking } from '@/types';
+import { formatDateAndTime, getFullAddress } from '@/lib/utils';
+import type { Trip } from '@/types';
 import { format } from 'date-fns';
-import { Send } from 'lucide-react';
+import { Paperclip, Send } from 'lucide-react';
 import { type Key, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -47,14 +46,22 @@ const useAuthToken = () => {
     return token;
 };
 
+interface ErrorType {
+    message?: string;
+}
+
+const isError = (value: unknown): value is ErrorType => {
+    return typeof value === 'object' && value !== null && 'message' in value;
+};
+
 export default function MainMessageComponent({ tripId, className }: MainMessageComponentProps) {
     const token = useAuthToken();
     const chatWindowRef = useRef(null);
 
     const { inputMessage, setInputMessage, sendMessageMutation, messageList, loadingMessages, messageError } = useChat(tripId, token);
 
-    const { data: response, isLoading: loadingBookingDetails, error } = useBookingDetails(tripId);
-    const bookingData = response?.data?.activetripresponse[0];
+    const { data: response, isLoading: loadingBookingDetails, error } = useTripDetails(tripId);
+    const tripData = response?.data?.activetripresponse[0];
 
     // Handle sending a message
     const handleSendMessage = (event: { preventDefault: () => void }) => {
@@ -87,76 +94,90 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
     }, [inputMessage]);
 
     return (
-        <>
-            {/* Chat window */}
-            <div
-                className={cn(
-                    'h-[calc(100dvh-220px)] space-y-4 overflow-y-auto pt-2 pb-2 lg:h-[calc(100dvh-120px)] lg:pr-4 lg:pb-4',
-                    className
-                )}
-                ref={chatWindowRef}>
-                {loadingMessages || loadingBookingDetails ? (
-                    <ChatSkeleton />
-                ) : (
-                    <>
-                        {/* @ts-ignore */}
-                        {error ||
-                            messageError ||
-                            (!response?.success && <div>Error: {error?.message || messageError?.message || response?.message}</div>)}
+        <div className='flex flex-1 flex-col gap-2 rounded-md md:px-4 md:pt-0 md:pb-4'>
+            <div className='flex size-full flex-1'>
+                <div className='chat-text-container -mr-4 relative flex flex-1 flex-col overflow-y-hidden'>
+                    <div
+                        className='chat-flex flex h-40 w-full flex-grow flex-col justify-start gap-4 overflow-y-auto py-2 pr-4 pb-4'
+                        ref={chatWindowRef}>
+                        {loadingMessages || loadingBookingDetails ? (
+                            <div className='flex h-full w-full items-center justify-center'>Loading messages...</div>
+                        ) : (
+                            <>
+                                {(() => {
+                                    if (error || messageError || !response?.success) {
+                                        const errorMessage =
+                                            (isError(error) && error.message) ||
+                                            (isError(messageError) && messageError.message) ||
+                                            response?.message ||
+                                            'An unknown error occurred.';
+                                        return <div className='text-red-500'>Error: {errorMessage}</div>;
+                                    }
+                                    return null;
+                                })()}
 
-                        {messageList.map((message: any, index: Key | null | undefined) => (
-                            <MessageItem key={index} message={message} bookingData={bookingData} />
-                        ))}
-                    </>
-                )}
+                                {messageList.map((message: any, index: Key | null | undefined) => (
+                                    <MessageItem key={index} message={message} tripData={tripData} />
+                                ))}
+                            </>
+                        )}
+                    </div>
+                </div>
             </div>
 
-            {/* Message input form */}
-            <div className='flex items-center py-2'>
-                <form className='flex w-full items-end space-x-2' onSubmit={handleSendMessage}>
-                    <textarea
-                        ref={textareaRef}
-                        value={inputMessage}
-                        onChange={(e) => setInputMessage(e.target.value)}
-                        placeholder='Type your message...'
-                        className='flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-                        rows={1}
-                        style={{ overflow: 'hidden' }} // Prevent scrollbars from appearing
-                    />
-                    <Button
-                        variant='black'
-                        type='submit'
-                        className='px-3'
-                        disabled={!inputMessage.trim() || sendMessageMutation.isPending}
-                        loading={sendMessageMutation.isPending}>
-                        <Send className='size-4' />
+            {/* Textbox and send */}
+            <form className='flex w-full flex-none gap-2' onSubmit={handleSendMessage}>
+                <div className='flex flex-1 items-center gap-2 rounded-md border border-input px-2 py-1 focus-within:outline-none focus-within:ring-1 focus-within:ring-ring lg:gap-4'>
+                    <Button variant='ghost' size='icon' className='w-fit'>
+                        <Paperclip className='size-5' />
+                    </Button>
+                    <label className='flex-1'>
+                        <span className='sr-only'>Chat Text Box</span>
 
+                        <textarea
+                            ref={textareaRef}
+                            value={inputMessage}
+                            onChange={(e) => setInputMessage(e.target.value)}
+                            placeholder='Type your message...'
+                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-md focus-visible:outline-none'
+                            rows={1}
+                            style={{ overflow: 'hidden' }} // Prevent scrollbars from appearing
+                        />
+                    </label>
+                    <Button
+                        variant='ghost'
+                        size='icon'
+                        className='w-fit px-2'
+                        type='submit'
+                        disabled={!inputMessage.trim() || sendMessageMutation.isPending}
+                        loading={sendMessageMutation.isPending}
+                        suffix={<Send className='size-5' />}>
                         <span className='sr-only'>Send</span>
                     </Button>
-                </form>
-            </div>
-        </>
+                </div>
+            </form>
+        </div>
     );
 }
 
 function MessageItem({
     message,
-    bookingData
+    tripData
 }: {
     message: any;
-    bookingData: Booking;
+    tripData: Trip;
 }) {
     const authorImage = {
         [AUTHOR_TYPE.SYSTEM]: '/images/robot.png',
-        [AUTHOR_TYPE.HOST]: bookingData.hostImage || '/images/dummy_avatar.png',
-        [AUTHOR_TYPE.CLIENT]: bookingData.userImage || '/images/dummy_avatar.png'
+        [AUTHOR_TYPE.HOST]: tripData.hostImage || '/images/dummy_avatar.png',
+        [AUTHOR_TYPE.CLIENT]: tripData.userImage || '/images/dummy_avatar.png'
     };
 
     const isClientMessage = message.author === AUTHOR_TYPE.CLIENT;
 
     const isHostMessage = message.author === AUTHOR_TYPE.HOST;
 
-    // const images = bookingData?.vehicleImages;
+    // const images = tripData?.vehicleImages;
 
     if (isClientMessage) {
         return (
@@ -171,9 +192,9 @@ function MessageItem({
                     />
                 )}
 
-                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-[#E1EFFE] px-3 py-2 font-medium text-sm'>
+                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-[#E1EFFE] px-3 py-2 font-medium text-sm dark:bg-[#2e4161]'>
                     {message.message}
-                    <p className='flex items-center justify-end text-[10px] text-black'>
+                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
                         {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
                     </p>
                 </div>
@@ -221,38 +242,29 @@ function MessageItem({
                     )} */}
 
                     <p className='font-semibold text-16 capitalize'>
-                        {bookingData?.vehmake} {bookingData?.vehmodel} {bookingData?.vehyear}
+                        {tripData?.vehmake} {tripData?.vehmodel} {tripData?.vehyear}
                     </p>
 
                     <div className='text-12'>
-                        Start Date :
-                        <span className='font-medium text-gray-800'>
-                            {' '}
-                            {formatDateAndTime(bookingData?.starttime, bookingData?.vehzipcode)}
-                        </span>
+                        Start Date :<span className='font-medium '> {formatDateAndTime(tripData?.starttime, tripData?.vehzipcode)}</span>
                     </div>
 
                     <div className='text-12'>
-                        End Date :{' '}
-                        <span className='font-medium text-gray-800'>
-                            {' '}
-                            {formatDateAndTime(bookingData?.endtime, bookingData?.vehzipcode)}
-                        </span>
+                        End Date : <span className='font-medium '> {formatDateAndTime(tripData?.endtime, tripData?.vehzipcode)}</span>
                     </div>
 
                     <div className='text-12'>
-                        Pickup & Return :
-                        <span className='font-medium text-gray-800 capitalize'>{getFullAddress({ tripDetails: bookingData })}</span>
+                        Pickup & Return :<span className='font-medium capitalize'> {getFullAddress({ tripDetails: tripData })}</span>
                     </div>
 
-                    <p className='flex items-center justify-end text-[10px] text-black'>
+                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
                         {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
                     </p>
                 </div>
             ) : (
                 <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-muted px-3 py-2 font-medium text-sm'>
                     {message.message}
-                    <p className='flex items-center justify-end text-[10px] text-black'>
+                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
                         {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
                     </p>
                 </div>

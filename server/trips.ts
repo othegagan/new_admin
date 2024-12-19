@@ -8,7 +8,7 @@ import axios from 'axios';
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const CHAT_SERVICE_BASEURL = env.NEXT_PUBLIC_CHAT_SERVICE_BASEURL;
 
-export async function getAllBookingsOfHost(startTime: string, endTime: string) {
+export async function getAllTripsOfHost(startTime: string, endTime: string) {
     const session = await auth();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {
@@ -22,7 +22,7 @@ export async function getAllBookingsOfHost(startTime: string, endTime: string) {
     return response;
 }
 
-export async function getBookingDetails(bookingId: number) {
+export async function getTripDetails(bookingId: number) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {
         fromValue: 'tripid',
@@ -33,7 +33,7 @@ export async function getBookingDetails(bookingId: number) {
     return response;
 }
 
-export async function getBookingChatHistory(tripid: number, firebaseToken: string) {
+export async function getTripChatHistory(tripid: number, firebaseToken: string) {
     try {
         const url = `${CHAT_SERVICE_BASEURL}/getAllChatHistory`;
 
@@ -117,7 +117,7 @@ export async function createHostCheckList(payload: any) {
     return response;
 }
 
-export async function enterBookingMiles(payload: any) {
+export async function enterTripMiles(payload: any) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/enterMiles`;
 
     const response = await api.post<any>(url, payload);

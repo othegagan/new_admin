@@ -8,38 +8,23 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
     return <div className={cn('rounded-md bg-neutral-200 dark:bg-neutral-700', shimmer, className)} {...props} />;
 }
 
-export function CardsSkeleton({ className }: { className?: string }) {
-    return <Skeleton className={cn('h-[190px] w-[400px] rounded-[20px] lg:w-full', className)} />;
-}
-
-export function ChatSkeleton() {
+export function ChatHeaderSkeleton() {
     return (
-        <div className='flex w-full flex-col gap-4'>
-            <div className='flex-grow-1 flex-row items-start gap-4'>
-                <div className={`${shimmer} h-[200px] w-[75%] rounded-lg rounded-br-none bg-neutral-200 dark:bg-neutral-700`} />
-            </div>
+        <div className='flex gap-3'>
+            <div className='flex items-center gap-2 md:px-4 md:py-1 lg:gap-4'>
+                <div className={`${shimmer} size-14 rounded-full bg-neutral-200 dark:bg-neutral-700`} />
 
-            <div className='flex flex-grow-1 items-start gap-4'>
-                <div className={`${shimmer} h-12 w-[200px] rounded-lg rounded-tl-none bg-neutral-200 dark:bg-neutral-700`} />
-            </div>
-
-            <div className='flex flex-row-reverse items-start gap-4'>
-                <div className={`${shimmer} h-10 w-[50%] rounded-lg rounded-br-none bg-neutral-200 dark:bg-neutral-700`} />
-            </div>
-
-            <div className='flex flex-row-reverse items-start gap-4'>
-                <div className={`${shimmer} h-12 w-[200px] rounded-lg rounded-br-none bg-neutral-200 dark:bg-neutral-700`} />
-            </div>
-
-            <div className='hidden flex-grow-1 items-start gap-4 lg:flex'>
-                <div className={`${shimmer} h-10 w-[200px] rounded-lg rounded-tl-none bg-neutral-200 dark:bg-neutral-700`} />
-            </div>
-
-            <div className='hidden flex-row-reverse items-start gap-4 lg:flex'>
-                <div className={`${shimmer} h-8 w-[50%] rounded-lg rounded-br-none bg-neutral-200 dark:bg-neutral-700`} />
+                <div className='flex flex-col gap-2'>
+                    <div className={`${shimmer} h-6 w-40 rounded bg-neutral-200 dark:bg-neutral-700`} />
+                    <div className={`${shimmer} h-5 w-20 rounded bg-neutral-200 dark:bg-neutral-700`} />
+                </div>
             </div>
         </div>
     );
+}
+
+export function CardsSkeleton({ className }: { className?: string }) {
+    return <Skeleton className={cn('h-[190px] w-[400px] rounded-[20px] lg:w-full', className)} />;
 }
 
 export function DrivingLicenseSkeleton() {

@@ -1,12 +1,12 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { formatDateAndTime } from '@/lib/utils';
-import { getAllBookingsOfHost, getAllMasterHostCheckList, getBookingDetails } from '@/server/bookings';
-import type { Booking } from '@/types';
+import { getAllMasterHostCheckList, getAllTripsOfHost, getTripDetails } from '@/server/trips';
+import type { Trip } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { addMonths, format } from 'date-fns';
 import { useMemo } from 'react';
 
-export const bookingSearchFields = [
+export const tripSearchFields = [
     { name: 'vehmake', weight: 1 },
     { name: 'vehmodel', weight: 1 },
     { name: 'vehyear', weight: 0.8 },
@@ -24,18 +24,18 @@ export const bookingSearchFields = [
     { name: 'status', weight: 0.7 }
 ];
 
-export const useAllBookings = (startTime: string, endTime: string) => {
+export const useAllTrips = (startTime: string, endTime: string) => {
     return useQuery({
         queryKey: [QUERY_KEYS.allTripsOfHost, { startTime, endTime }],
-        queryFn: async () => getAllBookingsOfHost(startTime, endTime)
+        queryFn: async () => getAllTripsOfHost(startTime, endTime)
     });
 };
 
-export const useDailyViewAndBookingRequests = () => {
+export const useDailyViewAndTripRequests = () => {
     const startDate = `${format(new Date(), 'yyyy-MM-dd')}T05:00:00.362Z`;
     const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T04:59:59.362Z`;
 
-    const { data: response, isLoading, isError, error, isFetching } = useAllBookings(startDate, endDate);
+    const { data: response, isLoading, isError, error, isFetching } = useAllTrips(startDate, endDate);
 
     // Helper function to determine the category based on status and type
     function getCategory(statusCode: string, type: 'start' | 'end'): number {
@@ -51,7 +51,7 @@ export const useDailyViewAndBookingRequests = () => {
 
     const { dailyViewObjects, bookingRequests } = useMemo(() => {
         const dailyViewObjects: Record<string, any[]> = {};
-        const bookingRequests: Booking[] = [];
+        const bookingRequests: Trip[] = [];
 
         // Generate the keys for each day in the range
         const currentDate = new Date(startDate);
@@ -66,24 +66,24 @@ export const useDailyViewAndBookingRequests = () => {
         if (response?.success) {
             const rawBookingData = response?.data?.activetripresponse || [];
 
-            rawBookingData.forEach((booking: Booking) => {
-                const zipcode = booking.vehzipcode;
-                const startKey = formatDateAndTime(booking.starttime, zipcode, 'yyyy-MM-DD');
-                const endKey = formatDateAndTime(booking.endtime, zipcode, 'yyyy-MM-DD');
+            rawBookingData.forEach((trip: Trip) => {
+                const zipcode = trip.vehzipcode;
+                const startKey = formatDateAndTime(trip.starttime, zipcode, 'yyyy-MM-DD');
+                const endKey = formatDateAndTime(trip.endtime, zipcode, 'yyyy-MM-DD');
 
                 // Handle action list based on status code
                 const statusCodes = ['REREQ', 'TRMODREQ', 'REMODHLD', 'TRMODHLD', 'RECANREQ'];
-                if (statusCodes.includes(booking.statusCode)) {
-                    bookingRequests.push(booking);
+                if (statusCodes.includes(trip.statusCode)) {
+                    bookingRequests.push(trip);
                 }
 
                 // Handle start date based on status code
                 if (dailyViewObjects[startKey]) {
-                    if (['REAPP', 'TRSTR', 'TRCOM', 'REMODHLD', 'TRMODHLD'].includes(booking.statusCode)) {
+                    if (['REAPP', 'TRSTR', 'TRCOM', 'REMODHLD', 'TRMODHLD'].includes(trip.statusCode)) {
                         const tripCopy = {
-                            ...booking,
-                            actionDate: booking.starttime,
-                            category: getCategory(booking.statusCode, 'start')
+                            ...trip,
+                            actionDate: trip.starttime,
+                            category: getCategory(trip.statusCode, 'start')
                         };
                         dailyViewObjects[startKey].push(tripCopy);
                     }
@@ -91,11 +91,11 @@ export const useDailyViewAndBookingRequests = () => {
 
                 // Handle end date based on status code
                 if (dailyViewObjects[endKey]) {
-                    if (['REAPP', 'TRSTR', 'TRCOM', 'REMODHLD', 'TRMODHLD'].includes(booking.statusCode)) {
+                    if (['REAPP', 'TRSTR', 'TRCOM', 'REMODHLD', 'TRMODHLD'].includes(trip.statusCode)) {
                         const tripCopy = {
-                            ...booking,
-                            actionDate: booking.endtime,
-                            category: getCategory(booking.statusCode, 'end')
+                            ...trip,
+                            actionDate: trip.endtime,
+                            category: getCategory(trip.statusCode, 'end')
                         };
                         dailyViewObjects[endKey].push(tripCopy);
                     }
@@ -131,10 +131,10 @@ export const useDailyViewAndBookingRequests = () => {
     };
 };
 
-export const useBookingDetails = (bookingId: string | number) => {
+export const useTripDetails = (bookingId: string | number) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.bookingDetails, { bookingId }],
-        queryFn: async () => getBookingDetails(Number(bookingId)),
+        queryKey: [QUERY_KEYS.tripDetails, { bookingId }],
+        queryFn: async () => getTripDetails(Number(bookingId)),
         refetchOnWindowFocus: true,
         staleTime: 10 * 1000
     });
