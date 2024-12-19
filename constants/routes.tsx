@@ -22,7 +22,7 @@ export const PAGE_ROUTES = {
         LOGS: '/logs',
         MAINTENANCE: '/maintenance',
         MASTER_DATA: '/master-data',
-        MILEAGE_LIMITS: '/mileage-limits',
+        MILEAGE_LIMITS: '/limits',
         NOTIFICATIONS: '/notifications',
         PHOTOS: '/photos',
         PRICING_DISCOUNTS: '/pricing-discounts',
@@ -39,17 +39,54 @@ export const PAGE_ROUTES = {
     MESSAGES: '/messages'
 };
 
-export const vehicleConfigTabs = [
-    { value: PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR, label: 'Calendar' },
-    { value: 'master-data', label: 'Master Data' },
-    { value: 'pricing', label: 'Pricing & Discounts' },
-    { value: 'platform-sync', label: 'Platform Sync' },
-    { value: 'telematics', label: 'Telematics' },
-    { value: 'notifications', label: 'Notifications' },
-    { value: 'maintenance', label: 'Maintenance' },
-    { value: 'trip-history', label: 'Trip History' },
-    { value: 'activity-logs', label: 'Activity Logs' }
-];
+export const vehicleConfigTabs = {
+    desktop: {
+        calendar: {
+            herf: PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR,
+            label: 'Calendar'
+        },
+        vehicleData: {
+            href: null,
+            label: 'Vehilce Data',
+            items: [
+                { href: '#', label: 'Vehicle Data' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA, label: 'Master Data' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.IMPORT, label: 'Import Vehicle' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.PHOTOS, label: 'Photos' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.DESCRIPTION, label: 'Description' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.LOCATION_DELIVERY, label: 'Location Delivery' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.GUEST_GUIDELINES, label: 'Guest Guidelines' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.MILEAGE_LIMITS, label: 'Mileage Limits' },
+                { href: PAGE_ROUTES.VEHICLE_DETAILS.RENTAL_DURATION, label: 'Rental Duration' }
+            ]
+        },
+        remaining: [
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.MAINTENANCE, label: 'Maintenance' },
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.TRP_HISTORY, label: 'Trip History' },
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.LOGS, label: 'Activity Logs' }
+        ]
+    },
+    mobile: [
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR, label: 'Calendar' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA, label: 'Master Data' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.IMPORT, label: 'Import Vehicle' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.PHOTOS, label: 'Photos' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.DESCRIPTION, label: 'Description' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.LOCATION_DELIVERY, label: 'Location Delivery' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.GUEST_GUIDELINES, label: 'Guest Guidelines' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.MILEAGE_LIMITS, label: 'Mileage Limits' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.RENTAL_DURATION, label: 'Rental Duration' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.MAINTENANCE, label: 'Maintenance' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.TRP_HISTORY, label: 'Trip History' },
+        { herf: PAGE_ROUTES.VEHICLE_DETAILS.LOGS, label: 'Activity Logs' }
+    ]
+};
 
 export const homePageItems = [
     {

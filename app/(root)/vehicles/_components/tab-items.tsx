@@ -1,119 +1,103 @@
 'use client';
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { PAGE_ROUTES } from '@/constants/routes';
+import { Button } from '@/components/ui/button';
+import { PAGE_ROUTES, vehicleConfigTabs } from '@/constants/routes';
+import { useIsMobile } from '@/hooks/utils/use-mobile';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
 
-interface TabItem {
-    value: string;
-    label: string;
-    items?: TabItem[];
-}
-
-const configTabs: TabItem[] = [
-    { value: '/calendar', label: 'Calendar' },
-    {
-        value: '/master-data',
-        label: 'Master Data',
-        items: [
-            { value: '/master-data', label: 'Master Data' },
-            { value: '/import-vehicle', label: 'Import Vehicle' },
-            { value: '/photos', label: 'Photos' },
-            { value: '/description', label: 'Description' },
-            { value: '/location-delivery', label: 'Location Delivery' },
-            { value: '/guest-guidelines', label: 'Guest Guidelines' },
-            { value: '/mileage-limits', label: 'Mileage Limits' },
-            { value: '/rental-duration', label: 'Rental Duration' }
-        ]
-    },
-    { value: '/pricing-discounts', label: 'Pricing & Discounts' },
-    { value: '/telematics', label: 'Telematics' },
-    { value: '/notifications', label: 'Notifications' },
-    { value: '/maintenance', label: 'Maintenance' },
-    { value: '/trip-history', label: 'Trip History' },
-    { value: '/activity-logs', label: 'Activity Logs' }
-];
-
-const TabsLayout = () => {
-    const router = useRouter();
+export default function ConfigTabs() {
     const pathname = usePathname();
+    const router = useRouter();
     const { vehicleId } = useParams();
-    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const handleNavigation = (path: string) => {
-        router.push(`${PAGE_ROUTES.VEHICLES}/${vehicleId}/${path}`);
-        setMobileMenuOpen(false); // Close the menu on selection
-    };
+    const isMobile = useIsMobile();
+
+    const basePath = `${PAGE_ROUTES.VEHICLES}/${vehicleId}`;
+
+    const selectedTabMobileValue =
+        vehicleConfigTabs.mobile.find((tab) => pathname === `${basePath}${tab.herf}`)?.herf || PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR;
+
+    function handleNavigation(value: string) {
+        router.replace(`${basePath}${value}`);
+    }
+
+    if (isMobile) {
+        return (
+            <div>
+                <select
+                    name='vehicle-config-tabs'
+                    id='vehicle-config-tabs'
+                    className='flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring '
+                    defaultValue={selectedTabMobileValue}
+                    onChange={(e) => handleNavigation(e.target.value)}>
+                    {vehicleConfigTabs.mobile.map((tab) => (
+                        <option key={tab.herf} value={tab.herf}>
+                            {tab.label}
+                        </option>
+                    ))}
+                </select>
+            </div>
+        );
+    }
 
     return (
-        <div className='w-full'>
-            {/* Desktop View */}
-            <div className='hidden items-center gap-6 border-b pb-2 md:flex'>
-                {configTabs.map((tab) => (
-                    <div key={tab.value} className='relative'>
-                        {!tab.items ? (
-                            <button
-                                type='button'
-                                onClick={() => handleNavigation(tab.value)}
-                                className='font-medium text-gray-600 text-sm hover:text-black'>
-                                {tab.label}
-                            </button>
-                        ) : (
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <button type='button' className='font-medium text-gray-600 text-sm hover:text-black'>
-                                        {tab.label}
-                                    </button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className='w-56'>
-                                    {tab.items.map((subItem) => (
-                                        <DropdownMenuItem key={subItem.value} onClick={() => handleNavigation(subItem.value)}>
-                                            {subItem.label}
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )}
-                    </div>
-                ))}
-            </div>
+        <div className='flex w-full items-center overflow-auto py-2 md:gap-6'>
+            <Button
+                variant='ghost'
+                className={cn(
+                    'font-medium text-sm duration-75 hover:text-primary',
+                    pathname === `/vehicles/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`
+                        ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
+                        : 'text-muted-foreground'
+                )}>
+                <Link href={`${basePath}${vehicleConfigTabs.desktop.calendar.herf}`}>{vehicleConfigTabs.desktop.calendar.label}</Link>
+            </Button>
 
-            {/* Mobile View */}
-            <div className='md:hidden'>
-                <button
-                    type='button'
-                    onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-                    className='flex w-full items-center justify-between bg-gray-100 px-4 py-2 text-left text-gray-600'>
-                    Menu
-                    <span>{isMobileMenuOpen ? '▲' : '▼'}</span>
-                </button>
-                {isMobileMenuOpen && (
-                    <div className='mt-2 rounded-lg bg-white shadow-lg'>
-                        {configTabs.map((tab) => (
-                            <div key={tab.value}>
-                                <button
-                                    type='button'
-                                    onClick={() => handleNavigation(tab.value)}
-                                    className='block w-full px-4 py-2 text-left text-gray-600 hover:bg-gray-100 hover:text-black'>
-                                    {tab.label}
-                                </button>
-                                {tab.items?.map((subItem) => (
-                                    <button
-                                        type='button'
-                                        key={subItem.value}
-                                        onClick={() => handleNavigation(subItem.value)}
-                                        className='block w-full px-6 py-2 text-left text-gray-600 hover:bg-gray-100 hover:text-black'>
-                                        {subItem.label}
-                                    </button>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            <select
+                name='vehicle-config-tabs'
+                id='vehicle-config-tabs'
+                className='flex w-fit max-w-[200px] items-center justify-between whitespace-nowrap rounded-full border border-input p-1 px-3 py-2 pr-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
+                defaultValue={vehicleConfigTabs.desktop.vehicleData.items[0].href}
+                onChange={(e) => handleNavigation(e.target.value)}>
+                {vehicleConfigTabs.desktop.vehicleData.items.map((tab) => (
+                    <option key={tab.href} value={tab.href} disabled={tab.href === '#'}>
+                        {tab.label}
+                    </option>
+                ))}
+            </select>
+
+            {/* <Select
+                value={selectedTabDesktopValue}
+                defaultValue={vehicleConfigTabs.desktop.vehicleData.items[0].href}
+                onValueChange={(value) => handleNavigation(value)}>
+                <SelectTrigger className='w-[180px] rounded-full'>
+                    <SelectValue placeholder={vehicleConfigTabs.desktop.vehicleData.label} />
+                </SelectTrigger>
+                <SelectContent>
+                    {vehicleConfigTabs.desktop.vehicleData.items.map((tab) => (
+                        <SelectItem key={tab.href} value={tab.href} disabled={tab.href === '#'} >
+                            {tab.label}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </Select> */}
+
+            {vehicleConfigTabs.desktop.remaining.map((tab) => (
+                <Button
+                    key={tab.href}
+                    variant='ghost'
+                    className={cn(
+                        'font-medium text-sm duration-75 hover:text-primary',
+                        pathname === `/vehicles/${vehicleId}${tab.href}`
+                            ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
+                            : 'text-muted-foreground'
+                    )}>
+                    <Link href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}>{tab.label}</Link>
+                </Button>
+            ))}
         </div>
     );
-};
-
-export default TabsLayout;
+}
