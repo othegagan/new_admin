@@ -39,14 +39,14 @@ function ActionRequiredAlert() {
                 <div className='flex grow flex-col gap-3'>
                     <div className='space-y-1'>
                         <p className='flex-start gap-2 font-medium text-sm'>
-                            <TriangleAlert className='mt-0.5 shrink-0 text-amber-500' size={16} strokeWidth={2} aria-hidden='true' />
+                            <TriangleAlert className='mt-0.5 shrink-0 text-amber-500' size={20} strokeWidth={2} aria-hidden='true' />
                             Host Action Required
                         </p>
-                        <p className='inline-flex items-center text-muted-foreground text-sm'>
+                        <p className=' text-muted-foreground text-sm'>
                             There are some items that need your review.
                             <Link
                                 href={PAGE_ROUTES.TRIPS}
-                                className='ml-2 whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
+                                className=' ml-2 inline-block whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
                                 See More
                             </Link>
                         </p>

@@ -1,13 +1,12 @@
 import { Main } from '@/components/layout/main';
 import ImagePreview from '@/components/ui/image-preview';
 import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { ChevronLeft, Star } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type * as React from 'react';
-import { DesktopDropdown } from '../_components/DesktopDropDown';
-import { MobileMenu } from '../_components/MobileMenu';
+import TabsLayout from '../_components/tab-items';
 
 // This is a mock function. In a real app, you'd fetch this data from an API or database.
 async function getVehicle(id: string) {
@@ -36,34 +35,38 @@ export default async function VehicleLayout({
         notFound();
     }
 
-    const tabs = [
-        { value: 'calendar', label: 'Calendar' },
+    const configTabs = [
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR, label: 'Calendar' },
         {
-            value: 'master-data',
+            value: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA,
             label: 'Master Data',
             items: [
-                { value: 'general-info', label: 'General Info' },
-                { value: 'documents', label: 'Documents' },
-                { value: 'images', label: 'Images' }
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA, label: 'Master Data' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.IMPORT, label: 'Import Vehicle' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.PHOTOS, label: 'Photos' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.DESCRIPTION, label: 'Description' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.LOCATION_DELIVERY, label: 'Location Delivery' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.GUEST_GUIDELINES, label: 'Guest Guidelines' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.MILEAGE_LIMITS, label: 'Mileage Limits' },
+                { value: PAGE_ROUTES.VEHICLE_DETAILS.RENTAL_DURATION, label: 'Rental Duration' }
             ]
         },
-        { value: 'pricing', label: 'Pricing & Discounts' },
-        { value: 'platform-sync', label: 'Platform Sync' },
-        { value: 'telematics', label: 'Telematics' },
-        { value: 'notifications', label: 'Notifications' },
-        { value: 'maintenance', label: 'Maintenance' },
-        { value: 'trip-history', label: 'Trip History' },
-        { value: 'activity-logs', label: 'Activity Logs' }
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.MAINTENANCE, label: 'Maintenance' },
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.TRP_HISTORY, label: 'Trip History' },
+        { value: PAGE_ROUTES.VEHICLE_DETAILS.LOGS, label: 'Activity Logs' }
     ];
 
     // Extract the current active tab from the URL
-    const activeTab = params.vehicleId.split('/').pop() || 'calendar';
+    const activeTab = params.vehicleId.split('/').pop() || PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR;
 
     return (
-        <Main fixed className=' md:py-0'>
+        <Main fixed className=' md:pt-0'>
             {/* Header */}
             <div className=''>
-                <Link href='/vehicles' className='inline-flex items-center text-muted-foreground text-sm hover:text-foreground'>
+                <Link href={PAGE_ROUTES.VEHICLES} className='inline-flex items-center text-muted-foreground text-sm hover:text-foreground'>
                     <ChevronLeft className='mr-1 h-4 w-4' />
                     Back
                 </Link>
@@ -96,36 +99,15 @@ export default async function VehicleLayout({
                 </div>
 
                 {/* Navigation Tabs */}
-                <div className='mt-6 flex items-center justify-between'>
-                    <Tabs defaultValue={activeTab} className='w-full'>
-                        <TabsList className='hidden h-auto w-full justify-start rounded-none border-b bg-transparent p-0 lg:flex'>
-                            {tabs.map((tab) =>
-                                tab.items ? (
-                                    <DesktopDropdown
-                                        key={tab.value}
-                                        label={tab.label}
-                                        items={tab.items}
-                                        vehicleId={params.vehicleId}
-                                        activeTab={activeTab}
-                                    />
-                                ) : (
-                                    <TabsTrigger
-                                        key={tab.value}
-                                        value={tab.value}
-                                        className='rounded-none data-[state=active]:border-primary data-[state=active]:bg-transparent'
-                                        asChild>
-                                        <Link href={`/vehicles/${params.vehicleId}/${tab.value}`}>{tab.label}</Link>
-                                    </TabsTrigger>
-                                )
-                            )}
-                        </TabsList>
-                    </Tabs>
-                    <MobileMenu tabs={tabs} vehicleId={params.vehicleId} activeTab={activeTab} />
+                <div className='mt-2 flex items-center justify-between py-3'>
+                    <div className=' flex items-center justify-between'>
+                        <TabsLayout />
+                    </div>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className='overflow-y-auto'>{children}</div>
+            <div className='overflow-y-auto border-t py-5'>{children}</div>
         </Main>
     );
 }

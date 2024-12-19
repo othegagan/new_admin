@@ -15,7 +15,21 @@ export const PAGE_ROUTES = {
     ADD_VEHICLE: '/add-vehicle',
     VEHICLE_DETAILS: {
         CALENDAR: '/calendar',
-        LOCATION: '/location'
+        DESCRIPTION: '/description',
+        GUEST_GUIDELINES: '/guest-guidelines',
+        IMPORT: '/import',
+        LOCATION_DELIVERY: '/location-delivery',
+        LOGS: '/logs',
+        MAINTENANCE: '/maintenance',
+        MASTER_DATA: '/master-data',
+        MILEAGE_LIMITS: '/mileage-limits',
+        NOTIFICATIONS: '/notifications',
+        PHOTOS: '/photos',
+        PRICING_DISCOUNTS: '/pricing-discounts',
+        RENTAL_DURATION: '/rental-duration',
+        TRP_HISTORY: '/trp-history',
+        TELEMETICS: '/telematics',
+        PLATFORM_SYNC: '/platform-sync'
     },
     CONFIGURATIONS: '/configurations',
     HOSTS: '/hosts',
