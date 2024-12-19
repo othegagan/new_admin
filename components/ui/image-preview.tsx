@@ -5,15 +5,15 @@ import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
 
 interface ImagePreviewProps {
-    imageUrl: string | null | undefined;
+    url: string | null | undefined;
     alt?: string;
     className?: string;
 }
 
-export default function ImagePreview({ imageUrl, alt = 'Image preview', className }: ImagePreviewProps) {
+export default function ImagePreview({ url: imageUrl, alt = 'Image preview', className }: ImagePreviewProps) {
     if (!imageUrl) {
         return (
-            <div className='flex aspect-[3/2] h-28 w-full items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100 text-center text-neutral-500 text-xs dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-400'>
+            <div className='flex aspect-[3/2] h-24 w-full select-none items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100 text-center text-neutral-500 text-xs dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-400'>
                 No image
             </div>
         );
@@ -22,7 +22,7 @@ export default function ImagePreview({ imageUrl, alt = 'Image preview', classNam
     return (
         <div
             className={cn(
-                'relative overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-700',
+                'relative select-none overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-700',
                 className
             )}>
             <Dialog>

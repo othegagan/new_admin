@@ -158,7 +158,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                     <div>
                         <p className='mb-2 font-medium text-sm'>Selfie</p>
                         <ImagePreview
-                            imageUrl={response?.images.selfie ? `data:image/jpeg;base64,${response?.images.selfie}` : null}
+                            url={response?.images.selfie ? `data:image/jpeg;base64,${response?.images.selfie}` : null}
                             alt='Selfie'
                             className='aspect-[3/2] rounded-lg border object-cover object-center'
                         />
@@ -166,7 +166,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                     <div>
                         <p className='mb-2 font-medium text-sm'>Driver's License Front</p>
                         <ImagePreview
-                            imageUrl={response?.images.front ? `data:image/jpeg;base64,${response?.images.front}` : null}
+                            url={response?.images.front ? `data:image/jpeg;base64,${response?.images.front}` : null}
                             alt='Front'
                             className='aspect-[3/2] rounded-lg border object-cover object-center'
                         />
@@ -174,7 +174,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                     <div>
                         <p className='mb-2 font-medium text-sm'>Driver's License Back</p>
                         <ImagePreview
-                            imageUrl={response?.images.back ? `data:image/jpeg;base64,${response?.images.back}` : null}
+                            url={response?.images.back ? `data:image/jpeg;base64,${response?.images.back}` : null}
                             alt='Back'
                             className='aspect-[3/2] rounded-lg border object-cover object-center'
                         />
