@@ -91,8 +91,7 @@ function SearchableVehicleList({ vehicles }: { vehicles: any[] }) {
 
     return (
         <div className='flex h-full w-full flex-col gap-4 md:gap-6'>
-            <div className='flex flex-col gap-4 lg:flex-row lg:justify-between'>
-                <h3>Find My Car</h3>
+            <div className='flex flex-col gap-4 lg:flex-row lg:justify-center'>
                 <div className='flex items-center gap-3 '>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
@@ -107,7 +106,7 @@ function SearchableVehicleList({ vehicles }: { vehicles: any[] }) {
                                 <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                             </div>
                         </PopoverTrigger>
-                        <PopoverContent className='w-full p-0 lg:w-[500px]'>
+                        <PopoverContent className='w-full'>
                             <Command>
                                 <SearchInput
                                     placeholder='Search'

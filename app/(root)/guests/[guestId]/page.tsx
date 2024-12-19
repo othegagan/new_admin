@@ -32,20 +32,22 @@ export default function Driver(props: {
     const channelName: Channel = response?.data?.driverRentalDetails[0]?.channelName;
 
     return (
-        <Main className='mx-auto max-w-5xl space-y-4 py-4'>
-            {isLoading && <DriverProfileSkeleton />}
-            {error && <div>Error: {error?.message}</div>}
-            {!isLoading && !response?.success && <div>Error: {response?.message}</div>}
-
-            {!isLoading && !error && response?.success && (
-                <>
-                    <DriverPersonalInfo driver={driverInfo} />
-                    <hr />
-                    <DriverLicenseDetails requestId={idScanRequestId} channel={channelName} />
-                    <hr />
-                    <DriverBookingHistory bookingHistory={bookingHistory} />
-                </>
-            )}
+        <Main>
+            <div className='mx-auto w-full max-w-5xl'>
+                {' '}
+                {isLoading && <DriverProfileSkeleton />}
+                {error && <div>Error: {error?.message}</div>}
+                {!isLoading && !response?.success && <div>Error: {response?.message}</div>}
+                {!isLoading && !error && response?.success && (
+                    <>
+                        <DriverPersonalInfo driver={driverInfo} />
+                        <hr />
+                        <DriverLicenseDetails requestId={idScanRequestId} channel={channelName} />
+                        <hr />
+                        <DriverBookingHistory bookingHistory={bookingHistory} />
+                    </>
+                )}
+            </div>
         </Main>
     );
 }
@@ -56,7 +58,7 @@ function DriverPersonalInfo({ driver }: { driver: any }) {
         .join(' ');
     return (
         <>
-            <div className='flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
+            <div className='mb-4 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
                 <div className='flex items-center gap-4'>
                     <Avatar className='size-24 rounded-md lg:size-28'>
                         <AvatarImage src={driver?.userImage} className='h-full w-full' alt={`${driver?.firstName} ${driver?.lastName}`} />
@@ -204,7 +206,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                 </div>
             </div>
 
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6'>
                 {response?.scores.map((score, index) => (
                     <Card key={index} className='flex gap-2 p-2 py-2.5'>
                         {score.status === 'success' ? (

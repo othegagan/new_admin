@@ -24,7 +24,7 @@ export const CHANNELS = {
  */
 const navItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Home',
         href: PAGE_ROUTES.DASHBOARD,
         icon: <LucideHome />,
         roles: [ROLES.EMPLOYEE, ROLES.HOST]
@@ -48,6 +48,12 @@ const navItems: NavItem[] = [
         roles: [ROLES.EMPLOYEE, ROLES.HOST]
     },
     {
+        title: 'Hosts',
+        href: PAGE_ROUTES.HOSTS,
+        icon: <HostsIcon />,
+        roles: [ROLES.EMPLOYEE, ROLES.HOST]
+    },
+    {
         title: 'Guests',
         href: PAGE_ROUTES.GUESTS,
         icon: <GuestsIcon />,
@@ -57,12 +63,6 @@ const navItems: NavItem[] = [
         title: 'Employees',
         href: PAGE_ROUTES.EMPLOYEES,
         icon: <EmployeesIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Hosts',
-        href: PAGE_ROUTES.HOSTS,
-        icon: <HostsIcon />,
         roles: [ROLES.EMPLOYEE, ROLES.HOST]
     },
     {

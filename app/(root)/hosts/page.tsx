@@ -26,7 +26,7 @@ function HostTable() {
     const { data: response, isLoading: loading, error } = useHosts();
     const allHostsList = response?.data?.userResponses;
 
-    const filterdHostsList = allHostsList?.filter((host: any) => host.email !== 'User Deleted' && host.email !== '');
+    // const filterdHostsList = allHostsList?.filter((host: any) => host.email !== 'User Deleted' && host.email !== '');
 
     if (loading) return <div>Loading...</div>;
 
@@ -36,5 +36,5 @@ function HostTable() {
 
     if (allHostsList && allHostsList.length === 0) return <div>No hosts found.</div>;
 
-    if (allHostsList && allHostsList.length > 0) return <DataTable columns={columns} data={filterdHostsList} sortBasedOn='email' />;
+    if (allHostsList && allHostsList.length > 0) return <DataTable columns={columns} data={allHostsList} sortBasedOn='email' />;
 }

@@ -20,58 +20,60 @@ export default function VehiclesPage() {
                     onChange={handleSearch}
                 />
                 <Button href={PAGE_ROUTES.ADD_VEHICLE} size='sm' className='w-fit rounded-full' prefix={<Plus className='size-4' />}>
-                    Add <span className='hidden md:flex'>You Vehicle</span>
+                    <div className='flex-center gap-1'>
+                        Add <span className='hidden md:block'>Vehicle</span>
+                    </div>
                 </Button>
             </div>
 
             <div className='flex-between flex-wrap gap-4'>
-                <p className='hidden md:block'>Filters</p>
-                <div className='flex-center flex-wrap gap-4'>
-                    <div className='flex-center gap-4'>
-                        <Select>
-                            <SelectTrigger className='hidden w-[150px] md:flex'>
-                                <SelectValue placeholder='Trip Status' />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value='on-trip'>On-trip</SelectItem>
-                                    <SelectItem value='upcoming'>Upcoming</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                        <Select>
-                            <SelectTrigger className='w-[150px]'>
-                                <SelectValue placeholder='Vehicle Status' />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value='active'>Active</SelectItem>
-                                    <SelectItem value='inprogress'>Inprogress</SelectItem>
-                                    <SelectItem value='inactive'>Inactive</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                        <Select>
-                            <SelectTrigger className='w-[150px]'>
-                                <SelectValue placeholder='Sort By' />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectItem value='last-added'>Last Added</SelectItem>
-                                    <SelectItem value='last-updated'>Last Updated</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <Button variant='outline' prefix={<X className='size-4' />} className='w-fit rounded-full' size='sm'>
-                        Clear
-                    </Button>
+                <div className='flex-center gap-4'>
+                    <Select>
+                        <SelectTrigger className='hidden w-[150px] md:flex'>
+                            <SelectValue placeholder='Trip Status' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value='on-trip'>On Trip</SelectItem>
+                                <SelectItem value='upcoming'>Upcoming</SelectItem>
+                                <SelectItem value='avaliable'>Available</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    <Select>
+                        <SelectTrigger className='w-[150px]'>
+                            <SelectValue placeholder='Vehicle Status' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value='active'>Active</SelectItem>
+                                <SelectItem value='inprogress'>In Progress</SelectItem>
+                                <SelectItem value='inactive'>In Active</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                    <Select>
+                        <SelectTrigger className='w-[150px]'>
+                            <SelectValue placeholder='Sort by' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value='last-added'>Last Added</SelectItem>
+                                <SelectItem value='last-updated'>Last Updated</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
                 </div>
+                <Button variant='outline' prefix={<X className='size-4' />} className='w-fit rounded-full' size='sm'>
+                    <div className='flex-center gap-1'>
+                        Clear <span className='hidden md:block'>Filters</span>
+                    </div>
+                </Button>
             </div>
 
-            <h4>10 Vehicle Added</h4>
+            <h4>10 Vehicles Added</h4>
 
-            <div className='grid gap-4 overflow-y-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div className='grid gap-4 overflow-y-auto pr-2 md:grid-cols-2 md:pr-4 lg:grid-cols-3 xl:grid-cols-4'>
                 <VehicleCard />
                 <VehicleCard />
                 <VehicleCard />
@@ -94,7 +96,8 @@ function VehicleCard() {
     const vehicleMake = 'BLT35904';
     const trips = '1.0 (10 trips)';
     const status = 'Active';
-    const upcomingTrip = 'Upcoming Trip: Sep-20 - Sep-22';
+    const upcomingTrip = 'Current: Bundee Trip';
+    const dates = 'Jan 01 - Dec 28';
     const imageUrl = 'https://bundeestorage.blob.core.windows.net/bundeeprodstorage/1474%2F268%2F2f60a6b201594eaf967c270eb8be0d32.jpg';
 
     return (
@@ -107,7 +110,7 @@ function VehicleCard() {
                         className='h-full w-full object-cover object-center transition-all ease-in-out group-hover:scale-[1.02] lg:h-full lg:w-full'
                     />
                 </div>
-                <div className='absolute top-2 right-1 inline-flex items-center rounded-md border border-transparent bg-green-200 px-2.5 py-0.5 font-semibold text-green-800 text-xs capitalize shadow transition-colors dark:bg-green-600 dark:text-green-50'>
+                <div className='absolute top-2 right-1 inline-flex items-center rounded-[2px] bg-[#C4F891] px-2.5 py-0.5 font-semibold text-black text-xs capitalize '>
                     {status}
                 </div>
             </div>
@@ -120,7 +123,9 @@ function VehicleCard() {
                         <span>{trips}</span>
                     </div>
                 </div>
-                <div className='flex-center justify-center gap-2 rounded bg-primary/20 p-1.5 font-semibold text-sm'>{upcomingTrip}</div>
+                <div className='flex-center justify-center gap-1 rounded bg-primary/10 p-1.5 text-center font-semibold text-sm '>
+                    <span className='text-nowrap'>{upcomingTrip} </span> ({dates})
+                </div>
             </div>
         </Link>
     );

@@ -2,16 +2,8 @@
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -22,16 +14,11 @@ import {
     SidebarRail
 } from '@/components/ui/sidebar';
 import type { NavItem } from '@/types';
-import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { ChevronRight } from 'lucide-react';
 import type { Session } from 'next-auth';
 import { usePathname } from 'next/navigation';
 import type * as React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Button } from '../ui/button';
-import ThemeToggleSwitch from '../ui/theme-toggle';
 import Logo from './logo';
-import { SignOut } from './user-nav';
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
     navItems: NavItem[];
@@ -45,9 +32,11 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
     return (
         <Sidebar {...props}>
             <SidebarHeader className='mt-4'>
-                <Logo />
+                <div className='-ml-8 flex-center'>
+                    <Logo className='mx-auto ' />
+                </div>
             </SidebarHeader>
-            <SidebarContent className='my-4 flex flex-col gap-4'>
+            <SidebarContent className='my-4 flex flex-col gap-4 pl-2'>
                 {navItems.map((item) =>
                     item.items && item.items.length > 0 ? (
                         <Collapsible key={item.title} title={item.title} defaultOpen className='group/collapsible'>
@@ -88,7 +77,7 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                     )
                 )}
             </SidebarContent>
-            <SidebarFooter>
+            {/* <SidebarFooter>
                 <div className='mx-auto mb-4 flex-center gap-5'>
                     <span className='text-md text-muted-foreground'>Theme</span> <ThemeToggleSwitch />
                 </div>
@@ -119,7 +108,7 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
                         </div>
                     </li>
                 </ul>
-            </SidebarFooter>
+            </SidebarFooter> */}
             <SidebarRail />
         </Sidebar>
     );

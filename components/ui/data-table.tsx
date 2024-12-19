@@ -132,6 +132,28 @@ export function DataTable<TData, TValue>({ columns, data, sortBasedOn }: DataTab
 
             {/* pagination */}
             <div className='flex flex-wrap items-center justify-between gap-4 space-x-2 py-4'>
+                <div className='flex items-center gap-2'>
+                    <p className='flex items-center gap-1 font-medium text-sm'>
+                        Page
+                        <strong>
+                            {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                        </strong>
+                    </p>
+                    <span className='flex items-center gap-1 font-medium text-sm'>
+                        | Go to page:
+                        <Input
+                            type='number'
+                            min={'1'}
+                            max={table.getPageCount()}
+                            defaultValue={table.getState().pagination.pageIndex + 1}
+                            onChange={(e) => {
+                                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                                table.setPageIndex(page);
+                            }}
+                            className='w-16 rounded border p-1'
+                        />
+                    </span>
+                </div>
                 <div className='flex items-center space-x-2'>
                     <p className='whitespace-nowrap font-medium text-sm'>Rows per page</p>
                     <Select
@@ -151,8 +173,7 @@ export function DataTable<TData, TValue>({ columns, data, sortBasedOn }: DataTab
                         </SelectContent>
                     </Select>
                 </div>
-
-                <div className='flex items-center gap-3'>
+                <div className=' flex items-center gap-3'>
                     <Button size='sm' onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
                         {'<<'}
                     </Button>
