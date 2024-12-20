@@ -4,7 +4,6 @@ import { z } from 'zod';
 const serverEnv = createEnv({
     emptyStringAsUndefined: true,
     server: {
-        NODE_ENV: z.union([z.literal('development'), z.literal('qa'), z.literal('production')]),
         AUTH_SECRET: z.string(),
         AUTH_URL: z.string(),
         AUTH_TRUST_HOST: z.string()
