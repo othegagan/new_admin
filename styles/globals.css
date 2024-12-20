@@ -145,6 +145,18 @@
     .dropdown-item {
         @apply relative flex select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 cursor-pointer hover:bg-muted;
     }
+
+    .fc-view {
+        @apply h-full w-full bg-white lg:h-3/4 xl:h-2/3;
+    }
+
+    .divider {
+        @apply mx-4 block w-px bg-neutral-200;
+    }
+
+    .fc-view {
+        @apply h-full w-full bg-background;
+    }
 }
 
 td button[disabled] {

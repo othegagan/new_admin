@@ -1,5 +1,11 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
-import { getAllVehiclesUnderHost, getVehicleFeaturesById, getVehicleMasterDataByVIN } from '@/server/vehicles';
+import {
+    getAllVehiclesUnderHost,
+    getVehicleFeaturesById,
+    getVehicleMasterDataByVIN,
+    getVehicleTripById,
+    getVehicleUpdateLogsById
+} from '@/server/vehicles';
 import { useQuery } from '@tanstack/react-query';
 
 export const useVehiclesUnderHost = () => {
@@ -24,22 +30,22 @@ export const useVehicleFeaturesById = (id: number) => {
     });
 };
 
-// export const useVehicleUpdateLogsById = (id: number) => {
-//     return useQuery({
-//         queryKey: [QUERY_KEYS.vehicleUpdateLogsById, id],
-//         queryFn: async () => getVehicleUpdateLogsById(id),
-//         refetchOnWindowFocus: true,
-//         staleTime: 0,
-//         gcTime: 0 * 1000
-//     });
-// };
+export const useVehicleUpdateLogsById = (id: number) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.vehicleUpdateLogsById, id],
+        queryFn: async () => getVehicleUpdateLogsById(id),
+        refetchOnWindowFocus: true,
+        staleTime: 0,
+        gcTime: 0 * 1000
+    });
+};
 
-// export const useVehicleTripById = (startDate: string, endDate: string, vehicleId: number) => {
-//     return useQuery({
-//         queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }],
-//         queryFn: async () => getVehicleTripById(startDate, endDate, vehicleId),
-//         refetchOnWindowFocus: true,
-//         staleTime: 0,
-//         gcTime: 0 * 1000
-//     });
-// };
+export const useVehicleTripById = (startDate: string, endDate: string, vehicleId: number) => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }],
+        queryFn: async () => getVehicleTripById(startDate, endDate, vehicleId),
+        refetchOnWindowFocus: true,
+        staleTime: 0,
+        gcTime: 0 * 1000
+    });
+};

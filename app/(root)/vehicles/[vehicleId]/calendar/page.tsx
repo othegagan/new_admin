@@ -1,37 +1,218 @@
+'use client';
+
+import { Skeleton } from '@/components/skeletons';
+import { Button } from '@/components/ui/button';
+import MonthPicker from '@/components/ui/month-picker';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { QUERY_KEYS } from '@/constants/query-keys';
+import { useChannels } from '@/hooks/useChannels';
+import { useVehicleFeaturesById, useVehicleTripById } from '@/hooks/useVehicles';
+import { convertToTimeZoneISO, formatDateAndTime } from '@/lib/utils';
+import '@/styles/fullcalendar.css';
+import { deleteUnavailabilityById } from '@/server/dynamicPricingAndUnavailability';
+import type FullCalendar from '@fullcalendar/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { Trash2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+import CalendarComponent from '../../_components/CalendarComponent';
+import AddUnavailabilityForm from '../../_components/unavailability/AddUnavailabilityForm';
+import UpdateUnavailabilityForm from '../../_components/unavailability/UpdateUnavailabilityForm';
+
 export default function VehicleCalendarPage() {
+    const { vehicleId } = useParams();
+    const queryClient = useQueryClient();
+
+    const [selectedChannel, setSelectedChannel] = useState('1');
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [startDate, setStartDate] = useState(format(startOfMonth(currentMonth), 'yyyy-MM-dd'));
+    const [endDate, setEndDate] = useState(format(endOfMonth(currentMonth), 'yyyy-MM-dd'));
+    const calendarRef = useRef<FullCalendar>(null);
+
+    function refetchData() {
+        queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }]
+        });
+        queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vehicleFeaturesById, Number(vehicleId)]
+        });
+        refetchFeatures();
+    }
+
+    function handleMonthChange(newMonth: Date) {
+        setCurrentMonth(newMonth);
+        const newStartDate = format(startOfMonth(newMonth), 'yyyy-MM-dd');
+        const newEndDate = format(endOfMonth(newMonth), 'yyyy-MM-dd');
+        setStartDate(newStartDate);
+        setEndDate(newEndDate);
+    }
+
+    const {
+        data: featuresResponse,
+        isLoading: isLoadingFeatures,
+        error: errorFeatures,
+        refetch: refetchFeatures
+    } = useVehicleFeaturesById(Number(vehicleId));
+    const zipcode = featuresResponse?.data?.vehicleAllDetails[0]?.zipcode || '';
+
+    const {
+        data: tripsResponse,
+        isLoading: isLoadingTrips,
+        error: errorTrips
+    } = useVehicleTripById(
+        convertToTimeZoneISO(`${startDate}T00:00:00`, zipcode),
+        convertToTimeZoneISO(`${endDate}T11:59:59`, zipcode),
+        Number(vehicleId)
+    );
+
+    const { data: channelsResponse, isLoading: isLoadingChannels, error: errorChannels } = useChannels();
+
+    const isLoading = isLoadingTrips || isLoadingFeatures || isLoadingChannels;
+    const error = errorTrips || errorFeatures || errorChannels;
+
+    const tripsData = tripsResponse?.data?.activetripresponse || [];
+
+    const dynamicPricing =
+        featuresResponse?.data?.vehicleAllDetails[0]?.hostPriceResponses?.filter((item: any) => item.isActive === true) || [];
+
+    const unavailabilityData = featuresResponse?.data?.vehicleUnavaliblityDetails || [];
+
+    const vehiclePricePerDay = featuresResponse?.data?.vehicleAllDetails[0]?.price_per_hr || 0;
+
+    const channelsData = channelsResponse?.data?.channels || [];
+
+    const vin = featuresResponse?.data?.vehicleAllDetails[0]?.vin || '';
+
     return (
-        <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate tempore eveniet porro molestias id, nisi voluptas officia
-            ipsum excepturi quaerat labore, eum unde, odit magni eius rem. Quia quisquam, eligendi, nostrum adipisci fuga mollitia
-            voluptatum molestiae rerum consequatur nesciunt ratione aliquid itaque dicta soluta impedit recusandae, aperiam dolor optio
-            temporibus dolores vel neque accusantium. Laborum recusandae corporis, tempore vero doloribus dolor possimus. Error quaerat
-            omnis totam nam odio consectetur non, nulla ad? Et, veritatis inventore labore hic amet nesciunt deserunt praesentium vitae
-            officia quasi, doloremque harum iste repudiandae porro quibusdam dignissimos id temporibus perspiciatis mollitia ad eveniet nemo
-            ipsam similique. Natus quae, libero perspiciatis quidem vitae facere, consequuntur sint ad exercitationem animi laboriosam nihil
-            eius. Quidem, itaque distinctio accusamus unde corporis ut iusto ducimus earum temporibus accusantium. Ut nobis ipsam accusamus
-            cum quidem, odio natus id totam quibusdam, quam inventore, necessitatibus corrupti neque ea beatae! Quis nihil repudiandae
-            mollitia minus qui eum sed, cum reprehenderit distinctio hic minima! Et quisquam id obcaecati libero temporibus earum accusamus
-            neque nostrum quibusdam autem. Dicta quo dolorum recusandae tenetur exercitationem veniam nihil, aut tempore alias, officia
-            deleniti nostrum consectetur? Officia nulla, debitis incidunt alias quasi quas officiis voluptatibus ipsa aliquid dolor
-            repellat? Assumenda architecto deleniti laborum omnis esse ipsa repellendus quos expedita sunt repellat nemo aut corporis vero
-            placeat officia, commodi aliquid tempora optio ad, inventore atque? Hic odio eligendi autem ullam! Temporibus quis,
-            exercitationem, a iure autem explicabo placeat eos odit iusto accusamus deleniti nulla? Odio commodi repellendus a, inventore
-            facilis, voluptatibus dolore velit ratione culpa ea laudantium necessitatibus. Quis soluta est dolores molestias, beatae
-            suscipit nulla modi praesentium, dicta ea ipsam. Minus, reiciendis quidem, alias molestias ratione, consectetur aliquid neque
-            expedita enim voluptate eaque voluptates! Iste, tenetur? Perspiciatis magni molestiae, velit ipsum aliquam, iste doloribus
-            asperiores laborum ipsam accusantium laudantium ullam sunt ab tempora assumenda earum atque? Minima exercitationem distinctio
-            quisquam quasi magnam laudantium saepe ea. Similique, facere ab aut unde molestiae, repellendus velit, vitae exercitationem
-            corrupti doloremque id animi sequi? Minus doloremque quaerat modi. Officiis, placeat ut porro minus sint tempore iusto
-            temporibus! Officiis minus esse ipsa, reiciendis pariatur voluptate perferendis accusamus doloremque hic officia ducimus rem
-            voluptatum magni quia quam eaque possimus necessitatibus dolorem aliquam autem rerum exercitationem debitis, odio saepe. Vero
-            beatae reiciendis iure odio, nisi error ullam sint ipsum atque sit optio, incidunt maiores omnis. Expedita iure magni explicabo,
-            doloribus necessitatibus iusto laboriosam accusantium amet tenetur, eveniet velit. Magnam consequuntur tempore non doloremque
-            asperiores reiciendis blanditiis nemo sunt esse? Voluptates numquam nobis dolorum sit itaque quis consequatur modi natus est
-            debitis ab laboriosam, quaerat dolores, optio aliquam incidunt ipsum iusto cum quidem harum, suscipit ipsam tempore. Praesentium
-            nostrum quae molestias alias ipsa eius reiciendis debitis neque, saepe quasi iste ad enim quam, eum qui. Officiis earum quia, ad
-            sunt odio quae sit culpa laborum assumenda harum ullam delectus vero libero reprehenderit eos praesentium placeat cum dolores
-            laudantium quisquam eaque aspernatur ratione amet! Esse, cumque magnam a labore quisquam quasi quaerat eaque fugit reiciendis?
-            Vel commodi inventore laborum quis.
+        <div className='flex flex-col'>
+            <div className='mb-4 flex w-full gap-6 p-0.5'>
+                <MonthPicker
+                    currentMonth={currentMonth}
+                    onMonthChange={handleMonthChange}
+                    setCurrentMonth={setCurrentMonth}
+                    // calendarRef={calendarRef}
+                    className='w-[200px]'
+                />
+
+                {isLoadingChannels ? (
+                    <Skeleton className='h-9 w-[200px] rounded-md' />
+                ) : (
+                    <Select
+                        onValueChange={(value) => {
+                            setSelectedChannel(value);
+                            refetchData();
+                        }}
+                        value={selectedChannel}
+                        defaultValue={selectedChannel}>
+                        <SelectTrigger className='max-w-[200px]'>
+                            <SelectValue placeholder='Select channel' />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {channelsData.map((item: any) => (
+                                <SelectItem key={item.id} value={String(item.id)} className='capitalize'>
+                                    {item.channelName}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                )}
+            </div>
+
+            {isLoading && <div className='flex h-full w-full items-center justify-center'>Loading...</div>}
+
+            {error && <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>}
+
+            <div className='flex flex-col gap-4'>
+                {!isLoading && !error && (
+                    <>
+                        <CalendarComponent
+                            trips={tripsData}
+                            blockedDates={unavailabilityData}
+                            dynamicPricies={dynamicPricing}
+                            calendarRef={calendarRef}
+                            currentMonth={currentMonth}
+                            vehiclePricePerDay={vehiclePricePerDay}
+                            zipcode={zipcode}
+                        />
+                        <hr />
+                        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                            <UnavailabilityComponent
+                                vin={vin}
+                                vehicleId={Number(vehicleId)}
+                                refetchData={refetchData}
+                                unavailabilityData={unavailabilityData}
+                                zipcode={zipcode}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}
+
+function UnavailabilityComponent({
+    vin,
+    vehicleId,
+    refetchData,
+    unavailabilityData,
+    zipcode
+}: {
+    vin: string;
+    vehicleId: number;
+    refetchData: () => void;
+    unavailabilityData: any[];
+    zipcode: string;
+}) {
+    async function deleteUnavailability(id: number) {
+        toast.promise(deleteUnavailabilityById(id), {
+            loading: 'Deleting Unavailability...',
+            success: (response) => {
+                if (response.success) {
+                    refetchData();
+                }
+                return response.message;
+            },
+            error: (error) => `Error: ${error.message}`
+        });
+    }
+
+    return (
+        <div className='flex w-full flex-col gap-4 md:pl-4 lg:border-l-2'>
+            <div className='flex w-full items-center justify-between'>
+                <h4 className='text-lg'> Vehicle Unavailability</h4>
+                <AddUnavailabilityForm vin={vin} vehicleId={vehicleId} refetchData={refetchData} zipcode={zipcode} />
+            </div>
+            <div>
+                {unavailabilityData.map((item: any) => (
+                    <div key={item.vinunavailableid} className='my-2 flex items-center justify-between gap-4 border-b pb-1.5 text-14'>
+                        <div className='whitespace-nowrap'>
+                            {formatDateAndTime(item.startdate, zipcode, 'MMM DD, YYYY')} -{' '}
+                            {formatDateAndTime(item.enddate, zipcode, 'MMM DD, YYYY')}
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <UpdateUnavailabilityForm
+                                refetchData={refetchData}
+                                zipcode={zipcode}
+                                hostId={item.hostId}
+                                dbStartDate={item.startdate}
+                                dbEndDate={item.enddate}
+                                dbId={item.vinunavailableid}
+                            />
+
+                            <Button
+                                variant='secondary'
+                                size='icon'
+                                className='h-auto w-auto p-1.5'
+                                onClick={() => deleteUnavailability(item.vinunavailableid)}>
+                                <Trash2 className='size-4' />
+                            </Button>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

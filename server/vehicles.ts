@@ -38,3 +38,35 @@ export async function createVehicle(hostId: number, vin: string) {
 
     return await api.post<any>(url, payload);
 }
+
+export async function getVehicleUpdateLogsById(id: number) {
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehicleLogByVehicleId`;
+    const payload = { vehicleId: id };
+
+    const response = await api.post(url, payload);
+    return response;
+}
+
+export async function getVehicleTripById(startTIme: string, endTime: string, vehicleId: number) {
+    const url = `${process.env.BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
+    const payload = {
+        startTime: startTIme,
+        endTime: endTime,
+        fromValue: 'vehicleidbetweendays',
+        id: vehicleId
+    };
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function copyVehicleFromOneToAnother(fromVehicleId: number, toVehicleId: number) {
+    const url = `${process.env.HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/copyVehicleFunctionality`;
+    const payload = {
+        fromVehicleId,
+        toVehicleId
+    };
+
+    const response = await api.post(url, payload);
+    return response;
+}
