@@ -89,9 +89,7 @@ export default function AddNewHostForm() {
 
     return (
         <>
-            <Button variant='black' onClick={openDialog}>
-                Add New Host
-            </Button>
+            <Button onClick={openDialog}>Add New Host</Button>
 
             <AdaptiveDialog isOpen={open} onClose={closeDialog} title='Add New Host'>
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>

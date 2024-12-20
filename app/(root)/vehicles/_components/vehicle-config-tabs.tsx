@@ -47,53 +47,55 @@ export default function VehicleConfigTabs() {
     }
 
     return (
-        <div className='flex w-full items-center overflow-auto py-2 md:gap-2'>
-            <Button
-                key={`${basePath}${vehicleConfigTabs.desktop.calendar.herf}`}
-                variant='ghost'
-                className={cn(
-                    'font-medium text-sm duration-75 hover:text-primary',
-                    pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`
-                        ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
-                        : 'text-muted-foreground'
-                )}>
-                <Link href={`${basePath}${vehicleConfigTabs.desktop.calendar.herf}`}>{vehicleConfigTabs.desktop.calendar.label}</Link>
-            </Button>
-
-            <SplitButtonDropdown
-                key='vehicle-data-dropdown'
-                options={vehicleConfigTabs.desktop.vehicleData.items.map((item) => ({
-                    ...item,
-                    href: `${basePath}${item.href}`
-                }))}
-                defaultOption={
-                    activeVehicleDataItem
-                        ? {
-                              label: activeVehicleDataItem.label,
-                              href: `${basePath}${activeVehicleDataItem.href}`
-                          }
-                        : {
-                              label: vehicleConfigTabs.desktop.vehicleData.label,
-                              href: `${basePath}${vehicleConfigTabs.desktop.vehicleData.items[0].href}`
-                          }
-                }
-                onSelect={(option) => handleNavigation(option.href)}
-                isActive={!!activeVehicleDataItem}
-            />
-
-            {vehicleConfigTabs.desktop.remaining.map((tab) => (
+        <div className='overflow-x-auto'>
+            <div className='flex min-w-max items-center py-2 md:gap-2'>
                 <Button
-                    key={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}
+                    key={`${basePath}${vehicleConfigTabs.desktop.calendar.herf}`}
                     variant='ghost'
                     className={cn(
                         'font-medium text-sm duration-75 hover:text-primary',
-                        pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`
+                        pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`
                             ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
                             : 'text-muted-foreground'
                     )}>
-                    <Link href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}>{tab.label}</Link>
+                    <Link href={`${basePath}${vehicleConfigTabs.desktop.calendar.herf}`}>{vehicleConfigTabs.desktop.calendar.label}</Link>
                 </Button>
-            ))}
+
+                <SplitButtonDropdown
+                    key='vehicle-data-dropdown'
+                    options={vehicleConfigTabs.desktop.vehicleData.items.map((item) => ({
+                        ...item,
+                        href: `${basePath}${item.href}`
+                    }))}
+                    defaultOption={
+                        activeVehicleDataItem
+                            ? {
+                                  label: activeVehicleDataItem.label,
+                                  href: `${basePath}${activeVehicleDataItem.href}`
+                              }
+                            : {
+                                  label: vehicleConfigTabs.desktop.vehicleData.label,
+                                  href: `${basePath}${vehicleConfigTabs.desktop.vehicleData.items[0].href}`
+                              }
+                    }
+                    onSelect={(option) => handleNavigation(option.href)}
+                    isActive={!!activeVehicleDataItem}
+                />
+
+                {vehicleConfigTabs.desktop.remaining.map((tab) => (
+                    <Button
+                        key={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}
+                        variant='ghost'
+                        className={cn(
+                            'font-medium text-sm duration-75 hover:text-primary',
+                            pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`
+                                ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
+                                : 'text-muted-foreground'
+                        )}>
+                        <Link href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}>{tab.label}</Link>
+                    </Button>
+                ))}
+            </div>
         </div>
     );
 }

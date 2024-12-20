@@ -1,5 +1,6 @@
+'use client';
 import { Main } from '@/components/layout/main';
-import type * as React from 'react';
+import * as React from 'react';
 import BasicVehicleDetails from '../_components/basic-vehicle-details';
 import VehicleConfigTabs from '../_components/vehicle-config-tabs';
 
@@ -13,8 +14,8 @@ interface VehicleIdValidatiorProps {
     children: React.ReactNode;
 }
 
-export default async function VehicleLayout({ children, params }: VehicleLayoutProps) {
-    const { vehicleId } = await params;
+export default function VehicleLayout({ children, params }: VehicleLayoutProps) {
+    const { vehicleId } = React.use(params);
 
     return (
         <Main fixed className=' md:pt-0'>

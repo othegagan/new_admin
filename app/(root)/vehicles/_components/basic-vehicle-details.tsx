@@ -3,6 +3,8 @@
 import ImagePreview from '@/components/ui/image-preview';
 import { Switch } from '@/components/ui/switch';
 import { PAGE_ROUTES } from '@/constants/routes';
+import { useVehicleFeaturesById } from '@/hooks/useVehicles';
+import { toTitleCase } from '@/lib/utils';
 import { ChevronLeft, Star } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,14 +13,27 @@ interface BasicVehicleDetailsProps {
 }
 
 export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsProps) {
-    const vehicle = {
-        id: vehicleId,
-        name: 'BMW 3 Series 2016',
-        code: 'BLT4040',
-        rating: 4.5,
-        trips: 400,
-        status: 'active'
-    };
+    const { data: featuresResponse, isLoading: isLoadingFeatures, error: errorFeatures } = useVehicleFeaturesById(Number(vehicleId));
+
+    if (isLoadingFeatures) {
+        return <div>Loading...</div>;
+    }
+
+    if (errorFeatures) {
+        return <div>Error!</div>;
+    }
+
+    const features = featuresResponse?.data?.vehicleAllDetails[0];
+    const reviews = featuresResponse?.data?.reserverList[0];
+
+    const { rating, tripcount } = reviews;
+
+    const { vin, make, model, year, imageresponse, number, isActive } = features;
+
+    const vehicleName = toTitleCase(`${make} ${model} ${year}`);
+    const ratingText = rating ? rating.toFixed(1) : '1.0';
+    const tripText = tripcount ? `(${tripcount}  ${tripcount > 1 ? 'trips' : 'trip'})` : null;
+    const primaryImage = imageresponse.find((image: any) => image.isPrimary)?.imagename || '';
 
     return (
         <div className=''>
@@ -30,31 +45,31 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
 
                 <div className='flex w-fit flex-col items-end gap-2 md:mt-4'>
                     <span className='text-md capitalize'>
-                        Vehicle Status: <b>{vehicle.status}</b>
+                        Vehicle Status: <b>{isActive ? 'Active' : 'In Active'}</b>
                     </span>
-                    <Switch defaultChecked={vehicle.status === 'active'} />
+                    <Switch defaultChecked={isActive} />
                 </div>
             </div>
 
             <div className='flex gap-4'>
                 <ImagePreview
-                    url='https://bundeestorage.blob.core.windows.net/bundeeprodstorage/1474%2F268%2F2f60a6b201594eaf967c270eb8be0d32.jpg'
-                    alt='car'
+                    url={primaryImage || '/images/image_not_available.png'}
+                    alt={vehicleName}
                     className=' h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
                 />
                 <div className='flex w-full flex-col gap-2'>
                     <div>
-                        <h1 className='font-semibold text-xl'>{vehicle.name}</h1>
+                        <h1 className='font-semibold text-xl'>{vehicleName}</h1>
                         <div className='flex-start gap-5 text-md'>
-                            <span className='text-muted-foreground tracking-wider'>{vehicle.code}</span>
+                            <span className='text-muted-foreground tracking-wider'>{number}</span>
                         </div>
                     </div>
                     <div className='flex-start gap-3'>
                         <span className='flex items-center gap-1'>
                             <Star fill='currentColor' className='size-5' />
-                            {vehicle.rating}
+                            {ratingText}
                         </span>
-                        <span>({vehicle.trips} Trips)</span>
+                        <span>{tripText}</span>
                     </div>
                 </div>
             </div>

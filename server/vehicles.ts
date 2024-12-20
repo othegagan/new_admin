@@ -70,3 +70,69 @@ export async function copyVehicleFromOneToAnother(fromVehicleId: number, toVehic
     const response = await api.post(url, payload);
     return response;
 }
+
+interface UpdateVehicleFeaturesById {
+    type:
+        | 'calendar'
+        | 'upload_master_data'
+        | 'update_master_data'
+        | 'upload_pricing_discounts'
+        | 'update_pricing_discounts'
+        | 'upload_photos'
+        | 'update_photos'
+        | 'description'
+        | 'upload_guest_instructions'
+        | 'update_guest_instructions'
+        | 'upload_location_delivery'
+        | 'update_location_delivery'
+        | 'upload_mileage_limits'
+        | 'update_mileage_limits'
+        | 'upload_status'
+        | 'update_status'
+        | 'create_turo_id'
+        | 'update_turo_id'
+        | 'telematics';
+    payload: any;
+}
+
+export async function updateVehicleFeaturesById({ type, payload }: UpdateVehicleFeaturesById) {
+    const urlMap: { [key: string]: string } = {
+        upload_master_data: '/v1/vehicle/uploadVehicleDetailsAndFeatures',
+        update_master_data: '/v1/vehicle/updateVehicleFeaturesandDetails',
+
+        upload_pricing_discounts: '/v1/vehicle/uploadPricingAndDiscounts',
+        update_pricing_discounts: '/v1/vehicle/updatePricingAndDiscount',
+
+        upload_photos: '/v1/vehicle/uploadVehicleImage',
+        update_photos: '/v1/vehicle/updateVehicleImage',
+
+        description: '/v1/vehicle/uploadVehicleDescription',
+
+        upload_guest_instructions: '/v1/vehicle/uploadGuestInstructionsAndGuideLines',
+        update_guest_instructions: '/v1/vehicle/updateGuestInstructionsAndGuideLines',
+
+        upload_location_delivery: '/v1/vehicle/uploadVehicleLocationDelivery',
+        update_location_delivery: '/v1/vehicle/updatePickUpLocation',
+
+        upload_mileage_limits: '/v1/vehicle/uploadVehicleMilage',
+        update_mileage_limits: '/v1/vehicle/updateMilageLimit',
+
+        upload_status: '/v1/vehicle/uploadVehicleAdditionalDetails',
+        update_status: '/v1/vehicle/updateVehicleAdditionalDetails',
+
+        create_turo_id: '/v1/vehicle/uploadVehicleConstraintLink',
+        update_turo_id: '/v1/vehicle/updateVehicleConstraintLink',
+
+        calendar: '/v1/vehicle/updateCalendar',
+        telematics: '/v1/vehicle/updateTelematics'
+    };
+
+    const url = `${process.env.HOST_VEHICLE_SERVICES_BASEURL}${urlMap[type]}`;
+
+    if (!url) {
+        throw new Error(`Invalid update type: ${type}`);
+    }
+
+    const response = await api.post(url, payload);
+    return response;
+}

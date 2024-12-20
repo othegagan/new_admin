@@ -95,7 +95,7 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
         accessorKey: 'numberOfBookings',
         header: ({ column }) => {
             return (
-                <div className='flex-center py-1'>
+                <div className='flex-start py-1'>
                     <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                         # of Bookings
                         <ChevronsUpDown className='ml-2 h-4 w-4' />
@@ -104,15 +104,15 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
             );
         },
         cell: ({ cell }: { cell: any }) => {
-            return <div className='flex-center'>{cell?.getValue()}</div>;
+            return <div className='flex-start'>{cell?.getValue()}</div>;
         }
     },
     {
         accessorKey: 'upcomingDriverTrips',
         header: ({ column }) => {
             return (
-                <div className='flex-center py-1'>
-                    <Button variant='ghost' className='flex-center' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                <div className='flex-start py-1'>
+                    <Button variant='ghost' className='flex-start' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                         Upcoming Booking
                         <ChevronsUpDown className='ml-2 h-4 w-4' />
                     </Button>
@@ -123,10 +123,10 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
             const userId = row.getValue('userId');
             const upcomingTrips = row.original.upcomingDriverTrips;
 
-            if (upcomingTrips.length === 0) return <div className='flex-center gap-2'>-</div>;
+            if (upcomingTrips.length === 0) return <div className='flex-start gap-2'>-</div>;
 
             return (
-                <Link href={`/drivers/${userId}`} className='flex-center gap-2 hover:underline'>
+                <Link href={`/drivers/${userId}`} className='flex-start gap-2 hover:underline'>
                     {upcomingTrips[0]}
                 </Link>
             );
@@ -153,7 +153,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         accessorKey: 'slNo',
         header: ({ column }) => {
             return (
-                <div className='flex-center py-1'>
+                <div className='flex-start py-1'>
                     <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                         Sl No.
                         <ChevronsUpDown className='ml-2 h-4 w-4' />
@@ -162,7 +162,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
             );
         },
         cell: ({ cell }: { cell: any }) => {
-            return <div className='flex-center'>{cell?.getValue()}</div>;
+            return <div className='flex-start'>{cell?.getValue()}</div>;
         }
     },
 
@@ -171,7 +171,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         id: 'booking',
         header: ({ column }) => {
             return (
-                <div className='flex-center py-1'>
+                <div className='flex-start py-1'>
                     <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                         Bookings
                         <ChevronsUpDown className='ml-2 h-4 w-4' />
@@ -184,7 +184,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
             const bookingId = row.original.tripId;
             const vehicleName = `${row.original.make} ${row.original.model} ${row.original.year}`;
             return (
-                <div className='flex-center gap-4 text-nowrap'>
+                <div className='flex-start gap-4 text-nowrap'>
                     <Link href={`/booking/${bookingId}/details`} className='text-nowrap font-semibold underline'>
                         BID: {bookingId}
                     </Link>
@@ -198,7 +198,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         accessorKey: 'status',
         header: ({ column }) => {
             return (
-                <div className='flex-center py-1'>
+                <div className='flex-start py-1'>
                     <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                         Booking Status
                         <ChevronsUpDown className='ml-2 h-4 w-4' />
@@ -208,7 +208,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         },
         enableSorting: true,
         cell: ({ cell }: { cell: any }) => {
-            return <div className='flex-center capitalize'>{cell?.getValue()}</div>;
+            return <div className='flex-start capitalize'>{cell?.getValue()}</div>;
         }
     },
 
@@ -216,7 +216,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         accessorKey: 'capturedAmount',
         header: ({ column }) => {
             return (
-                <div className='flex-center py-1'>
+                <div className='flex-start py-1'>
                     <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                         Captured Amount
                         <ChevronsUpDown className='ml-2 h-4 w-4' />
@@ -226,18 +226,18 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         },
         enableSorting: true,
         cell: ({ cell }: { cell: any }) => {
-            return <div className='flex-center'>{currencyFormatter({ value: cell?.getValue(), roundTo: 2 })}</div>;
+            return <div className='flex-start'>{currencyFormatter({ value: cell?.getValue(), roundTo: 2 })}</div>;
         }
     }
 
     // {
     //     id: 'supportTickets',
     //     header: ({ column }) => {
-    //         return <div className='flex-center text-nowrap py-1'>Support Ticket(s)</div>;
+    //         return <div className='flex-start text-nowrap py-1'>Support Ticket(s)</div>;
     //     },
     //     enableSorting: true,
     //     cell: ({ cell }: { cell: any }) => {
-    //         return <div className='flex-center'>-</div>;
+    //         return <div className='flex-start'>-</div>;
     //     }
     // }
 ];

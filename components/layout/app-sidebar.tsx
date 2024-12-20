@@ -13,6 +13,7 @@ import {
     SidebarMenuItem,
     SidebarRail
 } from '@/components/ui/sidebar';
+import { useIsMobile } from '@/hooks/utils/use-mobile';
 import type { NavItem } from '@/types';
 import { ChevronRight } from 'lucide-react';
 import type { Session } from 'next-auth';
@@ -29,11 +30,18 @@ export function AppSidebar({ navItems, session, ...props }: AppSidebarProps) {
     const pathname = usePathname();
 
     const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+    const isMobile = useIsMobile();
+
+    if (!isMobile && pathname === '/') {
+        return null;
+    }
+
     return (
         <Sidebar {...props}>
             <SidebarHeader className='mt-4'>
                 <div className='-ml-8 flex-center'>
-                    <Logo className='mx-auto ' />
+                    <Logo className='mx-auto ' herf='/' />
                 </div>
             </SidebarHeader>
             <SidebarContent className='my-4 flex flex-col gap-4 pl-2'>

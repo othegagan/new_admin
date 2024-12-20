@@ -126,18 +126,20 @@ export default function VehicleCalendarPage() {
 
             <div className='flex flex-col gap-4'>
                 {!isLoading && !error && (
-                    <>
-                        <CalendarComponent
-                            trips={tripsData}
-                            blockedDates={unavailabilityData}
-                            dynamicPricies={dynamicPricing}
-                            calendarRef={calendarRef}
-                            currentMonth={currentMonth}
-                            vehiclePricePerDay={vehiclePricePerDay}
-                            zipcode={zipcode}
-                        />
-                        <hr />
-                        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                    <div className='grid grid-cols-1 gap-4 md:grid-cols-6'>
+                        <div className='lg:col-span-4'>
+                            <CalendarComponent
+                                trips={tripsData}
+                                blockedDates={unavailabilityData}
+                                dynamicPricies={dynamicPricing}
+                                calendarRef={calendarRef}
+                                currentMonth={currentMonth}
+                                vehiclePricePerDay={vehiclePricePerDay}
+                                zipcode={zipcode}
+                            />
+                        </div>
+
+                        <div className='lg:col-span-2'>
                             <UnavailabilityComponent
                                 vin={vin}
                                 vehicleId={Number(vehicleId)}
@@ -146,7 +148,7 @@ export default function VehicleCalendarPage() {
                                 zipcode={zipcode}
                             />
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div>
@@ -182,7 +184,7 @@ function UnavailabilityComponent({
     return (
         <div className='flex w-full flex-col gap-4 md:pl-4 lg:border-l-2'>
             <div className='flex w-full items-center justify-between'>
-                <h4 className='text-lg'> Vehicle Unavailability</h4>
+                <h4 className='text-nowrap text-lg'> Vehicle Unavailability</h4>
                 <AddUnavailabilityForm vin={vin} vehicleId={vehicleId} refetchData={refetchData} zipcode={zipcode} />
             </div>
             <div>

@@ -37,7 +37,7 @@ export function SplitButtonDropdown({ options, defaultOption, onSelect, isActive
     };
 
     return (
-        <div className={cn('group flex items-center', isActive && 'rounded-full bg-primary/80')}>
+        <div className={cn('group flex items-center text-nowrap', isActive && 'rounded-full bg-primary/80')}>
             <Link
                 href={selectedOption.href}
                 className={cn(

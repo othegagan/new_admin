@@ -92,9 +92,7 @@ export default function AddNewEmployeeForm() {
 
     return (
         <>
-            <Button variant='black' onClick={openDialog}>
-                Add New Employee
-            </Button>
+            <Button onClick={openDialog}>Add New Employee</Button>
 
             <AdaptiveDialog isOpen={open} onClose={closeDialog} title='Add New Employee'>
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
