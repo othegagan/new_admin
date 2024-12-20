@@ -19,7 +19,7 @@ export const useMarkNotificationAsRead = (id: number) => {
             await markNotificationAsRead(id);
         },
         onSuccess: () => {
-            // console.log('refetch all notifications');
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.allNotifications] });
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.allNotifications] });

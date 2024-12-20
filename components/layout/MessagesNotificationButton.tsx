@@ -1,23 +1,20 @@
 'use client';
 
+import { useAllNotifications } from '@/hooks/useNotifications';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 
 export function MessagesNotificationButton() {
-    const [ping, setPing] = useState(true);
+    const { data: response, isLoading: loading, error } = useAllNotifications();
+    const messageNotificationsData = response?.data?.messageNotifications || [];
 
-    useEffect(() => {
-        setInterval(() => {
-            setPing(!ping);
-        }, 2000);
-    }, [ping]);
+    const countOfUnreadNotifications = messageNotificationsData.filter((notification: any) => !notification.viewed).length;
 
     return (
         <Link href='/messages'>
             <Button variant='ghost' className='relative px-2'>
                 <svg
-                    className='size-7 text-neutral-600 group-hover:text-neutral-800 md:size-6'
+                    className='size-6 text-muted-foreground'
                     aria-hidden='true'
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -31,10 +28,12 @@ export function MessagesNotificationButton() {
                     />
                 </svg>
 
-                <span className='absolute top-1 right-2 flex size-3'>
-                    {ping && <span className='absolute inline-flex size-full animate-ping rounded-full bg-orange-500' />}
-                    <span className='relative inline-flex size-3 rounded-full bg-primary' />
-                </span>
+                {countOfUnreadNotifications > 0 && (
+                    <span className='absolute top-1 right-2 flex size-3'>
+                        <span className='absolute inline-flex size-full rounded-full bg-primary ' />
+                        <span className='relative inline-flex size-3 rounded-full bg-primary' />
+                    </span>
+                )}
             </Button>
         </Link>
     );

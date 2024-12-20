@@ -4,32 +4,18 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { useAllNotifications, useMarkNotificationAsRead } from '@/hooks/useNotifications';
 import { toTitleCase } from '@/lib/utils';
 import { BellIcon } from '@/public/icons';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 export function NotificationBellButton() {
-    const [ping, setPing] = useState(false);
-
     const { data: response, isLoading: loading, error } = useAllNotifications();
     const notificationsData = response?.data?.inAppNotifications || [];
 
     const countOfUnreadNotifications = notificationsData.filter((notification: any) => !notification.viewed).length;
-
-    useEffect(() => {
-        setPing(countOfUnreadNotifications > 0);
-    }, [countOfUnreadNotifications]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setPing((p) => !p);
-        }, 15000);
-
-        return () => clearInterval(interval);
-    }, []);
 
     const groupedNotifications = notificationsData.reduce((acc: any, notification: any) => {
         const date = new Date(notification.createdDate).toDateString();
@@ -44,10 +30,10 @@ export function NotificationBellButton() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant='ghost' className='relative px-2'>
-                    <BellIcon className='size-7 text-neutral-600 group-hover:text-neutral-800 md:size-6' aria-hidden='true' />
+                    <BellIcon className='size-6 text-muted-foreground' aria-hidden='true' />
                     {countOfUnreadNotifications > 0 && (
                         <span className='absolute top-1 right-2 flex size-3'>
-                            <span className={`absolute inline-flex size-full rounded-full bg-primary ${ping ? 'animate-ping' : ''}`} />
+                            <span className='absolute inline-flex size-full rounded-full bg-primary ' />
                             <span className='relative inline-flex size-3 rounded-full bg-primary' />
                         </span>
                     )}
@@ -61,13 +47,15 @@ export function NotificationBellButton() {
                     <p className='font-bold text-foreground text-sm'>Notifications</p>
                 </div>
 
-                {loading && <div className='flex h-full w-full flex-col gap-2 px-2'>Loading Notifications...</div>}
+                {loading && (
+                    <div className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>Loading Notifications...</div>
+                )}
 
-                {!loading && error && <p className='my-3 text-center text-xs md:text-14'>{error.message}</p>}
+                {!loading && error && <p className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>{error.message}</p>}
 
                 {!loading && !error && notificationsData.length === 0 && (
                     <div className='flex h-full w-full flex-1 flex-col gap-2 px-2'>
-                        <p className='my-3 text-center text-xs md:text-14'>No notifications.</p>
+                        <p className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>No notifications.</p>
                     </div>
                 )}
 
@@ -104,7 +92,7 @@ function NotificationItem({ data }: { data: any }) {
         e.preventDefault();
         markAsRead();
 
-        router.push(`/booking/${tripId}/details`); // Navigate to the details page after marking as read
+        router.push(`${PAGE_ROUTES.TRIPS}/${tripId}/details`); // Navigate to the details page after marking as read
     };
 
     return (

@@ -1,8 +1,7 @@
 import { Main } from '@/components/layout/main';
-import { Button } from '@/components/ui/button';
 import { PAGE_ROUTES, homePageItems } from '@/constants/routes';
 import { auth } from '@/lib/auth';
-import { TriangleAlert, X } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function DashboardPage() {
@@ -52,12 +51,12 @@ function ActionRequiredAlert() {
                         </p>
                     </div>
                 </div>
-                <Button
+                {/* <Button
                     variant='ghost'
                     className='group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent'
                     aria-label='Close notification'>
                     <X size={16} strokeWidth={2} className='opacity-60 transition-opacity group-hover:opacity-100' aria-hidden='true' />
-                </Button>
+                </Button> */}
             </div>
         </div>
     );
