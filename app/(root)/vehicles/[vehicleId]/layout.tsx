@@ -1,7 +1,7 @@
 import { Main } from '@/components/layout/main';
 import type * as React from 'react';
 import BasicVehicleDetails from '../_components/basic-vehicle-details';
-import ConfigTabs from '../_components/tab-items';
+import VehicleConfigTabs from '../_components/vehicle-config-tabs';
 
 interface VehicleLayoutProps {
     children: React.ReactNode;
@@ -24,7 +24,7 @@ export default async function VehicleLayout({ children, params }: VehicleLayoutP
 
                 {/* Tabs */}
                 <div className='my-4 w-full'>
-                    <ConfigTabs />
+                    <VehicleConfigTabs />
                 </div>
 
                 {/* Main Content */}

@@ -24,7 +24,7 @@ export const ScreenSize = () => {
     const { width, height } = dimensions;
 
     return (
-        <div className='fixed right-5 bottom-5 flex items-center gap-2 rounded-full border bg-black px-2.5 py-1 font-medium font-mono text-white text-xs'>
+        <div className='fixed bottom-5 left-5 z-[999] flex items-center gap-2 rounded-full border bg-black px-2.5 py-1 font-medium font-mono text-white text-xs'>
             <span>
                 {width.toLocaleString()} x {height.toLocaleString()}
             </span>

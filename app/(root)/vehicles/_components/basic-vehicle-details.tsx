@@ -40,19 +40,21 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                 <ImagePreview
                     url='https://bundeestorage.blob.core.windows.net/bundeeprodstorage/1474%2F268%2F2f60a6b201594eaf967c270eb8be0d32.jpg'
                     alt='car'
-                    className=' h-20 w-[200px] rounded-lg border object-cover object-center'
+                    className=' h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
                 />
-                <div className='w-full space-y-2'>
-                    <h1 className='font-semibold text-xl'>{vehicle.name}</h1>
-                    <div className='flex-start gap-5 text-md'>
-                        <span className='text-muted-foreground tracking-wider'>{vehicle.code}</span>
-                        <div className='flex-start gap-3'>
-                            <span className='flex items-center gap-1'>
-                                <Star fill='currentColor' className='size-5' />
-                                {vehicle.rating}
-                            </span>
-                            <span>({vehicle.trips} Trips)</span>
+                <div className='flex w-full flex-col gap-2'>
+                    <div>
+                        <h1 className='font-semibold text-xl'>{vehicle.name}</h1>
+                        <div className='flex-start gap-5 text-md'>
+                            <span className='text-muted-foreground tracking-wider'>{vehicle.code}</span>
                         </div>
+                    </div>
+                    <div className='flex-start gap-3'>
+                        <span className='flex items-center gap-1'>
+                            <Star fill='currentColor' className='size-5' />
+                            {vehicle.rating}
+                        </span>
+                        <span>({vehicle.trips} Trips)</span>
                     </div>
                 </div>
             </div>

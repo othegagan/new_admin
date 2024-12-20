@@ -46,10 +46,9 @@ export const vehicleConfigTabs = {
             label: 'Calendar'
         },
         vehicleData: {
-            href: null,
-            label: 'Vehilce Data',
+            href: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA,
+            label: 'Master Data',
             items: [
-                { href: '#', label: 'Vehicle Data' },
                 { href: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA, label: 'Master Data' },
                 { href: PAGE_ROUTES.VEHICLE_DETAILS.IMPORT, label: 'Import Vehicle' },
                 { href: PAGE_ROUTES.VEHICLE_DETAILS.PHOTOS, label: 'Photos' },
@@ -62,6 +61,7 @@ export const vehicleConfigTabs = {
         },
         remaining: [
             { href: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
+            { href: PAGE_ROUTES.VEHICLE_DETAILS.PLATFORM_SYNC, label: 'Platform Sync' },
             { href: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
             { href: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
             { href: PAGE_ROUTES.VEHICLE_DETAILS.MAINTENANCE, label: 'Maintenance' },
@@ -79,6 +79,7 @@ export const vehicleConfigTabs = {
         { herf: PAGE_ROUTES.VEHICLE_DETAILS.GUEST_GUIDELINES, label: 'Guest Guidelines' },
         { herf: PAGE_ROUTES.VEHICLE_DETAILS.MILEAGE_LIMITS, label: 'Mileage Limits' },
         { herf: PAGE_ROUTES.VEHICLE_DETAILS.RENTAL_DURATION, label: 'Rental Duration' },
+        { href: PAGE_ROUTES.VEHICLE_DETAILS.PLATFORM_SYNC, label: 'Platform Sync' },
         { herf: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
         { herf: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
         { herf: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
