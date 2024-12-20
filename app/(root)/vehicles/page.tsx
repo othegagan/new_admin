@@ -225,7 +225,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
     return (
         <Link href={link} className='group h-auto rounded-lg border hover:shadow'>
             <div className='relative flex items-end overflow-hidden rounded-t-lg'>
-                <div className='aspect-video h-44 w-full cursor-pointer overflow-hidden rounded-t-md group-hover:opacity-[0.95] lg:aspect-video lg:h-40'>
+                <div className='aspect-video h-44 w-full cursor-pointer overflow-hidden rounded-t-md group-hover:opacity-[0.95] lg:aspect-video lg:h-36'>
                     <img
                         src={primaryImage || '/images/image_not_available.png'}
                         alt={vehicleName}
@@ -245,7 +245,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                         </span>
                     </div>
                 </div>
-                <div className='flex-center justify-center gap-1 rounded bg-primary/10 p-1.5 text-center font-semibold text-sm'>
+                <div className='flex-center justify-center gap-1 rounded bg-primary/10 p-1.5 text-center font-semibold text-xs'>
                     <span className='text-nowrap'>Current: Bundee Trip </span> (Jan 01 - Jan 04)
                 </div>
             </div>
