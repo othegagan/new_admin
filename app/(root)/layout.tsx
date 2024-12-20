@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     return (
         <SidebarProvider>
             <AppSidebar navItems={navItems} session={session} />
-            <div id='content' className='ml-auto flex h-svh w-full max-w-full flex-col overflow-hidden'>
+            <div id='content' className='ml-auto flex h-svh w-full max-w-full flex-col'>
                 <AppHeader sticky>
                     <Logo className='md:hidden' />
 
