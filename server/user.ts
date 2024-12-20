@@ -5,6 +5,7 @@ import { env } from '@/env';
 import { api } from '@/lib/apiService';
 import { JSONparsefy } from '@/lib/utils';
 import type { CreateUserProps } from '@/types';
+import axios from 'axios';
 
 const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 const USER_TOKEN_BASEURL = env.NEXT_PUBLIC_USER_TOKEN_BASEURL;
@@ -15,7 +16,7 @@ export async function getBundeeToken(firebaseToken: string) {
         authToken: firebaseToken
     };
 
-    const response = await api.post<any>(url, payload);
+    const response = await axios.post(url, payload);
     return JSONparsefy(response.data);
 }
 export async function getUserByEmail(email: string) {

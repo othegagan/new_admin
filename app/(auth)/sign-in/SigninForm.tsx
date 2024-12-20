@@ -138,6 +138,7 @@ export default function SigninForm() {
                         )}
 
                         <Button
+                            className='!w-full'
                             type='submit'
                             loading={isPending}
                             loadingText='Signing in...'

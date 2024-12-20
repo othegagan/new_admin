@@ -34,25 +34,25 @@ export const authConfig: NextAuthConfig = {
 
                     // Step 1: Fetch Bundee Auth Token
                     const authTokenResponse = await getBundeeToken(firebaseToken as string);
-                    if (!authTokenResponse.authToken) {
+                    if (!authTokenResponse?.authToken) {
                         throw new CustomAuthError('Unable to get Bundee Token');
                     }
 
                     // Step 2: Fetch user details
                     const response = await getUserByEmail(email as string);
-                    if (!response.success || !response.data?.userResponse) {
+                    if (!response?.success || !response?.data?.userResponse) {
                         throw new CustomAuthError(response.message || 'Unable to get user by email');
                     }
 
                     const userResponse = response.data.userResponse;
 
                     // Step 3: Check for inactive accounts
-                    if (!userResponse.isactive) {
+                    if (!userResponse?.isactive) {
                         throw new CustomAuthError('Unauthorized: Account is inactive');
                     }
 
                     // Step 4: Block DRIVER role users
-                    if (userResponse.userRole === ROLES.DRIVER) {
+                    if (userResponse?.userRole === ROLES.DRIVER) {
                         throw new CustomAuthError('Unauthorized to sign in');
                     }
 
