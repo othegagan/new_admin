@@ -1,23 +1,22 @@
 'use client';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useIsMobile } from '@/hooks/utils/use-mobile';
 import { cn } from '@/lib/utils';
-import { MenuIcon } from '@/public/icons';
 import { Slot } from '@radix-ui/react-slot';
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { type VariantProps, cva } from 'class-variance-authority';
+import { PanelLeft } from 'lucide-react';
 import * as React from 'react';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '14rem';
-const SIDEBAR_WIDTH_MOBILE = '18rem';
+const SIDEBAR_WIDTH_MOBILE = '15rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
@@ -153,8 +152,10 @@ const Sidebar = React.forwardRef<
     if (isMobile) {
         return (
             <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
+                <VisuallyHidden asChild>
+                    <SheetTitle />
+                </VisuallyHidden>
                 <SheetContent
-                    aria-describedby='sidebar'
                     data-sidebar='sidebar'
                     data-mobile='true'
                     className='w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden'
@@ -164,9 +165,9 @@ const Sidebar = React.forwardRef<
                         } as React.CSSProperties
                     }
                     side={side}>
-                    <VisuallyHidden.Root>
-                        <SheetTitle>Menu</SheetTitle>
-                    </VisuallyHidden.Root>
+                    <VisuallyHidden asChild>
+                        <SheetDescription />
+                    </VisuallyHidden>
                     <div className='flex h-full w-full flex-col'>{children}</div>
                 </SheetContent>
             </Sheet>
@@ -232,7 +233,7 @@ const SidebarTrigger = React.forwardRef<React.ElementRef<typeof Button>, React.C
                     toggleSidebar();
                 }}
                 {...props}>
-                <MenuIcon />
+                <PanelLeft />
                 <span className='sr-only'>Toggle Sidebar</span>
             </Button>
         );
@@ -315,7 +316,6 @@ SidebarSeparator.displayName = 'SidebarSeparator';
 const SidebarContent = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(({ className, ...props }, ref) => {
     return (
         <div
-            aria-describedby='sidebar'
             ref={ref}
             data-sidebar='content'
             className={cn('flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden', className)}
@@ -383,12 +383,12 @@ const SidebarMenu = React.forwardRef<HTMLUListElement, React.ComponentProps<'ul'
 SidebarMenu.displayName = 'SidebarMenu';
 
 const SidebarMenuItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(({ className, ...props }, ref) => (
-    <li ref={ref} data-sidebar='menu-item' className={cn('group/menu-item relative list-none', className)} {...props} />
+    <li ref={ref} data-sidebar='menu-item' className={cn('group/menu-item relative', className)} {...props} />
 ));
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
 const sidebarMenuButtonVariants = cva(
-    'class="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left outline-none ring-sidebar-ring transition-[width,height,padding] focus-visible:ring-2 active:bg-sidebar-accent-hover active:text-sidebar-accent-foreground-hover disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent-hover data-[state=open]:hover:text-sidebar-accent-foreground-hover group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-5 [&>svg]:shrink-0 hover:bg-sidebar-accent-hover hover:text-sidebar-accent-foreground-hover h-8 text-sm"',
+    'peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-none ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:!p-2 [&>span:last-child]:truncate [&>svg]:size-5 [&>svg]:shrink-0',
     {
         variants: {
             variant: {
@@ -464,7 +464,7 @@ const SidebarMenuAction = React.forwardRef<
             ref={ref}
             data-sidebar='menu-action'
             className={cn(
-                'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0',
+                'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-5 [&>svg]:shrink-0',
                 // Increases the hit area of the button on mobile.
                 'after:-inset-2 after:absolute after:md:hidden',
                 'peer-data-[size=sm]/menu-button:top-1',
@@ -532,7 +532,7 @@ const SidebarMenuSub = React.forwardRef<HTMLUListElement, React.ComponentProps<'
         ref={ref}
         data-sidebar='menu-sub'
         className={cn(
-            'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5',
+            'mx-3.5 flex min-w-0 translate-x-px list-none flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5',
             'group-data-[collapsible=icon]:hidden',
             className
         )}
@@ -541,7 +541,9 @@ const SidebarMenuSub = React.forwardRef<HTMLUListElement, React.ComponentProps<'
 ));
 SidebarMenuSub.displayName = 'SidebarMenuSub';
 
-const SidebarMenuSubItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(({ ...props }, ref) => <li ref={ref} {...props} />);
+const SidebarMenuSubItem = React.forwardRef<HTMLLIElement, React.ComponentProps<'li'>>(({ ...props }, ref) => (
+    <li className='list-none' ref={ref} {...props} />
+));
 SidebarMenuSubItem.displayName = 'SidebarMenuSubItem';
 
 const SidebarMenuSubButton = React.forwardRef<

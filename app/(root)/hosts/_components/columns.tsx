@@ -12,7 +12,7 @@ export const columns: ColumnDef<User>[] = [
     {
         accessorKey: 'iduser',
         header: ({ column }) => (
-            <div className='flex-start py-1'>
+            <div className='flex-center py-1'>
                 <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                     ID
                     <ChevronsUpDown className='ml-2 size-3' />
@@ -21,7 +21,7 @@ export const columns: ColumnDef<User>[] = [
         ),
         enableSorting: true,
         cell: ({ cell }: { cell: any }) => {
-            return <div className='flex-start'>{cell?.getValue()}</div>;
+            return <div className='flex-center'>{cell?.getValue()}</div>;
         }
     },
 
@@ -101,7 +101,7 @@ export const columns: ColumnDef<User>[] = [
     {
         accessorKey: 'channelName',
         header: ({ column }) => (
-            <div className='flex-start py-1'>
+            <div className='flex-center py-1'>
                 <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                     Channel Name
                     <ChevronsUpDown className='ml-2 size-3' />
@@ -111,7 +111,7 @@ export const columns: ColumnDef<User>[] = [
         enableSorting: true,
         cell: ({ cell }: { cell: any }) => {
             return (
-                <div className='flex-start'>
+                <div className='flex-center'>
                     <Badge>{cell?.getValue()}</Badge>
                 </div>
             );

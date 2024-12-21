@@ -8,7 +8,7 @@ export default async function DashboardPage() {
     const session = await auth();
     return (
         <Main>
-            <div className='mx-auto max-w-6xl'>
+            <div className='mx-auto max-w-7xl'>
                 <div className='mb-8 flex-between flex-wrap-reverse items-start gap-4'>
                     <div>
                         <h2>Hello, {session?.name || 'Host'}!</h2>

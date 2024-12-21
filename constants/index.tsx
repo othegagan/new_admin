@@ -1,6 +1,6 @@
-import { EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
-import type { NavItem, Role } from '@/types';
-import { LucideHome, UserCog } from 'lucide-react';
+import { ConfigurationsIcon, EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
+import type { NavGroupProps, Role } from '@/types';
+import { HomeIcon, User2 } from 'lucide-react';
 import { PAGE_ROUTES } from './routes';
 
 export const ROLES = {
@@ -22,54 +22,90 @@ export const CHANNELS = {
  * The user can access the sub items if the user has the role for the sub item.
  * Add the roles for each item in the `roles` array.
  */
-const navItems: NavItem[] = [
+
+const navItems: NavGroupProps[] = [
     {
-        title: 'Home',
-        href: PAGE_ROUTES.DASHBOARD,
-        icon: <LucideHome />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
+        title: '',
+        items: [
+            {
+                title: 'Home',
+                url: PAGE_ROUTES.DASHBOARD,
+                icon: <HomeIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Trips',
+                url: PAGE_ROUTES.TRIPS,
+                icon: <TripsIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Vehicles',
+                url: PAGE_ROUTES.VEHICLES,
+                icon: <VehiclesIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Find My Car',
+                url: PAGE_ROUTES.FIND_MY_CAR,
+                icon: <FindMyCarIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Hosts',
+                url: PAGE_ROUTES.HOSTS,
+                icon: <HostsIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Guests',
+                url: PAGE_ROUTES.GUESTS,
+                icon: <GuestsIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Employees',
+                url: PAGE_ROUTES.EMPLOYEES,
+                icon: <EmployeesIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            }
+        ]
     },
     {
-        title: 'Trips',
-        href: PAGE_ROUTES.TRIPS,
-        icon: <TripsIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Vehicles',
-        href: PAGE_ROUTES.VEHICLES,
-        icon: <VehiclesIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Find My Car',
-        href: PAGE_ROUTES.FIND_MY_CAR,
-        icon: <FindMyCarIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Hosts',
-        href: PAGE_ROUTES.HOSTS,
-        icon: <HostsIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Guests',
-        href: PAGE_ROUTES.GUESTS,
-        icon: <GuestsIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Employees',
-        href: PAGE_ROUTES.EMPLOYEES,
-        icon: <EmployeesIcon />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
-    },
-    {
-        title: 'Configurations',
-        href: PAGE_ROUTES.CONFIGURATIONS,
-        icon: <UserCog />,
-        roles: [ROLES.EMPLOYEE, ROLES.HOST]
+        title: 'Other',
+        items: [
+            {
+                title: 'Configurations',
+                url: PAGE_ROUTES.CONFIGURATIONS,
+                icon: <ConfigurationsIcon />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            },
+            {
+                title: 'Profile',
+                url: '/profile',
+                icon: <User2 />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            }
+            // {
+            //     title: 'Settings',
+            //     icon: <Settings />,
+            //     roles: [ROLES.EMPLOYEE, ROLES.HOST],
+            //     items: [
+            //         {
+            //             title: 'Profile',
+            //             url: '/settings',
+            //             icon: <UserCog />,
+            //             roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            //         },
+            //         {
+            //             title: 'Account',
+            //             url: '/settings/account',
+            //             icon: <PanelTopClose />,
+            //             roles: [ROLES.EMPLOYEE, ROLES.HOST]
+            //         }
+            //     ]
+            // },
+        ]
     }
 ];
 
@@ -79,19 +115,40 @@ const navItems: NavItem[] = [
  * @param role - The user's role.
  * @returns The filtered nav items.
  */
-export const getNavItems = (role: Role) => {
-    return navItems.filter((item) => {
-        if (item.items) {
-            // filter sub items
-            item.items = item.items.filter((subItem) => {
-                return subItem.roles?.includes(role);
-            });
-            // return true if there are sub items left
-            return item.items.length > 0;
-        }
-        // filter top level items
-        return item.roles?.includes(role);
-    });
+export const getNavItems = (role: Role): NavGroupProps[] => {
+    return navItems
+        .map((group) => {
+            // Create a copy of the group to avoid mutating the original
+            const filteredGroup = { ...group };
+
+            if (group.items) {
+                // Filter the items array
+                filteredGroup.items = group.items
+                    .map((item) => {
+                        // Handle nested items (like in Settings)
+                        if (item.items) {
+                            return {
+                                ...item,
+                                items: item.items.filter((subItem) => subItem.roles?.includes(role))
+                            };
+                        }
+                        // Handle regular items
+                        return item;
+                    })
+                    .filter(
+                        (item) =>
+                            // Keep items that either have roles matching or have remaining nested items
+                            item.roles?.includes(role) || (item.items && item.items.length > 0)
+                    );
+            }
+
+            return filteredGroup;
+        })
+        .filter(
+            (group) =>
+                // Only keep groups that have remaining items
+                group.items && group.items.length > 0
+        );
 };
 
 export const stateList = [

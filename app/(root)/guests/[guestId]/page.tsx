@@ -245,7 +245,7 @@ function DriverBookingHistory({ bookingHistory }: { bookingHistory: any[] }) {
         <>
             <h4 className='font-semibold text-lg'>Booking History</h4>
 
-            <DataTable columns={driverBookingHistoryColumns} data={bookingHistoryData} sortBasedOn='booking' />
+            <DataTable columns={driverBookingHistoryColumns} data={bookingHistoryData} sortBasedOn='slNo' />
         </>
     );
 }

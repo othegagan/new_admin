@@ -4,14 +4,30 @@ export type Channel = (typeof CHANNELS)[keyof typeof CHANNELS];
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
-export interface NavItem {
-    id?: number;
+export interface BaseNavItem {
     title: string;
-    href?: string;
+    badge?: string;
     icon?: React.ReactNode;
-    description?: string;
-    items?: NavItem[];
-    roles?: Role[];
+    roles: string[];
+}
+
+export type NavLink = BaseNavItem & {
+    url: string;
+    items?: never;
+    roles?: string[];
+};
+
+export type NavCollapsible = BaseNavItem & {
+    items: (BaseNavItem & { url: string })[];
+    url?: never;
+    roles?: string[];
+};
+
+export type NavItem = NavCollapsible | NavLink;
+
+export interface NavGroupProps {
+    title: string;
+    items: NavItem[];
 }
 
 export interface CreateUserProps {
