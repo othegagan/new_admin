@@ -84,12 +84,12 @@ export default function page() {
                         </Button>
                     </div>
                 ) : (
-                    <div className='mx-auto grid w-[350px] gap-6'>
+                    <div className='mx-auto grid w-full max-w-[450px] gap-6'>
                         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
                             <InputText
                                 type='email'
                                 label='Email'
-                                placeholder='m@example.com'
+                                placeholder='name@example.com'
                                 {...register('email')}
                                 error={errors.email?.message}
                             />
@@ -101,7 +101,7 @@ export default function page() {
                                 </div>
                             )}
 
-                            <Button type='submit' className='flex w-full' loading={isSubmitting} loadingText='Sending...'>
+                            <Button type='submit' className='!w-full flex' loading={isSubmitting} loadingText='Sending...'>
                                 Send password reset email
                             </Button>
                         </form>

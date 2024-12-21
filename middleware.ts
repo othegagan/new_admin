@@ -6,7 +6,8 @@ import { createRouterMatcher } from './lib/routeMatcher';
 
 const routeMatcher = createRouterMatcher([
     { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
-    { matcher: AUTH_ROUTES.SIGN_IN, auth: false }
+    { matcher: AUTH_ROUTES.SIGN_IN, auth: false },
+    { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false }
 ]);
 
 export async function middleware(request: NextRequest) {
@@ -16,8 +17,8 @@ export async function middleware(request: NextRequest) {
     const isLoggedIn = session;
     const userRole = session?.userRole;
 
-    // Check for sign-in page access first
-    if (pathname === AUTH_ROUTES.SIGN_IN) {
+    // Check for auth pages access first (both sign-in and forgot-password)
+    if (pathname === AUTH_ROUTES.SIGN_IN || pathname === AUTH_ROUTES.FORGOT_PASSWORD) {
         if (isLoggedIn) {
             const redirectedFrom = request.nextUrl.searchParams.get('redirectedFrom');
             if (redirectedFrom !== 'home') {
@@ -25,7 +26,6 @@ export async function middleware(request: NextRequest) {
                 redirectUrl.searchParams.set('redirectedFrom', 'signin');
                 return NextResponse.redirect(redirectUrl);
             }
-            return NextResponse.next();
         }
         return NextResponse.next();
     }
