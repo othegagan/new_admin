@@ -146,7 +146,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             <div className='flex-start flex-wrap gap-4'>
                 <div className='flex-center gap-4'>
                     <Select>
-                        <SelectTrigger className='hidden w-[150px] md:flex'>
+                        <SelectTrigger className=' w-[100px] md:w-[150px]'>
                             <SelectValue placeholder='Trip Status' />
                         </SelectTrigger>
                         <SelectContent>
@@ -159,7 +159,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                     </Select>
 
                     <Select value={selectedFilter} onValueChange={handleFilterChange}>
-                        <SelectTrigger className='w-[150px]'>
+                        <SelectTrigger className='w-[120px] md:w-[150px]'>
                             <SelectValue placeholder='Vehicle Status' />
                         </SelectTrigger>
                         <SelectContent>
@@ -175,7 +175,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                         </SelectContent>
                     </Select>
                     <Select>
-                        <SelectTrigger className='w-[150px]'>
+                        <SelectTrigger className='w-[110px] md:w-[150px]'>
                             <SelectValue placeholder='Sort by' />
                         </SelectTrigger>
                         <SelectContent>
@@ -253,7 +253,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
     );
 }
 
-function VehicleStatusBadge({
+export function VehicleStatusBadge({
     status,
     className
 }: {

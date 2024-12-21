@@ -50,11 +50,10 @@ export default function MasterDataPage() {
 
     return (
         <div className='mx-auto flex max-w-5xl flex-col gap-4'>
-            <h5 className='font-semibold'>Vehicle Details</h5>
             <AdditionalDataForm vehicleData={vehicleData} vinDBData={vinDBData} refetchData={refetchData} />
             <hr />
             <h5 className='font-semibold'>Make/Model</h5>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-6'>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6'>
                 <DataBlock title='VIN' data={vinDBData?.VIN} dataClassName='uppercase' />
                 <DataBlock title='Make' data={vinDBData?.Make} />
                 <DataBlock title='Model' data={vinDBData?.Model} />
@@ -64,7 +63,7 @@ export default function MasterDataPage() {
             </div>
             <hr />
             <h5 className='font-semibold'>Vehicle Features</h5>
-            <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-3'>
                 <DataBlock title='Vehicle Type' data={vinDBData['Vehicle Type']} />
                 <DataBlock title='Body Class' data={vinDBData['Body Class']} />
                 <DataBlock title='Number of Doors' data={vinDBData?.Doors} />
@@ -97,8 +96,8 @@ function DataBlock({
 
     return (
         <div className={cn('flex flex-col gap-2', classNmae)}>
-            <div className='font-medium capitalize'>{title}</div>
-            <div className={cn('text-muted-foreground text-sm', dataClassName)}>{data || '-'}</div>
+            <div className='truncate font-medium capitalize'>{title}</div>
+            <div className={cn('truncate text-muted-foreground text-sm', dataClassName)}>{data || '-'}</div>
         </div>
     );
 }
@@ -179,7 +178,7 @@ function AdditionalDataForm({ vehicleData, vinDBData, refetchData }: any) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-            <div className='grid grid-cols-1 gap-4 p-0.5 md:grid-cols-3 lg:grid-cols-4'>
+            <div className='grid grid-cols-2 gap-4 p-0.5 md:grid-cols-3 lg:grid-cols-4'>
                 <div className='flex flex-col gap-2'>
                     <Label>Licence Plate Number</Label>
                     <Input {...register('number')} placeholder='Vehicle Number' />

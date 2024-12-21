@@ -126,7 +126,7 @@ export default function VehicleCalendarPage() {
 
             <div className='flex flex-col gap-4'>
                 {!isLoading && !error && (
-                    <div className='grid grid-cols-1 gap-4 md:grid-cols-6'>
+                    <div className='grid grid-cols-1 gap-10 md:grid-cols-6'>
                         <div className='lg:col-span-4'>
                             <CalendarComponent
                                 trips={tripsData}

@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 
 const HOST_VEHICLE_SERVICES_BASEURL = env.NEXT_PUBLIC_HOST_VEHICLE_SERVICES_BASEURL;
 const AVAILABILITY_BASEURL = env.NEXT_PUBLIC_AVAILABILITY_BASEURL;
+const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 
 export async function getAllVehiclesUnderHost() {
     const session = await auth();
@@ -48,7 +49,7 @@ export async function getVehicleUpdateLogsById(id: number) {
 }
 
 export async function getVehicleTripById(startTIme: string, endTime: string, vehicleId: number) {
-    const url = `${process.env.BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {
         startTime: startTIme,
         endTime: endTime,
@@ -61,7 +62,7 @@ export async function getVehicleTripById(startTIme: string, endTime: string, veh
 }
 
 export async function copyVehicleFromOneToAnother(fromVehicleId: number, toVehicleId: number) {
-    const url = `${process.env.HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/copyVehicleFunctionality`;
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/copyVehicleFunctionality`;
     const payload = {
         fromVehicleId,
         toVehicleId
@@ -127,7 +128,7 @@ export async function updateVehicleFeaturesById({ type, payload }: UpdateVehicle
         telematics: '/v1/vehicle/updateTelematics'
     };
 
-    const url = `${process.env.HOST_VEHICLE_SERVICES_BASEURL}${urlMap[type]}`;
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}${urlMap[type]}`;
 
     if (!url) {
         throw new Error(`Invalid update type: ${type}`);

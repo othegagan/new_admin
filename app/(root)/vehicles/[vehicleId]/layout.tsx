@@ -1,8 +1,8 @@
 'use client';
 import { Main } from '@/components/layout/main';
 import * as React from 'react';
-import BasicVehicleDetails from '../_components/basic-vehicle-details';
-import VehicleConfigTabs from '../_components/vehicle-config-tabs';
+import BasicVehicleDetails from '../_components/layout/basic-vehicle-details';
+import VehicleConfigTabs from '../_components/layout/vehicle-config-tabs';
 
 interface VehicleLayoutProps {
     children: React.ReactNode;

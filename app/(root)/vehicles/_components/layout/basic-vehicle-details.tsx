@@ -16,7 +16,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
     const { data: featuresResponse, isLoading: isLoadingFeatures, error: errorFeatures } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoadingFeatures) {
-        return <div>Loading...</div>;
+        return <div className='h-28'>Loading...</div>;
     }
 
     if (errorFeatures) {
@@ -59,7 +59,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                 />
                 <div className='flex w-full flex-col gap-2'>
                     <div>
-                        <h1 className='font-semibold text-xl'>{vehicleName}</h1>
+                        <h1 className='font-semibold text-lg md:text-xl'>{vehicleName}</h1>
                         <div className='flex-start gap-5 text-md'>
                             <span className='text-muted-foreground tracking-wider'>{number}</span>
                         </div>

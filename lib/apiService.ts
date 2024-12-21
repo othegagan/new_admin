@@ -182,6 +182,8 @@ class ApiService {
                 ...config
             });
 
+            // console.log('response', response.data);
+
             // Return the transformed data
             return (response as any).transformedData;
         } catch (error: any) {

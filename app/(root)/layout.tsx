@@ -1,5 +1,3 @@
-import { MessagesNotificationButton } from '@/components/layout/MessagesNotificationButton';
-import { NotificationBellButton } from '@/components/layout/NotificationBellButton';
 import { AppHeader } from '@/components/layout/app-header';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import Logo from '@/components/layout/logo';
@@ -23,8 +21,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 <AppHeader sticky>
                     <Logo className='md:hidden' herf={PAGE_ROUTES.DASHBOARD} />
                     <div className='ml-auto flex items-center space-x-4'>
-                        <MessagesNotificationButton />
-                        <NotificationBellButton />
+                        {/* <MessagesNotificationButton />
+                        <NotificationBellButton /> */}
                         <UserNav session={session} />
                     </div>
                 </AppHeader>

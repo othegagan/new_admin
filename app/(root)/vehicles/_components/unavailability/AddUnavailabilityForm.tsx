@@ -73,7 +73,7 @@ export default function AddUnavailabilityForm({ vin, vehicleId, refetchData, zip
 
     return (
         <>
-            <Button variant='black' size='sm' onClick={openDialog}>
+            <Button variant='black' className='w-fit' onClick={openDialog}>
                 Add
             </Button>
 

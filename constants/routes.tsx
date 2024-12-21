@@ -70,22 +70,22 @@ export const vehicleConfigTabs = {
         ]
     },
     mobile: [
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR, label: 'Calendar' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA, label: 'Master Data' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.IMPORT, label: 'Import Vehicle' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.PHOTOS, label: 'Photos' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.DESCRIPTION, label: 'Description' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.LOCATION_DELIVERY, label: 'Location Delivery' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.GUEST_GUIDELINES, label: 'Guest Guidelines' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.MILEAGE_LIMITS, label: 'Mileage Limits' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.RENTAL_DURATION, label: 'Rental Duration' },
-        { href: PAGE_ROUTES.VEHICLE_DETAILS.PLATFORM_SYNC, label: 'Platform Sync' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.MAINTENANCE, label: 'Maintenance' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.TRP_HISTORY, label: 'Trip History' },
-        { herf: PAGE_ROUTES.VEHICLE_DETAILS.LOGS, label: 'Activity Logs' }
+        { id: 1, herf: PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR, label: 'Calendar' },
+        { id: 2, herf: PAGE_ROUTES.VEHICLE_DETAILS.MASTER_DATA, label: 'Master Data' },
+        { id: 3, herf: PAGE_ROUTES.VEHICLE_DETAILS.IMPORT, label: 'Import Vehicle' },
+        { id: 4, herf: PAGE_ROUTES.VEHICLE_DETAILS.PHOTOS, label: 'Photos' },
+        { id: 5, herf: PAGE_ROUTES.VEHICLE_DETAILS.DESCRIPTION, label: 'Description' },
+        { id: 6, herf: PAGE_ROUTES.VEHICLE_DETAILS.LOCATION_DELIVERY, label: 'Location Delivery' },
+        { id: 7, herf: PAGE_ROUTES.VEHICLE_DETAILS.GUEST_GUIDELINES, label: 'Guest Guidelines' },
+        { id: 8, herf: PAGE_ROUTES.VEHICLE_DETAILS.MILEAGE_LIMITS, label: 'Mileage Limits' },
+        { id: 9, herf: PAGE_ROUTES.VEHICLE_DETAILS.RENTAL_DURATION, label: 'Rental Duration' },
+        { id: 10, href: PAGE_ROUTES.VEHICLE_DETAILS.PLATFORM_SYNC, label: 'Platform Sync' },
+        { id: 11, herf: PAGE_ROUTES.VEHICLE_DETAILS.PRICING_DISCOUNTS, label: 'Pricing & Discounts' },
+        { id: 12, herf: PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS, label: 'Telematics' },
+        { id: 13, herf: PAGE_ROUTES.VEHICLE_DETAILS.NOTIFICATIONS, label: 'Notifications' },
+        { id: 14, herf: PAGE_ROUTES.VEHICLE_DETAILS.MAINTENANCE, label: 'Maintenance' },
+        { id: 15, herf: PAGE_ROUTES.VEHICLE_DETAILS.TRP_HISTORY, label: 'Trip History' },
+        { id: 16, herf: PAGE_ROUTES.VEHICLE_DETAILS.LOGS, label: 'Activity Logs' }
     ]
 };
 
