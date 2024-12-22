@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { vehicleConfigTabsContent } from '@/constants';
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
@@ -13,6 +14,7 @@ import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import SubHeader from '../../_components/layout/subheader';
 
 export default function GuestInstructionsPage() {
     const { vehicleId } = useParams();
@@ -38,10 +40,14 @@ export default function GuestInstructionsPage() {
         return <div>Error: {response?.message}</div>;
     }
 
-    const instructionsAndGuideLines: string = response?.data?.vehicleAllDetails[0].GuestInstructionsAndGuideLines;
+    const instructionsAndGuideLines: string = response?.data?.vehicleAllDetails[0].GuestInstructionsAndGuideLines || '';
 
     return (
         <div className='flex flex-col'>
+            <SubHeader
+                title={vehicleConfigTabsContent.guest_guidelines.title}
+                description={vehicleConfigTabsContent.guest_guidelines.description}
+            />
             <GuestInstructionsForm
                 vechicleId={Number(vehicleId)}
                 instructionsAndGuideLines={instructionsAndGuideLines}

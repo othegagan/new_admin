@@ -44,7 +44,7 @@ export async function getVehicleUpdateLogsById(id: number) {
     const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehicleLogByVehicleId`;
     const payload = { vehicleId: id };
 
-    const response = await api.post(url, payload);
+    const response = await api.post<any>(url, payload);
     return response;
 }
 
@@ -92,7 +92,9 @@ interface UpdateVehicleFeaturesById {
         | 'update_status'
         | 'create_turo_id'
         | 'update_turo_id'
+        | 'mix_max_rental_duration'
         | 'telematics';
+
     payload: any;
 }
 
@@ -117,6 +119,8 @@ export async function updateVehicleFeaturesById({ type, payload }: UpdateVehicle
 
         upload_mileage_limits: '/v1/vehicle/uploadVehicleMilage',
         update_mileage_limits: '/v1/vehicle/updateMilageLimit',
+
+        mix_max_rental_duration: '/v1/vehicle/setVehicleMinMax',
 
         upload_status: '/v1/vehicle/uploadVehicleAdditionalDetails',
         update_status: '/v1/vehicle/updateVehicleAdditionalDetails',

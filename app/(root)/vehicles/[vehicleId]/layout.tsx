@@ -1,8 +1,8 @@
 'use client';
 import { Main } from '@/components/layout/main';
-import * as React from 'react';
+import { use } from 'react';
 import BasicVehicleDetails from '../_components/layout/basic-vehicle-details';
-import VehicleConfigTabs from '../_components/layout/vehicle-config-tabs';
+import Tabs from '../_components/layout/tabs';
 
 interface VehicleLayoutProps {
     children: React.ReactNode;
@@ -15,23 +15,19 @@ interface VehicleIdValidatiorProps {
 }
 
 export default function VehicleLayout({ children, params }: VehicleLayoutProps) {
-    const { vehicleId } = React.use(params);
+    const { vehicleId } = use(params);
 
     return (
-        <Main fixed className=' md:pt-0'>
-            {/* Header */}
-            <VehicleIdValidatior vehicleId={vehicleId}>
+        <VehicleIdValidatior vehicleId={vehicleId}>
+            <Main fixed>
                 <BasicVehicleDetails vehicleId={Number(vehicleId)} />
 
-                {/* Tabs */}
-                <div className='my-4 w-full'>
-                    <VehicleConfigTabs />
+                <div className='flex flex-1 flex-col space-y-2 overflow-hidden '>
+                    <Tabs />
+                    <div className=' overflow-y-auto overflow-x-hidden pr-1'>{children}</div>
                 </div>
-
-                {/* Main Content */}
-                <div className='overflow-y-auto border-t py-5'>{children}</div>
-            </VehicleIdValidatior>
-        </Main>
+            </Main>
+        </VehicleIdValidatior>
     );
 }
 

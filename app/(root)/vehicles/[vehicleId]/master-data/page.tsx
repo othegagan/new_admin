@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { FormError, Label } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { stateList } from '@/constants';
+import { stateList, vehicleConfigTabsContent } from '@/constants';
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { useVehicleFeaturesById, useVehicleMasterDataByVIN } from '@/hooks/useVehicles';
 import { cn } from '@/lib/utils';
@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import SubHeader from '../../_components/layout/subheader';
 
 export default function MasterDataPage() {
     const { vehicleId } = useParams();
@@ -49,7 +50,8 @@ export default function MasterDataPage() {
     const vehicleData = vinDBResponse?.data?.vehicles[0];
 
     return (
-        <div className='mx-auto flex max-w-5xl flex-col gap-4'>
+        <div className=' flex flex-col gap-4'>
+            <SubHeader title={vehicleConfigTabsContent.master_data.title} description={vehicleConfigTabsContent.master_data.description} />
             <AdditionalDataForm vehicleData={vehicleData} vinDBData={vinDBData} refetchData={refetchData} />
             <hr />
             <h5 className='font-semibold'>Make/Model</h5>

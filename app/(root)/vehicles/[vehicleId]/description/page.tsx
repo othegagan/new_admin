@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 
+import { vehicleConfigTabsContent } from '@/constants';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
@@ -14,6 +15,7 @@ import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import SubHeader from '../../_components/layout/subheader';
 
 export default function DescriptionPage() {
     const { vehicleId } = useParams();
@@ -43,6 +45,7 @@ export default function DescriptionPage() {
 
     return (
         <div className='flex flex-col'>
+            <SubHeader title={vehicleConfigTabsContent.description.title} description={vehicleConfigTabsContent.description.description} />
             <DescriptionForm vechicleId={Number(vehicleId)} description={description} refetchData={refetchData} />
         </div>
     );
@@ -119,7 +122,7 @@ function DescriptionForm({ vechicleId, description = '', refetchData }: Descript
                 />
             </div>
 
-            <div className='mt-6 flex items-center justify-end gap-x-6'>
+            <div className='mt-4 flex items-center justify-end gap-x-6'>
                 <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...'>
                     Save
                 </Button>

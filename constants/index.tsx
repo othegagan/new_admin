@@ -225,3 +225,75 @@ export const fuseSettings = {
     findAllMatches: true,
     isCaseSensitive: false
 };
+
+export const vehicleConfigTabsContent = {
+    calendar: {
+        title: 'Calendar',
+        description: "View your vehicle's availability at one place!"
+    },
+    master_data: {
+        title: 'Master Data',
+        description: "Enter the vehicle's plate number, state, and color to complete your vehicle listing."
+    },
+    import: {
+        title: 'Import Vehicle',
+        description: 'Import vehicle information from another platform or from an existing vehicle on this platform.'
+    },
+    photos: {
+        title: 'Photos',
+        description: 'Upload high-quality photos of your vehicle to attract more renters.'
+    },
+    description: {
+        title: 'Description',
+        description:
+            'Provide a detailed description of your vehicle, including its features, condition, and any unique selling points. It will be displayed to potential renters on the vehicle listing page.'
+    },
+    location_delivery: {
+        title: 'Location & Delivery',
+        description: 'Enter the primary location where your vehicle will be available for pickup and return.'
+    },
+    guest_guidelines: {
+        title: 'Guest Guidelines',
+        description: 'Set guidelines for your guests. These guidelines will be displayed to potential guests when they book your vehicle.'
+    },
+    mileage_limits: {
+        title: 'Mileage Limits',
+        description: ''
+    },
+    rental_duration: {
+        title: 'Rental Duration',
+        description: 'Set minimum and maximum rental durations to control booking flexibility.'
+    },
+    pricing: {
+        title: 'Pricing',
+        description: ''
+    },
+    discounts: {
+        title: 'Discounts',
+        description: 'The configured discount rate will be applied to the total reservation amount.'
+    },
+    platform_sync: {
+        title: 'Platform Sync',
+        description: 'Connect your vehicle listings to other rental platforms for effective booking management.'
+    },
+    telematics: {
+        title: 'Telematics',
+        description: ''
+    },
+    notifications: {
+        title: 'Configure Automated Notifications',
+        description: ''
+    },
+    maintenance: {
+        title: 'Maintenance',
+        description: 'Track maintenance, repairs, and expenses for your vehicle.'
+    },
+    trp_history: {
+        title: 'Trip History',
+        description: ''
+    },
+    activity_logs: {
+        title: 'Activity Logs',
+        description: 'Shows a detailed history of actions performed on your vehicle.'
+    }
+};

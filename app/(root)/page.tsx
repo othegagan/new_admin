@@ -23,7 +23,7 @@ export default async function DashboardPage() {
                             key={item.label}
                             href={item.href}
                             className='group flex h-32 flex-col items-center justify-center gap-6 rounded-lg border-2 border-primary/70 bg-card text-foreground/70 transition-colors hover:border-2 hover:border-primary hover:bg-accent md:h-40'>
-                            <div className='scale-[1.6] group-hover:text-primary'>{item.icon}</div>
+                            <div className='scale-[0.80] group-hover:text-primary'>{item.icon}</div>
                             <h5>{item.label}</h5>
                         </Link>
                     ))}

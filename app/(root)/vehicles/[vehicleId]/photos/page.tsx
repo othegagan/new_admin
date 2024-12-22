@@ -2,7 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { FileInput, FileUploader } from '@/components/ui/extension/file-uploader';
+import { Progress } from '@/components/ui/progress';
 import { Sortable, SortableDragHandle, SortableItem } from '@/components/ui/sortable';
+import { vehicleConfigTabsContent } from '@/constants';
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { env } from '@/env';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
@@ -11,13 +13,14 @@ import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { closestCorners } from '@dnd-kit/core';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { FileImage, Star, Trash2 } from 'lucide-react';
+import { Star, Trash2 } from 'lucide-react';
 import { getSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { DropzoneOptions } from 'react-dropzone';
 import { TiStarFullOutline } from 'react-icons/ti';
 import { toast } from 'sonner';
+import SubHeader from '../../_components/layout/subheader';
 
 export default function PhotosPage() {
     const { vehicleId } = useParams();
@@ -62,6 +65,7 @@ export default function PhotosPage() {
 
     return (
         <div className='flex flex-col gap-4'>
+            <SubHeader title={vehicleConfigTabsContent.photos.title} description={vehicleConfigTabsContent.photos.description} />
             <PhotoRearrangeForm vehicleId={Number(vehicleId)} vehicleImages={images} refetchData={refetchData} />
         </div>
     );
@@ -244,7 +248,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRear
                 }
             });
 
-            toast.success('Image uploaded successfully!', { duration: 800 });
+            toast.success('Image uploaded successfully!', { duration: 500 });
             setUploading((prev) => {
                 const updatedUploading = new Set(prev);
                 updatedUploading.delete(index);
@@ -267,41 +271,44 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRear
 
     return (
         <main className='grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-10'>
-            <FileUploader
-                value={files}
-                onValueChange={handleFileUpload}
-                dropzoneOptions={dropzone}
-                className='relative rounded-lg bg-background p-2'>
-                <FileInput className='bg-muted py-4 outline-dashed outline-1 outline-neutral-300'>
-                    <div className='flex w-full flex-col items-center justify-center pt-3 pb-4'>
+            <div className='flex w-full flex-col gap-4 overflow-hidden'>
+                <FileUploader
+                    value={files}
+                    onValueChange={handleFileUpload}
+                    dropzoneOptions={dropzone}
+                    className='relative h-40 rounded-lg border-2 border-dashed bg-background transition-colors hover:border-primary'>
+                    <FileInput className='flex h-full flex-col items-center justify-center bg-muted'>
                         <FileUploadDropzoneIcon />
-                    </div>
-                </FileInput>
-
+                        <p className='mb-1 text-muted-foreground text-sm'>
+                            <span className='font-semibold'>Click to upload vehicle photos</span>
+                            &nbsp; or drag and drop
+                        </p>
+                        <p className='text-muted-foreground text-xs'>SVG, PNG, JPG or GIF</p>
+                    </FileInput>
+                </FileUploader>
                 {files.length > 0 && (
-                    <div className='mt-4 w-full'>
-                        {files.map((file, index) => (
-                            <div key={index} className='mb-2 flex items-center justify-between'>
-                                <div className='flex items-center gap-4'>
-                                    <FileImage className='h-4 w-4 stroke-current' />
-                                    <span>{file.name}</span>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <progress value={uploadProgress[index] || 0} max='100' className='w-24' />
-                                    <span>{Math.round(uploadProgress[index] || 0)}%</span>
-                                    {uploading.has(index) && <span>Uploading...</span>}
-                                </div>
-                            </div>
-                        ))}
+                    <div className='mt-4 w-full space-y-2'>
+                        <div className='flex justify-between text-sm'>
+                            <span>
+                                {files.length} file{files.length !== 1 ? 's' : ''} selected
+                            </span>
+                            <span>
+                                {Object.values(uploadProgress).filter((p) => p === 100).length} / {files.length} uploaded
+                            </span>
+                        </div>
+                        <Progress
+                            value={(Object.values(uploadProgress).reduce((a, b) => a + b, 0) / (files.length * 100)) * 100}
+                            className='h-2'
+                        />
                     </div>
                 )}
-                {error && <div className='text-red-500'>{error}</div>}
-            </FileUploader>
+                {error && <div className='mt-4 text-red-500 text-sm'>{error}</div>}
+            </div>
 
             <div className='col-span-2'>
                 <Sortable orientation='mixed' collisionDetection={closestCorners} value={images} onValueChange={rearrangeImages}>
                     <div className='grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4'>
-                        {images.map((image: any) => (
+                        {images?.map((image: any) => (
                             <SortableItem key={image.id} value={image.id} asChild>
                                 <div className='overflow-hidden rounded-md border'>
                                     <SortableDragHandle

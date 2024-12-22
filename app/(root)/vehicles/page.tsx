@@ -253,7 +253,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
     );
 }
 
-export function VehicleStatusBadge({
+function VehicleStatusBadge({
     status,
     className
 }: {

@@ -88,35 +88,39 @@ export default function VehicleCalendarPage() {
     return (
         <div className='flex flex-col'>
             <div className='mb-4 flex w-full gap-6 p-0.5'>
-                <MonthPicker
-                    currentMonth={currentMonth}
-                    onMonthChange={handleMonthChange}
-                    setCurrentMonth={setCurrentMonth}
-                    // calendarRef={calendarRef}
-                    className='w-[200px]'
-                />
-
                 {isLoadingChannels ? (
-                    <Skeleton className='h-9 w-[200px] rounded-md' />
+                    <div className='flex items-center justify-between gap-5'>
+                        <Skeleton className='h-9 w-[150px] rounded-full' />
+                        <Skeleton className='h-9 w-[150px] rounded-full' />
+                    </div>
                 ) : (
-                    <Select
-                        onValueChange={(value) => {
-                            setSelectedChannel(value);
-                            refetchData();
-                        }}
-                        value={selectedChannel}
-                        defaultValue={selectedChannel}>
-                        <SelectTrigger className='max-w-[200px]'>
-                            <SelectValue placeholder='Select channel' />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {channelsData.map((item: any) => (
-                                <SelectItem key={item.id} value={String(item.id)} className='capitalize'>
-                                    {item.channelName}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <>
+                        <MonthPicker
+                            currentMonth={currentMonth}
+                            onMonthChange={handleMonthChange}
+                            setCurrentMonth={setCurrentMonth}
+                            // calendarRef={calendarRef}
+                            className='w-[200px]'
+                        />
+                        <Select
+                            onValueChange={(value) => {
+                                setSelectedChannel(value);
+                                refetchData();
+                            }}
+                            value={selectedChannel}
+                            defaultValue={selectedChannel}>
+                            <SelectTrigger className='max-w-[150px] rounded-full'>
+                                <SelectValue placeholder='Select channel' />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {channelsData.map((item: any) => (
+                                    <SelectItem key={item.id} value={String(item.id)} className='capitalize'>
+                                        {item.channelName}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </>
                 )}
             </div>
 
@@ -182,7 +186,7 @@ function UnavailabilityComponent({
     }
 
     return (
-        <div className='flex w-full flex-col gap-4 md:pl-4 lg:border-l-2'>
+        <div className='flex w-full flex-col gap-4 '>
             <div className='flex w-full items-center justify-between'>
                 <h4 className='text-nowrap text-lg'> Vehicle Unavailability</h4>
                 <AddUnavailabilityForm vin={vin} vehicleId={vehicleId} refetchData={refetchData} zipcode={zipcode} />
