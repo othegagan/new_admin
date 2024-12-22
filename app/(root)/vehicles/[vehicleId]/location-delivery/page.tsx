@@ -293,7 +293,7 @@ function LocationDeliveryForm({
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                {error}
+                                <FormError> {error?.message}</FormError>
                             </>
                         )}
                     />
