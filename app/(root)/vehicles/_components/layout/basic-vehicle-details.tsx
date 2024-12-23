@@ -1,4 +1,4 @@
-'use client ';
+'use client';
 
 import ImagePreview from '@/components/ui/image-preview';
 import { Switch } from '@/components/ui/switch';
@@ -8,6 +8,7 @@ import { toTitleCase } from '@/lib/utils';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { ChevronLeft, Star } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface BasicVehicleDetailsProps {
@@ -22,6 +23,15 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
         refetchAll
     } = useVehicleFeaturesById(Number(vehicleId));
 
+    const [localIsActive, setLocalIsActive] = useState<boolean | null>(null); // Initialize with `null` to avoid before rendering
+
+    useEffect(() => {
+        if (featuresResponse) {
+            // Set the initial local state when featuresResponse is available
+            setLocalIsActive(featuresResponse.data?.vehicleAllDetails[0]?.isActive || false);
+        }
+    }, [featuresResponse]);
+
     if (isLoadingFeatures) {
         return <div className='h-20'>Loading...</div>;
     }
@@ -35,17 +45,20 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
 
     const { rating, tripcount } = reviews;
 
-    const { vin, make, model, year, imageresponse, number, isActive } = features;
+    const { vin, make, model, year, imageresponse, number } = features;
 
     const vehicleName = toTitleCase(`${make} ${model} ${year}`);
     const ratingText = rating ? rating.toFixed(1) : '1.0';
-    const tripText = tripcount ? `(${tripcount}  ${tripcount > 1 ? 'trips' : 'trip'})` : null;
+    const tripText = tripcount ? `(${tripcount} ${tripcount > 1 ? 'trips' : 'trip'})` : null;
     const primaryImage = imageresponse.find((image: any) => image.isPrimary)?.imagename || '';
 
     async function handleChange(checked: boolean) {
+        const previousState = localIsActive;
+        setLocalIsActive(checked); // Optimistically update the local state
+
         const payload: any = {
             vehicleId: vehicleId,
-            isActive: checked // Use the updated state directly from the switch
+            isActive: checked
         };
 
         try {
@@ -53,14 +66,16 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                 type: 'update_activation',
                 payload
             });
+
             if (response.success) {
                 toast.success(response.message);
-                refetchAll();
+                refetchAll(); // Optionally refetch the data
             } else {
-                toast.error(response.message);
+                throw new Error(response.message);
             }
         } catch (error) {
             console.error('Error updating vehicle status:', error);
+            setLocalIsActive(previousState); // Revert on error
             toast.error('Failed to update vehicle status. Please try again.');
         }
     }
@@ -80,38 +95,41 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                         <ImagePreview
                             url={primaryImage || '/images/image_not_available.png'}
                             alt={vehicleName}
-                            className=' h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
+                            className='h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
                         />
                         <div className='flex w-full flex-col gap-2'>
                             <div>
-                                <h1 className='font-semibold text-xl'>Fiat 500e 2017</h1>
+                                <h1 className='font-semibold text-xl'>{vehicleName}</h1>
                                 <div className='flex-start gap-5 text-md'>
-                                    <span className='text-muted-foreground tracking-wider'>NNM2279</span>
-                                    <span className='hidden text-muted-foreground uppercase tracking-wider lg:block'>(VIN : {vin})</span>
+                                    <span className='text-muted-foreground tracking-wider'>{number}</span>
+                                    <span className='hidden text-muted-foreground uppercase tracking-wider lg:block'>(VIN: {vin})</span>
                                 </div>
                             </div>
                             <div className='flex-start gap-3'>
                                 <span className='flex items-center gap-1'>
                                     <Star fill='currentColor' className='size-5' />
-                                    5.0
+                                    {ratingText}
                                 </span>
-                                <span>(149 trips)</span>
+                                <span>{tripText}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='flex w-fit flex-col items-end gap-2 '>
+                <div className='flex w-fit flex-col items-end gap-2'>
                     <span className='text-md capitalize'>
-                        Vehicle Status: <b>{isActive ? 'Active' : 'Inactive'}</b>
+                        Vehicle Status: <b>{localIsActive ? 'Active' : 'Inactive'}</b>
                     </span>
-                    <Switch defaultChecked={isActive} onCheckedChange={handleChange} />
+                    <Switch
+                        checked={localIsActive || false} // Ensure `false` fallback for initial render
+                        onCheckedChange={handleChange}
+                    />
                 </div>
             </div>
             <div className='flex gap-4 lg:hidden'>
                 <ImagePreview
                     url={primaryImage || '/images/image_not_available.png'}
                     alt={vehicleName}
-                    className=' h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
+                    className='h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
                 />
                 <div className='flex w-full flex-col gap-2'>
                     <div>

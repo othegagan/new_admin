@@ -24,7 +24,7 @@ export default function VehicleLayout({ children, params }: VehicleLayoutProps) 
 
                 <div className='flex flex-col overflow-hidden '>
                     <Tabs />
-                    <div className='h-[90%] overflow-y-auto overflow-x-hidden'>{children}</div>
+                    <div className='h-full min-h-40 overflow-y-auto overflow-x-hidden'>{children}</div>
                 </div>
             </Main>
         </VehicleIdValidatior>
