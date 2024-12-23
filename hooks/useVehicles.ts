@@ -6,7 +6,7 @@ import {
     getVehicleTripById,
     getVehicleUpdateLogsById
 } from '@/server/vehicles';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useVehiclesUnderHost = () => {
     return useQuery({
@@ -24,10 +24,18 @@ export const useVehicleMasterDataByVIN = (vin: string) => {
 };
 
 export const useVehicleFeaturesById = (id: number) => {
-    return useQuery({
-        queryKey: [QUERY_KEYS.vehicleFeaturesById, id],
-        queryFn: async () => getVehicleFeaturesById(id)
-    });
+    const queryClient = useQueryClient();
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.vehicleFeaturesById, id],
+            queryFn: async () => getVehicleFeaturesById(id)
+        }),
+        refetchAll: () => {
+            return queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.vehicleFeaturesById]
+            });
+        }
+    };
 };
 
 export const useVehicleUpdateLogsById = (id: number) => {

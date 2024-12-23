@@ -93,6 +93,8 @@ interface UpdateVehicleFeaturesById {
         | 'create_turo_id'
         | 'update_turo_id'
         | 'mix_max_rental_duration'
+        | 'upload_activation'
+        | 'update_activation'
         | 'telematics';
 
     payload: any;
@@ -129,7 +131,10 @@ export async function updateVehicleFeaturesById({ type, payload }: UpdateVehicle
         update_turo_id: '/v1/vehicle/updateVehicleConstraintLink',
 
         calendar: '/v1/vehicle/updateCalendar',
-        telematics: '/v1/vehicle/updateTelematics'
+        telematics: '/v1/vehicle/updateTelematics',
+
+        upload_activation: '/v1/vehicle/setVehicleActivation',
+        update_activation: '/v1/vehicle/vehicleActiveUpdate'
     };
 
     const url = `${HOST_VEHICLE_SERVICES_BASEURL}${urlMap[type]}`;

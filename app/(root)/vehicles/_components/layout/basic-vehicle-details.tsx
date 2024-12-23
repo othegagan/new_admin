@@ -5,15 +5,22 @@ import { Switch } from '@/components/ui/switch';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 import { toTitleCase } from '@/lib/utils';
+import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { ChevronLeft, Star } from 'lucide-react';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 interface BasicVehicleDetailsProps {
     vehicleId: number;
 }
 
 export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsProps) {
-    const { data: featuresResponse, isLoading: isLoadingFeatures, error: errorFeatures } = useVehicleFeaturesById(Number(vehicleId));
+    const {
+        data: featuresResponse,
+        isLoading: isLoadingFeatures,
+        error: errorFeatures,
+        refetchAll
+    } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoadingFeatures) {
         return <div className='h-20'>Loading...</div>;
@@ -34,6 +41,29 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
     const ratingText = rating ? rating.toFixed(1) : '1.0';
     const tripText = tripcount ? `(${tripcount}  ${tripcount > 1 ? 'trips' : 'trip'})` : null;
     const primaryImage = imageresponse.find((image: any) => image.isPrimary)?.imagename || '';
+
+    async function handleChange(checked: boolean) {
+        const payload: any = {
+            vehicleId: vehicleId,
+            isActive: checked // Use the updated state directly from the switch
+        };
+
+        try {
+            const response = await updateVehicleFeaturesById({
+                type: 'update_activation',
+                payload
+            });
+            if (response.success) {
+                toast.success(response.message);
+                refetchAll();
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            console.error('Error updating vehicle status:', error);
+            toast.error('Failed to update vehicle status. Please try again.');
+        }
+    }
 
     return (
         <>
@@ -57,6 +87,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                                 <h1 className='font-semibold text-xl'>Fiat 500e 2017</h1>
                                 <div className='flex-start gap-5 text-md'>
                                     <span className='text-muted-foreground tracking-wider'>NNM2279</span>
+                                    <span className='hidden text-muted-foreground uppercase tracking-wider lg:block'>(VIN : {vin})</span>
                                 </div>
                             </div>
                             <div className='flex-start gap-3'>
@@ -71,9 +102,9 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                 </div>
                 <div className='flex w-fit flex-col items-end gap-2 '>
                     <span className='text-md capitalize'>
-                        Vehicle Status: <b>Active</b>
+                        Vehicle Status: <b>{isActive ? 'Active' : 'Inactive'}</b>
                     </span>
-                    <Switch defaultChecked={isActive} />
+                    <Switch defaultChecked={isActive} onCheckedChange={handleChange} />
                 </div>
             </div>
             <div className='flex gap-4 lg:hidden'>
