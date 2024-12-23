@@ -39,7 +39,10 @@ export default function Tabs() {
                 </select>
             </div>
 
-            <ScrollArea orientation='horizontal' type='always' className='hidden w-full min-w-40 bg-background px-1 py-2 md:block'>
+            <ScrollArea
+                orientation='horizontal'
+                type='always'
+                className=' my-3 hidden w-full min-w-40 border-b bg-background px-1 py-2 md:block'>
                 <nav className={cn('flex space-x-2 pb-3.5 ')}>
                     <Button
                         variant='ghost'

@@ -22,9 +22,9 @@ export default function VehicleLayout({ children, params }: VehicleLayoutProps) 
             <Main fixed>
                 <BasicVehicleDetails vehicleId={Number(vehicleId)} />
 
-                <div className='flex flex-1 flex-col space-y-2 overflow-hidden '>
+                <div className='flex flex-col overflow-hidden '>
                     <Tabs />
-                    <div className=' overflow-y-auto overflow-x-hidden pr-1'>{children}</div>
+                    <div className='h-[90%] overflow-y-auto overflow-x-hidden'>{children}</div>
                 </div>
             </Main>
         </VehicleIdValidatior>

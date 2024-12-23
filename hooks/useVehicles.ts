@@ -1,6 +1,7 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
 import {
     getAllVehiclesUnderHost,
+    getVehicleConfigurationEvents,
     getVehicleFeaturesById,
     getVehicleMasterDataByVIN,
     getVehicleTripById,
@@ -50,4 +51,20 @@ export const useVehicleTripById = (startDate: string, endDate: string, vehicleId
         queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }],
         queryFn: async () => getVehicleTripById(startDate, endDate, vehicleId)
     });
+};
+
+export const useVehicleConfigurationEvents = () => {
+    const queryClient = useQueryClient();
+
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.vehicleConfigurationEvents],
+            queryFn: async () => getVehicleConfigurationEvents()
+        }),
+        refetchAll: () => {
+            return queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.vehicleConfigurationEvents]
+            });
+        }
+    };
 };

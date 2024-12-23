@@ -68,7 +68,19 @@ export async function copyVehicleFromOneToAnother(fromVehicleId: number, toVehic
         toVehicleId
     };
 
-    const response = await api.post(url, payload);
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function getVehicleConfigurationEvents() {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getAllVehicleConfigurationEvents`;
+    const response = await api.get<any>(url);
+    return response;
+}
+
+export async function insertVehicleConfigurationEvent(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/insertVehicleMessageContent`;
+    const response = await api.post<any>(url, payload);
     return response;
 }
 
