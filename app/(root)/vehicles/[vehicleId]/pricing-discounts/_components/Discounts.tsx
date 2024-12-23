@@ -90,7 +90,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = [0, 0, 0], refetchData }: DiscountsFormProps) {
+function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = [0, 0, 0] }: DiscountsFormProps) {
     const {
         register,
         handleSubmit,
@@ -138,8 +138,14 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
                 payload
             });
             if (response.success) {
-                refetchData();
+                // refetchData();
                 toast.success(response.message);
+                reset({
+                    pricePerDay: pricePerDay,
+                    discount3Days: discountsArray[0] / 100, // Converting to percentage only because of the input number field
+                    discount7Days: discountsArray[1] / 100,
+                    discount30Days: discountsArray[2] / 100
+                });
             } else {
                 toast.error(response.message);
             }
