@@ -40,6 +40,10 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
         return <div>Error!</div>;
     }
 
+    if (!featuresResponse?.data?.vehicleAllDetails[0]) {
+        return <div>No data</div>;
+    }
+
     const features = featuresResponse?.data?.vehicleAllDetails[0];
     const reviews = featuresResponse?.data?.reserverList[0];
 
