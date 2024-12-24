@@ -130,11 +130,15 @@ const SidebarMenuCollapsedDropdown = ({ item, href }: { item: NavCollapsible; hr
     );
 };
 
-function checkIsActive(href: string, item: NavItem, mainNav = false) {
-    return (
-        href === item.url || // /endpint?search=param
-        href.split('?')[0] === item.url || // endpoint
-        !!item?.items?.filter((i) => i.url === href).length || // if child nav is active
-        (mainNav && href.split('/')[1] !== '' && href.split('/')[1] === item?.url?.split('/')[1])
-    );
+function checkIsActive(href: string, item: NavItem, mainNav = false): boolean {
+    // For items without URL but with subitems (like Settings dropdown)
+    if (!item.url) {
+        return !!item.items?.some((subItem) => checkIsActive(href, subItem, false));
+    }
+
+    // Clean the URLs of any query parameters
+    const currentPath = href.split('?')[0];
+    const itemPath = item.url.split('?')[0];
+
+    return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
 }
