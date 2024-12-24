@@ -8,7 +8,7 @@ interface LogoProps {
 
 const primaryColor = '#F97217';
 
-export default function Logo({ className = '', variant = 'full', herf = '' }: LogoProps) {
+export default function Logo({ className = '', herf = '' }: LogoProps) {
     const logoContent = (
         <div className={`flex items-center gap-2 font-semibold text-lg md:text-base ${className}`}>
             <svg xmlns='http://www.w3.org/2000/svg' className='h-10 w-20' viewBox='0 0 200 103' fill='none'>

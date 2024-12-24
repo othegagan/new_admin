@@ -1,34 +1,33 @@
 import type { CHANNELS, ROLES } from '@/constants';
+import type { ReactNode } from 'react';
 
-export type Channel = (typeof CHANNELS)[keyof typeof CHANNELS];
-
-export type Role = (typeof ROLES)[keyof typeof ROLES];
-
-export interface BaseNavItem {
+interface BaseNavItem {
     title: string;
     badge?: string;
-    icon?: React.ReactNode;
-    roles: string[];
+    icon?: ReactNode;
+    roles?: Role[];
 }
 
 export type NavLink = BaseNavItem & {
     url: string;
     items?: never;
-    roles?: string[];
 };
 
 export type NavCollapsible = BaseNavItem & {
     items: (BaseNavItem & { url: string })[];
-    url?: never;
-    roles?: string[];
+    url?: string;
 };
 
 export type NavItem = NavCollapsible | NavLink;
 
-export interface NavGroupProps {
+export interface ISidebar {
     title: string;
     items: NavItem[];
 }
+
+export type Channel = (typeof CHANNELS)[keyof typeof CHANNELS];
+
+export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export interface CreateUserProps {
     email: string;

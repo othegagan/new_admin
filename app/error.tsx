@@ -23,12 +23,7 @@ export default function Error({ error }: CustomErrorComponentProps) {
                 <div className='flex-center'>
                     <CarBreakdownErrorIcon className='size-52' />
                 </div>
-                <h1 className='mt-5 font-bold text-2xl text-foreground'> Oops! We've Hit a Bump in the Road</h1>
-                <p className='mt-2 max-w-xl text-muted-foreground'>
-                    It looks like our rental system has temporarily stalled. Our team of expert mechanics is working hard to get things
-                    running smoothly again.
-                    {/* We apologize for any inconvenience this may cause to your travel plans. */}
-                </p>
+                <h1 className='mt-5 font-bold text-2xl text-foreground'> Oops! Something went wrong. Try refeshing the page.</h1>
                 <Button
                     className='mt-4'
                     variant='outline'
@@ -38,12 +33,12 @@ export default function Error({ error }: CustomErrorComponentProps) {
                     {showDetails ? 'Hide' : 'Show'} Error Details
                 </Button>
                 {showDetails && (
-                    <div className='mt-4 rounded-md bg-muted p-4 text-left'>
-                        <p className='break-all font-mono text-muted-foreground text-sm'>{error.message}</p>
-                    </div>
+                    <pre className='mt-4 max-w-2xl break-all rounded-md bg-muted p-4 text-left font-mono text-muted-foreground text-sm'>
+                        {error.message}
+                    </pre>
                 )}
                 <Button className='mt-4 ml-2' size='sm' onClick={() => window.location.reload()}>
-                    Try Again
+                    Refresh
                 </Button>
             </div>
         </div>

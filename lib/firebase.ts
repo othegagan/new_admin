@@ -2,8 +2,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
-export const vapidKey = 'BPXlh9OQxe4gIUZ5gdWrsahfxY8Eu4cxaDn4osuW72ysoyg13swUrwVlNZNz82WVTQrjvVd53STe723itTZ3jVY';
-
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_APIKEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTHDOMAIN,

@@ -1,18 +1,14 @@
-'use client';
-
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-    navItems: NavGroupProps[];
-    session: Session | null;
-}
-
-import { NavGroup } from '@/components/layout/nav-group';
 import { Sidebar, SidebarContent, SidebarHeader } from '@/components/ui/sidebar';
 import { PAGE_ROUTES } from '@/constants/routes';
-import type { NavGroupProps } from '@/types';
-import type { Session } from 'next-auth';
+import type { ISidebar } from '@/types';
 import Logo from './logo';
+import { NavGroup } from './nav-group';
 
-export function AppSidebar({ session, navItems, ...props }: AppSidebarProps) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+    navItems: ISidebar[];
+}
+
+export function AppSidebar({ navItems, ...props }: AppSidebarProps) {
     return (
         <Sidebar collapsible='icon' variant='sidebar' {...props}>
             <SidebarHeader>

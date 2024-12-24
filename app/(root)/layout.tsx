@@ -1,33 +1,28 @@
-import { AppHeader } from '@/components/layout/app-header';
 import { AppSidebar } from '@/components/layout/app-sidebar';
-import Logo from '@/components/layout/logo';
-import { UserNav } from '@/components/layout/user-nav';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { Header } from '@/components/layout/header/app-header';
+import { ProfileDropdown } from '@/components/layout/header/profile-dropdown';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { getNavItems } from '@/constants';
-import { PAGE_ROUTES } from '@/constants/routes';
 import { auth } from '@/lib/auth';
+import { cookies } from 'next/headers';
 
-interface RootLayoutProps {
-    children: React.ReactNode;
-}
+export default async function RouteComponent({ children }: { children: React.ReactNode }) {
+    const cookieStore = await cookies();
+    const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
 
-export default async function RootLayout({ children }: RootLayoutProps) {
     const session = await auth();
     const navItems = getNavItems(session?.userRole);
     return (
-        <SidebarProvider defaultOpen={true}>
-            <AppSidebar session={session} navItems={navItems} />
-            <div id='content' className='ml-auto flex h-svh w-full max-w-full flex-col'>
-                <AppHeader sticky>
-                    <Logo className='md:hidden' herf={PAGE_ROUTES.DASHBOARD} />
+        <SidebarProvider defaultOpen={defaultOpen}>
+            <AppSidebar navItems={navItems} />
+            <SidebarInset>
+                <Header sticky>
                     <div className='ml-auto flex items-center space-x-4'>
-                        {/* <MessagesNotificationButton />
-                        <NotificationBellButton /> */}
-                        <UserNav session={session} />
+                        <ProfileDropdown session={session} />
                     </div>
-                </AppHeader>
+                </Header>
                 {children}
-            </div>
+            </SidebarInset>
         </SidebarProvider>
     );
 }

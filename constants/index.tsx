@@ -1,6 +1,6 @@
-import { ConfigurationsIcon, EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
-import type { NavGroupProps, Role } from '@/types';
-import { HomeIcon, User2 } from 'lucide-react';
+import { ConfigurationsIcon, EmployeesIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
+import type { ISidebar, Role } from '@/types';
+import { HomeIcon, SearchIcon, User2 } from 'lucide-react';
 import { PAGE_ROUTES } from './routes';
 
 export const ROLES = {
@@ -18,12 +18,11 @@ export const CHANNELS = {
 /**
  * Nav Items
  * This is the main navigation items for the application.
- * Each item can have a sub items which can be accessed by the user with the role.
- * The user can access the sub items if the user has the role for the sub item.
+ * Each item can have sub-items accessible by the user's role.
  * Add the roles for each item in the `roles` array.
  */
 
-const navItems: NavGroupProps[] = [
+export const sidebarData: ISidebar[] = [
     {
         title: '',
         items: [
@@ -48,14 +47,14 @@ const navItems: NavGroupProps[] = [
             {
                 title: 'Find My Car',
                 url: PAGE_ROUTES.FIND_MY_CAR,
-                icon: <FindMyCarIcon />,
+                icon: <SearchIcon />,
                 roles: [ROLES.EMPLOYEE, ROLES.HOST]
             },
             {
                 title: 'Hosts',
                 url: PAGE_ROUTES.HOSTS,
                 icon: <HostsIcon />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.HOST]
             },
             {
                 title: 'Guests',
@@ -67,7 +66,7 @@ const navItems: NavGroupProps[] = [
                 title: 'Employees',
                 url: PAGE_ROUTES.EMPLOYEES,
                 icon: <EmployeesIcon />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.HOST]
             }
         ]
     },
@@ -82,29 +81,10 @@ const navItems: NavGroupProps[] = [
             },
             {
                 title: 'Profile',
-                url: '/profile',
+                url: PAGE_ROUTES.PROFILE,
                 icon: <User2 />,
                 roles: [ROLES.EMPLOYEE, ROLES.HOST]
             }
-            // {
-            //     title: 'Settings',
-            //     icon: <Settings />,
-            //     roles: [ROLES.EMPLOYEE, ROLES.HOST],
-            //     items: [
-            //         {
-            //             title: 'Profile',
-            //             url: '/settings',
-            //             icon: <UserCog />,
-            //             roles: [ROLES.EMPLOYEE, ROLES.HOST]
-            //         },
-            //         {
-            //             title: 'Account',
-            //             url: '/settings/account',
-            //             icon: <PanelTopClose />,
-            //             roles: [ROLES.EMPLOYEE, ROLES.HOST]
-            //         }
-            //     ]
-            // },
         ]
     }
 ];
@@ -115,38 +95,33 @@ const navItems: NavGroupProps[] = [
  * @param role - The user's role.
  * @returns The filtered nav items.
  */
-export const getNavItems = (role: Role): NavGroupProps[] => {
-    return navItems
+export const getNavItems = (role: Role): ISidebar[] => {
+    return sidebarData
         .map((group) => {
-            // Create a copy of the group to avoid mutating the original
+            // Create a shallow copy of the group to avoid mutating the original
             const filteredGroup = { ...group };
 
-            if (group.items) {
-                // Filter the items array
-                filteredGroup.items = group.items
-                    .map((item) => {
-                        // Handle nested items (like in Settings)
-                        if (item.items) {
-                            return {
-                                ...item,
-                                items: item.items.filter((subItem) => subItem.roles?.includes(role))
-                            };
-                        }
-                        // Handle regular items
-                        return item;
-                    })
-                    .filter(
-                        (item) =>
-                            // Keep items that either have roles matching or have remaining nested items
-                            item.roles?.includes(role) || (item.items && item.items.length > 0)
-                    );
-            }
+            // Filter the items based on role
+            filteredGroup.items = group.items
+                .map((item) => {
+                    // Filter nested sub-items, if any
+                    if (item.items) {
+                        const filteredSubItems = item.items.filter((subItem) => subItem.roles?.includes(role));
+                        return { ...item, items: filteredSubItems };
+                    }
+                    return item;
+                })
+                .filter(
+                    (item) =>
+                        // Include items with matching roles or non-empty nested items
+                        item.roles?.includes(role) || (item.items && item.items.length > 0)
+                );
 
             return filteredGroup;
         })
         .filter(
             (group) =>
-                // Only keep groups that have remaining items
+                // Only include groups with remaining items
                 group.items && group.items.length > 0
         );
 };
