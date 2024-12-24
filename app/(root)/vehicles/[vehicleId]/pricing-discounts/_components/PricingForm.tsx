@@ -28,15 +28,15 @@ export default function Pricing() {
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div className='h-32 w-full flex-center text-xl'>Loading...</div>;
+        return <div className='h-32 w-full flex-center '>Loading...</div>;
     }
 
     if (error) {
-        return <div className='h-32 w-full flex-center text-xl'>Error: {error.message}</div>;
+        return <div className='h-32 w-full flex-center '>Error: {error.message}</div>;
     }
 
     if (!response?.success) {
-        return <div className='h-32 w-full flex-center text-xl'>Error: {response?.message}</div>;
+        return <div className='h-32 w-full flex-center '>Error: {response?.message}</div>;
     }
 
     const vehiclePricePerDay: number = response?.data?.vehicleAllDetails[0].price_per_hr || 0;
@@ -158,7 +158,7 @@ function PricingForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = 
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 md:max-w-sm'>
             <div className='flex flex-col gap-4'>
                 <input id='pricePerDay' type='hidden' {...register('pricePerDay')} />
             </div>

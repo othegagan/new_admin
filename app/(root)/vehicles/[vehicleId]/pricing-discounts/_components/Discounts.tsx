@@ -28,15 +28,15 @@ export default function Discounts() {
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div className='h-32 w-full flex-center text-xl'>Loading...</div>;
+        return <div className='h-32 w-full flex-center '>Loading...</div>;
     }
 
     if (error) {
-        return <div className='h-32 w-full flex-center text-xl'>Error: {error.message}</div>;
+        return <div className='h-32 w-full flex-center '>Error: {error.message}</div>;
     }
 
     if (!response?.success) {
-        return <div className='h-32 w-full flex-center text-xl'>Error: {response?.message}</div>;
+        return <div className='h-32 w-full flex-center '>Error: {response?.message}</div>;
     }
 
     const vehiclePricePerDay: number = response?.data?.vehicleAllDetails[0].price_per_hr || 0;

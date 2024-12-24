@@ -1,4 +1,5 @@
 'use client';
+
 import { Main } from '@/components/layout/main';
 import { use } from 'react';
 import BasicVehicleDetails from '../_components/layout/basic-vehicle-details';
