@@ -2,12 +2,11 @@
 
 import ImagePreview from '@/components/ui/image-preview';
 import { Switch } from '@/components/ui/switch';
-import { PAGE_ROUTES } from '@/constants/routes';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 import { toTitleCase } from '@/lib/utils';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { ChevronLeft, Star } from 'lucide-react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -16,6 +15,8 @@ interface BasicVehicleDetailsProps {
 }
 
 export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsProps) {
+    const router = useRouter();
+
     const {
         data: featuresResponse,
         isLoading: isLoadingFeatures,
@@ -88,12 +89,13 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
         <>
             <div className='flex items-start justify-between'>
                 <div className='flex items-start gap-10'>
-                    <Link
+                    <button
+                        type='button'
                         className='inline-flex items-center text-md text-muted-foreground hover:text-foreground'
-                        href={`${PAGE_ROUTES.VEHICLES}`}>
+                        onClick={() => router.back()}>
                         <ChevronLeft className='mr-1 h-4 w-4' />
                         Back
-                    </Link>
+                    </button>
 
                     <div className='hidden gap-4 lg:flex'>
                         <ImagePreview

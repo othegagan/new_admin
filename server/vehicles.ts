@@ -10,8 +10,8 @@ const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 
 export async function getAllVehiclesUnderHost() {
     const session = await auth();
-    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehiclesByHostId`;
-    const payload = { id: session?.iduser };
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehicleTripsDetails`;
+    const payload = { hostId: session?.iduser };
 
     return await api.post<any>(url, payload);
 }
