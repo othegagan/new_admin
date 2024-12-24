@@ -12,7 +12,7 @@ export function AppSidebar({ navItems, ...props }: AppSidebarProps) {
     return (
         <Sidebar collapsible='icon' variant='sidebar' {...props}>
             <SidebarHeader>
-                <Logo className='pt-4' herf={PAGE_ROUTES.DASHBOARD} />
+                <Logo className='pt-2' herf={PAGE_ROUTES.DASHBOARD} />
             </SidebarHeader>
             <SidebarContent>
                 {navItems.map((props) => (

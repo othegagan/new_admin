@@ -1,5 +1,5 @@
-import { ConfigurationsIcon, EmployeesIcon, FindMyCarIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
-import { MessageSquareText, UserCog } from 'lucide-react';
+import { EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
+import { MessageSquareText, SlidersHorizontal } from 'lucide-react';
 
 export const AUTH_ROUTES = {
     SIGN_IN: '/sign-in',
@@ -116,12 +116,17 @@ export const homePageItems = [
         href: PAGE_ROUTES.EMPLOYEES
     },
     {
-        icon: <UserCog className='size-20' />,
+        icon: <GuestsIcon className='size-20' />,
+        label: 'Guests',
+        href: PAGE_ROUTES.GUESTS
+    },
+    {
+        icon: <HostsIcon className='size-20' />,
         label: 'Hosts',
         href: PAGE_ROUTES.HOSTS
     },
     {
-        icon: <ConfigurationsIcon className='size-20' />,
+        icon: <SlidersHorizontal className='size-20' />,
         label: 'Configurations',
         href: PAGE_ROUTES.CONFIGURATIONS
     }

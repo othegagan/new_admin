@@ -1,6 +1,6 @@
-import { ConfigurationsIcon, EmployeesIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
+import { EmployeesIcon, GuestsIcon, HostsIcon, TripsIcon } from '@/public/icons';
 import type { ISidebar, Role } from '@/types';
-import { HomeIcon, SearchIcon, User2 } from 'lucide-react';
+import { Car, HomeIcon, SearchIcon, SlidersHorizontal, User2 } from 'lucide-react';
 import { PAGE_ROUTES } from './routes';
 
 export const ROLES = {
@@ -41,7 +41,7 @@ export const sidebarData: ISidebar[] = [
             {
                 title: 'Vehicles',
                 url: PAGE_ROUTES.VEHICLES,
-                icon: <VehiclesIcon />,
+                icon: <Car className='' />,
                 roles: [ROLES.EMPLOYEE, ROLES.HOST]
             },
             {
@@ -76,7 +76,7 @@ export const sidebarData: ISidebar[] = [
             {
                 title: 'Configurations',
                 url: PAGE_ROUTES.CONFIGURATIONS,
-                icon: <ConfigurationsIcon />,
+                icon: <SlidersHorizontal />,
                 roles: [ROLES.EMPLOYEE, ROLES.HOST]
             },
             {
