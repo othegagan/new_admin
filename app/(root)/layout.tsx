@@ -1,9 +1,10 @@
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header/app-header';
 import { ProfileDropdown } from '@/components/layout/header/profile-dropdown';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { getNavItems } from '@/constants';
 import { auth } from '@/lib/auth';
+import { cn } from '@/lib/utils';
 import { cookies } from 'next/headers';
 
 export default async function RouteComponent({ children }: { children: React.ReactNode }) {
@@ -15,14 +16,22 @@ export default async function RouteComponent({ children }: { children: React.Rea
     return (
         <SidebarProvider defaultOpen={defaultOpen}>
             <AppSidebar navItems={navItems} />
-            <SidebarInset>
+            <div
+                id='content'
+                className={cn(
+                    'ml-auto w-full max-w-full',
+                    'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon))]',
+                    'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
+                    'transition-[width] duration-200 ease-linear',
+                    'flex h-svh flex-col'
+                )}>
                 <Header sticky>
                     <div className='ml-auto flex items-center space-x-4'>
                         <ProfileDropdown session={session} />
                     </div>
                 </Header>
                 {children}
-            </SidebarInset>
+            </div>
         </SidebarProvider>
     );
 }
