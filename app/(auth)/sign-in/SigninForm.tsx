@@ -87,7 +87,7 @@ export default function SigninForm() {
     };
 
     return (
-        <div className='flex h-screen w-full justify-center overflow-hidden lg:grid lg:min-h-screen lg:grid-cols-2'>
+        <div className='flex h-dvh w-full justify-center overflow-hidden lg:grid lg:min-h-screen lg:grid-cols-2'>
             <div className='relative hidden bg-muted lg:block'>
                 <Image
                     src='/images/signin.webp'

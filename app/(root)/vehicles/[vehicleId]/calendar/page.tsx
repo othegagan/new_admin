@@ -11,7 +11,7 @@ import '@/styles/fullcalendar.css';
 import type FullCalendar from '@fullcalendar/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
-import { Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2 } from 'lucide-react';
 import { getSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -213,11 +213,11 @@ function UnavailabilityComponent({
 
     return (
         <div className='flex w-full flex-col gap-4'>
-            <div className='flex w-full items-center justify-between'>
+            <div className='flex w-full items-center'>
                 <h4 className='text-nowrap text-lg'>Vehicle Unavailability</h4>
                 {!isAdding ? (
-                    <Button variant='black' className='w-fit' onClick={startAdding}>
-                        Add
+                    <Button className='h-10 w-fit border-none p-3' size='icon' variant='outline' onClick={startAdding}>
+                        <PlusCircle className='size-6' />
                     </Button>
                 ) : null}
             </div>
@@ -231,11 +231,11 @@ function UnavailabilityComponent({
                         <DateRangeCalendar startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} />
                     </div>
                     <div className='ml-auto flex gap-2'>
-                        <Button variant='black' type='submit' loading={isSubmitting} loadingText='Saving...'>
-                            Save
-                        </Button>
                         <Button variant='outline' onClick={cancelAdding}>
                             Cancel
+                        </Button>
+                        <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
+                            Save
                         </Button>
                     </div>
                 </form>
