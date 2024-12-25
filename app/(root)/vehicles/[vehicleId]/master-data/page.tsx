@@ -224,7 +224,7 @@ function AdditionalDataForm({ vehicleData, vinDBData, refetchData }: any) {
 
             <div className='flex items-center justify-end gap-x-6'>
                 {hasChanges && (
-                    <Button type='submit' variant='black' loading={isSubmitting} loadingText='Saving...'>
+                    <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
                         Save
                     </Button>
                 )}

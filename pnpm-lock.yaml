@@ -48,7 +48,7 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-alert-dialog':
-        specifier: ^1.1.2
+        specifier: ^1.1.4
         version: 1.1.4(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-avatar':
         specifier: ^1.1.2
@@ -117,11 +117,11 @@ importers:
         specifier: ^8.19.4
         version: 8.19.4
       '@tanstack/react-query':
-        specifier: ^5.62.8
-        version: 5.62.9(react@19.0.0)
+        specifier: ^5.62.10
+        version: 5.62.10(react@19.0.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.62.8
-        version: 5.62.9(@tanstack/react-query@5.62.9(react@19.0.0))(react@19.0.0)
+        specifier: ^5.62.10
+        version: 5.62.10(@tanstack/react-query@5.62.10(react@19.0.0))(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.20.6
         version: 8.20.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -171,7 +171,7 @@ importers:
         specifier: ^0.469.0
         version: 0.469.0(react@19.0.0)
       mapbox-gl:
-        specifier: ^3.9.0
+        specifier: ^3.9.1
         version: 3.9.1
       moment-timezone:
         specifier: ^0.5.46
@@ -240,7 +240,7 @@ importers:
         specifier: ^1.7.1
         version: 1.7.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwind-merge:
-        specifier: ^2.5.5
+        specifier: ^2.6.0
         version: 2.6.0
       tailwindcss-animate:
         specifier: ^1.0.7
@@ -265,7 +265,7 @@ importers:
         specifier: ^1.9.4
         version: 1.9.4
       '@tanstack/eslint-plugin-query':
-        specifier: ^5.62.1
+        specifier: ^5.62.9
         version: 5.62.9(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
       '@types/node':
         specifier: ^22.10.2
@@ -2095,14 +2095,14 @@ packages:
   '@tanstack/query-devtools@5.62.9':
     resolution: {integrity: sha512-b1NZzDLVf6laJsB1Cfm3ieuYzM+WqoO8qpm9v+3Etwd+Ph4zkhUMiT+wcWj5AhEPsXiRodKYiiW048VDNdBxNg==}
 
-  '@tanstack/react-query-devtools@5.62.9':
-    resolution: {integrity: sha512-5fYAjZiG2PEVsrG7wz4ea0268iS23ng0PbXS1KfAzCcai/QOkKtUQ/OKRoVE6LHBFLdQX6R+0ho7c5hLD23CAQ==}
+  '@tanstack/react-query-devtools@5.62.10':
+    resolution: {integrity: sha512-TnFcvfEnOvH9j8iYKRl8Qn/U2P0NijdQ6nilhHobpdAcF4DLUwlKKufJZAlc759+1HBZ/jEvCqWo2g3mO9Ttvg==}
     peerDependencies:
-      '@tanstack/react-query': ^5.62.9
+      '@tanstack/react-query': ^5.62.10
       react: ^18 || ^19
 
-  '@tanstack/react-query@5.62.9':
-    resolution: {integrity: sha512-jFUH9pOsOyN2ugGIR8tjz2+bRC0PEp25LvpNvYIgiEegP5Xbfi9phuNOMnjFugyg3GM0WI/HfUEE7eM2vmcbxg==}
+  '@tanstack/react-query@5.62.10':
+    resolution: {integrity: sha512-1e1WpHM5oGf27nWM/NWLY62/X9pbMBWa6ErWYmeuK0OqB9/g9UzA59ogiWbxCmS2wtAFQRhOdHhfSofrkhPl2g==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -6112,13 +6112,13 @@ snapshots:
 
   '@tanstack/query-devtools@5.62.9': {}
 
-  '@tanstack/react-query-devtools@5.62.9(@tanstack/react-query@5.62.9(react@19.0.0))(react@19.0.0)':
+  '@tanstack/react-query-devtools@5.62.10(@tanstack/react-query@5.62.10(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@tanstack/query-devtools': 5.62.9
-      '@tanstack/react-query': 5.62.9(react@19.0.0)
+      '@tanstack/react-query': 5.62.10(react@19.0.0)
       react: 19.0.0
 
-  '@tanstack/react-query@5.62.9(react@19.0.0)':
+  '@tanstack/react-query@5.62.10(react@19.0.0)':
     dependencies:
       '@tanstack/query-core': 5.62.9
       react: 19.0.0

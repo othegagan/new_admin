@@ -67,9 +67,11 @@ export default function NotificationConfigurationPage() {
     return (
         <div className='flex flex-col gap-4'>
             <SubHeader title={vehicleConfigTabsContent.notifications.title} description='' />
-            <div>
-                Use code <b>DRIVER_NAME</b> to indicate driver name and <b>TRIP_END</b> to indicate trip ending time, and{' '}
-                <b>VEHICLE_LOCATION</b> to indicate vehicle location.
+            <div className='text-muted-foreground'>
+                Set up automated notifications to keep your drivers informed and engaged. Customize the content of these notifications to
+                ensure a smooth and efficient rental process. Use placeholders like <b className='text-foreground'>DRIVER_NAME</b>,{' '}
+                <b className='text-foreground'>TRIP_END</b>, and <b className='text-foreground'>VEHICLE_LOCATION</b> to personalize your
+                messages.
             </div>
             <MessageContentForm
                 vehicleId={Number(vehicleId)}
@@ -124,7 +126,7 @@ function MessageContentForm({ vehicleId, masterEventsList, alreadySavedEvents, r
     };
 
     return (
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8'>
+        <div className='mt-4 grid grid-cols-1 gap-4 md:gap-8'>
             {masterEventsList.map((event) => {
                 const existingMessage = alreadySavedEvents.find((msg) => msg.statusCode === event.statusCode);
                 const defaultValue = existingMessage?.messageContent || '';
@@ -160,11 +162,14 @@ function MessageContentForm({ vehicleId, masterEventsList, alreadySavedEvents, r
                             control={control}
                             render={({ field }) => <Textarea {...field} className='w-full' />}
                         />
-                        {isDirty && trimmedValue !== defaultValue.trim() && (
-                            <Button type='submit' className='ml-auto' variant='black' loading={isSubmitting} loadingText='Saving...'>
-                                Save
-                            </Button>
-                        )}
+                        <Button
+                            type='submit'
+                            className='fade-in-25 ml-auto'
+                            disabled={!(isDirty && trimmedValue !== defaultValue.trim())}
+                            loading={isSubmitting}
+                            loadingText='Saving...'>
+                            Save
+                        </Button>
                     </form>
                 );
             })}

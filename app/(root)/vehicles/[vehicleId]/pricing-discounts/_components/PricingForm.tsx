@@ -158,53 +158,47 @@ function PricingForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = 
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 md:max-w-sm'>
-            <div className='flex flex-col gap-4'>
-                <input id='pricePerDay' type='hidden' {...register('pricePerDay')} />
-            </div>
-
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 pt-4 md:max-w-sm'>
             <div className='flex flex-col gap-6'>
                 <h3>Pricing </h3>
 
-                <Controller
-                    name='pricePerDay'
-                    control={control}
-                    render={({ field }) => {
-                        const value = field.value === '' ? undefined : Number(field.value);
-                        return (
-                            // @ts-ignore
-                            <JollyNumberField
-                                id='pricePerDay'
-                                label='Vehicle Price/Day Amount'
-                                defaultValue={value || 0}
-                                isRequired
-                                formatOptions={{
-                                    style: 'currency',
-                                    currency: 'USD',
-                                    currencyDisplay: 'symbol',
-                                    currencySign: 'standard',
-                                    minimumFractionDigits: 0
-                                }}
-                                {...field}
-                                onChange={field.onChange}
-                                errorMessage={errors.pricePerDay?.message}
-                                isInvalid={!!errors.pricePerDay?.message}
-                            />
-                        );
-                    }}
-                />
+                <div className='flex items-end gap-x-6'>
+                    <Controller
+                        name='pricePerDay'
+                        control={control}
+                        render={({ field }) => {
+                            const value = field.value === '' ? undefined : Number(field.value);
+                            return (
+                                // @ts-ignore
+                                <JollyNumberField
+                                    id='pricePerDay'
+                                    label='Vehicle Price/Day Amount'
+                                    defaultValue={value || 0}
+                                    isRequired
+                                    formatOptions={{
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        currencyDisplay: 'symbol',
+                                        currencySign: 'standard',
+                                        minimumFractionDigits: 0
+                                    }}
+                                    {...field}
+                                    onChange={field.onChange}
+                                    errorMessage={errors.pricePerDay?.message}
+                                    isInvalid={!!errors.pricePerDay?.message}
+                                />
+                            );
+                        }}
+                    />
+                    <Button type='submit' loading={isSubmitting} disabled={!isDirty} className='w-fit' loadingText='Saving...'>
+                        Save
+                    </Button>
+                </div>
 
                 <input id='discount3Days' type='hidden' {...register('discount3Days')} />
                 <input id='discount7Days' type='hidden' {...register('discount7Days')} />
                 <input id='discount30Days' type='hidden' {...register('discount30Days')} />
             </div>
-            {isDirty && (
-                <div className=' flex items-center justify-end gap-x-6'>
-                    <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
-                        Save
-                    </Button>
-                </div>
-            )}
         </form>
     );
 }

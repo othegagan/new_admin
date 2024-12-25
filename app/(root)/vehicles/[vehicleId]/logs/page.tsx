@@ -56,7 +56,7 @@ export default function UpdateLogsPage() {
                 description={vehicleConfigTabsContent.activity_logs.description}
             />
             <div className='h-[calc(75dvh-200px)] overflow-y-auto'>
-                <Accordion type='single' collapsible className='max-w-4xl md:ml-10 '>
+                <Accordion type='single' collapsible className='max-w-6xl '>
                     {vehicleLogs.map((log: any) => (
                         <AccordionItem key={log.id} value={log.id.toString()}>
                             <AccordionTrigger className='hover:no-underline'>

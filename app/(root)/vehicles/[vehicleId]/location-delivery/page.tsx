@@ -253,15 +253,15 @@ function LocationDeliveryForm({
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10'>
-            <div className='grid grid-cols-3 gap-2 md:col-span-1 md:grid-cols-6 md:gap-4'>
-                <div className='col-span-3 flex flex-col gap-2'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 md:gap-10'>
+            <div className='grid grid-cols-3 gap-2 md:grid-cols-12 md:gap-4'>
+                <div className='col-span-3 flex flex-col gap-2 md:col-span-6'>
                     <Label> Address line 1</Label>
                     <AddressSearchBox address1={fullAddress.address1} setSavedData={setFullAddress} />
                     <FormError>{errors.fullAddress?.address1?.message}</FormError>
                 </div>
 
-                <div className='col-span-3 flex flex-col gap-2'>
+                <div className='col-span-3 flex flex-col gap-2 md:col-span-6'>
                     <Label> Address line 2</Label>
                     <Input id='address2' defaultValue={fullAddress.address2} className='w-full' {...register('fullAddress.address2')} />
                     <FormError>{errors.fullAddress?.address2?.message}</FormError>
@@ -345,14 +345,14 @@ function LocationDeliveryForm({
                         control={control}
                         render={({ field }) => {
                             return (
-                                <div className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                                    <div className='flex flex-col space-y-0.5'>
-                                        <Label className='text-base'>Vehicle Delivery</Label>
-                                        <FormDescription>
-                                            {field.value ? 'The vehicle is delivable.' : 'Turn on to make the vehicle delivable.'}
-                                        </FormDescription>
+                                <div className='flex flex-col gap-2'>
+                                    <div className='flex items-center gap-8'>
+                                        <Label className='text-base'>Custom Delivery</Label>
+                                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                                     </div>
-                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                    <FormDescription>
+                                        Enable custom deliveries to allow renters to request specific pickup and return locations.
+                                    </FormDescription>
                                 </div>
                             );
                         }}
@@ -366,16 +366,9 @@ function LocationDeliveryForm({
                             control={control}
                             render={({ field }) => {
                                 return (
-                                    <div className='flex flex-col rounded-lg border p-4'>
-                                        <div className='flex items-center justify-between space-y-0.5'>
-                                            <Label className='text-base'>Delivery to Airport</Label>
-                                            <Switch checked={field.value} onCheckedChange={field.onChange} />
-                                        </div>
-                                        <FormDescription>
-                                            {field.value
-                                                ? 'The vehicle is delivable to airport.'
-                                                : ' make the vehicle delivable to airport.'}
-                                        </FormDescription>
+                                    <div className='flex items-center gap-8'>
+                                        <Label className='text-base'>Allow Airport Deliveries</Label>
+                                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                                     </div>
                                 );
                             }}
@@ -384,7 +377,7 @@ function LocationDeliveryForm({
                 )}
 
                 {deliveryEnabledState && (
-                    <div className='grid grid-cols-1 gap-4 md:col-span-6 md:grid-cols-3'>
+                    <div className='grid max-w-3xl grid-cols-1 gap-4 md:col-span-6 md:grid-cols-3'>
                         <Controller
                             name='deliveryRadius'
                             control={control}
@@ -465,11 +458,11 @@ function LocationDeliveryForm({
                         />
                     </div>
                 )}
-                <div className='mt-6 flex items-center justify-end gap-x-6'>
-                    <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
-                        Save
-                    </Button>
-                </div>
+            </div>
+            <div className='mt-4 flex items-center justify-end gap-x-6 md:pr-10'>
+                <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...'>
+                    Save
+                </Button>
             </div>
         </form>
     );

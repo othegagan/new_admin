@@ -48,6 +48,22 @@ export async function getVehicleUpdateLogsById(id: number) {
     return response;
 }
 
+export async function getVehicleRepairLogs(id: number) {
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehicleRepairLogsByVehicleId`;
+    const payload = { vehicleId: id };
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function getVehicleExpenseLogs(id: number) {
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehicleExpenseLogsByVehicleId`;
+    const payload = { vehicleId: id };
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
 export async function getVehicleTripById(startTIme: string, endTime: string, vehicleId: number) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {

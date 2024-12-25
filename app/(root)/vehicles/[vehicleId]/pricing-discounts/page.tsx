@@ -7,7 +7,7 @@ export default function PricingAndDiscountsPage() {
     return (
         <div className='flex flex-col gap-6'>
             <Card>
-                <CardContent className='flex flex-col gap-6'>
+                <CardContent className='flex flex-col gap-10'>
                     <Pricing />
                     <DynamicPricingComponent />
                 </CardContent>

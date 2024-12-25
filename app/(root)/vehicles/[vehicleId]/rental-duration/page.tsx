@@ -98,12 +98,11 @@ type FormFields = z.infer<typeof schema>;
 
 function StatusForm({ vechicleId, minRentalDuration = 1, maxRentalDuration = 30, refetchData }: MileageLimitsFormProps) {
     const {
-        register,
         handleSubmit,
-        setValue,
+
         control,
-        setError,
-        formState: { errors, isSubmitting }
+        reset,
+        formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -133,6 +132,10 @@ function StatusForm({ vechicleId, minRentalDuration = 1, maxRentalDuration = 30,
             if (response.success) {
                 refetchData();
                 toast.success(response.message);
+                reset({
+                    minRentalDuration: minRentalDuration,
+                    maxRentalDuration: maxRentalDuration
+                });
             } else {
                 toast.error(response.message);
             }
@@ -143,7 +146,7 @@ function StatusForm({ vechicleId, minRentalDuration = 1, maxRentalDuration = 30,
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex max-w-4xl flex-col gap-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
             <div className='grid grid-cols-1 gap-4 md:my-10 md:grid-cols-2 md:gap-10'>
                 <Controller
                     name='minRentalDuration'
@@ -198,7 +201,7 @@ function StatusForm({ vechicleId, minRentalDuration = 1, maxRentalDuration = 30,
             </div>
 
             <div className='flex items-center justify-end gap-x-6'>
-                <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
+                <Button type='submit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...' className='w-fit'>
                     Save
                 </Button>
             </div>

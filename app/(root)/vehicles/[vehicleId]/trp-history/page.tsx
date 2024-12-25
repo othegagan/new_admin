@@ -1,3 +1,3 @@
 export default function TrpHistoryPage() {
-    return <div>TrpHistoryPage() </div>;
+    return <div className='flex h-64 items-center justify-center'>Coming Soon</div>;
 }

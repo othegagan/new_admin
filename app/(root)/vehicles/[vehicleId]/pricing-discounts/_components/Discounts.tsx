@@ -169,88 +169,87 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
                     <p className='text-sm'>The selected discount will be applied to the reservation.</p>
                 </div>
 
-                <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
-                    <Controller
-                        name='discount3Days'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    id='discount3Days'
-                                    label='3 Days Rental Discount'
-                                    defaultValue={value || 0}
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'percent',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.discount3Days?.message}
-                                    isInvalid={!!errors.discount3Days?.message}
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        name='discount7Days'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    id='discount7Days'
-                                    label='7 Days Rental Discount'
-                                    defaultValue={value || 0}
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'percent',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.discount7Days?.message}
-                                    isInvalid={!!errors.discount7Days?.message}
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        name='discount30Days'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    id='discount30Days'
-                                    label='30 Days Rental Discount'
-                                    defaultValue={value || 0}
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'percent',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.discount30Days?.message}
-                                    isInvalid={!!errors.discount30Days?.message}
-                                />
-                            );
-                        }}
-                    />
-                </div>
-            </div>
-            {isDirty && (
-                <div className=' flex items-center justify-end gap-x-6'>
-                    <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
+                <div className='flex flex-col gap-6 md:flex-row md:items-end'>
+                    <div className='grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-3'>
+                        <Controller
+                            name='discount3Days'
+                            control={control}
+                            render={({ field }) => {
+                                const value = field.value === '' ? undefined : Number(field.value);
+                                return (
+                                    // @ts-ignore
+                                    <JollyNumberField
+                                        id='discount3Days'
+                                        label='3 Days Rental Discount'
+                                        defaultValue={value || 0}
+                                        isRequired
+                                        formatOptions={{
+                                            style: 'percent',
+                                            minimumFractionDigits: 0
+                                        }}
+                                        {...field}
+                                        onChange={field.onChange}
+                                        errorMessage={errors.discount3Days?.message}
+                                        isInvalid={!!errors.discount3Days?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            name='discount7Days'
+                            control={control}
+                            render={({ field }) => {
+                                const value = field.value === '' ? undefined : Number(field.value);
+                                return (
+                                    // @ts-ignore
+                                    <JollyNumberField
+                                        id='discount7Days'
+                                        label='7 Days Rental Discount'
+                                        defaultValue={value || 0}
+                                        isRequired
+                                        formatOptions={{
+                                            style: 'percent',
+                                            minimumFractionDigits: 0
+                                        }}
+                                        {...field}
+                                        onChange={field.onChange}
+                                        errorMessage={errors.discount7Days?.message}
+                                        isInvalid={!!errors.discount7Days?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            name='discount30Days'
+                            control={control}
+                            render={({ field }) => {
+                                const value = field.value === '' ? undefined : Number(field.value);
+                                return (
+                                    // @ts-ignore
+                                    <JollyNumberField
+                                        id='discount30Days'
+                                        label='30 Days Rental Discount'
+                                        defaultValue={value || 0}
+                                        isRequired
+                                        formatOptions={{
+                                            style: 'percent',
+                                            minimumFractionDigits: 0
+                                        }}
+                                        {...field}
+                                        onChange={field.onChange}
+                                        errorMessage={errors.discount30Days?.message}
+                                        isInvalid={!!errors.discount30Days?.message}
+                                    />
+                                );
+                            }}
+                        />
+                    </div>
+
+                    <Button type='submit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...' className='w-fit'>
                         Save
                     </Button>
                 </div>
-            )}
+            </div>
         </form>
     );
 }

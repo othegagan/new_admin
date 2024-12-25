@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { PanelLeft } from 'lucide-react';
+import { Menu, PanelLeft } from 'lucide-react';
 import * as React from 'react';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
@@ -228,14 +228,15 @@ const SidebarTrigger = React.forwardRef<React.ElementRef<typeof Button>, React.C
                 data-sidebar='trigger'
                 variant='ghost'
                 size='icon'
-                className={cn('h-7 w-7', className)}
+                className={cn('h-7 w-7 rounded-md', className)}
                 onClick={(event) => {
                     onClick?.(event);
                     toggleSidebar();
                 }}
                 toolTip='Toggle Sidebar'
                 {...props}>
-                <PanelLeft className='size-5' />
+                <PanelLeft className='hidden size-5 md:flex' />
+                <Menu className='size-5 md:hidden' />
                 <span className='sr-only'>Toggle Sidebar</span>
             </Button>
         );

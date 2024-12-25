@@ -88,39 +88,13 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
     return (
         <>
             <div className='flex items-start justify-between'>
-                <div className='flex items-start gap-10'>
-                    <button
-                        type='button'
-                        className='inline-flex items-center text-md text-muted-foreground hover:text-foreground'
-                        onClick={() => router.back()}>
-                        <ChevronLeft className='mr-1 h-4 w-4' />
-                        Back
-                    </button>
-
-                    <div className='hidden gap-4 lg:flex'>
-                        <ImagePreview
-                            url={primaryImage || '/images/image_not_available.png'}
-                            alt={vehicleName}
-                            className='h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
-                        />
-                        <div className='flex w-full flex-col gap-2'>
-                            <div>
-                                <h1 className='font-semibold text-xl'>{vehicleName}</h1>
-                                <div className='flex-start gap-5 text-md'>
-                                    <span className='text-muted-foreground tracking-wider'>{number}</span>
-                                    <span className='hidden text-muted-foreground uppercase tracking-wider lg:block'>(VIN: {vin})</span>
-                                </div>
-                            </div>
-                            <div className='flex-start gap-3'>
-                                <span className='flex items-center gap-1'>
-                                    <Star fill='currentColor' className='size-5' />
-                                    {ratingText}
-                                </span>
-                                <span>{tripText}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <button
+                    type='button'
+                    className='inline-flex items-center text-md text-muted-foreground hover:text-foreground'
+                    onClick={() => router.back()}>
+                    <ChevronLeft className='mr-1 h-4 w-4' />
+                    Back
+                </button>
                 <div className='flex w-fit flex-col items-end gap-2'>
                     <span className='text-md capitalize'>
                         Vehicle Status: <b>{localIsActive ? 'Active' : 'Inactive'}</b>
@@ -131,7 +105,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                     />
                 </div>
             </div>
-            <div className='flex gap-4 lg:hidden'>
+            <div className='flex gap-4 '>
                 <ImagePreview
                     url={primaryImage || '/images/image_not_available.png'}
                     alt={vehicleName}

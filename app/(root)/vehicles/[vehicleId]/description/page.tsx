@@ -65,11 +65,11 @@ type FormFields = z.infer<typeof schema>;
 
 function DescriptionForm({ vechicleId, description = '', refetchData }: DescriptionFormProps) {
     const {
-        register,
         handleSubmit,
         setValue,
         control,
-        formState: { errors, isSubmitting }
+        reset,
+        formState: { isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -100,6 +100,9 @@ function DescriptionForm({ vechicleId, description = '', refetchData }: Descript
 
             if (response.success) {
                 toast.success(response.message);
+                reset({
+                    description: description
+                });
             } else {
                 toast.error(response.message);
             }
@@ -123,7 +126,7 @@ function DescriptionForm({ vechicleId, description = '', refetchData }: Descript
             </div>
 
             <div className='mt-4 flex items-center justify-end gap-x-6'>
-                <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...'>
+                <Button type='submit' className='w-fit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...'>
                     Save
                 </Button>
             </div>

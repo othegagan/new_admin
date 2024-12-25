@@ -67,18 +67,18 @@ export const sidebarData: ISidebar[] = [
                 url: PAGE_ROUTES.EMPLOYEES,
                 icon: <EmployeesIcon />,
                 roles: [ROLES.HOST]
+            },
+            {
+                title: 'Configurations',
+                url: PAGE_ROUTES.CONFIGURATIONS,
+                icon: <SlidersHorizontal />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST]
             }
         ]
     },
     {
         title: 'Other',
         items: [
-            {
-                title: 'Configurations',
-                url: PAGE_ROUTES.CONFIGURATIONS,
-                icon: <SlidersHorizontal />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
-            },
             {
                 title: 'Profile',
                 url: PAGE_ROUTES.PROFILE,
@@ -272,3 +272,69 @@ export const vehicleConfigTabsContent = {
         description: 'Shows a detailed history of actions performed on your vehicle.'
     }
 };
+
+export const vehicleRepairAndMaintenance = [
+    'Airbag Replacement',
+    'Accident Repairs',
+    'Air Conditioning Service',
+    'Air Filter',
+    'Alignment and Balancing',
+    'Battery',
+    'Battery Replacement',
+    'Belts',
+    'Brake Fluid',
+    'Brake Pads',
+    'Car Accessories',
+    'Car Wash',
+    'Cleaning and Detailing',
+    'Clutch Repair',
+    'Coolant Flush',
+    'Dashboard Repair',
+    'Depreciation',
+    'Electrical Diagnostics',
+    'Emission Testing Fees',
+    'Emissions Test',
+    'Engine Tune-Up',
+    'Exhaust System Repair',
+    'Extended Warranty Costs',
+    'Fuel Costs',
+    'Fuel Filter',
+    'GPS systems',
+    'Headlight Restoration',
+    'Inspection',
+    'Inspection Fees',
+    'Insurance Premiums',
+    'Interior Cleaning',
+    'Lights',
+    'Loan Payments',
+    'Maintenance Costs',
+    'Modifications',
+    'New Tires',
+    'Oil Change',
+    'Oil Filter',
+    'Paint Touch-Up',
+    'Parking Fees',
+    'Radiator Replacement',
+    'Registration Fees',
+    'Repairs and Servicing',
+    'Roadside Assistance',
+    'Rust Removal',
+    'Spark Plugs Replacement',
+    'Starter Motor Repair',
+    'Storage Costs',
+    'Subscription Services',
+    'Suspension',
+    'Technology Updates',
+    'Tire Pressure',
+    'Tire Replacements',
+    'Tire Rotation',
+    'Toll Charges',
+    'Transmission Service',
+    'Undercoating',
+    'Vehicle Tax',
+    'Wheel Alignment',
+    'Wheel Balancing',
+    'Windshield Repair',
+    'Wiper Blade Replacement',
+    'Other'
+];

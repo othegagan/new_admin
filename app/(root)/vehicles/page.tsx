@@ -23,7 +23,6 @@ export default function VehiclesPage() {
         return (
             <div className='flex h-full w-full flex-col items-center justify-center gap-6'>
                 <img src='./images/car_loading.gif' className='h-auto w-40 dark:invert' alt='Loading...' />
-                <span className='text-center'>Loading Vehicles...</span>
             </div>
         );
     if (error) return <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>;
@@ -46,7 +45,7 @@ export default function VehiclesPage() {
 
     const updatedVehicleList = allHostsVehicles?.map((vehicle: any) => {
         let vehicleStatus = vehicle.isActive ? 'Active' : 'Inactive';
-        if (vehicle.uploadStatus === 'inprogress') vehicleStatus = 'Inprogress';
+        if (vehicle.uploadStatus === 'inprogress') vehicleStatus = 'In Progress';
         return { ...vehicle, vehicleStatus };
     });
 
@@ -59,7 +58,7 @@ export default function VehiclesPage() {
 
 function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
-    const [selectedFilter, setSelectedFilter] = useQueryState('status', { defaultValue: 'all' });
+    const [selectedFilter, setSelectedFilter] = useQueryState('status', { defaultValue: '' });
     const [tripStatus, setTripStatus] = useQueryState('tripStatus', { defaultValue: '' });
     const [sortBy, setSortBy] = useQueryState('sortBy', { defaultValue: '' });
     const [filteredCars, setFilteredCars] = useState(cars);
@@ -114,7 +113,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     const filteredCount = filteredCars.length;
     const allCarsCount = cars.length;
     const activeCarsCount = cars.filter((car) => car.vehicleStatus === 'Active').length;
-    const inprogressCarsCount = cars.filter((car) => car.vehicleStatus === 'Inprogress').length;
+    const inprogressCarsCount = cars.filter((car) => car.vehicleStatus === 'In Progress').length;
     const inactiveCarsCount = cars.filter((car) => car.vehicleStatus === 'Inactive').length;
 
     return (
@@ -149,7 +148,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                     </Select>
 
                     <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                        <SelectTrigger className='w-[120px] md:w-[150px]'>
+                        <SelectTrigger className='w-[120px] md:w-[170px]'>
                             <SelectValue placeholder='Vehicle Status' />
                         </SelectTrigger>
                         <SelectContent>
@@ -157,7 +156,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                                 {[
                                     { label: 'All', value: 'all', count: allCarsCount },
                                     { label: 'Active', value: 'active', count: activeCarsCount },
-                                    { label: 'Inprogress', value: 'inprogress', count: inprogressCarsCount },
+                                    { label: 'In Progress', value: 'inprogress', count: inprogressCarsCount },
                                     { label: 'Inactive', value: 'inactive', count: inactiveCarsCount }
                                 ].map((status) => (
                                     <SelectItem key={status.value} value={status.value}>
@@ -236,7 +235,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
 
     const vehicleName = toTitleCase(`${make} ${model} ${year}`);
     const ratingText = rating ? rating.toFixed(1) : null;
-    const tripText = totalTrips ? `(${totalTrips}  ${totalTrips > 1 ? 'trips' : 'trip'})` : null;
+    const tripText = totalTrips ? `(${totalTrips}  ${totalTrips > 1 ? 'trips' : 'trip'})` : '(0 trips)';
 
     const formatedStartDate = startDate ? formatDateAndTime(startDate, zipCode, 'MMM DD') : null;
     const formatedEndDate = endDate ? formatDateAndTime(endDate, zipCode, 'MMM DD') : null;
@@ -265,14 +264,19 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                         </span>
                     </div>
                 </div>
-                {tripStatus && (
-                    <div className='flex-center justify-center gap-1 rounded bg-primary/10 p-1.5 text-center font-semibold text-xs'>
-                        <span className='text-nowrap capitalize'>
-                            {tripStatus}: {channelName} Trip{' '}
-                        </span>{' '}
-                        ({formatedStartDate} - {formatedEndDate})
-                    </div>
-                )}
+                <div className='flex-center justify-center gap-1 rounded bg-primary/10 p-1.5 text-center font-semibold text-xs'>
+                    {tripStatus ? (
+                        <>
+                            <span className='text-nowrap capitalize'>
+                                {tripStatus.toLowerCase() === 'completed' && 'Last'} {tripStatus.toLowerCase() === 'requested' && 'Next'}:{' '}
+                                {channelName} Trip{' '}
+                            </span>{' '}
+                            ({formatedStartDate} - {formatedEndDate})
+                        </>
+                    ) : (
+                        'No known trips found'
+                    )}
+                </div>
             </div>
         </Link>
     );
@@ -287,7 +291,7 @@ function VehicleStatusBadge({
 }) {
     const statusClasses: { [key: string]: string } = {
         Active: 'bg-[#C4F891] dark:bg-[#1E9A3C]',
-        Inprogress: 'bg-[#EEE423] dark:bg-yellow-600',
+        'In Progress': 'bg-[#EEE423] dark:bg-yellow-600',
         Inactive: 'bg-[#F8C4C4] dark:bg-red-700'
     };
 

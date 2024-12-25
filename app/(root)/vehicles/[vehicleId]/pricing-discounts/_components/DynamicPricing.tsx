@@ -9,7 +9,7 @@ import { convertToTimeZoneISO, currencyFormatter, formatDateAndTime } from '@/li
 import { deleteDynamicPricingById, insertDynamicPricing } from '@/server/dynamicPricingAndUnavailability';
 import { useQueryClient } from '@tanstack/react-query';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
-import { Trash2 } from 'lucide-react';
+import { PlusCircle, Trash2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -99,11 +99,11 @@ export default function DynamicPricingComponent() {
 
     return (
         <div className='flex w-full flex-col gap-4'>
-            <div className='flex w-full items-center justify-between'>
+            <div className='flex w-full items-center '>
                 <h3>Custom Pricing</h3>
                 {!isAdding && (
-                    <Button variant='black' className='w-fit' size='sm' onClick={() => setIsAdding(true)}>
-                        Add Price
+                    <Button className='h-10 w-fit border-none p-3' size='icon' variant='outline' onClick={() => setIsAdding(true)}>
+                        <PlusCircle className='size-6' />
                     </Button>
                 )}
             </div>
@@ -139,9 +139,7 @@ export default function DynamicPricingComponent() {
                         <Button variant='outline' onClick={resetAddForm}>
                             Cancel
                         </Button>
-                        <Button variant='black' onClick={handleAddPrice}>
-                            Save
-                        </Button>
+                        <Button onClick={handleAddPrice}>Save</Button>
                     </div>
                 </div>
             )}

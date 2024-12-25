@@ -2,8 +2,10 @@ import { QUERY_KEYS } from '@/constants/query-keys';
 import {
     getAllVehiclesUnderHost,
     getVehicleConfigurationEvents,
+    getVehicleExpenseLogs,
     getVehicleFeaturesById,
     getVehicleMasterDataByVIN,
+    getVehicleRepairLogs,
     getVehicleTripById,
     getVehicleUpdateLogsById
 } from '@/server/vehicles';
@@ -44,6 +46,34 @@ export const useVehicleUpdateLogsById = (id: number) => {
         queryKey: [QUERY_KEYS.vehicleUpdateLogsById, id],
         queryFn: async () => getVehicleUpdateLogsById(id)
     });
+};
+
+export const useVehicleRepairLogs = (id: number) => {
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.vehicleRepairLogs, id],
+            queryFn: async () => getVehicleRepairLogs(id)
+        }),
+        refetchAll: () => {
+            return useQueryClient().invalidateQueries({
+                queryKey: [QUERY_KEYS.vehicleRepairLogs]
+            });
+        }
+    };
+};
+
+export const useVehicleExpenseLogs = (id: number) => {
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.vehicleExpenseLogs, id],
+            queryFn: async () => getVehicleExpenseLogs(id)
+        }),
+        refetchAll: () => {
+            return useQueryClient().invalidateQueries({
+                queryKey: [QUERY_KEYS.vehicleExpenseLogs]
+            });
+        }
+    };
 };
 
 export const useVehicleTripById = (startDate: string, endDate: string, vehicleId: number) => {

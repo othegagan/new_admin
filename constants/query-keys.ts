@@ -18,5 +18,7 @@ export const QUERY_KEYS = {
     vehicleFeaturesById: 'vehicleFeaturesById',
     vehicleUpdateLogsById: 'vehicleUpdateLogsById',
     vehicleTripById: 'vehicleTripById',
-    vehicleConfigurationEvents: 'vehicleConfigurationEvents'
+    vehicleConfigurationEvents: 'vehicleConfigurationEvents',
+    vehicleRepairLogs: 'vehicleRepairLogs',
+    vehicleExpenseLogs: 'vehicleExpenseLogs'
 };

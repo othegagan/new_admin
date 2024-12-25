@@ -91,7 +91,8 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
         handleSubmit,
         setValue,
         control,
-        formState: { errors, isSubmitting }
+        reset,
+        formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -125,6 +126,10 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
             });
             if (response.success) {
                 toast.success(response.message);
+                reset({
+                    mileageLimit: mileageLimit,
+                    extraMileageCost: extraMileageCost
+                });
                 refetchData();
             } else {
                 toast.error(response.message);
@@ -136,7 +141,7 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex max-w-4xl flex-col gap-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
             <div className='grid grid-cols-1 gap-4 md:my-10 md:grid-cols-2 md:gap-10'>
                 <Controller
                     name='mileageLimit'
@@ -192,7 +197,7 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
             </div>
 
             <div className='mt-6 flex items-center justify-end gap-x-6'>
-                <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
+                <Button type='submit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...'>
                     Save
                 </Button>
             </div>

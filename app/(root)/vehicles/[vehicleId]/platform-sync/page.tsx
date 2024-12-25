@@ -85,9 +85,8 @@ function TuroIdForm({ vechicleId, url = '', channelName = '', constraintId, isUp
     const {
         register,
         handleSubmit,
-        setValue,
-        control,
-        formState: { errors, isSubmitting }
+        reset,
+        formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -137,10 +136,11 @@ function TuroIdForm({ vechicleId, url = '', channelName = '', constraintId, isUp
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex max-w-4xl flex-col gap-10'>
-            <div className='grid gap-6 md:grid-cols-2'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
+            <div className='grid max-w-[1200px] gap-6 md:grid-cols-2'>
                 <div className='space-y-2'>
                     <Label htmlFor='platform'>Platform</Label>
+                    <p className='text-muted-foreground text-sm'>Select the rental platform where your vehicle is listed.</p>
                     <Select defaultValue='turo'>
                         <SelectTrigger id='platform'>
                             <SelectValue placeholder='Select platform' />
@@ -149,17 +149,16 @@ function TuroIdForm({ vechicleId, url = '', channelName = '', constraintId, isUp
                             <SelectItem value='turo'>Turo</SelectItem>
                         </SelectContent>
                     </Select>
-                    <p className='text-muted-foreground text-sm'>Select the rental platform where your vehicle is listed.</p>
                 </div>
                 <div className='space-y-2'>
                     <Label htmlFor='vehicleId'>Vehicle ID</Label>
-                    <Input id='url' defaultValue={url} className='mt-1 w-full sm:mt-0' {...register('url')} />
                     <p className='text-muted-foreground text-sm'>Enter the unique identifier of your vehicle on the specified platform.</p>
+                    <Input id='url' defaultValue={url} className='mt-1 w-full sm:mt-0' {...register('url')} />
                 </div>
             </div>
 
             <div className='flex items-center justify-end gap-x-6'>
-                <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
+                <Button type='submit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...' className='w-fit'>
                     Save
                 </Button>
             </div>

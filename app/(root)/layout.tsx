@@ -27,7 +27,7 @@ export default async function RouteComponent({ children }: { children: React.Rea
                     'flex h-svh flex-col'
                 )}>
                 <Header sticky>
-                    <Logo className='pt-2' herf={PAGE_ROUTES.DASHBOARD} />
+                    <Logo className='pt-2 md:hidden' herf={PAGE_ROUTES.DASHBOARD} />
                     <div className='ml-auto flex items-center space-x-4'>
                         <ProfileDropdown session={session} />
                     </div>
