@@ -43,7 +43,7 @@ export default function Tabs() {
                 orientation='horizontal'
                 type='always'
                 className=' my-3 hidden w-full min-w-40 border-b bg-background px-1 py-2 md:block'>
-                <nav className={cn('flex space-x-2 pb-3.5 ')}>
+                <nav className={cn('flex space-x-2 pb-6 ')}>
                     <Button
                         variant='ghost'
                         className={cn(

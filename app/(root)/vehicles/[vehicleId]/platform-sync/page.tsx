@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
@@ -21,7 +22,7 @@ export default function TuroIdPage() {
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

@@ -119,3 +119,11 @@ export function DriverProfileSkeleton() {
         </>
     );
 }
+
+export function CarLoadingSkeleton({ className }: { className?: string }) {
+    return (
+        <div className={cn('flex h-full w-full flex-col items-center justify-center gap-6', className)}>
+            <img src='/images/car_loading.gif' className='h-auto w-40 dark:invert' alt='Loading...' />
+        </div>
+    );
+}

@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Label } from '@/components/ui/extension/field';
@@ -43,7 +44,7 @@ function CopyBundeeDataForm({ toVehicleId }: { toVehicleId: number }) {
     const { data: response, error, isLoading } = useVehiclesUnderHost();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
 import { vehicleConfigTabsContent } from '@/constants';
@@ -30,7 +31,7 @@ export default function MileageLimitsPage() {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

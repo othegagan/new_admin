@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -33,7 +34,7 @@ export default function MaintenancePage() {
     } = useVehicleRepairLogs(Number(vehicleId));
 
     if (isLoadingExpenseLogs || isLoadingServiceLogs) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (errorExpenseLogs || errorServiceLogs) {

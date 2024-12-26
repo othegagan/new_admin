@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { vehicleConfigTabsContent } from '@/constants';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,7 +31,7 @@ export default function DescriptionPage() {
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { FileInput, FileUploader } from '@/components/ui/extension/file-uploader';
 import { Progress } from '@/components/ui/progress';
@@ -35,7 +36,7 @@ export default function PhotosPage() {
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

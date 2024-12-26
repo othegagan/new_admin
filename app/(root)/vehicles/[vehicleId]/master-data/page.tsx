@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { FormError, Label } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
@@ -35,7 +36,7 @@ export default function MasterDataPage() {
     const { data: vinDBResponse, isLoading: vinDBLoading, error: vinDBError } = useVehicleMasterDataByVIN(vin);
 
     if (vinDBLoading || isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error || vinDBError) {

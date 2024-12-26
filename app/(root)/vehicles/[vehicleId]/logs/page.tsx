@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { vehicleConfigTabsContent } from '@/constants';
 import { useVehicleUpdateLogsById } from '@/hooks/useVehicles';
@@ -14,25 +15,7 @@ export default function UpdateLogsPage() {
     const { data: response, isLoading, error } = useVehicleUpdateLogsById(Number(vehicleId));
 
     if (isLoading) {
-        return (
-            <div>
-                {/* {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index} className='group relative flex w-full rounded-lg'>
-                        <div className='after:-translate-x-[0.5px] relative after:absolute after:start-3.5 after:top-0 after:bottom-0 after:w-px after:bg-neutral-200 last:after:hidden'>
-                            <div className='relative z-10 flex size-7 items-center justify-center'>
-                                <div className='size-2.5 rounded-full border-2 border-neutral-200 bg-neutral-200' />
-                            </div>
-                        </div>
-
-                        <div className='flex max-w-lg grow flex-col space-y-2 p-2 pb-4'>
-                            <Skeleton className='h-12 w-full' />
-                            <Skeleton className='h-4 w-3/4' />
-                        </div>
-                    </div>
-                ))} */}
-                Loading..
-            </div>
-        );
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

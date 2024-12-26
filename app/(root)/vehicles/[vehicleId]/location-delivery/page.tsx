@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { FormDescription, FormError, Label } from '@/components/ui/extension/field';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
@@ -34,7 +35,7 @@ export default function LocationDeliveryPage() {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {

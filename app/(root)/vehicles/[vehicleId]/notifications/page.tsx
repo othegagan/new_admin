@@ -50,7 +50,7 @@ export default function NotificationConfigurationPage() {
     } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoadingFeatures || isLoadingEvents) {
-        return <div className='h-32 w-full flex-center text-xl'>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (errorFeatures || errorEvents) {
@@ -92,6 +92,7 @@ interface MessageContentFormProps {
     refetchEvents: () => void;
 }
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { useEffect } from 'react';
 
 function MessageContentForm({ vehicleId, masterEventsList, alreadySavedEvents, refetchFeatures }: MessageContentFormProps) {

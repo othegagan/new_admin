@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { vehicleConfigTabsContent } from '@/constants';
@@ -29,7 +30,7 @@ export default function GuestInstructionsPage() {
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CarLoadingSkeleton />;
     }
 
     if (error) {
