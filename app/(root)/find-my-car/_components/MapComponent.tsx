@@ -1,4 +1,5 @@
 'use client';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { toTitleCase } from '@/lib/utils';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -49,6 +50,13 @@ export default function MapComponent({
         setPins(groupedMarkers);
     }, [filteredCars]);
 
+    useEffect(() => {
+        if (mapRef.current && filteredCars.length > 0) {
+            const validCoordinates = filteredCars.filter(isValidCoordinate);
+            fitMapToBounds(validCoordinates);
+        }
+    }, [mapRef, filteredCars]);
+
     const fitMapToBounds = (coordinates: any[]) => {
         if (!mapRef.current || coordinates.length === 0) return;
 
@@ -93,7 +101,7 @@ export default function MapComponent({
                     <img src='./images/car-top.png' alt='car' className='h-full w-full rotate-270 object-cover' />
                 ) : (
                     <div className='relative flex flex-col items-center justify-center'>
-                        <div className='grouped-marker-count absolute top-1 font-semibold text-md'>{group.length}</div>
+                        <div className='grouped-marker-count absolute top-1 font-semibold text-black text-md'>{group.length}</div>
                         <svg
                             width='436'
                             height='624'
@@ -103,7 +111,7 @@ export default function MapComponent({
                             className='size-10 cursor-pointer'>
                             <path
                                 d='M218 0C97.4771 0 0 97.656 0 218.4C0 382.2 218 624 218 624C218 624 436 382.2 436 218.4C436 97.656 338.523 0 218 0Z'
-                                fill='currentColor'
+                                fill='black'
                             />
                             <circle cx='218' cy='222' r='160' fill='white' />
                         </svg>
@@ -135,8 +143,10 @@ export default function MapComponent({
                             setCarPopInfo(null);
                             setCarsPopInfo(null);
                         }}
-                        className='rounded-lg'>
-                        <Link href={`/vehicles/${carPopInfo?.id}/calendar`} className='flex flex-col border-0 outline-none focus:border-0'>
+                        className='rounded-lg '>
+                        <Link
+                            href={`${PAGE_ROUTES.VEHICLES}/${carPopInfo?.id}${PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS}`}
+                            className='flex flex-col border-0 text-black outline-none focus:border-0'>
                             <img
                                 width='100%'
                                 src={carPopInfo?.imageresponse[0]?.imagename}
@@ -159,14 +169,14 @@ export default function MapComponent({
                         }}
                         style={{ maxWidth: '350px' }}
                         className='w-[400px] rounded-lg'>
-                        <p>{carsPopInfo.length} cars are available here.</p>
+                        <p className='font-medium text-black'>{carsPopInfo.length} cars are available here.</p>
                         <div className='flex max-h-60 w-full select-none flex-col overflow-y-auto rounded-lg border-1'>
                             {carsPopInfo.map((car: any) => (
                                 <Link
                                     key={car?.id}
                                     href={`/vehicles/${car?.id}/calendar`}
-                                    className='my-1 grid grid-cols-3 gap-2 rounded-md border hover:bg-neutral-200/70'>
-                                    <div className='aspect-video h-16 w-full border'>
+                                    className='my-1 grid grid-cols-3 gap-2 rounded-md border text-black hover:bg-neutral-200/70 dark:border-neutral-300'>
+                                    <div className='aspect-video h-16 w-full border dark:border-neutral-300'>
                                         {car?.imageresponse[0]?.imagename ? (
                                             <img
                                                 src={car?.imageresponse[0]?.imagename}

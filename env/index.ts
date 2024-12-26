@@ -14,7 +14,7 @@ const serverEnv = createEnv({
 const clientEnv = createEnv({
     emptyStringAsUndefined: true,
     client: {
-        NEXT_PUBLIC_APP_NODE_ENV: z.union([z.literal('development'), z.literal('qa'), z.literal('production')]),
+        NEXT_PUBLIC_APP_NODE_ENV: z.union([z.literal('development'), z.literal('test'), z.literal('production')]),
         NEXT_PUBLIC_USER_MANAGEMENT_BASEURL: z.string(),
         NEXT_PUBLIC_HOST_VEHICLE_SERVICES_BASEURL: z.string(),
         NEXT_PUBLIC_BOOKING_SERVICES_BASEURL: z.string(),

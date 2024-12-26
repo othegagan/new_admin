@@ -7,7 +7,8 @@ import {
     getVehicleMasterDataByVIN,
     getVehicleRepairLogs,
     getVehicleTripById,
-    getVehicleUpdateLogsById
+    getVehicleUpdateLogsById,
+    getVehiclesForMapView
 } from '@/server/vehicles';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -15,6 +16,13 @@ export const useVehiclesUnderHost = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.allVechiclesUnderHost],
         queryFn: async () => getAllVehiclesUnderHost()
+    });
+};
+
+export const useVehiclesForMapView = () => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.vehiclesForMapView],
+        queryFn: async () => getVehiclesForMapView()
     });
 };
 

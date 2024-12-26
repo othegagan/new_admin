@@ -1,11 +1,12 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { SearchInput } from '@/components/ui/search-input';
 import { fuseSettings } from '@/constants';
-import { useVehiclesUnderHost } from '@/hooks/useVehicles';
+import { useVehiclesForMapView } from '@/hooks/useVehicles';
 import { cn } from '@/lib/utils';
 import Fuse from 'fuse.js';
 import { Check, ChevronsUpDown } from 'lucide-react';
@@ -14,7 +15,7 @@ import MapComponent from './MapComponent';
 import { SelectedVehicleDetails, VehicleCard } from './VehicleCard';
 
 export default function VehicleSearch() {
-    const { data: response, error, isLoading } = useVehiclesUnderHost();
+    const { data: response, error, isLoading } = useVehiclesForMapView();
     // Sort the vehicles by make
     const sortedVehicles =
         response?.data?.hostVehicleDetails?.sort((a: { make: string | null }, b: { make: string | null }) => {
@@ -43,7 +44,9 @@ export default function VehicleSearch() {
         return (
             <div className='flex flex-col gap-4'>
                 <h3>Find My Car</h3>
-                Loading...
+                <div className='flex h-[50dvh] w-full items-center justify-center'>
+                    <CarLoadingSkeleton />
+                </div>
             </div>
         );
     if (error)
@@ -90,7 +93,8 @@ function SearchableVehicleList({ vehicles }: { vehicles: any[] }) {
     };
 
     return (
-        <div className='flex h-full w-full flex-col gap-4 md:gap-6'>
+        <div className='flex h-full w-full flex-col '>
+            <h3>Find My Car</h3>
             <div className='flex flex-col gap-4 lg:flex-row lg:justify-center'>
                 <div className='flex items-center gap-3 '>
                     <Popover open={open} onOpenChange={setOpen}>
@@ -141,7 +145,7 @@ function SearchableVehicleList({ vehicles }: { vehicles: any[] }) {
                     )}
                 </div>
             </div>
-            <div className='h-full w-full'>
+            <div className='mt-6 h-full w-full'>
                 <MapComponent filteredCars={mapData || []} />
             </div>
         </div>

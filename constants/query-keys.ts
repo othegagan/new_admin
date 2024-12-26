@@ -14,6 +14,7 @@ export const QUERY_KEYS = {
     telematicsDataByVehicleId: 'telematicsDataByVehicleId',
     telematicsEventsOfTripById: 'telematicsEventsOfTripById',
     allVechiclesUnderHost: 'allVechiclesUnderHost',
+    vehiclesForMapView: 'vehiclesForMapView',
     vehiclesByVin: 'vehiclesByVin',
     vehicleFeaturesById: 'vehicleFeaturesById',
     vehicleUpdateLogsById: 'vehicleUpdateLogsById',

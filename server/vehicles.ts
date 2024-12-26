@@ -16,6 +16,14 @@ export async function getAllVehiclesUnderHost() {
     return await api.post<any>(url, payload);
 }
 
+export async function getVehiclesForMapView() {
+    const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/getVehicleForMapView`;
+    const session = await auth();
+    const payload = { id: session?.iduser };
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
 export async function getVehicleFeaturesById(id: number) {
     const url = `${AVAILABILITY_BASEURL}/v1/availability/getVehiclesnFeaturesById`;
     const payload = { vehicleid: id };
