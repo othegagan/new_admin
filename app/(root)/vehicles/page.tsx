@@ -49,6 +49,8 @@ export default function VehiclesPage() {
         return { ...vehicle, vehicleStatus };
     });
 
+    console.log('updatedVehicleList', updatedVehicleList);
+
     return (
         <Main fixed className='flex flex-col gap-4'>
             <VehicleSearchAndFilter cars={updatedVehicleList} />
@@ -101,11 +103,10 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     }, [searchTerm, selectedFilter, tripStatus, sortBy, cars]);
 
     function getVehicleLink(id: any) {
-        const uploadStatus = cars.find((car: any) => car.vehicleId === id)?.upploadStatus;
+        const uploadStatus = cars.find((car: any) => car.vehicleId === id)?.uploadStatus;
         if (uploadStatus === 'inprogress') {
             const vin = cars.find((car: any) => car.vehicleId === id)?.vin;
-            const vehicleId = cars.find((car: any) => car.vehicleId === id)?.id;
-            return `${PAGE_ROUTES.ADD_VEHICLE}?vin=${vin}&vehicleId=${vehicleId}&alreadyUploaded=true`;
+            return `${PAGE_ROUTES.ADD_VEHICLE}?vin=${vin}&vehicleId=${id}&alreadyUploaded=true`;
         }
         return `${PAGE_ROUTES.VEHICLES}/${id}${PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR}`;
     }

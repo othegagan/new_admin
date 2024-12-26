@@ -1,7 +1,6 @@
-'use client';
-
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
+import { CardDescription, CardTitle } from '@/components/ui/card';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
 import { vehicleConfigTabsContent } from '@/constants';
 import { QUERY_KEYS } from '@/constants/query-keys';
@@ -10,16 +9,27 @@ import { requiredNumberSchema } from '@/schemas/validationSchemas';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { getSession } from 'next-auth/react';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import SubHeader from '../../_components/layout/subheader';
 
-export default function MileageLimitsPage() {
-    const { vehicleId } = useParams();
+interface MileageLimitsProps {
+    nextStep: () => void;
+    previousStep: () => void;
+}
+
+export default function MileageLimits({ nextStep, previousStep }: MileageLimitsProps) {
+    const searchParams = useSearchParams();
+    const vin = searchParams.get('vin');
+    const vehicleId = searchParams.get('vehicleId');
+
+    if (!vehicleId || !vin) {
+        return <div>Error: Invalid vehicle ID or VIN</div>;
+    }
 
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
@@ -58,15 +68,13 @@ export default function MileageLimitsPage() {
 
     return (
         <div className='flex flex-col'>
-            <SubHeader
-                title={vehicleConfigTabsContent.mileage_limits.title}
-                description={vehicleConfigTabsContent.mileage_limits.description}
-            />
             <MileageLimitsForm
                 vechicleId={Number(vehicleId)}
                 mileageLimit={mileageLimit}
                 extraMileageCost={extraMileageCost}
                 refetchData={refetchData}
+                nextStep={nextStep}
+                previousStep={previousStep}
             />
         </div>
     );
@@ -77,6 +85,8 @@ interface MileageLimitsFormProps {
     extraMileageCost: number;
     vechicleId: number;
     refetchData: () => void;
+    nextStep: () => void;
+    previousStep: () => void;
 }
 
 const schema = z.object({
@@ -86,14 +96,20 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0, refetchData }: MileageLimitsFormProps) {
+function MileageLimitsForm({
+    vechicleId,
+    mileageLimit = 0,
+    extraMileageCost = 0,
+    refetchData,
+    nextStep,
+    previousStep
+}: MileageLimitsFormProps) {
     const {
         register,
         handleSubmit,
         setValue,
         control,
-        reset,
-        formState: { errors, isSubmitting, isDirty }
+        formState: { errors, isSubmitting }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -127,11 +143,8 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
             });
             if (response.success) {
                 toast.success(response.message);
-                reset({
-                    mileageLimit: mileageLimit,
-                    extraMileageCost: extraMileageCost
-                });
                 refetchData();
+                nextStep();
             } else {
                 toast.error(response.message);
             }
@@ -143,7 +156,9 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-            <div className='grid grid-cols-1 gap-4 md:my-10 md:grid-cols-2 md:gap-10'>
+            <CardTitle>{vehicleConfigTabsContent.mileage_limits.title}</CardTitle>
+            <CardDescription> {vehicleConfigTabsContent.mileage_limits.description}</CardDescription>
+            <div className='grid grid-cols-1 gap-4 md:my-10 md:grid-cols-2'>
                 <Controller
                     name='mileageLimit'
                     control={control}
@@ -197,9 +212,13 @@ function MileageLimitsForm({ vechicleId, mileageLimit = 0, extraMileageCost = 0,
                 />
             </div>
 
-            <div className='mt-6 flex items-center justify-end gap-x-6'>
-                <Button type='submit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...'>
-                    Save
+            <div className='mt-6 flex items-center justify-between gap-x-6'>
+                <Button onClick={previousStep} variant='outline'>
+                    <ArrowLeft className='size-4' /> Prev
+                </Button>
+
+                <Button type='submit' variant='black' loading={isSubmitting} suffix={<ArrowRight className='size-4' />}>
+                    Next
                 </Button>
             </div>
         </form>

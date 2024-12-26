@@ -24,7 +24,7 @@ const buttonVariants = cva(
                 success: 'bg-green-500 text-background hover:bg-green-500/90 shadow-sm',
                 warning: 'bg-amber-500 text-background hover:bg-amber-500/90 shadow-sm',
                 danger: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-                black: 'bg-black text-white shadow-sm hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-900'
+                black: 'bg-foreground text-background shadow-sm '
             },
             size: {
                 default: 'h-9 px-4 py-2 w-full',

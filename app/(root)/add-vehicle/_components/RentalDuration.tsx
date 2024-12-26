@@ -1,7 +1,6 @@
-'use client';
-
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
+import { CardDescription, CardTitle } from '@/components/ui/card';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
 import { vehicleConfigTabsContent } from '@/constants';
 import { QUERY_KEYS } from '@/constants/query-keys';
@@ -9,15 +8,28 @@ import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { getSession } from 'next-auth/react';
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import SubHeader from '../../_components/layout/subheader';
 
-export default function StatusPage() {
-    const { vehicleId } = useParams();
+interface RentalDurationProps {
+    nextStep: () => void;
+    previousStep: () => void;
+}
+
+export default function RentalDuration({ nextStep, previousStep }: RentalDurationProps) {
+    const searchParams = useSearchParams();
+    const vin = searchParams.get('vin');
+    const vehicleId = searchParams.get('vehicleId');
+
+    if (!vehicleId || !vin) {
+        return <div>Error: Invalid vehicle ID or VIN</div>;
+    }
+
+    const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     const queryClient = useQueryClient();
     const refetchData = () => {
@@ -25,8 +37,6 @@ export default function StatusPage() {
             queryKey: [QUERY_KEYS.vehicleFeaturesById, Number(vehicleId)]
         });
     };
-
-    const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
         return <CarLoadingSkeleton />;
@@ -55,15 +65,13 @@ export default function StatusPage() {
 
     return (
         <div className='flex flex-col'>
-            <SubHeader
-                title={vehicleConfigTabsContent.rental_duration.title}
-                description={vehicleConfigTabsContent.rental_duration.description}
-            />
             <RentalDurationForm
                 vechicleId={Number(vehicleId)}
                 minRentalDuration={minRentalDuration}
                 maxRentalDuration={maxRentalDuration}
                 refetchData={refetchData}
+                nextStep={nextStep}
+                previousStep={previousStep}
             />
         </div>
     );
@@ -74,6 +82,8 @@ interface RentalDurationFormProps {
     minRentalDuration: number;
     maxRentalDuration: number;
     refetchData: () => void;
+    nextStep: () => void;
+    previousStep: () => void;
 }
 
 const schema = z.object({
@@ -92,12 +102,19 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-function RentalDurationForm({ vechicleId, minRentalDuration = 1, maxRentalDuration = 30, refetchData }: RentalDurationFormProps) {
+function RentalDurationForm({
+    vechicleId,
+    minRentalDuration = 1,
+    maxRentalDuration = 30,
+    refetchData,
+    nextStep,
+    previousStep
+}: RentalDurationFormProps) {
     const {
         handleSubmit,
         control,
         reset,
-        formState: { errors, isSubmitting, isDirty }
+        formState: { errors, isSubmitting }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -125,23 +142,26 @@ function RentalDurationForm({ vechicleId, minRentalDuration = 1, maxRentalDurati
             });
 
             if (response.success) {
-                refetchData();
                 toast.success(response.message);
                 reset({
                     minRentalDuration: minRentalDuration,
                     maxRentalDuration: maxRentalDuration
                 });
+                refetchData();
+                nextStep();
             } else {
                 toast.error(response.message);
             }
         } catch (error: any) {
-            console.error('Error updating status:', error);
-            toast.error('Error in updating status :', error.message);
+            console.error('Error updating mileage:', error);
+            toast.error('Error in updating mileage :', error.message);
         }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+            <CardTitle>{vehicleConfigTabsContent.mileage_limits.title}</CardTitle>
+            <CardDescription> {vehicleConfigTabsContent.mileage_limits.description}</CardDescription>
             <div className='grid grid-cols-1 gap-4 md:my-10 md:grid-cols-2 md:gap-10'>
                 <Controller
                     name='minRentalDuration'
@@ -195,9 +215,13 @@ function RentalDurationForm({ vechicleId, minRentalDuration = 1, maxRentalDurati
                 />
             </div>
 
-            <div className='flex items-center justify-end gap-x-6'>
-                <Button type='submit' loading={isSubmitting} disabled={!isDirty} loadingText='Saving...' className='w-fit'>
-                    Save
+            <div className='mt-6 flex items-center justify-between gap-x-6'>
+                <Button onClick={previousStep} variant='outline'>
+                    <ArrowLeft className='size-4' /> Prev
+                </Button>
+
+                <Button type='submit' variant='black' loading={isSubmitting} suffix={<ArrowRight className='size-4' />}>
+                    Next
                 </Button>
             </div>
         </form>

@@ -134,7 +134,7 @@ function PricingForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = 
             };
 
             const response = await updateVehicleFeaturesById({
-                type: 'update_pricing_discounts',
+                type: 'upload_pricing_discounts',
                 payload
             });
             if (response.success) {
