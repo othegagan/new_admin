@@ -104,7 +104,7 @@ export const authConfig: NextAuthConfig = {
     },
     cookies: {
         sessionToken: {
-            name: 'mybudee-host-session',
+            name: `mybudee-host-session-${process.env.NEXT_PUBLIC_APP_NODE_ENV}`,
             options: {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
