@@ -165,7 +165,7 @@ function MessageContentForm({ vehicleId, masterEventsList, alreadySavedEvents, r
                         />
                         <Button
                             type='submit'
-                            className='fade-in-25 ml-auto'
+                            className='fade-in-25 ml-auto w-fit'
                             disabled={!(isDirty && trimmedValue !== defaultValue.trim())}
                             loading={isSubmitting}
                             loadingText='Saving...'>

@@ -1,5 +1,6 @@
 'use client';
 
+import { VehicleHeaderSkeleton } from '@/components/skeletons';
 import ImagePreview from '@/components/ui/image-preview';
 import { Switch } from '@/components/ui/switch';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
@@ -34,7 +35,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
     }, [featuresResponse]);
 
     if (isLoadingFeatures) {
-        return <div className='h-20'>Loading...</div>;
+        return <VehicleHeaderSkeleton />;
     }
 
     if (errorFeatures) {

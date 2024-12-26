@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { ChevronLeft } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 
 export const shimmer =
@@ -124,6 +125,40 @@ export function CarLoadingSkeleton({ className }: { className?: string }) {
     return (
         <div className={cn('flex h-full w-full flex-col items-center justify-center gap-6', className)}>
             <img src='/images/car_loading.gif' className='h-auto w-40 dark:invert' alt='Loading...' />
+        </div>
+    );
+}
+
+export function VehicleHeaderSkeleton() {
+    return (
+        <div className='space-y-4'>
+            {/* Top Navigation Bar */}
+            <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2'>
+                    <ChevronLeft className='mr-1 h-4 w-4 text-muted-foreground' />
+                    <Skeleton className='h-6 w-16' />
+                </div>
+                <div className='flex items-center gap-2'>
+                    <Skeleton className='h-6 w-24' />
+                    <Skeleton className='h-6 w-6 rounded-full' />
+                </div>
+            </div>
+
+            {/* Vehicle Info Section */}
+            <div className='flex flex-row gap-4 px-4 '>
+                <Skeleton className='h-[90px] w-[150px] rounded-lg' />
+                <div className='flex flex-col justify-between space-y-2'>
+                    <div className='space-y-2'>
+                        <Skeleton className='h-6 w-[180px]' />
+                        <Skeleton className='h-4 w-[100px]' />
+                    </div>
+                    <div className='flex items-center gap-2'>
+                        <Skeleton className='h-4 w-4' />
+                        <Skeleton className='h-4 w-16' />
+                        <Skeleton className='h-4 w-[80px]' />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
