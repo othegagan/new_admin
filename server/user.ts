@@ -1,5 +1,3 @@
-'use server';
-
 import { CHANNELS, ROLES } from '@/constants';
 import { env } from '@/env';
 import { api } from '@/lib/apiService';

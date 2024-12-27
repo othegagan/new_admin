@@ -1,16 +1,15 @@
-'use server';
 import { CHANNELS } from '@/constants';
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
-import { auth } from '@/lib/auth';
 import type { Channel } from '@/types';
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
 
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 
 export async function getGuestsOfHost() {
-    const session = await auth();
+    const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getHostSpecificDriverDetails`;
     const payload = {
         hostID: session?.iduser
@@ -20,7 +19,7 @@ export async function getGuestsOfHost() {
 }
 
 export async function getGuestsHistory(driverId: string) {
-    const session = await auth();
+    const session = await getSession();
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/getDriverRentalDetails`;
     const payload = {
         hostId: session?.iduser,

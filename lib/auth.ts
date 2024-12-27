@@ -34,6 +34,7 @@ export const authConfig: NextAuthConfig = {
 
                     // Step 1: Fetch Bundee Auth Token
                     const authTokenResponse = await getBundeeToken(firebaseToken as string);
+
                     if (!authTokenResponse?.authToken) {
                         throw new CustomAuthError('Unable to get Bundee Token');
                     }

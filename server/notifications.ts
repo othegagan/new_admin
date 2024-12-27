@@ -1,14 +1,12 @@
-'use server';
-
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
-import { auth } from '@/lib/auth';
+import { getSession } from 'next-auth/react';
 
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 
 export async function getAllNotifications() {
-    const session = await auth();
+    const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getNotification`;
     const payload = {
         id: session?.iduser,
@@ -38,7 +36,7 @@ export async function markMessageNotificationAsRead(tripId: number) {
 }
 
 export async function updatePushNotificationToken(deviceUUID: string, deviceToken: string, callBackUrl: string) {
-    const session = await auth();
+    const session = await getSession();
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/updatePushNotification`;
     const payload = {
         userid: session?.iduser,

@@ -1,6 +1,6 @@
-import { env } from '@/env';
-import { auth, signOut } from '@/lib/auth';
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import { getSession, signOut } from 'next-auth/react';
+import { auth } from './auth';
 
 export interface ApiResponse<T> {
     success: boolean;
@@ -25,13 +25,24 @@ class ApiService {
         this.setupInterceptors();
     }
 
+    private async getAuthToken() {
+        if (typeof window === 'undefined') {
+            // Server-side
+            const session = await auth();
+            return session?.bundeeToken || process.env.NEXT_PUBLIC_FALLBACK_BUNDEE_AUTH_TOKEN;
+        }
+        // Client-side
+        const session = await getSession();
+        return session?.bundeeToken || process.env.NEXT_PUBLIC_FALLBACK_BUNDEE_AUTH_TOKEN;
+    }
+
     private setupInterceptors(): void {
         // Request Interceptor
         this.instance.interceptors.request.use(
             async (config) => {
                 try {
-                    const session = await auth();
-                    config.headers.bundee_auth_token = session?.bundeeToken || env.NEXT_PUBLIC_FALLBACK_BUNDEE_AUTH_TOKEN;
+                    const token = await this.getAuthToken();
+                    config.headers.bundee_auth_token = token;
                     return config;
                 } catch (error) {
                     console.error('Error in request interceptor:', error);

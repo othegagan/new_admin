@@ -1,15 +1,13 @@
-'use server';
-
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
-import { auth } from '@/lib/auth';
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
 
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const CHAT_SERVICE_BASEURL = env.NEXT_PUBLIC_CHAT_SERVICE_BASEURL;
 
 export async function getAllTripsOfHost(startTime: string, endTime: string) {
-    const session = await auth();
+    const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {
         fromValue: 'hostidbetweendays',

@@ -1,8 +1,6 @@
-'use server';
-
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
-import { auth } from '@/lib/auth';
+import { getSession } from 'next-auth/react';
 
 const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 
@@ -14,7 +12,7 @@ export async function getAllHosts() {
 }
 
 export async function getAllHostEmployees() {
-    const session = await auth();
+    const session = await getSession();
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/getOwnerEmployeeMappingById`;
     const payload = { fromvalue: 'hostidEmployees', id: session?.iduser };
 

@@ -1,5 +1,3 @@
-'use server';
-
 import { env } from '@/env';
 
 export async function addressSearchUsingMapbox(addressSeach: string) {
