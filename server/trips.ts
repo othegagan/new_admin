@@ -20,6 +20,18 @@ export async function getAllTripsOfHost(startTime: string, endTime: string) {
     return response;
 }
 
+export async function getReviewRequiredTrips() {
+    const session = await getSession();
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
+    const payload = {
+        fromValue: 'needsReviewTrips',
+        id: session?.iduser
+    };
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
 export async function getTripDetails(bookingId: number) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {

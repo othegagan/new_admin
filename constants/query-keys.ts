@@ -1,5 +1,6 @@
 export const QUERY_KEYS = {
     allTripsOfHost: 'allTripsOfHost',
+    allReviewRequiredTrips: 'allReviewRequiredTrips',
     tripDetails: 'tripDetails',
     allMasterHostCheckList: 'allMasterHostCheckList',
     allChannels: 'allChannels',

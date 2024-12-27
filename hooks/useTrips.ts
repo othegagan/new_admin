@@ -1,28 +1,10 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
 import { formatDateAndTime } from '@/lib/utils';
-import { getAllMasterHostCheckList, getAllTripsOfHost, getTripDetails } from '@/server/trips';
+import { getAllMasterHostCheckList, getAllTripsOfHost, getReviewRequiredTrips, getTripDetails } from '@/server/trips';
 import type { Trip } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { addMonths, format } from 'date-fns';
 import { useMemo } from 'react';
-
-export const tripSearchFields = [
-    { name: 'vehmake', weight: 1 },
-    { name: 'vehmodel', weight: 1 },
-    { name: 'vehyear', weight: 0.8 },
-    { name: 'vehicleId', weight: 0.9 },
-    { name: 'vehicleNumber', weight: 1 },
-    { name: 'tripid', weight: 1 },
-    { name: 'channelName', weight: 0.7 },
-    { name: 'userFirstName', weight: 1 },
-    { name: 'userlastName', weight: 1 },
-    { name: 'vehaddress1', weight: 0.6 },
-    { name: 'vehaddress2', weight: 0.6 },
-    { name: 'vehcityname', weight: 0.6 },
-    { name: 'vehstate', weight: 0.6 },
-    { name: 'vehzipcode', weight: 0.6 },
-    { name: 'status', weight: 0.7 }
-];
 
 export const useAllTrips = (startTime: string, endTime: string) => {
     return useQuery({
@@ -31,9 +13,9 @@ export const useAllTrips = (startTime: string, endTime: string) => {
     });
 };
 
-export const useDailyViewAndTripRequests = () => {
-    const startDate = `${format(new Date(), 'yyyy-MM-dd')}T05:00:00.362Z`;
-    const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T04:59:59.362Z`;
+export const useDailyViewTrips = () => {
+    const startDate = `${format(new Date(), 'yyyy-MM-dd')}T06:00:00.362Z`;
+    const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T05:59:59.362Z`;
 
     const { data: response, isLoading, isError, error, isFetching } = useAllTrips(startDate, endDate);
 
@@ -49,9 +31,8 @@ export const useDailyViewAndTripRequests = () => {
         return -1; // Default if no match
     }
 
-    const { dailyViewObjects, bookingRequests } = useMemo(() => {
+    const { dailyViewObjects } = useMemo(() => {
         const dailyViewObjects: Record<string, any[]> = {};
-        const bookingRequests: Trip[] = [];
 
         // Generate the keys for each day in the range
         const currentDate = new Date(startDate);
@@ -70,12 +51,6 @@ export const useDailyViewAndTripRequests = () => {
                 const zipcode = trip.vehzipcode;
                 const startKey = formatDateAndTime(trip.starttime, zipcode, 'yyyy-MM-DD');
                 const endKey = formatDateAndTime(trip.endtime, zipcode, 'yyyy-MM-DD');
-
-                // Handle action list based on status code
-                const statusCodes = ['REREQ', 'TRMODREQ', 'REMODHLD', 'TRMODHLD', 'RECANREQ'];
-                if (statusCodes.includes(trip.statusCode)) {
-                    bookingRequests.push(trip);
-                }
 
                 // Handle start date based on status code
                 if (dailyViewObjects[startKey]) {
@@ -103,7 +78,7 @@ export const useDailyViewAndTripRequests = () => {
             });
         }
 
-        return { dailyViewObjects, bookingRequests };
+        return { dailyViewObjects };
     }, [response, startDate, endDate]);
 
     // Sort bookings for each date and remove empty dates
@@ -126,9 +101,16 @@ export const useDailyViewAndTripRequests = () => {
         isError,
         isFetching,
         error,
-        dailyViewObjects: sortedDailyViewObjects,
-        bookingRequests
+        dailyViewObjects: sortedDailyViewObjects
     };
+};
+
+export const useReviewRequiredTrips = () => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.allReviewRequiredTrips],
+        queryFn: async () => getReviewRequiredTrips(),
+        staleTime: 0
+    });
 };
 
 export const useTripDetails = (bookingId: string | number) => {
@@ -136,7 +118,7 @@ export const useTripDetails = (bookingId: string | number) => {
         queryKey: [QUERY_KEYS.tripDetails, { bookingId }],
         queryFn: async () => getTripDetails(Number(bookingId)),
         refetchOnWindowFocus: true,
-        staleTime: 10 * 1000
+        staleTime: 0
     });
 };
 
