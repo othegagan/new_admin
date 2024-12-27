@@ -55,10 +55,11 @@ export async function getTripChatHistory(tripid: number, firebaseToken: string) 
         const data = response.data;
 
         const messageData = data.messages
-            .map((item: { author: any; body: any; dateUpdated: any }) => ({
+            .map((item: any) => ({
                 author: item.author,
                 message: item.body,
-                deliveryDate: item.dateUpdated
+                deliveryDate: item.dateUpdated,
+                mediaUrl: item.attributes?.mediaUrl || null
             }))
             .reverse();
 

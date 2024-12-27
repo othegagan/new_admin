@@ -1,31 +1,10 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
-import { getTripChatHistory, sendMessageToCustomer } from '@/server/trips';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getTripChatHistory } from '@/server/trips';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 const useChat = (bookingId: number, token: string) => {
     const [inputMessage, setInputMessage] = useState('');
-    const queryClient = useQueryClient();
-
-    const sendMessageMutation = useMutation({
-        mutationFn: async () => {
-            if (bookingId && token && inputMessage) {
-                return await sendMessageToCustomer(bookingId, inputMessage, token);
-            }
-            throw new Error('Missing bookingId, token, or inputMessage');
-        },
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.chatHistory, bookingId]
-            });
-            setInputMessage('');
-        },
-        onError: (error) => {
-            console.error('Error sending message:', error);
-            toast.error('Failed to send message. Please try again.');
-        }
-    });
 
     const {
         data: messageList = [],
@@ -42,7 +21,6 @@ const useChat = (bookingId: number, token: string) => {
     return {
         inputMessage,
         setInputMessage,
-        sendMessageMutation,
         messageList,
         loadingMessages,
         messageError,

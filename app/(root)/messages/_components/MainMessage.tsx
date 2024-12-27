@@ -1,12 +1,16 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import ImagePreview from '@/components/ui/image-preview';
 import useChat from '@/hooks/useChat';
 import { useTripDetails } from '@/hooks/useTrips';
 import { auth } from '@/lib/firebase';
 import { formatDateAndTime, getFullAddress } from '@/lib/utils';
 import type { Trip } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { format } from 'date-fns';
-import { Paperclip, Send } from 'lucide-react';
+import { Paperclip, Send, X } from 'lucide-react';
 import { type Key, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -57,8 +61,12 @@ const isError = (value: unknown): value is ErrorType => {
 export default function MainMessageComponent({ tripId, className }: MainMessageComponentProps) {
     const token = useAuthToken();
     const chatWindowRef = useRef(null);
+    const queryClient = useQueryClient();
 
-    const { inputMessage, setInputMessage, sendMessageMutation, messageList, loadingMessages, messageError } = useChat(tripId, token);
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [file, setFile] = useState<File | null>(null);
+
+    const { inputMessage, setInputMessage, messageList, loadingMessages, messageError } = useChat(tripId, token);
 
     const { data: response, isLoading: loadingBookingDetails, error } = useTripDetails(tripId);
     const tripData = response?.data?.activetripresponse[0];
@@ -68,6 +76,50 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
         event.preventDefault();
         sendMessageMutation.mutate();
     };
+
+    const sendMessageMutation = useMutation({
+        mutationFn: async () => {
+            if ((tripId && token) || inputMessage || file) {
+                const formData = new FormData();
+
+                if (file) formData.append('file', file || null);
+                formData.append('tripId', String(tripId));
+                formData.append('message', inputMessage || '');
+                formData.append('author', 'HOST');
+
+                const config = {
+                    headers: {
+                        Accept: '*/*',
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                };
+
+                try {
+                    const url = `${process.env.NEXT_PUBLIC_CHAT_SERVICE_BASEURL}/sendMediaMessage`;
+                    const response = await axios.post(url, formData, config);
+                    return {
+                        success: true
+                    };
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    throw new Error('Failed to send message.');
+                }
+            } else {
+                throw new Error('Missing tripId, token, or inputMessage');
+            }
+        },
+        onSuccess: async () => {
+            setInputMessage('');
+            setFile(null);
+            await queryClient.invalidateQueries({ queryKey: ['chatHistory', tripId, token] });
+            removeFile();
+        },
+        onError: (error) => {
+            console.error('Error sending message:', error);
+            toast.error('Failed to send message. Please try again.');
+        }
+    });
 
     // Scroll chat window to bottom
     const scrollToBottom = () => {
@@ -92,6 +144,23 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
     }, [inputMessage]);
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    function removeFile() {
+        setPreviewImage(null);
+        setFile(null);
+    }
 
     return (
         <div className='flex flex-1 flex-col gap-2 rounded-md md:px-4 md:pt-0 md:pb-4'>
@@ -126,20 +195,36 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
             </div>
 
             {/* Textbox and send */}
-            <form className='flex w-full flex-none gap-2' onSubmit={handleSendMessage}>
-                <div className='flex flex-1 items-center gap-2 rounded-md border border-input px-2 py-1 focus-within:outline-none focus-within:ring-1 focus-within:ring-ring lg:gap-4'>
-                    <Button variant='ghost' size='icon' className='w-fit'>
-                        <Paperclip className='size-5' />
-                    </Button>
+            <form onSubmit={handleSendMessage} className='relative flex w-full items-end gap-2'>
+                {previewImage && (
+                    <Card className='absolute bottom-full left-[5%] mb-2 overflow-hidden'>
+                        <div className='relative h-24 w-24'>
+                            <img src={previewImage} alt='Preview' className='h-full w-full object-cover' />
+                            <Button
+                                type='button'
+                                variant='destructive'
+                                size='icon'
+                                className='absolute top-1 right-1 w-fit px-1 py-0'
+                                onClick={removeFile}>
+                                <X className='h-4 w-4' />
+                                <span className='sr-only'>Remove image</span>
+                            </Button>
+                        </div>
+                    </Card>
+                )}
+                <div className='flex flex-1 items-center gap-2 rounded-md border border-input bg-background px-3 py-1 focus-within:ring-1 focus-within:ring-ring'>
+                    <label htmlFor='image-upload' className='cursor-pointer'>
+                        <Paperclip className='h-5 w-5 text-muted-foreground' />
+                        <input id='image-upload' type='file' accept='image/*' onChange={handleImageUpload} className='sr-only' />
+                    </label>
                     <label className='flex-1'>
                         <span className='sr-only'>Chat Text Box</span>
-
                         <textarea
                             ref={textareaRef}
                             value={inputMessage}
                             onChange={(e) => setInputMessage(e.target.value)}
                             placeholder='Type your message...'
-                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-md focus-visible:outline-none'
+                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-md text-xs placeholder:text-muted-foreground focus-visible:outline-none'
                             rows={1}
                             style={{ overflow: 'hidden' }} // Prevent scrollbars from appearing
                         />
@@ -147,9 +232,9 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
                     <Button
                         variant='ghost'
                         size='icon'
-                        className='w-fit px-2'
+                        className='w-fit px-2 text-primary'
                         type='submit'
-                        disabled={!inputMessage.trim() || sendMessageMutation.isPending}
+                        disabled={(!inputMessage.trim() && !file) || sendMessageMutation.isPending}
                         loading={sendMessageMutation.isPending}
                         suffix={<Send className='size-5' />}>
                         <span className='sr-only'>Send</span>
@@ -192,8 +277,17 @@ function MessageItem({
                     />
                 )}
 
-                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-[#E1EFFE] px-3 py-2 font-medium text-sm dark:bg-[#2e4161]'>
-                    {message.message}
+                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-[#E1EFFE] px-3 py-2 dark:bg-[#2e4161]'>
+                    <span className='text-xs'> {message.message}</span>
+
+                    {message.mediaUrl && (
+                        <ImagePreview
+                            url={message?.mediaUrl || '/images/image_not_available.png'}
+                            alt='media content'
+                            className='md:w[250px] h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
+                        />
+                    )}
+
                     <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
                         {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
                     </p>
@@ -204,8 +298,16 @@ function MessageItem({
 
     if (isHostMessage) {
         return (
-            <div className='ml-auto flex w-max max-w-[75%] flex-col gap-2 rounded-lg rounded-br-none bg-primary/40 px-3 py-2 font-medium text-sm'>
-                {message?.message}
+            <div className='ml-auto flex w-max max-w-[75%] flex-col gap-2 rounded-lg rounded-br-none bg-primary/40 px-3 py-2'>
+                <span className='text-xs'> {message.message}</span>
+
+                {message?.mediaUrl && (
+                    <ImagePreview
+                        url={message?.mediaUrl || '/images/image_not_available.png'}
+                        alt='media content'
+                        className='md:w[250px] h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
+                    />
+                )}
                 <p className='flex items-center justify-end text-[10px]'> {format(new Date(message.deliveryDate), 'PP | hh:mm a')}</p>
             </div>
         );
@@ -225,7 +327,7 @@ function MessageItem({
 
             {message.message.toLocaleLowerCase() === 'a new reservation was requested' ? (
                 <div className='flex flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm'>
-                    <span>{message.message}</span>
+                    <span className='text-xs'> {message.message}</span>
                     {/*
                     {images.length > 0 ? (
                         <div className='relative max-w-md sm:overflow-hidden md:max-w-lg md:rounded-lg'>
@@ -245,15 +347,15 @@ function MessageItem({
                         {tripData?.vehmake} {tripData?.vehmodel} {tripData?.vehyear}
                     </p>
 
-                    <div className='text-12'>
+                    <div className='text-xs'>
                         Start Date :<span className='font-medium '> {formatDateAndTime(tripData?.starttime, tripData?.vehzipcode)}</span>
                     </div>
 
-                    <div className='text-12'>
+                    <div className='text-xs'>
                         End Date : <span className='font-medium '> {formatDateAndTime(tripData?.endtime, tripData?.vehzipcode)}</span>
                     </div>
 
-                    <div className='text-12'>
+                    <div className='text-xs'>
                         Pickup & Return :<span className='font-medium capitalize'> {getFullAddress({ tripDetails: tripData })}</span>
                     </div>
 
@@ -262,8 +364,10 @@ function MessageItem({
                     </p>
                 </div>
             ) : (
-                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-muted px-3 py-2 font-medium text-sm'>
+                <div className='flex flex-col gap-2 rounded-lg rounded-tl-none bg-muted px-3 py-2 text-xs'>
                     {message.message}
+
+                    {message.mediaUrl && <img src={message.mediaUrl} alt='media content' className='mt-2 h-auto max-w-full rounded-lg' />}
                     <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
                         {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
                     </p>

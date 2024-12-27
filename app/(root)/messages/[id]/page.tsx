@@ -2,9 +2,11 @@
 
 import { ChatHeaderSkeleton } from '@/components/skeletons';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { useTripDetails } from '@/hooks/useTrips';
 import type { Trip } from '@/types';
 import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import MainMessageComponent from '../_components/MainMessage';
 
@@ -48,20 +50,26 @@ function ChatHeader({ tripId }: { tripId: number }) {
 
     return (
         <div className='mb-1 flex flex-none justify-between rounded-t-md border-b pb-2'>
-            <div className='flex gap-3'>
+            <div className='flex w-full gap-3'>
                 <button type='button' className='px-0 sm:hidden' onClick={() => router.back()}>
                     <ArrowLeft /> <span className='sr-only'>Back</span>
                 </button>
-                <div className='flex items-center gap-2 md:px-4 md:py-1 lg:gap-4'>
-                    <Avatar className='h-12 w-12 border'>
+                <div className='flex items-center gap-4 md:px-4 md:py-1 lg:gap-4'>
+                    <Avatar className='size-10 border'>
                         <AvatarImage src={trip.userImage || '/images/dummy_avatar.png'} alt={trip.userFirstName || 'Guest'} />
                     </Avatar>
 
                     <div>
                         <h5 className='capitalize'>{`${trip.userFirstName} ${trip.userlastName}`}</h5>
-                        <p>{trip.vehicleNumber}</p>
+                        <p className='text-muted-foreground'>{trip.vehicleNumber}</p>
                     </div>
                 </div>
+
+                <Link
+                    href={`${PAGE_ROUTES.TRIPS}/${tripId}`}
+                    className=' ml-auto flex items-center gap-2 text-sm underline underline-offset-2 md:pr-4'>
+                    <span>View Trip</span>
+                </Link>
             </div>
         </div>
     );
