@@ -122,7 +122,7 @@ function DailyTripsSearch({ tripsData }: any) {
     );
 }
 
-export function TripCard({ tripData }: { tripData: Trip }) {
+function TripCard({ tripData }: { tripData: Trip }) {
     const tripId = tripData.tripid;
     const channel = tripData?.channelName;
 
