@@ -54,7 +54,7 @@ const InputPassword = React.forwardRef<HTMLInputElement, InputPasswordProps>(
 
         return (
             <div>
-                <div className='relative'>
+                <div className='relative z-10'>
                     <Input
                         type={isVisible ? 'text' : 'password'}
                         value={value}

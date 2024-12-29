@@ -13,19 +13,19 @@ interface UserInfoProps {
 
 export function UserInfo({ avatarSrc, name, className = '', userId, tripId }: UserInfoProps) {
     return (
-        <div className={`flex items-start gap-3 ${className}`}>
+        <div className={`flex items-center gap-3 ${className}`}>
             <Link href={`${PAGE_ROUTES.GUESTS}/${userId}`} className='relative size-9 overflow-hidden rounded-full border md:size-10'>
                 <img src={avatarSrc} alt={name} className='h-full w-full object-cover object-center' />
             </Link>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-1'>
                 <Link
                     href={`${PAGE_ROUTES.GUESTS}/${userId}`}
-                    className='font-light hover:underline hover:underline-offset-2 md:font-medium md:text-base'>
+                    className='max-w-20 truncate font-light hover:underline hover:underline-offset-2 md:max-w-fit md:font-medium md:text-base'>
                     {name}
                 </Link>
                 <Link
                     href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
-                    className='font-light text-lg hover:underline hover:underline-offset-2'>
+                    className='hidden font-light hover:underline hover:underline-offset-2 md:block'>
                     (Trip #{tripId})
                 </Link>
             </div>
@@ -59,16 +59,17 @@ export function CarDetails({
     return (
         <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} className='flex flex-1 gap-3'>
             <div className='relative'>
-                <div className='absolute top-0 w-fit rounded border bg-white px-2 font-bold text-14 text-black'>{channel}</div>
+                <div className='absolute top-0 w-fit rounded border bg-white px-2 font-bold text-black text-sm'>{channel}</div>
                 <div className='col-span-2 h-20 w-32 flex-center overflow-hidden rounded-md border md:h-32 md:w-44'>
                     <img src={carImage} alt={carName} className='h-full w-full object-cover object-center' />
                 </div>
             </div>
             <div className='flex w-fit flex-col'>
-                <h1 className='font-semibold text-xl md:max-w-sm'>{carName}</h1>
+                <h1 className='font-semibold text-lg md:max-w-sm md:text-xl'>{carName}</h1>
                 <div className='flex-start gap-5 text-md'>
                     <span className='text-muted-foreground tracking-wider'>{licensePlate}</span>
                 </div>
+                <div className='block font-light hover:underline hover:underline-offset-2 md:hidden'>(Trip #{tripId})</div>
                 <div className='mt-auto hidden w-full items-center gap-2 md:flex'>
                     <CalendarDays className='size-4 text-muted-foreground' />
                     <div className='text-sm md:text-base dark:text-muted-foreground'>{dateRange}</div>

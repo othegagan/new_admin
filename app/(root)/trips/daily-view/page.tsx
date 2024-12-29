@@ -143,13 +143,29 @@ function TripCard({ tripData }: { tripData: Trip }) {
     const isPhoneVerified = tripData.isPhoneVarified;
     const isRentalAgreed = tripData.isRentalAgreed;
     const isInsuranceVerified = tripData.isInsuranceVerified;
-    const tripStatus = tripData.status;
 
     const startDate = formatDateAndTime(tripData.starttime, tripData.vehzipcode, 'MMM DD, YYYY | h:mm A ');
     const endDate = formatDateAndTime(tripData.endtime, tripData.vehzipcode, 'MMM DD, YYYY | h:mm A  ');
     const dateRange = `${startDate} - ${endDate}`;
 
     const location = isAirportDelivery || isCustomDelivery ? deliveryAddress : carAddress;
+
+    let tripStatusText = tripData.status;
+
+    enum CategoryText {
+        'Starts at' = 0,
+        'Started at' = 1,
+        'Ends at' = 2,
+        'Ended on' = 3
+    }
+
+    if (tripData.category !== undefined) {
+        const date = tripData.category === 0 || tripData.category === 1 ? tripData.starttime : tripData.endtime;
+        const time = formatDateAndTime(date, tripData.vehzipcode, 'MMM DD, h:mm A');
+        const text = `${CategoryText[tripData.category]} ${time}`;
+
+        tripStatusText = text;
+    }
 
     return (
         <div className='flex w-full flex-col gap-1 text-nowrap border-b py-2.5 md:max-w-5xl lg:max-w-6xl xl:max-w-7xl'>
@@ -160,7 +176,7 @@ function TripCard({ tripData }: { tripData: Trip }) {
                     isPhoneVerified={isPhoneVerified}
                     isRentalAgreed={isRentalAgreed}
                     isInsuranceVerified={isInsuranceVerified}
-                    tripStatus={tripStatus}
+                    tripStatus={tripStatusText}
                     tripId={tripId}
                     userId={userId}
                     userName={userName}
@@ -187,7 +203,7 @@ function TripCard({ tripData }: { tripData: Trip }) {
                         isPhoneVerified={isPhoneVerified}
                         isRentalAgreed={isRentalAgreed}
                         isInsuranceVerified={isInsuranceVerified}
-                        tripStatus={tripStatus}
+                        tripStatus={tripStatusText}
                         tripId={tripId}
                         userId={userId}
                         userName={userName}

@@ -96,9 +96,10 @@ function TripCard({ tripData }: { tripData: Trip }) {
 
     return (
         <div className='flex w-full flex-col gap-1 text-nowrap border-b py-2.5 md:max-w-5xl lg:max-w-6xl xl:max-w-7xl'>
-            <div className='flex items-start justify-between gap-4 lg:hidden'>
-                <UserInfo avatarSrc={avatarSrc} name={userName} tripId={tripId} userId={userId} />
+            <div className='flex items-center gap-4 lg:hidden'>
+                <UserInfo className='text-[14px]' avatarSrc={avatarSrc} name={userName} tripId={tripId} userId={userId} />
                 <ActionButtons
+                    className='ml-auto pr-6'
                     isLicenceVerified={isLicenceVerified}
                     isPhoneVerified={isPhoneVerified}
                     isRentalAgreed={isRentalAgreed}
