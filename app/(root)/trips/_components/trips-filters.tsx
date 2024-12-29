@@ -43,7 +43,7 @@ export default function TripsFilter() {
                             <SelectValue placeholder='Trip Status' />
                         </SelectTrigger>
                         <SelectContent>
-                            {['Requested', 'Approved', 'Completed', 'Cancelled'].map((status) => (
+                            {['Requested', 'Approved', 'Started', 'Completed', 'Cancelled', 'Rejected'].map((status) => (
                                 <SelectItem key={status} value={status}>
                                     <span className='capitalize'>{status}</span>
                                 </SelectItem>
