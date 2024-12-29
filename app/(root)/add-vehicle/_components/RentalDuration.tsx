@@ -160,8 +160,8 @@ function RentalDurationForm({
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-            <CardTitle>{vehicleConfigTabsContent.mileage_limits.title}</CardTitle>
-            <CardDescription> {vehicleConfigTabsContent.mileage_limits.description}</CardDescription>
+            <CardTitle>{vehicleConfigTabsContent.rental_duration.title}</CardTitle>
+            <CardDescription> {vehicleConfigTabsContent.rental_duration.description}</CardDescription>
             <div className='grid grid-cols-1 gap-4 md:my-10 md:grid-cols-2 md:gap-10'>
                 <Controller
                     name='minRentalDuration'

@@ -162,7 +162,10 @@ const schema = z.object({
         address2: z.string().optional(),
         city: z.string({ message: 'City is required' }).trim().min(1, { message: 'City is required' }),
         state: z.string({ message: 'State is required' }).trim().min(1, { message: 'State is required' }),
-        zipcode: z.string({ message: 'Zipcode is required' }).min(4, { message: 'Zipcode is required' }),
+        zipcode: z
+            .string({ message: 'Zipcode is required' })
+            .min(4, { message: 'Zipcode is required' })
+            .max(6, { message: 'Max 6 digits' }),
         latitude: z.string().min(1, { message: 'Latitude is required' }),
         longitude: z.string().min(1, { message: 'Longitude is required' })
     })
@@ -213,6 +216,7 @@ function LocationDeliveryForm({
     };
 
     const deliveryEnabledState = watch('deliveryEnabled');
+    const lat_lng = watch('fullAddress.latitude');
 
     useEffect(() => {
         setValue('deliveryEnabled', deliveryEnabled);
@@ -492,7 +496,7 @@ function LocationDeliveryForm({
                     <ArrowLeft className='size-4' /> Prev
                 </Button>
 
-                <Button type='submit' variant='black' loading={isSubmitting} suffix={<ArrowRight className='size-4' />}>
+                <Button type='submit' variant='black' loading={isSubmitting} disabled={!lat_lng} suffix={<ArrowRight className='size-4' />}>
                     Next
                 </Button>
             </div>

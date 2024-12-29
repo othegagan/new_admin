@@ -12,7 +12,7 @@ import { loginSchema } from '@/schemas';
 import { login } from '@/server/auth-operations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type AuthError, type UserCredential, signInWithEmailAndPassword } from 'firebase/auth';
-import { LogIn, TriangleAlert } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -102,7 +102,7 @@ export default function SigninForm() {
             <div className='my-auto flex flex-col items-center justify-center gap-10 py-12'>
                 <Logo />
                 <div className='mx-auto grid min-w-[350px] gap-6'>
-                    <h1 className='text-center font-bold text-3xl'>Host Sign In</h1>
+                    <h1 className='text-center font-bold text-3xl'>Sign In to MyBundee</h1>
 
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
                         <InputText
@@ -137,12 +137,7 @@ export default function SigninForm() {
                             </div>
                         )}
 
-                        <Button
-                            className='!w-full'
-                            type='submit'
-                            loading={isPending}
-                            loadingText='Signing in...'
-                            suffix={<LogIn className='size-4 transition-all ease-linear group-hover:translate-x-2' />}>
+                        <Button className='!w-full' type='submit' loading={isPending} loadingText='Signing in...'>
                             Sign In
                         </Button>
                     </form>

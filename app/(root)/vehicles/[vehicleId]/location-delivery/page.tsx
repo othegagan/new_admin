@@ -150,7 +150,10 @@ const schema = z.object({
         address2: z.string().optional(),
         city: z.string({ message: 'City is required' }).trim(),
         state: z.string({ message: 'State is required' }).trim(),
-        zipcode: z.string({ message: 'Zipcode is required' }),
+        zipcode: z
+            .string({ message: 'Zipcode is required' })
+            .min(4, { message: 'Zipcode is required' })
+            .max(6, { message: 'Max 6 digits' }),
         latitude: z.string(),
         longitude: z.string()
     })

@@ -49,8 +49,6 @@ export default function VehiclesPage() {
         return { ...vehicle, vehicleStatus };
     });
 
-    console.log('updatedVehicleList', updatedVehicleList);
-
     return (
         <Main fixed className='flex flex-col gap-4'>
             <VehicleSearchAndFilter cars={updatedVehicleList} />
@@ -252,7 +250,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                     />
                 </div>
                 <VehicleStatusBadge status={vehicleStatus} />
-                <div className='absolute top-2 left-2 inline-flex rounded bg-accent/50 px-2 text-sm'>ID: {vehicleId}</div>
+                <div className='absolute top-2 left-2 inline-flex rounded bg-accent/80 px-2 text-sm'>ID: {vehicleId}</div>
             </div>
             <div className='flex flex-col gap-1 p-2'>
                 <div className='truncate font-semibold text-md'>{vehicleName}</div>

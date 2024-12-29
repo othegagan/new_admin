@@ -46,6 +46,7 @@ export default function VehicleCalendarPage() {
         const newEndDate = format(endOfMonth(newMonth), 'yyyy-MM-dd');
         setStartDate(newStartDate);
         setEndDate(newEndDate);
+        refetchTrips();
     }
 
     const {
@@ -59,7 +60,8 @@ export default function VehicleCalendarPage() {
     const {
         data: tripsResponse,
         isLoading: isLoadingTrips,
-        error: errorTrips
+        error: errorTrips,
+        refetchAll: refetchTrips
     } = useVehicleTripById(
         convertToTimeZoneISO(`${startDate}T00:00:00`, zipcode),
         convertToTimeZoneISO(`${endDate}T11:59:59`, zipcode),

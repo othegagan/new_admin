@@ -211,8 +211,8 @@ export const vehicleConfigTabsContent = {
         description: "Enter the vehicle's plate number, state, and color to complete your vehicle listing."
     },
     import: {
-        title: 'Import Vehicle',
-        description: 'Import vehicle information from another platform or from an existing vehicle on this platform.'
+        title: 'Import Vehicle Data',
+        description: 'Import vehicle data from another platform or from an existing vehicle on this platform.'
     },
     photos: {
         title: 'Photos',

@@ -161,89 +161,97 @@ function VehicleSelect({
         <form onSubmit={handleSubmit(onSubmit)} className='mt-6 flex w-full flex-col gap-4 lg:mt-10'>
             <div className='flex flex-col gap-2 p-0.5'>
                 <Label>Select a vehicle to copy from</Label>
-                <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                        <div className='flex w-[200px] cursor-pointer items-center justify-between gap-2 rounded-md border px-3 py-2 lg:w-[400px]'>
-                            {fromVehicle ? (
-                                <div className='flex items-center gap-2'>
-                                    <div className='aspect-video h-full w-24 flex-center overflow-hidden rounded-[6px] border'>
-                                        <img
-                                            src={fromVehicle.imageURL || '/images/image_not_available.png'}
-                                            alt={`${fromVehicle.make} ${fromVehicle.model} ${fromVehicle.year}`}
-                                            className='h-full w-full object-cover object-center'
-                                        />
-                                    </div>
-                                    <div className='flex flex-col gap-1'>
-                                        <div className='line-clamp-1 select-text font-bold text-14 group-hover:line-clamp-none'>
-                                            {fromVehicle.make} {fromVehicle.model} {fromVehicle.year}
-                                        </div>
-                                        <div className='select-text font-medium text-[10px] text-muted-foreground uppercase'>
-                                            VIN: {fromVehicle.vin}
-                                        </div>
-                                        <div className='flex w-full items-center justify-between'>
-                                            <div className='select-text font-semibold text-foreground text-xs'>{fromVehicle.number}</div>
-                                            <div className='select-text font-medium text-muted-foreground text-xs'>
-                                                ID: {fromVehicle.id}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <p className='text-14 text-muted-foreground'>Select a vehicle </p>
-                            )}
-                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-                        </div>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-[300px] p-0 lg:w-[400px]'>
-                        <Command>
-                            <CommandInput placeholder='Search Vehicle...' />
-                            <CommandList>
-                                <CommandEmpty>No vehicle found.</CommandEmpty>
-                                <CommandGroup>
-                                    {vehicles?.map((vehicle: Vehicle) => (
-                                        <CommandItem
-                                            key={vehicle.id}
-                                            onSelect={() => {
-                                                setFromVehicle(vehicle);
-                                                setOpen(false);
-                                            }}>
-                                            <Check
-                                                className={cn('mr-2 h-4 w-4', fromVehicle?.id === vehicle.id ? 'opacity-100' : 'opacity-0')}
+                <div className='flex items-end gap-4'>
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                            <div className='flex w-[200px] cursor-pointer items-center justify-between gap-2 rounded-md border px-3 py-2 lg:w-[400px]'>
+                                {fromVehicle ? (
+                                    <div className='flex items-center gap-2'>
+                                        <div className='aspect-video h-full w-24 flex-center overflow-hidden rounded-[6px] border'>
+                                            <img
+                                                src={fromVehicle.imageURL || '/images/image_not_available.png'}
+                                                alt={`${fromVehicle.make} ${fromVehicle.model} ${fromVehicle.year}`}
+                                                className='h-full w-full object-cover object-center'
                                             />
-                                            <div className='aspect-video h-full w-24 flex-center overflow-hidden rounded-[6px] border'>
-                                                <img
-                                                    src={vehicle.imageURL || '/images/image_not_available.png'}
-                                                    alt={`${vehicle.make} ${vehicle.model} ${vehicle.year}`}
-                                                    className='h-full w-full object-cover object-center'
+                                        </div>
+                                        <div className='flex flex-col gap-1'>
+                                            <div className='line-clamp-1 select-text font-bold text-14 group-hover:line-clamp-none'>
+                                                {fromVehicle.make} {fromVehicle.model} {fromVehicle.year}
+                                            </div>
+                                            <div className='select-text font-medium text-[10px] text-muted-foreground uppercase'>
+                                                VIN: {fromVehicle.vin}
+                                            </div>
+                                            <div className='flex w-full items-center justify-between'>
+                                                <div className='select-text font-semibold text-foreground text-xs'>
+                                                    {fromVehicle.number}
+                                                </div>
+                                                <div className='select-text font-medium text-muted-foreground text-xs'>
+                                                    ID: {fromVehicle.id}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <p className='text-14 text-muted-foreground'>Select a vehicle </p>
+                                )}
+                                <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                            </div>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-[300px] p-0 lg:w-[400px]'>
+                            <Command>
+                                <CommandInput placeholder='Search Vehicle...' />
+                                <CommandList>
+                                    <CommandEmpty>No vehicle found.</CommandEmpty>
+                                    <CommandGroup>
+                                        {vehicles?.map((vehicle: Vehicle) => (
+                                            <CommandItem
+                                                key={vehicle.id}
+                                                onSelect={() => {
+                                                    setFromVehicle(vehicle);
+                                                    setOpen(false);
+                                                }}>
+                                                <Check
+                                                    className={cn(
+                                                        'mr-2 h-4 w-4',
+                                                        fromVehicle?.id === vehicle.id ? 'opacity-100' : 'opacity-0'
+                                                    )}
                                                 />
-                                            </div>
-
-                                            <div className='ml-2 flex flex-1 select-text flex-col gap-1.5'>
-                                                <div className='flex w-full flex-col gap-1'>
-                                                    <div className='line-clamp-1 select-text font-bold text-14 group-hover:line-clamp-none'>
-                                                        {vehicle.make} {vehicle.model} {vehicle.year}
+                                                <div className='aspect-video h-full w-24 flex-center overflow-hidden rounded-[6px] border'>
+                                                    <img
+                                                        src={vehicle.imageURL || '/images/image_not_available.png'}
+                                                        alt={`${vehicle.make} ${vehicle.model} ${vehicle.year}`}
+                                                        className='h-full w-full object-cover object-center'
+                                                    />
+                                                </div>
+                                                <div className='ml-2 flex flex-1 select-text flex-col gap-1.5'>
+                                                    <div className='flex w-full flex-col gap-1'>
+                                                        <div className='line-clamp-1 select-text font-bold text-14 group-hover:line-clamp-none'>
+                                                            {vehicle.make} {vehicle.model} {vehicle.year}
+                                                        </div>
+                                                        <div className='select-text font-medium text-[10px] text-muted-foreground uppercase'>
+                                                            VIN: {vehicle.vin}
+                                                        </div>
                                                     </div>
-                                                    <div className='select-text font-medium text-[10px] text-muted-foreground uppercase'>
-                                                        VIN: {vehicle.vin}
+                                                    <div className='flex w-full items-center justify-between'>
+                                                        <div className='select-text font-semibold text-foreground text-xs'>
+                                                            {vehicle.number}
+                                                        </div>
+                                                        <div className='select-text font-medium text-muted-foreground text-xs'>
+                                                            ID: {vehicle.id}
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div className='flex w-full items-center justify-between'>
-                                                    <div className='select-text font-semibold text-foreground text-xs'>
-                                                        {vehicle.number}
-                                                    </div>
-                                                    <div className='select-text font-medium text-muted-foreground text-xs'>
-                                                        ID: {vehicle.id}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </CommandList>
-                        </Command>
-                    </PopoverContent>
-                </Popover>
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                </CommandList>
+                            </Command>
+                        </PopoverContent>
+                    </Popover>
+                    <Button variant='ghost' onClick={() => setFromVehicle(null)} className='w-fit'>
+                        Clear
+                    </Button>
+                </div>
             </div>
 
             <Button type='submit' disabled={!fromVehicle} loading={isSubmitting} loadingText='Copying...'>

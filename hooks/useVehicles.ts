@@ -85,10 +85,17 @@ export const useVehicleExpenseLogs = (id: number) => {
 };
 
 export const useVehicleTripById = (startDate: string, endDate: string, vehicleId: number) => {
-    return useQuery({
-        queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }],
-        queryFn: async () => getVehicleTripById(startDate, endDate, vehicleId)
-    });
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }],
+            queryFn: async () => getVehicleTripById(startDate, endDate, vehicleId)
+        }),
+        refetchAll: () => {
+            return useQueryClient().invalidateQueries({
+                queryKey: [QUERY_KEYS.vehicleTripById]
+            });
+        }
+    };
 };
 
 export const useVehicleConfigurationEvents = () => {
