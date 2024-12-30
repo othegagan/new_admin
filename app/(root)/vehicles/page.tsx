@@ -16,6 +16,11 @@ import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useEffect, useState } from 'react';
 
+// Constants for vehicle statuses
+const STATUS_ACTIVE = 'Active';
+const STATUS_INACTIVE = 'Inactive';
+const STATUS_IN_PROGRESS = 'In Progress';
+
 export default function VehiclesPage() {
     const { data: response, error, isLoading: loading } = useVehiclesUnderHost();
 
@@ -35,19 +40,15 @@ export default function VehiclesPage() {
                 updatedDate: vehicle.updatedDate || new Date().toISOString(),
                 createdDate: vehicle.createdDate || new Date().toISOString()
             }))
-            .sort((a: any, b: any) => {
-                if (a.make === null) return 1;
-                if (b.make === null) return -1;
-                return a.make.localeCompare(b.make);
-            }) || [];
+            .sort((a: any, b: any) => (a.make || '').localeCompare(b.make || '')) || [];
 
     if (allHostsVehicles.length === 0) return <EmptyGarage />;
 
-    const updatedVehicleList = allHostsVehicles?.map((vehicle: any) => {
-        let vehicleStatus = vehicle.isActive ? 'Active' : 'Inactive';
-        if (vehicle.uploadStatus === 'inprogress') vehicleStatus = 'In Progress';
-        return { ...vehicle, vehicleStatus };
-    });
+    // Map and add `vehicleStatus` field
+    const updatedVehicleList = allHostsVehicles.map((vehicle: any) => ({
+        ...vehicle,
+        vehicleStatus: vehicle.uploadStatus === 'inprogress' ? STATUS_IN_PROGRESS : vehicle.isActive ? STATUS_ACTIVE : STATUS_INACTIVE
+    }));
 
     return (
         <Main fixed className='flex flex-col gap-4'>
@@ -79,22 +80,23 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     useEffect(() => {
         let filtered = searchTerm ? fuse.search(searchTerm).map((result) => result.item) : cars;
 
-        filtered = filtered.filter((car) => {
-            if (!selectedFilter || selectedFilter === 'all') return true;
-            return car.vehicleStatus.toLowerCase() === selectedFilter.toLowerCase();
-        });
+        // Filter by vehicle status
+        if (selectedFilter && selectedFilter !== 'all') {
+            filtered = filtered.filter((car) => car.vehicleStatus.toLowerCase() === selectedFilter.toLowerCase());
+        }
 
+        // Filter by trip status
         if (tripStatus) {
             filtered = filtered.filter((car) => car.status?.toLowerCase() === tripStatus.toLowerCase());
         }
 
+        // Sort vehicles by date
         if (sortBy) {
-            filtered.sort((a, b) => {
-                if (sortBy === 'last-added') {
-                    return new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime();
-                }
-                return new Date(b.updatedDate).getTime() - new Date(a.updatedDate).getTime();
-            });
+            filtered.sort((a, b) =>
+                sortBy === 'last-added'
+                    ? new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+                    : new Date(b.updatedDate).getTime() - new Date(a.updatedDate).getTime()
+            );
         }
 
         setFilteredCars(filtered);
