@@ -35,7 +35,9 @@ export default async function DashboardPage() {
 
 function ActionRequiredAlert() {
     return (
-        <div className=' rounded-lg border border-border bg-background p-4 shadow shadow-black/5'>
+        <Link
+            href={`${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`}
+            className='cursor-pointer rounded-lg border border-border bg-background p-4 shadow shadow-black/5'>
             <div className='flex gap-2'>
                 <div className='flex grow flex-col gap-3'>
                     <div className='space-y-1'>
@@ -45,11 +47,9 @@ function ActionRequiredAlert() {
                         </p>
                         <p className=' text-muted-foreground text-sm'>
                             There are some items that need your review.
-                            <Link
-                                href={PAGE_ROUTES.TRIPS}
-                                className=' ml-2 inline-block whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
+                            <div className=' ml-2 inline-block whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
                                 See More
-                            </Link>
+                            </div>
                         </p>
                     </div>
                 </div>
@@ -60,6 +60,6 @@ function ActionRequiredAlert() {
                     <X size={16} strokeWidth={2} className='opacity-60 transition-opacity group-hover:opacity-100' aria-hidden='true' />
                 </Button> */}
             </div>
-        </div>
+        </Link>
     );
 }

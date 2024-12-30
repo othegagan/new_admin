@@ -11,6 +11,11 @@ export const PAGE_ROUTES = {
     DASHBOARD: '/',
     PROFILE: '/profile',
     TRIPS: '/trips',
+    TRIPS_TABS: {
+        DAILY_VIEW: '/daily-view',
+        REVIEW_REUIRED: '/review-reuired',
+        ALL_TRIPS: '/all-trips'
+    },
     TRIP_DETAILS: '/trip-details',
     VEHICLES: '/vehicles',
     ADD_VEHICLE: '/add-vehicle',
