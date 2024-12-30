@@ -13,7 +13,7 @@ export const PAGE_ROUTES = {
     TRIPS: '/trips',
     TRIPS_TABS: {
         DAILY_VIEW: '/daily-view',
-        REVIEW_REUIRED: '/review-reuired',
+        REVIEW_REUIRED: '/review-required',
         ALL_TRIPS: '/all-trips'
     },
     TRIP_DETAILS: '/trip-details',
@@ -99,7 +99,7 @@ export const homePageItems = [
     {
         icon: <TripsIcon className='size-20' />,
         label: 'Trips',
-        href: PAGE_ROUTES.TRIPS
+        href: `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`
     },
     {
         icon: <MessageSquareText className='size-20' />,

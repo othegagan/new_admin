@@ -45,12 +45,12 @@ function ActionRequiredAlert() {
                             <TriangleAlert className='mt-0.5 shrink-0 text-amber-500' size={20} strokeWidth={2} aria-hidden='true' />
                             Host Action Required
                         </p>
-                        <p className=' text-muted-foreground text-sm'>
+                        <div className=' text-muted-foreground text-sm'>
                             There are some items that need your review.
                             <div className=' ml-2 inline-block whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
                                 See More
                             </div>
-                        </p>
+                        </div>
                     </div>
                 </div>
                 {/* <Button

@@ -20,7 +20,7 @@ export default function TripsFilter() {
         setSelectedStatus('');
     };
 
-    if (pathname !== `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`) {
+    if (pathname === `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`) {
         return null;
     }
 
