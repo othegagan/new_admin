@@ -324,7 +324,7 @@ function EmptyGarage() {
             </div>
             <h3 className='md:-mt-12 font-bold text-2xl text-muted-foreground tracking-tight'>Your Bundee garage is looking a bit bare.</h3>
             <p className='text-muted-foreground'>Fill it with your vehicles and unlock amazing opportunities.</p>
-            <Button size='lg' onClick={() => router.push('/add_vehicle')} className='mt-6 py-4'>
+            <Button size='lg' onClick={() => router.push(PAGE_ROUTES.ADD_VEHICLE)} className='mt-6 py-4'>
                 <Plus className='size-5' /> Add Vehicles
             </Button>
         </div>
