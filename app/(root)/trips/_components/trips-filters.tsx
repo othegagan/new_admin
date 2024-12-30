@@ -20,6 +20,10 @@ export default function TripsFilter() {
         setSelectedStatus('');
     };
 
+    if (pathname !== `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`) {
+        return null;
+    }
+
     return (
         <div className='mb-6 flex w-full flex-col flex-wrap gap-4 md:flex-row md:items-center'>
             <div className='w-full md:max-w-md'>
@@ -33,7 +37,7 @@ export default function TripsFilter() {
                 />
             </div>
             <div className='flex flex-wrap items-center gap-4 md:ml-auto'>
-                {pathname !== `${PAGE_ROUTES.TRIPS}/review-required` && (
+                {pathname !== `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}` && (
                     <Select
                         value={selectedStatus}
                         onValueChange={(value) => {
