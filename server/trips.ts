@@ -134,3 +134,31 @@ export async function enterTripMiles(payload: any) {
     const response = await api.post<any>(url, payload);
     return response;
 }
+
+export async function tripApproval(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateReservationApproval`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function tripRejection(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateReservationRejected`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function tripDismissalFromNeedsReview(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateNeedsReview`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function acceptTripCancellation(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/acceptCancellationRequest`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}

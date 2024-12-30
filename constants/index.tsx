@@ -15,6 +15,7 @@ export const CHANNELS = {
     TURO: 'Turo'
 } as const;
 
+export const DEPOSIT_HOLD_AMOUNT = 250;
 /**
  * Nav Items
  * This is the main navigation items for the application.

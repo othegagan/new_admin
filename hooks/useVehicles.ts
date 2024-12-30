@@ -57,13 +57,14 @@ export const useVehicleUpdateLogsById = (id: number) => {
 };
 
 export const useVehicleRepairLogs = (id: number) => {
+    const queryClient = useQueryClient();
     return {
         ...useQuery({
             queryKey: [QUERY_KEYS.vehicleRepairLogs, id],
             queryFn: async () => getVehicleRepairLogs(id)
         }),
         refetchAll: () => {
-            return useQueryClient().invalidateQueries({
+            return queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.vehicleRepairLogs]
             });
         }
@@ -71,13 +72,14 @@ export const useVehicleRepairLogs = (id: number) => {
 };
 
 export const useVehicleExpenseLogs = (id: number) => {
+    const queryClient = useQueryClient();
     return {
         ...useQuery({
             queryKey: [QUERY_KEYS.vehicleExpenseLogs, id],
             queryFn: async () => getVehicleExpenseLogs(id)
         }),
         refetchAll: () => {
-            return useQueryClient().invalidateQueries({
+            return queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.vehicleExpenseLogs]
             });
         }
@@ -85,13 +87,15 @@ export const useVehicleExpenseLogs = (id: number) => {
 };
 
 export const useVehicleTripById = (startDate: string, endDate: string, vehicleId: number) => {
+    const queryClient = useQueryClient();
+
     return {
         ...useQuery({
             queryKey: [QUERY_KEYS.vehicleTripById, { startDate, endDate, vehicleId }],
             queryFn: async () => getVehicleTripById(startDate, endDate, vehicleId)
         }),
         refetchAll: () => {
-            return useQueryClient().invalidateQueries({
+            return queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.vehicleTripById]
             });
         }
