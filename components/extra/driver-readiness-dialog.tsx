@@ -10,12 +10,12 @@ interface DriverReadinessDialogProps {
     className?: string;
     isLicenceVerified: boolean;
     isPhoneVerified: boolean;
-    isRentalAgreed: boolean;
-    isInsuranceVerified: boolean;
-    tripId: number;
+    isRentalAgreed?: boolean;
+    isInsuranceVerified?: boolean;
+    tripId?: number;
     userName: string;
     userId: number;
-    avatarSrc: string;
+    avatarSrc: string | null;
 }
 
 const readyText = 'Ready to Drive';
@@ -34,7 +34,7 @@ export default function DriverReadinessDialog({
     userName,
     avatarSrc
 }: DriverReadinessDialogProps) {
-    const isReadyToDrive = isLicenceVerified && isPhoneVerified && isRentalAgreed;
+    const isReadyToDrive = isLicenceVerified && isPhoneVerified && (isRentalAgreed === undefined || isRentalAgreed);
 
     return (
         <>
@@ -58,7 +58,7 @@ export default function DriverReadinessDialog({
                         <p className='text-sm'>{isReadyToDrive ? readyDescription : notReadyDescription}</p>
 
                         <div className='w-full flex-between gap-4'>
-                            <div>Trip: #{tripId}</div>
+                            {tripId && <div>Trip: #{tripId}</div>}
                             <div className='flex items-center gap-4'>
                                 <Link
                                     href={`${PAGE_ROUTES.GUESTS}/${userId}`}
@@ -77,7 +77,7 @@ export default function DriverReadinessDialog({
                         <div className='flex flex-col gap-4'>
                             <CheckListItem className='flex-1' text="Driver's Licence Verification" checkMark={isLicenceVerified} />
                             <CheckListItem className='flex-1' text='Phone Number Verification' checkMark={isPhoneVerified} />
-                            <CheckListItem className='flex-1' text='Rental Agreement' checkMark={isRentalAgreed} />
+                            {isRentalAgreed && <CheckListItem className='flex-1' text='Rental Agreement' checkMark={isRentalAgreed} />}
                             {/* <CheckListItem className='flex-1' text='Insurance Verified' checkMark={isInsuranceVerified} /> */}
                         </div>
                     </div>

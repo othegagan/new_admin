@@ -1,10 +1,10 @@
 'use client';
 
+import DriverReadinessDialog from '@/components/extra/driver-readiness-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { currencyFormatter } from '@/lib/utils';
-import { UserAlertIcon, UserCheckIcon } from '@/public/icons';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
@@ -51,6 +51,24 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
         }
     },
     {
+        accessorKey: 'firstName',
+        header: () => {
+            return null;
+        },
+        cell: () => {
+            return null;
+        }
+    },
+    {
+        accessorKey: 'lastName',
+        header: () => {
+            return null;
+        },
+        cell: () => {
+            return null;
+        }
+    },
+    {
         accessorKey: 'userStatus',
         header: ({ column }) => {
             return (
@@ -66,28 +84,19 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
     },
     {
         id: 'bookingReadiness',
-        header: ({ column }) => {
-            return (
-                <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    Booking Readiness
-                    <ChevronsUpDown className='ml-2 h-4 w-4' />
-                </Button>
-            );
+        enableSorting: false,
+        header: () => {
+            return <div>Booking Readiness</div>;
         },
         cell: ({ row }) => {
-            const isReady = row.original.isDrivingLicenseVarified && row.original.isPhoneVarified;
             return (
-                <div className={isReady ? 'text-green-500' : 'text-yellow-500'}>
-                    {isReady ? (
-                        <span className='flex items-center gap-2'>
-                            <UserCheckIcon className='mr-1' /> Driver Actions Complete
-                        </span>
-                    ) : (
-                        <span className='flex items-center gap-2'>
-                            <UserAlertIcon className='mr-1' /> Driver Actions Pending
-                        </span>
-                    )}
-                </div>
+                <DriverReadinessDialog
+                    isLicenceVerified={row.original.isDrivingLicenseVarified}
+                    isPhoneVerified={row.original.isPhoneVarified}
+                    userId={Number(row.original.userId)}
+                    userName={`${row.original.firstName} ${row.original.lastName}`}
+                    avatarSrc={row.original.userImage}
+                />
             );
         }
     },

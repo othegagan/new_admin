@@ -33,5 +33,6 @@ function GuestsTable() {
 
     if (allGuestsOfHost && allGuestsOfHost.length === 0) return <div>No Drivers found.</div>;
 
-    if (allGuestsOfHost && allGuestsOfHost.length > 0) return <DataTable columns={guestsColumns} data={allGuestsOfHost} />;
+    if (allGuestsOfHost && allGuestsOfHost.length > 0)
+        return <DataTable columns={guestsColumns} data={allGuestsOfHost} sortBasedOn='userId' />;
 }

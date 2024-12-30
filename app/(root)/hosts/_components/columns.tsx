@@ -10,6 +10,24 @@ import UpdateHostForm from './UpdateHostForm';
 
 export const columns: ColumnDef<User>[] = [
     {
+        accessorKey: 'firstName',
+        header: () => {
+            return null;
+        },
+        cell: () => {
+            return null;
+        }
+    },
+    {
+        accessorKey: 'lastName',
+        header: () => {
+            return null;
+        },
+        cell: () => {
+            return null;
+        }
+    },
+    {
         accessorKey: 'iduser',
         header: ({ column }) => (
             <div className='flex-center py-1'>
@@ -24,7 +42,6 @@ export const columns: ColumnDef<User>[] = [
             return <div className='flex-center'>{cell?.getValue()}</div>;
         }
     },
-
     {
         accessorKey: 'email',
         header: ({ column }) => (
@@ -40,7 +57,6 @@ export const columns: ColumnDef<User>[] = [
             return <div className='flex-start'>{cell?.getValue()}</div>;
         }
     },
-
     {
         accessorFn: (row) => `${row.firstname || ''} ${row.lastname || ''}`.trim(),
         id: 'fullName',
