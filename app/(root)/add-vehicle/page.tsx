@@ -68,18 +68,18 @@ export default function CreateVehiclePage() {
                             {index !== steps.length - 1 && (
                                 <div className='absolute inset-0 flex h-full w-6 items-center justify-center'>
                                     <div
-                                        className={`h-full w-0.5 ${index < currentStep ? 'bg-green-500' : 'bg-neutral-200 dark:bg-neutral-600'} pointer-events-none`}
+                                        className={`h-full w-0.5 ${index < currentStep ? 'bg-primary' : 'bg-neutral-200 dark:bg-neutral-600'} pointer-events-none`}
                                     />
                                 </div>
                             )}
 
                             {index < currentStep ? (
-                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-green-500 text-background'>
+                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-background'>
                                     <CircleCheckBig className='size-4 text-background' />
                                 </div>
                             ) : index === currentStep ? (
-                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-green-500 bg-background'>
-                                    <Dot className='size-10 text-green-500' />
+                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-primabg-primary bg-background'>
+                                    <Dot className='size-10 text-primabg-primary' />
                                 </div>
                             ) : (
                                 <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-neutral-400 bg-background text-neutral-400' />
