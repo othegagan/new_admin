@@ -9,7 +9,7 @@ import { columns } from './_components/columns';
 
 export default function Page() {
     return (
-        <Main>
+        <Main fixed className='overflow-y-auto'>
             <div className='flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
                 <PageHeader title='Hosts' description='List of all the hosts of the platform' />
                 <AddNewHostForm />

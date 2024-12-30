@@ -8,7 +8,7 @@ import { guestsColumns } from './_components/columns';
 
 export default function GuestsPage() {
     return (
-        <Main>
+        <Main fixed className='overflow-y-auto'>
             <div className='flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
                 <PageHeader title='Guests' description='List of all the guests under the host' />
             </div>

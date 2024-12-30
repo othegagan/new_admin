@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
     type ColumnDef,
@@ -82,6 +82,10 @@ export function DataTable<TData, TValue>({ columns, data, sortBasedOn }: DataTab
         }
     });
 
+    const preventScroll = useCallback((e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>) => {
+        e.preventDefault();
+    }, []);
+
     return (
         <div className='flex flex-col'>
             {/* search */}
@@ -143,7 +147,7 @@ export function DataTable<TData, TValue>({ columns, data, sortBasedOn }: DataTab
                         | Go to page:
                         <Input
                             type='number'
-                            min={'1'}
+                            min={1}
                             max={table.getPageCount()}
                             defaultValue={table.getState().pagination.pageIndex + 1}
                             onChange={(e) => {
@@ -161,10 +165,10 @@ export function DataTable<TData, TValue>({ columns, data, sortBasedOn }: DataTab
                         onValueChange={(value) => {
                             table.setPageSize(Number(value));
                         }}>
-                        <SelectTrigger className='h-8 w-[70px]'>
+                        <SelectTrigger className='h-8 w-[70px]' onMouseDown={preventScroll}>
                             <SelectValue placeholder={table.getState().pagination.pageSize} />
                         </SelectTrigger>
-                        <SelectContent side='top' className='w-[70px]'>
+                        <SelectContent side='top' align='center' className='w-[70px]'>
                             {[10, 20, 30, 40, 50].map((pageSize) => (
                                 <SelectItem key={pageSize} value={`${pageSize}`}>
                                     {pageSize}
@@ -173,26 +177,14 @@ export function DataTable<TData, TValue>({ columns, data, sortBasedOn }: DataTab
                         </SelectContent>
                     </Select>
                 </div>
-                <div className=' flex items-center gap-3'>
+                <div className='flex items-center gap-3'>
                     <Button size='sm' onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
                         {'<<'}
                     </Button>
-                    <Button
-                        variant='outline'
-                        size='sm'
-                        onClick={() => {
-                            table.previousPage();
-                        }}
-                        disabled={!table.getCanPreviousPage()}>
+                    <Button variant='outline' size='sm' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                         Previous
                     </Button>
-                    <Button
-                        variant='outline'
-                        size='sm'
-                        onClick={() => {
-                            table.nextPage();
-                        }}
-                        disabled={!table.getCanNextPage()}>
+                    <Button variant='outline' size='sm' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
                         Next
                     </Button>
                     <Button size='sm' onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
