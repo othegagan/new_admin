@@ -64,7 +64,7 @@ export default function CreateVehiclePage() {
                 </div>
                 <div aria-label='Progress' className='hidden md:block'>
                     {steps.map((step, index) => (
-                        <div key={step.id} className='relative flex pb-6' onClick={() => setCurrentStep(index)}>
+                        <div key={step.id} className='relative flex pb-6'>
                             {index !== steps.length - 1 && (
                                 <div className='absolute inset-0 flex h-full w-6 items-center justify-center'>
                                     <div
