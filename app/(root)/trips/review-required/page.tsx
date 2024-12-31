@@ -289,7 +289,7 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
     const carAddress = getFullAddress({ tripDetails: tripData });
 
     const userId = tripData?.userid;
-    const userName = toTitleCase(`${tripData?.userFirstName} ${tripData?.userlastName}`);
+    const userName = toTitleCase(`${tripData?.userFirstName || ''} ${tripData?.userlastName || ''}`);
     const avatarSrc = tripData?.userImage || '/images/dummy_avatar.png';
 
     const isAirportDelivery = tripData.airportDelivery;

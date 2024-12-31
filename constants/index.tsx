@@ -35,7 +35,7 @@ export const sidebarData: ISidebar[] = [
             },
             {
                 title: 'Trips',
-                url: PAGE_ROUTES.TRIPS,
+                url: `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`,
                 icon: <TripsIcon />,
                 roles: [ROLES.EMPLOYEE, ROLES.HOST]
             },

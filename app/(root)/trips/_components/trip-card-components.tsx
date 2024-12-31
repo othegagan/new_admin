@@ -59,7 +59,7 @@ export function CarDetails({
     return (
         <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} className='flex flex-1 gap-3'>
             <div className='relative'>
-                <div className='absolute top-0 w-fit rounded border bg-white px-2 font-bold text-black text-sm'>{channel}</div>
+                <div className='absolute top-0 w-fit rounded border bg-white px-2 font-bold text-black text-sm capitalize'>{channel}</div>
                 <div className='col-span-2 h-20 w-32 flex-center overflow-hidden rounded-md border md:h-32 md:w-44'>
                     <img src={carImage} alt={carName} className='h-full w-full object-cover object-center' />
                 </div>

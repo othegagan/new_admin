@@ -1,4 +1,3 @@
-import { MessagesNotificationButton } from '@/components/layout/MessagesNotificationButton';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { Header } from '@/components/layout/header/app-header';
 import { ProfileDropdown } from '@/components/layout/header/profile-dropdown';
@@ -30,7 +29,7 @@ export default async function RouteComponent({ children }: { children: React.Rea
                 <Header sticky>
                     <Logo className='pt-2 md:hidden' herf={PAGE_ROUTES.DASHBOARD} />
                     <div className='ml-auto flex items-center space-x-4'>
-                        <MessagesNotificationButton />
+                        {/* <MessagesNotificationButton /> */}
 
                         <ProfileDropdown session={session} />
                     </div>

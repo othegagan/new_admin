@@ -1,7 +1,7 @@
+import { CHANNELS } from '@/constants';
 import { parseZonedDateTime } from '@internationalized/date';
 import { type ClassValue, clsx } from 'clsx';
 import moment from 'moment-timezone';
-import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import zipToTimeZone from 'zipcode-to-timezone';
 
@@ -17,12 +17,12 @@ export function toTitleCase(str: string) {
     return str?.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()) || str;
 }
 
-export function roundToTwoDecimalPlaces(num: number) {
+export function roundToTwoDecimalPlaces(num: number | string): string {
     try {
-        return Number.parseFloat(num.toString()).toFixed(2);
+        return Number.parseFloat(num.toString()).toFixed(2); // Always returns a string with 2 decimal places
     } catch (error) {
         console.error('Error rounding to two decimal places:', error);
-        return 0;
+        return '0.00'; // Return a fallback value as a string
     }
 }
 
@@ -119,21 +119,6 @@ export function getFullAddress({ vehicleDetails, tripDetails }: { vehicleDetails
     return address;
 }
 
-export function splitFormattedDateAndTime(input: string): React.ReactElement | string {
-    const parts = input.split(' | ');
-    if (parts.length !== 2) {
-        return input; // Return the original input if it doesn't split into exactly two parts
-    }
-    const [datePart, timePart] = parts;
-    return React.createElement(
-        React.Fragment,
-        null,
-        React.createElement('span', null, datePart),
-        React.createElement('br'),
-        React.createElement('span', null, timePart)
-    );
-}
-
 /**
  * Function to check if a string is a URL or a Base64 string
  * @param str - The input string to validate
@@ -158,4 +143,13 @@ export function checkStringType(str: string): 'url' | 'base64' | 'invalid' {
 
     // Return 'invalid' if neither condition is met
     return 'invalid';
+}
+
+/**
+ * Function to check if a channel name is a Turo channel
+ * @param channelName - The channel name to check
+ * @returns {boolean} - Returns true if the channel name is a Turo channel, false otherwise
+ */
+export function checkForTuroTrip(channelName: string): boolean {
+    return channelName.toLowerCase().includes(CHANNELS.TURO.toLowerCase());
 }

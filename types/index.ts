@@ -55,6 +55,9 @@ export interface Trip {
     rentalAgreedDate: string;
     isLicenseVerified: boolean;
     isPhoneVarified: boolean;
+    drivingLicenseStatus: string;
+    isInsuranceVerified: boolean;
+    insuranceStatus: any;
     invoiceUrl: string | null;
     rentalAgrrementUrl: string | null;
 
@@ -89,6 +92,8 @@ export interface Trip {
     driverTripStartingBlobs: any[];
     driverTripCompletingBlobs: any[];
 
+    isDebitCard: boolean;
+    cardDetails: CardDetail[];
     paymentFailedReason: string | null;
     paymentFailed: boolean;
     actualstarttime: string | null;
@@ -112,7 +117,7 @@ export interface Trip {
 
     tripModificationHistories: any[];
     swapDetails: any[];
-    tripPaymentTokens: any[];
+    tripPaymentTokens: Pricelist[];
     paymentTransactions: any[];
     successfullPaymentTransactions: any[];
     cancelresponse: any[];
@@ -125,6 +130,8 @@ export interface Trip {
     tripStatusTransactionResponses: any[];
     transactionCheckLists: any[];
     tripConstraints: any[];
+    completedDate: string;
+
     category?: 0 | 1 | 2 | 3 | 4;
 
     [key: string]: any; // Catch-all for additional keys with uncertain types
@@ -158,4 +165,79 @@ export interface Vehicle {
     state: string | null;
     zipcode: string | null;
     [key: string]: any;
+}
+
+interface CardDetail {
+    id: number;
+    userId: number;
+    tripId: number;
+    oldMethodIdToken: string;
+    newMethodIdToken: string;
+    createdDate: string; // Use Date if you plan to parse it
+    updatedDate: string | null; // Use Date if you plan to parse it
+    isActive: boolean;
+    cardType: 'credit' | 'debit' | 'prepaid' | 'other'; // Extend as needed
+    last4Digit: string; // Can be a number if you prefer, but string is safer for leading zeros
+    cardBrand: string; // Could restrict to known brands like 'visa', 'mastercard', etc.
+}
+
+interface Pricelist {
+    capturedDays: number;
+    depositHoldAmount: number;
+    chargedAmountOnHold: number;
+    id: number;
+    reservationid: number;
+    userid: number;
+    hostid: number;
+    channelid: number;
+    vehicleid: number;
+    deductionfrequencyconfigid: number;
+    paymentauthorizationconfigid: number;
+    authorizationamount: number;
+    authorizationpercentage: number;
+    releasedAmountOnHold: number;
+    totaldays: number;
+    perdayamount: number;
+    totalamount: number;
+    createddate: string;
+    updateddate: any;
+    tripid: number;
+    strippaymenttoken: string;
+    strippaymentid: string;
+    strippaymenttokenactiveflag: boolean;
+    isactive: boolean;
+    paymentrecieveddate: string;
+    stripetransactiondetails: string;
+    paymentmethodidtoken: string;
+    customertoken: string;
+    setupIntentToken: string;
+    tripAmount: number;
+    taxAmount: number;
+    tripTaxAmount: number;
+    discountedDays: number;
+    discountPercentage: number;
+    discountAmount: number;
+    tripDiscountedAmount: number;
+    upCharges: number;
+    deliveryCost: number;
+    tripFee: number;
+    charges: number;
+    taxPercentage: number;
+    numberOfDaysDiscount: number;
+    concessionCalculated: number;
+    concessionPercentage: number;
+    concessionFee: number;
+    registrationRecoveryFee: number;
+    extreaMilageCost: number;
+    Statesurchargetax: number;
+    Statesurchargeamount: number;
+    tripFeeAmount: number;
+    capturedAmount: number;
+    refundAmount: number;
+    extraMileageCost: number;
+    extraMilage: number;
+    lateFee: number;
+    extraDayCharges: number;
+    registrationFee: number;
+    averageRentalDays: number;
 }

@@ -224,7 +224,7 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
                             value={inputMessage}
                             onChange={(e) => setInputMessage(e.target.value)}
                             placeholder='Type your message...'
-                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-md text-xs placeholder:text-muted-foreground focus-visible:outline-none'
+                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-sm placeholder:text-muted-foreground placeholder:text-sm focus-visible:outline-none'
                             rows={1}
                             style={{ overflow: 'hidden' }} // Prevent scrollbars from appearing
                         />
@@ -232,11 +232,11 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
                     <Button
                         variant='ghost'
                         size='icon'
-                        className='w-fit px-2 text-primary'
+                        className='size-6 w-fit px-2 pt-0 text-primary'
                         type='submit'
                         disabled={(!inputMessage.trim() && !file) || sendMessageMutation.isPending}
                         loading={sendMessageMutation.isPending}
-                        suffix={<Send className='size-5' />}>
+                        suffix={<Send className='size-[20px]' />}>
                         <span className='sr-only'>Send</span>
                     </Button>
                 </div>

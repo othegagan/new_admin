@@ -77,7 +77,9 @@ export default function DriverReadinessDialog({
                         <div className='flex flex-col gap-4'>
                             <CheckListItem className='flex-1' text="Driver's Licence Verification" checkMark={isLicenceVerified} />
                             <CheckListItem className='flex-1' text='Phone Number Verification' checkMark={isPhoneVerified} />
-                            {isRentalAgreed && <CheckListItem className='flex-1' text='Rental Agreement' checkMark={isRentalAgreed} />}
+                            {isRentalAgreed !== undefined && (
+                                <CheckListItem className='flex-1' text='Rental Agreement' checkMark={isRentalAgreed} />
+                            )}
                             {/* <CheckListItem className='flex-1' text='Insurance Verified' checkMark={isInsuranceVerified} /> */}
                         </div>
                     </div>
