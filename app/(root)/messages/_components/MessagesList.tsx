@@ -159,7 +159,7 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
 
     const handleLinkClick = () => {
         markAsRead();
-        router.push(`/messages/${tripId}`); // Navigate to the details page after marking as read
+        router.push(`${PAGE_ROUTES.MESSAGES}/${tripId}`); // Navigate to the details page after marking as read
     };
 
     return (
