@@ -1,9 +1,8 @@
 'use client';
 
-import { useReviewRequiredTrips } from '@/hooks/useTrips';
 import { cn } from '@/lib/utils';
-import { tripRejection } from '@/server/trips';
-import { X } from 'lucide-react';
+import { tripComplete } from '@/server/trips';
+import { Check } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '../ui/button';
@@ -11,18 +10,23 @@ import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '../ui/extension/ad
 import { Label } from '../ui/extension/field';
 import { Textarea } from '../ui/textarea';
 
-interface TripRejectDialogProps {
+interface TripCompleteDialogProps {
     className?: string;
-    buttonText?: string;
     tripId: number;
+    captureAmount?: number;
+    buttonText?: string;
     onActionComplete?: () => void;
 }
 
-export default function TripRejectDialog({ className, tripId, buttonText = 'Reject', onActionComplete }: TripRejectDialogProps) {
+export default function TripCompleteDialog({
+    className,
+    tripId,
+    buttonText = 'End Trip',
+    captureAmount,
+    onActionComplete
+}: TripCompleteDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const { refetchAll } = useReviewRequiredTrips();
 
     const [comments, setComments] = useState('');
 
@@ -42,12 +46,14 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
         try {
             const payload = {
                 tripid: tripId,
-                comments: comments || ''
+                comments: comments || '',
+                paymentCategoryId: 1,
+                captureAmount: captureAmount,
+                changedBy: 'HOST'
             };
 
-            const response = await tripRejection(payload);
+            const response = await tripComplete(payload);
             if (response.success) {
-                refetchAll();
                 toast.success(response.message);
                 setIsOpen(false);
                 setIsSubmitting(false);
@@ -70,31 +76,30 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
                 variant='ghost'
                 type='button'
                 className={cn(
-                    'flex flex-row items-center gap-2 py-2 font-semibold text-[14px] text-neutral-700 dark:text-neutral-400',
+                    'flex flex-row items-center gap-2 py-2 font-semibold text-[14px] text-neutral-700 dark:text-neutral-300',
                     className
                 )}
                 onClick={handleOpen}>
-                <X className='size-5 ' /> {buttonText}
+                <Check className='h-4 w-4' /> {buttonText}
             </Button>
 
             {isOpen && (
-                <AdaptiveDialog onClose={handleClose} isOpen={isOpen} size='xl' title={buttonText} interactOutside={false}>
+                <AdaptiveDialog onClose={handleClose} isOpen={isOpen} size='xl' title='End Trip' interactOutside={false}>
                     <AdaptiveBody className='flex flex-col gap-4'>
-                        <div className='flex flex-col gap-1 text-sm'>
-                            Rejecting this trip will notify the renter that their booking has been declined. You can optionally provide a
-                            reason in the comments below. This action cannot be undone.
-                        </div>
-                        <div className='space-y-2'>
-                            <Label>
-                                Message <span className='text-muted-foreground'>(Optional)</span>
-                            </Label>
-                            <Textarea
-                                autoFocus={false}
-                                className='w-full'
-                                placeholder=''
-                                value={comments}
-                                onChange={(e) => setComments(e.target.value)}
-                            />
+                        <div className='flex flex-col gap-2 text-sm'>
+                            <div className='space-y-2'>
+                                <Label>
+                                    Message <span className='text-muted-foreground'>(Optional)</span>
+                                </Label>
+                                <Textarea
+                                    autoFocus={false}
+                                    className='w-full'
+                                    placeholder=''
+                                    rows={4}
+                                    value={comments}
+                                    onChange={(e) => setComments(e.target.value)}
+                                />
+                            </div>
                         </div>
                     </AdaptiveBody>
                     <AdaptiveFooter>
@@ -102,7 +107,7 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
                             Cancel
                         </Button>
                         <Button className='w-fit' loading={isSubmitting} onClick={handleSubmit}>
-                            {buttonText}
+                            End Trip
                         </Button>
                     </AdaptiveFooter>
                 </AdaptiveDialog>

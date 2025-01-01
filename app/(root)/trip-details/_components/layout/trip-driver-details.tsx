@@ -25,13 +25,13 @@ export default function TripDriverDetails({
 }: TripDriverDetailsProps) {
     return (
         <div className={`flex w-fit items-center gap-3 ${className} `}>
-            <Link href={`${PAGE_ROUTES.GUESTS}/${userId}`} className='relative size-9 overflow-hidden rounded-full border md:size-14'>
+            <Link href={`${PAGE_ROUTES.GUESTS}/${userId}`} className='relative size-10 overflow-hidden rounded-full border md:size-14'>
                 <img src={avatarSrc || '/images/dummy_avatar.png'} alt={name} className='h-full w-full object-cover object-center' />
             </Link>
             <div className='flex flex-col gap-1'>
                 <Link
                     href={`${PAGE_ROUTES.GUESTS}/${userId}`}
-                    className='max-w-20 truncate font-light hover:underline hover:underline-offset-2 md:max-w-fit md:font-semibold md:text-lg'>
+                    className='max-w-24 truncate font-semibold hover:underline hover:underline-offset-2 md:max-w-fit md:text-lg'>
                     {name}
                 </Link>
                 <Link

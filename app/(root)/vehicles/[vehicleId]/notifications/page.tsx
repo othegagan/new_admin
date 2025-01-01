@@ -128,52 +128,54 @@ function MessageContentForm({ vehicleId, masterEventsList, alreadySavedEvents, r
 
     return (
         <div className='mt-4 grid grid-cols-1 gap-4 md:gap-8'>
-            {masterEventsList.map((event) => {
-                const existingMessage = alreadySavedEvents.find((msg) => msg.statusCode === event.statusCode);
-                const defaultValue = existingMessage?.messageContent || '';
+            {masterEventsList
+                .sort((a: any, b: any) => a.id - b.id)
+                .map((event) => {
+                    const existingMessage = alreadySavedEvents.find((msg) => msg.statusCode === event.statusCode);
+                    const defaultValue = existingMessage?.messageContent || '';
 
-                const {
-                    control,
-                    handleSubmit,
-                    reset,
-                    watch,
-                    formState: { isSubmitting, isDirty }
-                } = useForm<FormValues>({
-                    defaultValues: { messageContent: defaultValue },
-                    mode: 'onChange'
-                });
+                    const {
+                        control,
+                        handleSubmit,
+                        reset,
+                        watch,
+                        formState: { isSubmitting, isDirty }
+                    } = useForm<FormValues>({
+                        defaultValues: { messageContent: defaultValue },
+                        mode: 'onChange'
+                    });
 
-                // Reset form when `alreadySavedEvents` changes
-                useEffect(() => {
-                    reset({ messageContent: defaultValue });
-                }, [alreadySavedEvents, event.statusCode, defaultValue, reset]);
+                    // Reset form when `alreadySavedEvents` changes
+                    useEffect(() => {
+                        reset({ messageContent: defaultValue });
+                    }, [alreadySavedEvents, event.statusCode, defaultValue, reset]);
 
-                const trimmedValue = watch('messageContent').trim();
+                    const trimmedValue = watch('messageContent').trim();
 
-                return (
-                    <form
-                        key={event.statusCode}
-                        onSubmit={handleSubmit((data) => handleSave(event.statusCode, data))}
-                        className='flex flex-col gap-4 p-0.5'>
-                        <Label htmlFor={event.description} className='font-semibold'>
-                            {event.description}
-                        </Label>
-                        <Controller
-                            name='messageContent'
-                            control={control}
-                            render={({ field }) => <Textarea {...field} className='w-full' />}
-                        />
-                        <Button
-                            type='submit'
-                            className='fade-in-25 ml-auto w-fit'
-                            disabled={!(isDirty && trimmedValue !== defaultValue.trim())}
-                            loading={isSubmitting}
-                            loadingText='Saving...'>
-                            Save
-                        </Button>
-                    </form>
-                );
-            })}
+                    return (
+                        <form
+                            key={event.statusCode}
+                            onSubmit={handleSubmit((data) => handleSave(event.statusCode, data))}
+                            className='flex flex-col gap-4 p-0.5'>
+                            <Label htmlFor={event.description} className='font-semibold'>
+                                {event.description}
+                            </Label>
+                            <Controller
+                                name='messageContent'
+                                control={control}
+                                render={({ field }) => <Textarea {...field} className='w-full' />}
+                            />
+                            <Button
+                                type='submit'
+                                className='fade-in-25 ml-auto w-fit'
+                                disabled={!(isDirty && trimmedValue !== defaultValue.trim())}
+                                loading={isSubmitting}
+                                loadingText='Saving...'>
+                                Save
+                            </Button>
+                        </form>
+                    );
+                })}
         </div>
     );
 }

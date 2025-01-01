@@ -18,13 +18,17 @@ interface TripApproveDialogProps {
     tripId: number;
     debitOrCreditCard?: 'credit' | 'debit';
     defaultDepositToBeCollectedFlag: boolean;
+    buttonText?: string;
+    onActionComplete?: () => void;
 }
 
 export default function TripApproveDialog({
     className,
     tripId,
     defaultDepositToBeCollectedFlag = true,
-    debitOrCreditCard
+    debitOrCreditCard,
+    buttonText = 'Approve',
+    onActionComplete
 }: TripApproveDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +47,7 @@ export default function TripApproveDialog({
         setDepositToBeCollected(defaultDepositToBeCollectedFlag);
         setComments('');
         setIsSubmitting(false);
+        onActionComplete?.();
     }
 
     async function handleSubmit() {
@@ -68,17 +73,20 @@ export default function TripApproveDialog({
             toast.error(error.message);
             setIsSubmitting(false);
             console.error(error.message);
+        } finally {
+            onActionComplete?.();
         }
     }
 
     return (
         <>
-            <button
+            <Button
+                variant='ghost'
                 type='button'
                 className={cn('flex flex-row items-center gap-2 py-2 font-semibold text-[14px] text-green-600', className)}
                 onClick={handleOpen}>
-                <Check className='size-5 ' /> Approve
-            </button>
+                <Check className='size-5 ' /> {buttonText}
+            </Button>
 
             {isOpen && (
                 <AdaptiveDialog onClose={handleClose} isOpen={isOpen} size='xl' title='Approve Trip' interactOutside={false}>
@@ -100,6 +108,7 @@ export default function TripApproveDialog({
                                 autoFocus={false}
                                 className='w-full'
                                 placeholder=''
+                                rows={4}
                                 value={comments}
                                 onChange={(e) => setComments(e.target.value)}
                             />

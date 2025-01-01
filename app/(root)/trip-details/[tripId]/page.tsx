@@ -9,6 +9,7 @@ import type { Trip } from '@/types';
 import { ChevronLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { TripActions } from '../_components/layout/trip-actions';
+import TripChecklist from '../_components/layout/trip-checklist';
 import TripDriverDetails from '../_components/layout/trip-driver-details';
 import TripLogs from '../_components/layout/trip-logs';
 import TripPayments from '../_components/layout/trip-payments';
@@ -20,10 +21,12 @@ export default function TripDetails() {
     const router = useRouter();
     //@ts-ignore
     const trip: Trip = activeTrip.activetripresponse[0];
-
-    const customDelivery = false;
-
+    const checklist = activeTrip?.checkLists?.[0];
     const isTuroTrip = checkForTuroTrip(trip.channelName);
+
+    const customDelivery = trip?.delivery || trip?.airportDelivery;
+    const deliveryLocation = getDeliveryLocation(trip?.deliveryLocations);
+
     return (
         <Main fixed className='mx-auto h-full w-full max-w-[1600px] py-4'>
             {/* Header */}
@@ -36,7 +39,7 @@ export default function TripDetails() {
                         <ChevronLeft className='mr-2 h-4 w-4' /> Back
                     </button>
 
-                    {!isTuroTrip && <TripActions className='ml-auto' />}
+                    {!isTuroTrip && <TripActions className='ml-auto' trip={trip} />}
                 </div>
             </header>
 
@@ -44,7 +47,7 @@ export default function TripDetails() {
             <div className='px-0'>
                 <div className='grid lg:grid-cols-[1fr,400px]'>
                     {/* Left Column - Trip Details */}
-                    <div className='h-[calc(100dvh-8rem)] space-y-6 overflow-y-auto border-r md:pr-2'>
+                    <div className='h-[calc(100dvh-8rem)] space-y-6 overflow-y-auto md:border-r md:pr-2'>
                         {/* User Info */}
                         <div className='flex items-start justify-between gap-4 pt-4'>
                             <TripDriverDetails
@@ -70,9 +73,12 @@ export default function TripDetails() {
 
                         {/* Custom Delivery Required */}
                         {customDelivery && (
-                            <Card className=' p-4'>
+                            <Card className='bg-accent p-2.5 pl-4 shadow-none '>
                                 <p className='text-sm'>
-                                    Custom Delivery Required: <span className='text-gray-500'>[Address]</span>
+                                    <span className='font-semibold'>
+                                        {trip?.delivery ? 'Custom' : trip?.airportDelivery && 'Airport'} Delivery Required :
+                                    </span>{' '}
+                                    {deliveryLocation}
                                 </p>
                             </Card>
                         )}
@@ -123,7 +129,7 @@ export default function TripDetails() {
                                 <TripPayments trip={trip} />
                             </TabsContent>
                             <TabsContent value='checklist' className='mt-4 pr-4 pl-0.5'>
-                                {/* Checklist content */}
+                                <TripChecklist trip={trip} checklist={checklist} />
                             </TabsContent>
                             <TabsContent value='logs' className='mt-4 pr-4 pl-0.5'>
                                 <TripLogs trip={trip} />
@@ -153,3 +159,20 @@ export default function TripDetails() {
 //         </div>
 //     );
 // }
+
+interface DeliveryLocation {
+    address1?: string;
+    cityName?: string;
+    state?: string;
+    country?: string;
+}
+
+function getDeliveryLocation(deliveryLocations: DeliveryLocation[]) {
+    if (deliveryLocations) return '';
+
+    const location = deliveryLocations?.[0];
+    //@ts-ignore
+    const addressParts = [location?.address1, location?.cityName, location?.state, location?.country].filter(Boolean);
+
+    return addressParts.join(', ') || '-';
+}

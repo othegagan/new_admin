@@ -18,12 +18,12 @@ export default function TripSummary({ trip }: { trip: Trip }) {
     const status = trip.status;
 
     const tripStart = {
-        date: formatDateAndTime(trip.starttime, trip.vehzipcode, 'MMM DD, YYYY'),
-        time: formatDateAndTime(trip.starttime, trip.vehzipcode, 'h:mm A ')
+        date: formatDateAndTime(trip.starttime, trip.vehzipcode, 'MMM DD, YYYY '),
+        time: formatDateAndTime(trip.starttime, trip.vehzipcode, 'h:mm A z')
     };
     const tripEnd = {
-        date: formatDateAndTime(trip.endtime, trip.vehzipcode, 'MMM DD, YYYY'),
-        time: formatDateAndTime(trip.endtime, trip.vehzipcode, 'h:mm A ')
+        date: formatDateAndTime(trip.endtime, trip.vehzipcode, 'MMM DD, YYYY '),
+        time: formatDateAndTime(trip.endtime, trip.vehzipcode, 'h:mm A z')
     };
     const location = getFullAddress({ tripDetails: trip });
 
@@ -35,7 +35,7 @@ export default function TripSummary({ trip }: { trip: Trip }) {
     const isTuroTrip = checkForTuroTrip(trip.channelName);
 
     return (
-        <div className='flex flex-col gap-5'>
+        <div className='flex flex-col gap-5 pb-5'>
             <div className='flex-between gap-4'>
                 <h4>Trip Summary</h4>
                 <div className='w-fit rounded bg-[#d1d1d1] p-1.5 font-medium text-xs md:px-5 lg:text-[14px] dark:bg-accent'>{status}</div>

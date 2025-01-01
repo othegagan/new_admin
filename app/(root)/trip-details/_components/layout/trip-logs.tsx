@@ -61,11 +61,11 @@ export default function TripLogs({ trip }: TripLogsProps) {
                             key={index}
                             className={` ${['VEHICLECONFIGEVENT', 'Pending', 'RENTALAGREEMENT'].includes(log.fromstatus) ? 'hidden' : ''}`}>
                             <div className='relative flex flex-col before:absolute before:top-2 before:left-[-33px] before:z-[1] before:size-3 before:rounded-full before:bg-primary/70'>
-                                <div>{log.changedby ? logCreatorRef[log.changedby] : '-'}</div>
-                                <div className='text-muted-foreground text-sm uppercase'>
+                                <div className='font-medium'>{log.changedby ? logCreatorRef[log.changedby] : '-'}</div>
+                                <div className='text-muted-foreground text-xs uppercase'>
                                     {formatDateAndTime(log.createddate ?? '', trip.vehzipcode, 'MMM DD, YYYY | h:mm A ')}
                                 </div>
-                                <p className='mt-3 font-light text-md'>{log.comments}</p>
+                                <p className='mt-3 text-md'>{log.comments}</p>
 
                                 {log.tostatus === 'REQMODAPP' && (
                                     <div className='mt-2 flex flex-col gap-2 text-sm'>

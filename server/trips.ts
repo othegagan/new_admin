@@ -162,3 +162,38 @@ export async function acceptTripCancellation(payload: any) {
     const response = await api.post<any>(url, payload);
     return response;
 }
+
+export async function tripStart(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateReservationStart`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function tripComplete(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateReservationCompleted`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function tripStartChecklist(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/tripStartCheckList`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function tripEndChecklist(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/tripEndCheckList`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function tripExtraCharges(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateExtraCharges`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}

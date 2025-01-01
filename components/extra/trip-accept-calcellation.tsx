@@ -11,9 +11,16 @@ import { Button } from '../ui/button';
 interface AcceptTripCancellationDialogProps {
     className?: string;
     tripId: number;
+    buttonText?: string;
+    onActionComplete?: () => void;
 }
 
-export default function AcceptTripCancellationDialog({ className, tripId }: AcceptTripCancellationDialogProps) {
+export default function AcceptTripCancellationDialog({
+    className,
+    tripId,
+    buttonText = 'Cancel',
+    onActionComplete
+}: AcceptTripCancellationDialogProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { refetchAll } = useReviewRequiredTrips();
 
@@ -37,6 +44,8 @@ export default function AcceptTripCancellationDialog({ className, tripId }: Acce
             toast.error(error.message);
             setIsSubmitting(false);
             console.error(error.message);
+        } finally {
+            onActionComplete?.();
         }
     }
 
@@ -44,6 +53,7 @@ export default function AcceptTripCancellationDialog({ className, tripId }: Acce
         <>
             <Button
                 type='button'
+                variant='ghost'
                 loading={isSubmitting}
                 loadingText='Cancelling...'
                 className={cn(
@@ -52,7 +62,7 @@ export default function AcceptTripCancellationDialog({ className, tripId }: Acce
                 )}
                 suffix={<X className='size-5 ' />}
                 onClick={handleSubmit}>
-                Cancel
+                {buttonText}
             </Button>
 
             {/* {isOpen && (
