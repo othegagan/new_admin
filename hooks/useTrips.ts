@@ -34,13 +34,23 @@ export const useReviewRequiredTrips = () => {
     return { ...query, refetchAll };
 };
 
-export const useTripDetails = (bookingId: string | number) => {
-    return useQuery({
-        queryKey: [QUERY_KEYS.tripDetails, { bookingId }],
-        queryFn: async () => getTripDetails(Number(bookingId)),
+export const useTripDetails = (tripId: string | number) => {
+    const queryClient = useQueryClient();
+
+    const query = useQuery({
+        queryKey: [QUERY_KEYS.tripDetails, { tripId }],
+        queryFn: async () => getTripDetails(Number(tripId)),
         refetchOnWindowFocus: true,
         staleTime: 0
     });
+
+    const refetchAll = () => {
+        queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.tripDetails]
+        });
+    };
+
+    return { ...query, refetchAll };
 };
 
 export const useAllMasterHostCheckList = () => {

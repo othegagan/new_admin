@@ -2,8 +2,10 @@
 
 import DriverReadinessDialog from '@/components/extra/driver-readiness-dialog';
 import { Main } from '@/components/layout/main';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useTripDetails } from '@/hooks/useTrips';
 import { checkForTuroTrip, cn } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ChevronLeft } from 'lucide-react';
@@ -14,14 +16,23 @@ import TripDriverDetails from '../_components/layout/trip-driver-details';
 import TripLogs from '../_components/layout/trip-logs';
 import TripPayments from '../_components/layout/trip-payments';
 import TripSummary from '../_components/layout/trip-summart';
-import { activeTrip } from './data';
 
 export default function TripDetails() {
-    const params = useParams();
+    const params = useParams<{ tripId: string }>();
+    const tripId = params.tripId;
     const router = useRouter();
+
+    const { data: response, isLoading, isError, error } = useTripDetails(tripId);
+
+    if (isLoading) return <CarLoadingSkeleton />;
+
+    if (isError) return <div>Error: {error.message}</div>;
+
+    if (!response?.success) return <div>Error: {response?.message}</div>;
+
     //@ts-ignore
-    const trip: Trip = activeTrip.activetripresponse[0];
-    const checklist = activeTrip?.checkLists?.[0];
+    const trip: Trip = response.data.activetripresponse[0];
+    const checklist = response.data.checkLists ? response.data.checkLists[0] : [];
     const isTuroTrip = checkForTuroTrip(trip.channelName);
 
     const customDelivery = trip?.delivery || trip?.airportDelivery;

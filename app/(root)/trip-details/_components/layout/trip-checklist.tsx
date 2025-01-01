@@ -73,7 +73,7 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
     } = useForm({
         defaultValues: {
             closingMiles: trip?.closingMiles || 0,
-            endFuelLevel: checklist?.endFuelLevel || '',
+            endFuelLevel: checklist?.endFuelLevel || '1/4',
             postTripCarCleaned: checklist?.postTripCarCleaned || false,
             postTripComments: checklist?.postTripComments || ''
         }
@@ -202,29 +202,51 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
                                 <div className='flex flex-col gap-3 md:flex-row md:gap-32'>
                                     <div className=' text-base'>
                                         <span className='font-medium text-muted-foreground'>Odometer Start (miles): </span>
-                                        {trip.openingMiles}
+                                        {trip?.openingMiles}
                                     </div>
                                     <div className='text-base'>
-                                        <span className='font-medium text-muted-foreground'>Fuel Level: </span> {checklist.startFuelLevel}
+                                        <span className='font-medium text-muted-foreground'>Fuel Level: </span> {checklist?.startFuelLevel}
                                     </div>
                                 </div>
-                                {checklist.preTripComments && (
+                                {checklist?.preTripComments && (
                                     <div className=' text-base'>
                                         <span className='font-medium text-muted-foreground'>Comments: </span>
-                                        {checklist.preTripComments}
+                                        {checklist?.preTripComments}
                                     </div>
                                 )}
                                 <div className='space-y-2'>
                                     <Label className='font-medium text-base'>Vehicle Functioning</Label>
                                     <div className='mt-3 grid max-w-xl grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3'>
-                                        {vehicleFunctioningItems.map(({ id, label, key }) => (
-                                            <div key={id} className='flex items-start space-x-2'>
-                                                <Checkbox id={id} checked={checklist[key as keyof Checklist]} disabled />
-                                                <label htmlFor={id} className='font-medium text-sm'>
-                                                    {label}
-                                                </label>
-                                            </div>
-                                        ))}
+                                        {!checklist ? (
+                                            <>
+                                                {vehicleFunctioningItems.map(({ id, label, key }) => (
+                                                    <Controller
+                                                        key={id}
+                                                        name={key}
+                                                        control={startControl}
+                                                        render={({ field }) => (
+                                                            <div className='flex items-start space-x-2'>
+                                                                <Checkbox id={id} checked={field.value} disabled />
+                                                                <label htmlFor={id} className='font-medium text-sm'>
+                                                                    {label}
+                                                                </label>
+                                                            </div>
+                                                        )}
+                                                    />
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {vehicleFunctioningItems.map(({ id, label, key }) => (
+                                                    <div key={id} className='flex items-start space-x-2'>
+                                                        <Checkbox id={id} checked={checklist[key as keyof Checklist]} disabled />
+                                                        <label htmlFor={id} className='font-medium text-sm'>
+                                                            {label}
+                                                        </label>
+                                                    </div>
+                                                ))}
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -308,23 +330,23 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
                                 <div className='flex flex-col gap-3 md:flex-row md:gap-32'>
                                     <div className=' text-base'>
                                         <span className='font-medium text-muted-foreground'>Odometer End (miles): </span>
-                                        {trip.closingMiles}
+                                        {trip?.closingMiles}
                                     </div>
                                     <div className='text-base'>
-                                        <span className='font-medium text-muted-foreground'>Fuel Level: </span> {checklist.startFuelLevel}
+                                        <span className='font-medium text-muted-foreground'>Fuel Level: </span> {checklist?.startFuelLevel}
                                     </div>
                                 </div>
                                 <div className='flex items-center space-x-2'>
-                                    <Checkbox checked={checklist.postTripCarCleaned} disabled id='postTripCarCleaned' />
+                                    <Checkbox checked={checklist?.postTripCarCleaned} disabled id='postTripCarCleaned' />
                                     <label htmlFor='postTripCarCleaned' className='text-sm'>
                                         Car cleaned after delivery
                                     </label>
                                 </div>
 
-                                {checklist.postTripComments && (
+                                {checklist?.postTripComments && (
                                     <div className=' text-base'>
                                         <span className='font-medium text-muted-foreground'>Comments: </span>
-                                        {checklist.postTripComments}
+                                        {checklist?.postTripComments}
                                     </div>
                                 )}
                             </div>
