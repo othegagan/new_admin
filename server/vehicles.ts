@@ -172,3 +172,16 @@ export async function updateVehicleFeaturesById({ type, payload }: UpdateVehicle
     const response = await api.post(url, payload);
     return response;
 }
+
+export async function getAvailabilityDatesByVehicleId(vehicleid: number, tripid: number) {
+    const url = `${AVAILABILITY_BASEURL}/v1/availability/getAvailabilityDatesByVehicleId`;
+    const payload = tripid
+        ? {
+              reservationId: tripid,
+              vehicleid: vehicleid
+          }
+        : { vehicleid: vehicleid };
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}

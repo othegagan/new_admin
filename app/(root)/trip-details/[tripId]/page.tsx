@@ -10,12 +10,13 @@ import { checkForTuroTrip, cn } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ChevronLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import MainMessageComponent from '../../messages/_components/MainMessage';
 import { TripActions } from '../_components/layout/trip-actions';
 import TripChecklist from '../_components/layout/trip-checklist';
 import TripDriverDetails from '../_components/layout/trip-driver-details';
 import TripLogs from '../_components/layout/trip-logs';
 import TripPayments from '../_components/layout/trip-payments';
-import TripSummary from '../_components/layout/trip-summart';
+import TripSummary from '../_components/layout/trip-summary';
 
 export default function TripDetails() {
     const params = useParams<{ tripId: string }>();
@@ -134,7 +135,7 @@ export default function TripDetails() {
                             <TabsContent
                                 value='chat'
                                 className={cn('mt-4 pr-4 pl-0.5', customDelivery ? 'h-[calc(100dvh-25rem)]' : 'h-[calc(100dvh-19rem)]')}>
-                                {/* <ChatInterface tripId={tripId} /> */}
+                                <ChatInterface tripId={Number(tripId)} />
                             </TabsContent>
                             <TabsContent value='payments' className='mt-4 pr-4 pl-0.5'>
                                 <TripPayments trip={trip} />
@@ -152,7 +153,7 @@ export default function TripDetails() {
                     <div className='hidden h-[calc(100dvh-8rem)] overflow-y-auto pt-4 lg:block'>
                         <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
                             <h5 className='pl-5'>Messages</h5>
-                            {/* <MainMessageComponent tripId={tripId} className='h-full lg:h-full' /> */}
+                            <MainMessageComponent tripId={Number(tripId)} className='h-full lg:h-full' />
                         </div>
                     </div>
                 </div>
@@ -161,15 +162,15 @@ export default function TripDetails() {
     );
 }
 
-// function ChatInterface({ tripId }: { tripId: number }) {
-//     return (
-//         <div className='flex h-full flex-1 flex-col'>
-//             <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
-//                 {/* <MainMessageComponent tripId={tripId} className='h-full lg:h-full' /> */}
-//             </div>
-//         </div>
-//     );
-// }
+function ChatInterface({ tripId }: { tripId: number }) {
+    return (
+        <div className='flex h-full flex-1 flex-col'>
+            <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
+                <MainMessageComponent tripId={tripId} className='h-full lg:h-full' />
+            </div>
+        </div>
+    );
+}
 
 interface DeliveryLocation {
     address1?: string;

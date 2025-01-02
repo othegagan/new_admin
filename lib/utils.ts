@@ -73,6 +73,22 @@ export function formatDateAndTime(date: string, zipCode: string, format = 'MMM D
     return timeInTimeZone.format(format);
 }
 
+/**
+ * Function to format time from a given date time string and zip code
+ * @param dateTimeString - The date time string to format
+ * @param zipCode - The zip code to determine the timezone.
+ * @returns The formatted time in local zipcode time zone format.
+ * @throws Will throw an error if the timezone cannot be determined from the zip code.
+ * @example
+ * formatTime('2023-03-01T00:00:00', '73301')
+ * // Output: '12:00:00'
+ */
+export function formatTime(dateTimeString: string, zipCode: string) {
+    const timeZone = getTimeZoneByZipcode(zipCode);
+    const time = moment(dateTimeString).tz(timeZone).format('HH:mm:ss');
+    return time;
+}
+
 export function getFullAddress({ vehicleDetails, tripDetails }: { vehicleDetails?: any; tripDetails?: any }): string {
     if (!vehicleDetails && !tripDetails) return '';
 

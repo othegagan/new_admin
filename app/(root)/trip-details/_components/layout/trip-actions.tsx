@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import type { Trip } from '@/types';
-import { ArrowLeftRight, FilePenLine, MoreVertical } from 'lucide-react';
+import { ArrowLeftRight, MoreVertical } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import TripModificationDialog from '../modification/trip-modification-dialog';
 import TripExtraChargesDialog from './trip-extra-charges-dialog';
 
 interface TripActionsProps {
@@ -23,12 +24,7 @@ function TripActionButtons({ trip, isMobile, onActionComplete }: { trip: Trip; i
 
     return (
         <>
-            {['TRCOM', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false &&
-                renderButton(
-                    <Button variant='ghost' type='button' className='font-semibold text-neutral-700 dark:text-neutral-300'>
-                        <FilePenLine className='size-5 ' /> Modify Trip
-                    </Button>
-                )}
+            {['TRCOM', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false && renderButton(<TripModificationDialog tripData={trip} />)}
 
             {['TRCOM'].includes(trip?.statusCode) &&
                 renderButton(

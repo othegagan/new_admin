@@ -162,3 +162,12 @@ export function VehicleHeaderSkeleton() {
         </div>
     );
 }
+
+export function PriceCalculatedListSkeleton() {
+    return (
+        <div className='space-y-2'>
+            <Skeleton className='h-64 w-full rounded-md bg-neutral-200 dark:bg-neutral-700' />
+            <Skeleton className='ml-auto h-9 w-full rounded-md bg-neutral-200 dark:bg-neutral-700' />
+        </div>
+    );
+}
