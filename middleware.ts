@@ -7,7 +7,8 @@ import { createRouterMatcher } from './lib/routeMatcher';
 const routeMatcher = createRouterMatcher([
     { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
     { matcher: AUTH_ROUTES.SIGN_IN, auth: false },
-    { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false }
+    { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false },
+    { matcher: PAGE_ROUTES.TRIPS, auth: true }
 ]);
 
 export async function middleware(request: NextRequest) {

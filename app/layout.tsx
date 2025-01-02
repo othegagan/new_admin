@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import '@/styles/globals.css';
 import Providers from '@/components/layout/providers';
 import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
-import NextTopLoader from 'nextjs-toploader';
+import '@/styles/globals.css';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 
 const geistSans = Geist({
@@ -40,7 +39,6 @@ export default async function RootLayout({ children }: Readonly<RootLayoutProps>
                 <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js' />
             </head>
             <body className={cn(' h-dvh w-full min-w-[360px] bg-background font-sans antialiased', geistSans.variable, geistMono.variable)}>
-                <NextTopLoader color='#F97217' showSpinner={false} height={2} />
                 <Providers session={session}>{children}</Providers>
                 <Toaster position='bottom-right' closeButton={true} duration={3000} richColors className={`${geistSans.className}`} />
                 {/* {env.NODE_ENV === 'development' && <ScreenSize />} */}
