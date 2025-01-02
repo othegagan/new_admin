@@ -2,9 +2,9 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import ImagePreview from '@/components/ui/image-preview';
+import { env } from '@/env';
 import useChat from '@/hooks/useChat';
 import { useTripDetails } from '@/hooks/useTrips';
-import { auth } from '@/lib/firebase';
 import { formatDateAndTime, getFullAddress } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -25,31 +25,6 @@ const AUTHOR_TYPE = {
     CLIENT: 'CLIENT'
 };
 
-// Custom hook for authentication token
-const useAuthToken = () => {
-    const [token, setToken] = useState('');
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                try {
-                    const idToken = await user.getIdToken();
-                    setToken(idToken);
-                } catch (error) {
-                    console.error('Error retrieving token:', error);
-                    toast.error('Failed to retrieve token. Please reload the page and try again.');
-                }
-            } else {
-                setToken('');
-            }
-        });
-
-        return () => unsubscribe();
-    }, []);
-
-    return token;
-};
-
 interface ErrorType {
     message?: string;
 }
@@ -58,15 +33,14 @@ const isError = (value: unknown): value is ErrorType => {
     return typeof value === 'object' && value !== null && 'message' in value;
 };
 
-export default function MainMessageComponent({ tripId, className }: MainMessageComponentProps) {
-    const token = useAuthToken();
+export default function MainMessageComponent({ tripId }: MainMessageComponentProps) {
     const chatWindowRef = useRef(null);
     const queryClient = useQueryClient();
 
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
 
-    const { inputMessage, setInputMessage, messageList, loadingMessages, messageError } = useChat(tripId, token);
+    const { inputMessage, setInputMessage, messageList, loadingMessages, messageError } = useChat(tripId);
 
     const { data: response, isLoading: loadingBookingDetails, error } = useTripDetails(tripId);
     const tripData = response?.data?.activetripresponse[0];
@@ -79,25 +53,25 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
 
     const sendMessageMutation = useMutation({
         mutationFn: async () => {
-            if ((tripId && token) || inputMessage || file) {
+            if (tripId || inputMessage || file) {
                 const formData = new FormData();
 
                 if (file) formData.append('file', file || null);
                 formData.append('tripId', String(tripId));
                 formData.append('message', inputMessage || '');
                 formData.append('author', 'HOST');
+                formData.append('password', env.NEXT_PUBLIC_CHAT_SERVICE_PASSWORD);
 
                 const config = {
                     headers: {
                         Accept: '*/*',
-                        Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data'
                     }
                 };
 
                 try {
                     const url = `${process.env.NEXT_PUBLIC_CHAT_SERVICE_BASEURL}/sendMediaMessage`;
-                    const response = await axios.post(url, formData, config);
+                    await axios.post(url, formData, config);
                     return {
                         success: true
                     };
@@ -112,7 +86,7 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
         onSuccess: async () => {
             setInputMessage('');
             setFile(null);
-            await queryClient.invalidateQueries({ queryKey: ['chatHistory', tripId, token] });
+            await queryClient.invalidateQueries({ queryKey: ['chatHistory', tripId] });
             removeFile();
         },
         onError: (error) => {
@@ -124,14 +98,27 @@ export default function MainMessageComponent({ tripId, className }: MainMessageC
     // Scroll chat window to bottom
     const scrollToBottom = () => {
         if (chatWindowRef.current) {
-            //@ts-ignore
+            // @ts-ignore
             chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
         }
     };
 
-    // Effect hooks for scrolling
-    useEffect(scrollToBottom, [messageList]);
-    useEffect(scrollToBottom, [sendMessageMutation.isPending]);
+    // Effect to scroll when messages are loaded or updated
+    useEffect(() => {
+        if (!loadingMessages && !loadingBookingDetails && messageList.length > 0) {
+            const timer = setTimeout(scrollToBottom, 0); // Ensure DOM updates are complete before scrolling
+            return () => clearTimeout(timer); // Cleanup the timer
+        }
+    }, [loadingMessages, loadingBookingDetails, messageList]);
+
+    // Effect to scroll when a message is sent
+    useEffect(() => {
+        if (sendMessageMutation.isPending === false) {
+            const timeout = setTimeout(scrollToBottom, 100);
+            return () => clearTimeout(timeout);
+        }
+    }, [sendMessageMutation.isPending]);
+
     useEffect(scrollToBottom, []);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);

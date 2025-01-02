@@ -1,7 +1,8 @@
 'use client';
 
-import { useReviewRequiredTrips } from '@/hooks/useTrips';
+import { useReviewRequiredTrips, useTripDetails } from '@/hooks/useTrips';
 import { cn } from '@/lib/utils';
+import { sendMessageInChat } from '@/server/chat';
 import { tripRejection } from '@/server/trips';
 import { X } from 'lucide-react';
 import { useState } from 'react';
@@ -23,6 +24,7 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { refetchAll } = useReviewRequiredTrips();
+    const { refetchAll: refectTripDetails } = useTripDetails(tripId);
 
     const [comments, setComments] = useState('');
 
@@ -47,7 +49,10 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
 
             const response = await tripRejection(payload);
             if (response.success) {
+                if (comments) await sendMessageInChat(tripId, comments);
+
                 refetchAll();
+                refectTripDetails();
                 toast.success(response.message);
                 setIsOpen(false);
                 setIsSubmitting(false);

@@ -1,8 +1,9 @@
 'use client';
 
 import { DEPOSIT_HOLD_AMOUNT } from '@/constants';
-import { useReviewRequiredTrips } from '@/hooks/useTrips';
+import { useReviewRequiredTrips, useTripDetails } from '@/hooks/useTrips';
 import { cn } from '@/lib/utils';
+import { sendMessageInChat } from '@/server/chat';
 import { tripApproval } from '@/server/trips';
 import { Check } from 'lucide-react';
 import { useState } from 'react';
@@ -37,6 +38,7 @@ export default function TripApproveDialog({
     const [comments, setComments] = useState('');
 
     const { refetchAll } = useReviewRequiredTrips();
+    const { refetchAll: refectTripDetails } = useTripDetails(tripId);
 
     function handleOpen() {
         setIsOpen(true);
@@ -61,7 +63,9 @@ export default function TripApproveDialog({
 
             const response = await tripApproval(payload);
             if (response.success) {
+                if (comments) await sendMessageInChat(tripId, comments);
                 refetchAll();
+                refectTripDetails();
                 toast.success(response.message);
                 setIsOpen(false);
                 setIsSubmitting(false);

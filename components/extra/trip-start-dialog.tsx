@@ -1,6 +1,8 @@
 'use client';
 
+import { useTripDetails } from '@/hooks/useTrips';
 import { cn } from '@/lib/utils';
+import { sendMessageInChat } from '@/server/chat';
 import { tripStart } from '@/server/trips';
 import { Check, CircleCheck, CircleX } from 'lucide-react';
 import { useState } from 'react';
@@ -34,6 +36,7 @@ export default function TripStartDialog({
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [comments, setComments] = useState('');
+    const { refetchAll: refectTripDetails } = useTripDetails(tripId);
 
     function handleOpen() {
         setIsOpen(true);
@@ -57,6 +60,8 @@ export default function TripStartDialog({
 
             const response = await tripStart(payload);
             if (response.success) {
+                if (comments) await sendMessageInChat(tripId, comments);
+                refectTripDetails();
                 toast.success(response.message);
                 setIsOpen(false);
                 setIsSubmitting(false);
