@@ -23,9 +23,9 @@ export default function TripDetails() {
     const tripId = params.tripId;
     const router = useRouter();
 
-    const { data: response, isPending, isError, error } = useTripDetails(tripId);
+    const { data: response, isLoading, isError, error } = useTripDetails(tripId);
 
-    if (isPending) return <CarLoadingSkeleton />;
+    if (isLoading) return <CarLoadingSkeleton />;
 
     if (isError) return <div>Error: {error.message}</div>;
 

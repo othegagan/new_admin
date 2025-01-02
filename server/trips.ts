@@ -3,6 +3,7 @@ import { api } from '@/lib/apiService';
 import { getSession } from 'next-auth/react';
 
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
+const AVAILABILITY_SERVICES_BASEURL = env.NEXT_PUBLIC_AVAILABILITY_BASEURL;
 
 export async function getAllTripsOfHost(startTime: string, endTime: string) {
     const session = await getSession();
@@ -38,13 +39,6 @@ export async function getTripDetails(bookingId: number) {
     };
 
     const response = await api.post<any>(url, payload);
-    return response;
-}
-
-export async function getAllMasterHostCheckList() {
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getAllMasterCheckList`;
-
-    const response = await api.get<any>(url);
     return response;
 }
 
@@ -120,6 +114,20 @@ export async function tripEndChecklist(payload: any) {
 
 export async function tripExtraCharges(payload: any) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateExtraCharges`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function getVehiclesForSwap(payload: any) {
+    const url = `${AVAILABILITY_SERVICES_BASEURL}/v1/availability/getByHostSearch`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function swapVehicle(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/createSwapRequest`;
 
     const response = await api.post<any>(url, payload);
     return response;

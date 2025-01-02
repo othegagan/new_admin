@@ -23,5 +23,6 @@ export const QUERY_KEYS = {
     vehicleTripById: 'vehicleTripById',
     vehicleConfigurationEvents: 'vehicleConfigurationEvents',
     vehicleRepairLogs: 'vehicleRepairLogs',
-    vehicleExpenseLogs: 'vehicleExpenseLogs'
+    vehicleExpenseLogs: 'vehicleExpenseLogs',
+    vehiclesForSwap: 'vehiclesForSwap'
 };

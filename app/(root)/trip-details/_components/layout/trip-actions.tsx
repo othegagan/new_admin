@@ -7,6 +7,7 @@ import TripRejectDialog from '@/components/extra/trip-reject-dialog';
 import TripStartDialog from '@/components/extra/trip-start-dialog';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { cn } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ArrowLeftRight, MoreVertical } from 'lucide-react';
@@ -40,7 +41,11 @@ function TripActionButtons({ trip, isMobile, onActionComplete }: { trip: Trip; i
 
             {['REREQ', 'REAPP', 'TRSTR'].includes(trip?.statusCode) &&
                 renderButton(
-                    <Button variant='ghost' type='button' className='font-semibold text-neutral-700 dark:text-neutral-300'>
+                    <Button
+                        href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.tripid}${PAGE_ROUTES.TRIP_DETAILS_SWAP}`}
+                        variant='ghost'
+                        type='button'
+                        className='font-semibold text-neutral-700 dark:text-neutral-300'>
                         <ArrowLeftRight className='size-5' />
                         Swap Vehicle
                     </Button>

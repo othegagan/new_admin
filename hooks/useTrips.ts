@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
-import { getAllMasterHostCheckList, getAllTripsOfHost, getReviewRequiredTrips, getTripDetails } from '@/server/trips';
+import { getAllTripsOfHost, getReviewRequiredTrips, getTripDetails, getVehiclesForSwap } from '@/server/trips';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useAllTrips = (startTime: string, endTime: string) => {
@@ -53,9 +53,22 @@ export const useTripDetails = (tripId: string | number) => {
     return { ...query, refetchAll };
 };
 
-export const useAllMasterHostCheckList = () => {
-    return useQuery({
-        queryKey: [QUERY_KEYS.allMasterHostCheckList],
-        queryFn: async () => getAllMasterHostCheckList()
+export const useVehiclesForSwap = (payload: any) => {
+    const queryClient = useQueryClient();
+
+    const query = useQuery({
+        queryKey: [QUERY_KEYS.vehiclesForSwap, { ...payload }],
+        queryFn: async () => getVehiclesForSwap(payload),
+        refetchOnWindowFocus: true,
+        staleTime: 0,
+        enabled: !!payload
     });
+
+    const refetchAll = () => {
+        queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vehiclesForSwap]
+        });
+    };
+
+    return { ...query, refetchAll };
 };

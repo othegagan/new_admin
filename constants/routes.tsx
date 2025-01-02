@@ -17,6 +17,7 @@ export const PAGE_ROUTES = {
         ALL_TRIPS: '/all-trips'
     },
     TRIP_DETAILS: '/trip-details',
+    TRIP_DETAILS_SWAP: '/swap',
     VEHICLES: '/vehicles',
     ADD_VEHICLE: '/add-vehicle',
     VEHICLE_DETAILS: {
