@@ -118,8 +118,6 @@ interface UpdateVehicleFeaturesById {
         | 'update_guest_instructions'
         | 'upload_location_delivery'
         | 'upload_mileage_limits'
-        | 'upload_status'
-        | 'update_status'
         | 'create_turo_id'
         | 'update_turo_id'
         | 'mix_max_rental_duration'
@@ -149,9 +147,6 @@ export async function updateVehicleFeaturesById({ type, payload }: UpdateVehicle
         upload_mileage_limits: '/v1/vehicle/uploadVehicleMilage',
 
         mix_max_rental_duration: '/v1/vehicle/setVehicleMinMax',
-
-        upload_status: '/v1/vehicle/uploadVehicleAdditionalDetails',
-        update_status: '/v1/vehicle/updateVehicleAdditionalDetails',
 
         create_turo_id: '/v1/vehicle/uploadVehicleConstraintLink',
         update_turo_id: '/v1/vehicle/updateVehicleConstraintLink',

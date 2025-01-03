@@ -128,7 +128,7 @@ export default function CreateVehiclePage() {
 
                 {currentStep === 9 && <RentalDuration nextStep={nextStep} previousStep={prevStep} />}
 
-                {currentStep === 10 && <Status previousStep={prevStep} alreadyUploaded={alreadyUploaded} />}
+                {currentStep === 10 && <Status previousStep={prevStep} />}
             </div>
         </Main>
     );

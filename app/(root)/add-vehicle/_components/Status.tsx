@@ -12,6 +12,7 @@ import { DatePicker, DatePickerButton, DatePickerContent } from '@/components/ui
 import { FieldError, FormDescription, FormError, Label } from '@/components/ui/extension/field';
 import { Switch } from '@/components/ui/switch';
 import { QUERY_KEYS } from '@/constants/query-keys';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 import { cn } from '@/lib/utils';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
@@ -29,10 +30,9 @@ import { z } from 'zod';
 
 interface StatusProps {
     previousStep: () => void;
-    alreadyUploaded: boolean;
 }
 
-export default function Status({ previousStep, alreadyUploaded }: StatusProps) {
+export default function Status({ previousStep }: StatusProps) {
     const searchParams = useSearchParams();
     const vin = searchParams.get('vin');
     const vehicleId = searchParams.get('vehicleId');
@@ -78,7 +78,6 @@ export default function Status({ previousStep, alreadyUploaded }: StatusProps) {
                 isActive={isActive}
                 refetchData={refetchData}
                 previousStep={previousStep}
-                alreadyUploaded={alreadyUploaded}
             />
         </div>
     );
@@ -90,7 +89,6 @@ interface MileageLimitsFormProps {
     isActive: boolean;
     refetchData: () => void;
     previousStep: () => void;
-    alreadyUploaded: boolean;
 }
 
 const schema = z.object({
@@ -102,7 +100,7 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-function StatusForm({ vechicleId, endDate, isActive = false, refetchData, previousStep, alreadyUploaded }: MileageLimitsFormProps) {
+function StatusForm({ vechicleId, endDate, isActive = false, refetchData, previousStep }: MileageLimitsFormProps) {
     const router = useRouter();
     const {
         handleSubmit,
@@ -132,14 +130,14 @@ function StatusForm({ vechicleId, endDate, isActive = false, refetchData, previo
             };
 
             const response = await updateVehicleFeaturesById({
-                type: alreadyUploaded ? 'update_status' : 'upload_status',
+                type: 'upload_activation',
                 payload
             });
 
             if (response.success) {
                 refetchData();
                 toast.success(response.message);
-                router.replace('/vehicles');
+                router.replace(`${PAGE_ROUTES.VEHICLES}`);
             } else {
                 toast.error(response.message);
             }
