@@ -92,7 +92,7 @@ function NotificationItem({ data }: { data: any }) {
         e.preventDefault();
         markAsRead();
 
-        router.push(`${PAGE_ROUTES.TRIPS}/${tripId}/details`); // Navigate to the details page after marking as read
+        router.push(`${PAGE_ROUTES.TRIPS}/${tripId}`); // Navigate to the details page after marking as read
     };
 
     return (

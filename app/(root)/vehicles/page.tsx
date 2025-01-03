@@ -33,14 +33,7 @@ export default function VehiclesPage() {
     if (error) return <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>;
     if (!response?.success) return <div className='flex h-full w-full items-center justify-center'>Error: {response?.message}</div>;
 
-    const allHostsVehicles =
-        response?.data?.vehicleAndTripDetails
-            ?.map((vehicle: any) => ({
-                ...vehicle,
-                updatedDate: vehicle.updatedDate || new Date().toISOString(),
-                createdDate: vehicle.createdDate || new Date().toISOString()
-            }))
-            .sort((a: any, b: any) => (a.make || '').localeCompare(b.make || '')) || [];
+    const allHostsVehicles = response?.data?.vehicleAndTripDetails || [];
 
     if (allHostsVehicles.length === 0) return <EmptyGarage />;
 
@@ -65,7 +58,6 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     const [filteredCars, setFilteredCars] = useState(cars);
 
     const fuse = new Fuse(cars, {
-        ...fuseSettings,
         keys: [
             { name: 'make', weight: 0.3 },
             { name: 'model', weight: 0.3 },
@@ -74,7 +66,8 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             { name: 'vehicleId', weight: 0.3 },
             { name: 'number', weight: 0.2 },
             { name: 'color', weight: 0.3 }
-        ]
+        ],
+        ...fuseSettings
     });
 
     useEffect(() => {
@@ -87,11 +80,16 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
 
         // Filter by trip status
         if (tripStatus) {
-            filtered = filtered.filter((car) => car.status?.toLowerCase() === tripStatus.toLowerCase());
+            filtered = filtered.filter((car) => {
+                if (car.status === null) {
+                    return tripStatus.toLowerCase() === 'available';
+                }
+                return car.status?.toLowerCase() === tripStatus.toLowerCase();
+            });
         }
 
         // Sort vehicles by date
-        if (sortBy) {
+        if (sortBy === 'last-updated' || sortBy === 'last-added') {
             filtered.sort((a, b) =>
                 sortBy === 'last-added'
                     ? new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
@@ -99,8 +97,23 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             );
         }
 
+        // Update filteredCars
         setFilteredCars(filtered);
     }, [searchTerm, selectedFilter, tripStatus, sortBy, cars]);
+
+    const filteredCount = filteredCars.length;
+    const allCarsCount = cars.length;
+    const activeCarsCount = cars.filter((car) => car.vehicleStatus === 'Active').length;
+    const inprogressCarsCount = cars.filter((car) => car.vehicleStatus === 'In Progress').length;
+    const inactiveCarsCount = cars.filter((car) => car.vehicleStatus === 'Inactive').length;
+
+    function clearFilters() {
+        setSearchTerm('');
+        setSelectedFilter('');
+        setTripStatus('');
+        setSortBy('');
+        setFilteredCars(cars); // Reset to the full, unsorted car list
+    }
 
     function getVehicleLink(id: any) {
         const uploadStatus = cars.find((car: any) => car.vehicleId === id)?.uploadStatus;
@@ -110,12 +123,6 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
         }
         return `${PAGE_ROUTES.VEHICLES}/${id}${PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR}`;
     }
-
-    const filteredCount = filteredCars.length;
-    const allCarsCount = cars.length;
-    const activeCarsCount = cars.filter((car) => car.vehicleStatus === 'Active').length;
-    const inprogressCarsCount = cars.filter((car) => car.vehicleStatus === 'In Progress').length;
-    const inactiveCarsCount = cars.filter((car) => car.vehicleStatus === 'Inactive').length;
 
     return (
         <>
@@ -136,7 +143,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             <div className='flex-start flex-wrap gap-4'>
                 <div className='flex-center gap-4'>
                     <Select value={tripStatus} onValueChange={setTripStatus}>
-                        <SelectTrigger className='w-[100px] md:w-[150px]'>
+                        <SelectTrigger className='w-[150px]'>
                             <SelectValue placeholder='Trip Status' />
                         </SelectTrigger>
                         <SelectContent>
@@ -157,7 +164,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                                 {[
                                     { label: 'All', value: 'all', count: allCarsCount },
                                     { label: 'Active', value: 'active', count: activeCarsCount },
-                                    { label: 'In Progress', value: 'inprogress', count: inprogressCarsCount },
+                                    { label: STATUS_IN_PROGRESS, value: 'in progress', count: inprogressCarsCount },
                                     { label: 'Inactive', value: 'inactive', count: inactiveCarsCount }
                                 ].map((status) => (
                                     <SelectItem key={status.value} value={status.value}>
@@ -186,12 +193,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                 {(selectedFilter || tripStatus || sortBy || searchTerm) && (
                     <Button
                         variant='outline'
-                        onClick={() => {
-                            setSelectedFilter('');
-                            setTripStatus('');
-                            setSortBy('');
-                            setSearchTerm('');
-                        }}
+                        onClick={clearFilters}
                         prefix={<X className='size-4' />}
                         className='w-fit rounded-full'
                         size='sm'>
