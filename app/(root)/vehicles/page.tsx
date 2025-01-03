@@ -270,6 +270,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                         <>
                             <span className='text-nowrap capitalize'>
                                 {tripStatus.toLowerCase() === 'completed' && 'Last'} {tripStatus.toLowerCase() === 'requested' && 'Next'}:{' '}
+                                {tripStatus.toLowerCase() === 'started' && 'On Going'}
                                 {channelName} Trip{' '}
                             </span>{' '}
                             ({formatedStartDate} - {formatedEndDate})

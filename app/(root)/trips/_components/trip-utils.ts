@@ -109,8 +109,11 @@ export function getCategory(statusCode: string, type: 'start' | 'end'): number {
     if (type === 'start') {
         if (['REAPP', 'REMODHLD'].includes(statusCode)) return 0;
         if (['TRSTR', 'TRMODHLD'].includes(statusCode)) return 1;
+        if (['TRCOM'].includes(statusCode)) return 3;
+        if (['REREJ', 'RECAN'].includes(statusCode)) return 3;
     } else if (type === 'end') {
         if (['TRCOM'].includes(statusCode)) return 3;
+        if (['REREJ', 'RECAN'].includes(statusCode)) return 3;
         if (['REAPP', 'TRSTR', 'REMODHLD', 'TRMODHLD'].includes(statusCode)) return 2;
     }
     return -1;

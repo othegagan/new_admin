@@ -1,4 +1,6 @@
 import { AppSidebar } from '@/components/layout/app-sidebar';
+import { MessagesNotificationButton } from '@/components/layout/header/MessagesNotificationButton';
+import { NotificationBellButton } from '@/components/layout/header/NotificationBellButton';
 import { Header } from '@/components/layout/header/app-header';
 import { ProfileDropdown } from '@/components/layout/header/profile-dropdown';
 import Logo from '@/components/layout/logo';
@@ -29,7 +31,8 @@ export default async function RouteComponent({ children }: { children: React.Rea
                 <Header sticky>
                     <Logo className='pt-2 md:hidden' herf={PAGE_ROUTES.DASHBOARD} />
                     <div className='ml-auto flex items-center space-x-4'>
-                        {/* <MessagesNotificationButton /> */}
+                        <MessagesNotificationButton />
+                        <NotificationBellButton />
 
                         <ProfileDropdown session={session} />
                     </div>

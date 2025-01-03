@@ -54,7 +54,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
     const { vin, make, model, year, imageresponse, number } = features;
 
     const vehicleName = toTitleCase(`${make} ${model} ${year}`);
-    const ratingText = rating ? rating.toFixed(1) : '1.0';
+    const ratingText = rating ? rating.toFixed(1) : '';
     const tripText = tripcount ? `(${tripcount} ${tripcount > 1 ? 'trips' : 'trip'})` : null;
     const primaryImage = imageresponse.find((image: any) => image.isPrimary)?.imagename || '';
 
@@ -120,10 +120,12 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                         </div>
                     </div>
                     <div className='flex-start gap-3'>
-                        <span className='flex items-center gap-1'>
-                            <Star fill='currentColor' className='size-5' />
-                            {ratingText}
-                        </span>
+                        {ratingText && (
+                            <span className='flex items-center gap-1'>
+                                <Star fill='currentColor' className='size-5' />
+                                {ratingText}
+                            </span>
+                        )}
                         <span>{tripText}</span>
                     </div>
                 </div>
