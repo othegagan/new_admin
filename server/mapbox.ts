@@ -10,7 +10,7 @@ export async function addressSearchUsingMapbox(addressSeach: string) {
 
         let url = '';
 
-        url = `${baseURL}${addressSeach}.json?country=${searchCountry}&limit=${searchLimit}&proximity=ip&types=place%2Cpostcode%2Caddress%2Cpoi%2Cdistrict%2Clocality%2Cneighborhood&language=${responseLanguage}&access_token=${accessToken}`;
+        url = `${baseURL}${addressSeach}.json?country=${searchCountry}&limit=${searchLimit}&proximity=ip&types=postcode,address&language=${responseLanguage}&access_token=${accessToken}`;
 
         const response = await fetch(url, { cache: 'no-cache' });
         if (!response.ok) {
@@ -38,9 +38,20 @@ const extractAddressFromJson = (data: any) => {
 
         const address1 = components[0]?.trim();
         const city = components[1]?.trim();
-        const stateZip = components[2]?.trim()?.split(' ');
-        const state = stateZip[0]?.trim();
-        const zipcode = stateZip[1]?.trim();
+        const stateZip = components[2]?.trim();
+
+        let state = '';
+        let zipcode = '';
+
+        // Use regex to separate state and zip code
+        const stateZipMatch = stateZip?.match(/^(.+)\s+(\d{5})$/);
+        if (stateZipMatch) {
+            state = stateZipMatch[1]?.trim();
+            zipcode = stateZipMatch[2]?.trim();
+        } else {
+            // Fallback if no zip code is found
+            state = stateZip;
+        }
 
         const locationSuggestion = {
             placeName,

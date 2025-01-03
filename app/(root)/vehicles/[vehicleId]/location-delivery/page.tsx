@@ -215,7 +215,8 @@ function LocationDeliveryForm({
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
         try {
             const session = await getSession();
-            const { deliveryEnabled, deliveryRadius, airportDeliveryCost, nonAirportDeliveryCost, deliveryToAirport } = formData;
+            const { deliveryEnabled, deliveryRadius, airportDeliveryCost, nonAirportDeliveryCost, deliveryToAirport, fullAddress } =
+                formData;
 
             const payload: any = {
                 vehicleId: vechicleId,

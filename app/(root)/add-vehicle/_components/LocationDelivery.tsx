@@ -233,7 +233,8 @@ function LocationDeliveryForm({
             await schema.parseAsync(formData);
 
             const session = await getSession();
-            const { deliveryEnabled, deliveryRadius, airportDeliveryCost, nonAirportDeliveryCost, deliveryToAirport } = formData;
+            const { deliveryEnabled, deliveryRadius, airportDeliveryCost, nonAirportDeliveryCost, deliveryToAirport, fullAddress } =
+                formData;
 
             const payload: any = {
                 vehicleId: vechicleId,
