@@ -8,6 +8,8 @@ export const tripSearchFields = [
     { name: 'vehmodel', weight: 1 },
     { name: 'vehyear', weight: 0.8 },
     { name: 'tripid', weight: 1 },
+    { name: 'vehicleId', weight: 1 },
+    { name: 'vehicleNumber', weight: 0.9 },
     { name: 'userFirstName', weight: 1 },
     { name: 'userlastName', weight: 1 },
     { name: 'vehaddress1', weight: 0.6 },

@@ -69,8 +69,8 @@ export default function TripsFilter() {
                         <SelectItem value='Turo'>Turo</SelectItem>
                     </SelectContent>
                 </Select>
-                <Button variant='ghost' onClick={clearFilters} className='ml-auto w-fit text-muted-foreground'>
-                    Clear Filters
+                <Button variant='ghost' onClick={clearFilters} className='ml-auto w-fit px-0 text-muted-foreground'>
+                    Clear <span className='hidden lg:inline-block'>Filters</span>
                 </Button>
             </div>
         </div>

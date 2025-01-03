@@ -112,8 +112,8 @@ function DailyTripsSearch({ tripsData }: any) {
                             {format(new Date(date), 'PPP')}
                         </div>
                     </div>
-                    {trips.map((tripData) => (
-                        <div key={tripData.tripid}>
+                    {trips.map((tripData, index) => (
+                        <div key={`${tripData.tripid}-${index}`}>
                             <TripCard tripData={tripData} />
                         </div>
                     ))}

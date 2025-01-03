@@ -7,12 +7,14 @@ import TripDismissDialog from '@/components/extra/trip-dismiss-dialog';
 import TripRejectDialog from '@/components/extra/trip-reject-dialog';
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { useReviewRequiredTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
 import type { Trip } from '@/types';
-import { CalendarDays, MapPin } from 'lucide-react';
+import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
 
@@ -96,6 +98,15 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
                             </div>
                         }>
                         <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                            <Button
+                                href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.tripid}${PAGE_ROUTES.TRIP_DETAILS_SWAP}`}
+                                variant='ghost'
+                                type='button'
+                                className='font-semibold text-neutral-700 dark:text-neutral-300'>
+                                <ArrowLeftRight className='size-5' />
+                                Swap Vehicle
+                            </Button>
+
                             <TripRejectDialog tripId={trip.tripid} />
 
                             <TripApproveDialog
