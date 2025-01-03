@@ -47,11 +47,8 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
     }
 
     const features = featuresResponse?.data?.vehicleAllDetails[0];
-    const reviews = featuresResponse?.data?.reserverList[0];
 
-    const { rating, tripcount } = reviews;
-
-    const { vin, make, model, year, imageresponse, number } = features;
+    const { vin, make, model, year, imageresponse, number, tripcount, rating } = features;
 
     const vehicleName = toTitleCase(`${make} ${model} ${year}`);
     const ratingText = rating ? rating.toFixed(1) : '';
