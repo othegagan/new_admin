@@ -1,7 +1,8 @@
 'use client';
 
 import { PAGE_ROUTES } from '@/constants/routes';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { getReviewRequiredTrips } from '@/server/trips';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import TripsFilter from './trips-filters';
 
@@ -17,17 +18,38 @@ interface TripsHeaderProps {
 export default function TripsHeader({ pathname }: TripsHeaderProps) {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState(pathname);
-    const searchParams = useSearchParams();
+    const [showdot, setShowDot] = useState(false);
 
     useEffect(() => {
         setActiveTab(pathname);
     }, [pathname]);
     // Convert searchParams to a string, ensuring it starts with '?'
-    const searchString = searchParams.toString() && `?${searchParams.toString()}`;
+
+    useEffect(() => {
+        async function reviewTripsDot() {
+            const response = await getReviewRequiredTrips();
+
+            if (!response.success) return null;
+
+            const data = response.data;
+
+            const actionRequired =
+                data?.newRequests?.length > 0 ||
+                data?.failedPayments?.length > 0 ||
+                data?.failedTripExtensions?.length > 0 ||
+                data?.failedDriverVerifications?.length > 0 ||
+                data?.failedCardExtensions?.length > 0 ||
+                data?.cancellationRequestedTrips?.length > 0;
+
+            setShowDot(actionRequired);
+        }
+
+        reviewTripsDot();
+    }, []);
 
     const handleTabClick = (href: string) => {
         setActiveTab(href);
-        router.push(href + searchString);
+        router.push(href);
     };
     return (
         <div className='mx-auto flex w-full flex-col items-center justify-between gap-3.5 px-4 py-2 text-center text-15 md:max-w-6xl'>
@@ -41,10 +63,11 @@ export default function TripsHeader({ pathname }: TripsHeaderProps) {
                             type='button'
                             key={tab.code}
                             onClick={() => handleTabClick(tab.href)}
-                            className={`relative cursor-pointer rounded-md px-2 py-1 font-semibold transition-all ease-in-out hover:text-primary ${isActive ? 'text-primary' : 'text-neutral-400'}`}
-                            aria-current={isActive ? 'page' : undefined}>
+                            className={`relative cursor-pointer rounded-md px-2 py-1 font-semibold transition-all ease-in-out hover:text-primary ${isActive ? 'text-primary' : 'text-neutral-400'}`}>
                             {tab.name}
-                            {showDot && <span className='-right-1 -top-1 absolute h-2 w-2 rounded-full bg-primary' aria-hidden='true' />}
+                            {showDot && showdot && (
+                                <span className='-right-1 -top-1 absolute h-2 w-2 rounded-full bg-primary' aria-hidden='true' />
+                            )}
                         </button>
                     );
                 })}

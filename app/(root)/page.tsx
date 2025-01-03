@@ -1,7 +1,7 @@
+import ActionRequiredAlert from '@/components/extra/action-required-alert';
 import { Main } from '@/components/layout/main';
-import { PAGE_ROUTES, homePageItems } from '@/constants/routes';
+import { homePageItems } from '@/constants/routes';
 import { auth } from '@/lib/auth';
-import { TriangleAlert } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function DashboardPage() {
@@ -30,36 +30,5 @@ export default async function DashboardPage() {
                 </div>
             </div>
         </Main>
-    );
-}
-
-function ActionRequiredAlert() {
-    return (
-        <Link
-            href={`${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`}
-            className='cursor-pointer rounded-lg border border-border bg-background p-4 shadow shadow-black/5'>
-            <div className='flex gap-2'>
-                <div className='flex grow flex-col gap-3'>
-                    <div className='space-y-1'>
-                        <p className='flex-start gap-2 font-medium text-sm'>
-                            <TriangleAlert className='mt-0.5 shrink-0 text-amber-500' size={20} strokeWidth={2} aria-hidden='true' />
-                            Host Action Required
-                        </p>
-                        <div className=' text-muted-foreground text-sm'>
-                            There are some items that need your review.
-                            <div className=' ml-2 inline-block whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
-                                See More
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* <Button
-                    variant='ghost'
-                    className='group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent'
-                    aria-label='Close notification'>
-                    <X size={16} strokeWidth={2} className='opacity-60 transition-opacity group-hover:opacity-100' aria-hidden='true' />
-                </Button> */}
-            </div>
-        </Link>
     );
 }
