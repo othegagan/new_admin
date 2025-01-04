@@ -248,14 +248,18 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
 FileUploaderItem.displayName = 'FileUploaderItem';
 
 export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, children, ...props }, ref) => {
-    const { dropzoneState, isFileTooBig, isLOF } = useFileUpload();
+    const { dropzoneState, isLOF } = useFileUpload();
     const rootProps = isLOF ? {} : dropzoneState.getRootProps();
+    const { isDragActive, isDragAccept } = dropzoneState;
+
     return (
-        <div ref={ref} {...props} className={`relative w-full ${isLOF ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+        <div ref={ref} {...props} className={cn('relative w-full', isLOF ? 'cursor-not-allowed opacity-50' : 'cursor-pointer', className)}>
             <div
                 className={cn(
-                    `w-full rounded-lg duration-300 ease-in-out ${dropzoneState.isDragAccept ? 'border-green-500' : dropzoneState.isDragReject || isFileTooBig ? 'border-red-500' : 'border-neutral-300'}`,
-                    className
+                    'flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed bg-background transition-colors duration-100 ease-in-out hover:border-primary',
+                    isDragActive && 'border-primary bg-primary/20',
+                    isDragAccept && 'border-primary'
+                    // (isDragReject || isFileTooBig) && 'border-red-500'
                 )}
                 {...rootProps}>
                 {children}

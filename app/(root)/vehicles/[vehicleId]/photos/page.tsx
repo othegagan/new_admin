@@ -25,13 +25,6 @@ import SubHeader from '../../_components/layout/subheader';
 
 export default function PhotosPage() {
     const { vehicleId } = useParams();
-    const queryClient = useQueryClient();
-
-    const refetchData = async () => {
-        await queryClient.invalidateQueries({
-            queryKey: [QUERY_KEYS.vehicleFeaturesById, Number(vehicleId)]
-        });
-    };
 
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
@@ -67,7 +60,7 @@ export default function PhotosPage() {
     return (
         <div className='flex flex-col gap-4'>
             <SubHeader title={vehicleConfigTabsContent.photos.title} description={vehicleConfigTabsContent.photos.description} />
-            <PhotoRearrangeForm vehicleId={Number(vehicleId)} vehicleImages={images} refetchData={refetchData} />
+            <PhotoRearrangeForm vehicleId={Number(vehicleId)} vehicleImages={images} />
         </div>
     );
 }
@@ -75,11 +68,16 @@ export default function PhotosPage() {
 interface PhotoRearrangeFormProps {
     vehicleId: number;
     vehicleImages: any[];
-    refetchData: () => void;
 }
 
-function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRearrangeFormProps) {
+function PhotoRearrangeForm({ vehicleId, vehicleImages }: PhotoRearrangeFormProps) {
     const [images, setImages] = useState<any[]>(vehicleImages);
+    const [files, setFiles] = useState<File[]>([]);
+    const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({});
+    const [uploading, setUploading] = useState<Set<number>>(new Set());
+    const [error, setError] = useState<string | null>(null);
+
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         setImages(vehicleImages);
@@ -206,17 +204,19 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRear
         }
     }
 
-    const [files, setFiles] = useState<File[]>([]);
-    const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({});
-    const [uploading, setUploading] = useState<Set<number>>(new Set());
-    const [error, setError] = useState<string | null>(null);
+    const refetchData = async () => {
+        await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vehicleFeaturesById, Number(vehicleId)]
+        });
+    };
 
     const dropzone = {
         accept: {
             'image/*': ['.jpg', '.jpeg', '.png']
         },
         multiple: true,
-        maxFiles: 20
+        maxFiles: 20,
+        maxSize: 15 * 1024 * 1024
     } as DropzoneOptions;
 
     function handleFileUpload(newFiles: File[] | null) {
@@ -249,7 +249,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRear
                 }
             });
 
-            toast.success('Image uploaded successfully!', { duration: 500 });
+            toast.success('Image uploaded successfully!', { duration: 300 });
             setUploading((prev) => {
                 const updatedUploading = new Set(prev);
                 updatedUploading.delete(index);
@@ -277,7 +277,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRear
                     value={files}
                     onValueChange={handleFileUpload}
                     dropzoneOptions={dropzone}
-                    className='relative h-40 rounded-lg border-2 border-dashed bg-background transition-colors hover:border-primary'>
+                    className='relative h-40 rounded-lg '>
                     <FileInput className='flex h-full flex-col items-center justify-center bg-muted'>
                         <FileUploadDropzoneIcon />
                         <p className='mb-1 text-muted-foreground text-sm'>
@@ -319,7 +319,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData }: PhotoRear
                                         <img
                                             src={image.imagename}
                                             alt={` ${image.id}`}
-                                            className='h-full w-full object-cover object-center'
+                                            className='aspect-[16/9] h-full w-full object-cover object-center'
                                         />
                                     </SortableDragHandle>
                                     <div className='flex w-full justify-between px-1.5 py-0.5'>

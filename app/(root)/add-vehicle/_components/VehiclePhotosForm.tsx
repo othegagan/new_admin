@@ -298,7 +298,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages, refetchData, nextStep, p
                     value={files}
                     onValueChange={handleFileUpload}
                     dropzoneOptions={dropzone}
-                    className='relative h-40 rounded-lg border-2 border-dashed bg-background transition-colors hover:border-primary'>
+                    className='relative h-40 rounded-lg '>
                     <FileInput className='flex h-full flex-col items-center justify-center bg-muted'>
                         <FileUploadDropzoneIcon />
                         <p className='mb-1 text-muted-foreground text-sm'>
