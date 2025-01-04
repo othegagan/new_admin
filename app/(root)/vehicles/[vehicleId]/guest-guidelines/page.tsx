@@ -72,11 +72,11 @@ type FormFields = z.infer<typeof schema>;
 
 function GuestInstructionsForm({ vechicleId, instructionsAndGuideLines = '', refetchData }: GuestInstructionsFormProps) {
     const {
-        register,
         handleSubmit,
         setValue,
         control,
-        formState: { errors, isSubmitting }
+        reset,
+        formState: { isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -110,6 +110,7 @@ function GuestInstructionsForm({ vechicleId, instructionsAndGuideLines = '', ref
 
             if (response.success) {
                 toast.success(response.message);
+                reset({ instructionsAndGuideLines });
                 refetchData();
             } else {
                 toast.error(response.message);
@@ -133,7 +134,7 @@ function GuestInstructionsForm({ vechicleId, instructionsAndGuideLines = '', ref
             </div>
 
             <div className='mt-6 flex items-center justify-end gap-x-6'>
-                <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...'>
+                <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...' disabled={!isDirty}>
                     Save
                 </Button>
             </div>

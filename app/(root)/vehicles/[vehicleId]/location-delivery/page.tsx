@@ -177,7 +177,8 @@ function LocationDeliveryForm({
         setValue,
         control,
         watch,
-        formState: { errors, isSubmitting }
+        reset,
+        formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -248,6 +249,9 @@ function LocationDeliveryForm({
             if (response.success) {
                 toast.success(response.message);
                 refetchData();
+                reset({
+                    ...formData
+                });
             } else {
                 toast.error(response.message);
             }
@@ -258,7 +262,7 @@ function LocationDeliveryForm({
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 md:gap-10'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 pb-3 md:gap-10'>
             <div className='grid grid-cols-3 gap-2 md:grid-cols-12 md:gap-4'>
                 <div className='col-span-3 flex flex-col gap-2 md:col-span-6'>
                     <Label> Address line 1</Label>
@@ -465,7 +469,7 @@ function LocationDeliveryForm({
                 )}
             </div>
             <div className='mt-4 flex items-center justify-end gap-x-6 md:pr-10'>
-                <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...'>
+                <Button type='submit' className='w-fit' loading={isSubmitting} loadingText='Saving...' disabled={!isDirty}>
                     Save
                 </Button>
             </div>
