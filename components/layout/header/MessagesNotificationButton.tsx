@@ -5,10 +5,10 @@ import { useAllNotifications } from '@/hooks/useNotifications';
 import Link from 'next/link';
 
 export function MessagesNotificationButton() {
-    const { data: response, isLoading: loading, error } = useAllNotifications();
+    const { data: response } = useAllNotifications();
     const messageNotificationsData = response?.data?.messageNotifications || [];
 
-    const countOfUnreadNotifications = messageNotificationsData.filter((notification: any) => !notification.viewed).length;
+    const countOfUnreadNotifications = messageNotificationsData.filter((notification: any) => !notification.isViewed).length;
 
     return (
         <Link href='/messages'>
