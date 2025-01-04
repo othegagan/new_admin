@@ -156,15 +156,17 @@ function MessageContentForm({ vehicleId, masterEventsList, alreadySavedEvents, r
                         <form
                             key={event.statusCode}
                             onSubmit={handleSubmit((data) => handleSave(event.statusCode, data))}
-                            className='flex flex-col gap-4 p-0.5'>
-                            <Label htmlFor={event.description} className='font-semibold'>
-                                {event.description}
-                            </Label>
-                            <Controller
-                                name='messageContent'
-                                control={control}
-                                render={({ field }) => <Textarea {...field} className='w-full' />}
-                            />
+                            className='flex max-w-7xl flex-col gap-4 p-0.5 lg:flex-row lg:items-end'>
+                            <div className='flex w-full flex-col gap-3'>
+                                <Label htmlFor={event.description} className='font-semibold'>
+                                    {event.description}
+                                </Label>
+                                <Controller
+                                    name='messageContent'
+                                    control={control}
+                                    render={({ field }) => <Textarea {...field} className='w-full ' />}
+                                />
+                            </div>
                             <Button
                                 type='submit'
                                 className='fade-in-25 ml-auto w-fit'
