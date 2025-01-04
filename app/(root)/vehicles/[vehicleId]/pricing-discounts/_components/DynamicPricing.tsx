@@ -99,13 +99,23 @@ export default function DynamicPricingComponent() {
 
     return (
         <div className='flex w-full flex-col gap-4'>
-            <div className='flex w-full items-center '>
-                <h3>Custom Pricing</h3>
-                {!isAdding && (
-                    <Button className='h-10 w-fit border-none p-3' size='icon' variant='outline' onClick={() => setIsAdding(true)}>
-                        <PlusCircle className='size-6' />
-                    </Button>
-                )}
+            <div className='flex flex-col'>
+                <div className='flex w-full items-center '>
+                    <h4>
+                        Custom Pricing Configuration <span className='text-muted-foreground'>(Optional)</span>
+                    </h4>
+                    {!isAdding && (
+                        <Button
+                            toolTip='Add custom pricing'
+                            className='h-10 w-fit border-none p-3'
+                            size='icon'
+                            variant='outline'
+                            onClick={() => setIsAdding(true)}>
+                            <PlusCircle className='size-6' />
+                        </Button>
+                    )}
+                </div>
+                <div className='text-muted-foreground text-sm'>Set custom prices for specific dates or periods.</div>
             </div>
             {isAdding && (
                 <div className='flex flex-col gap-4'>

@@ -164,9 +164,9 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
             </div>
 
             <div className='flex flex-col gap-6'>
-                <div className='space-y-2'>
+                <div className='space-y-1'>
                     <h3>Discounts </h3>
-                    <p className='text-sm'>The selected discount will be applied to the reservation.</p>
+                    <p className='text-muted-foreground text-sm'>The configured discounts will be applied to the total rental cost.</p>
                 </div>
 
                 <div className='flex flex-col gap-6 md:flex-row md:items-end'>
@@ -182,6 +182,7 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
                                         id='discount3Days'
                                         label='3 Days Rental Discount'
                                         defaultValue={value || 0}
+                                        maxValue={100}
                                         isRequired
                                         formatOptions={{
                                             style: 'percent',
@@ -207,6 +208,7 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
                                         label='7 Days Rental Discount'
                                         defaultValue={value || 0}
                                         isRequired
+                                        maxValue={100}
                                         formatOptions={{
                                             style: 'percent',
                                             minimumFractionDigits: 0
@@ -231,6 +233,7 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
                                         label='30 Days Rental Discount'
                                         defaultValue={value || 0}
                                         isRequired
+                                        maxValue={100}
                                         formatOptions={{
                                             style: 'percent',
                                             minimumFractionDigits: 0

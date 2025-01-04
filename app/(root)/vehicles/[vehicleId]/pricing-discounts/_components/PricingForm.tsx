@@ -172,7 +172,7 @@ function PricingForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = 
                                 // @ts-ignore
                                 <JollyNumberField
                                     id='pricePerDay'
-                                    label='Vehicle Price/Day Amount'
+                                    label='Per day rental charge'
                                     defaultValue={value || 0}
                                     isRequired
                                     formatOptions={{
