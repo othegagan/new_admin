@@ -7,23 +7,14 @@ import { FormDescription } from '@/components/ui/extension/field';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
 import { Label } from '@/components/ui/label';
 import { useHostConfigutations } from '@/hooks/useHostConfigutations';
-import { requiredNumberSchema, requiredWholeNumberSchema } from '@/schemas/validationSchemas';
+import { configurationsSchema } from '@/schemas';
 import { insertHostConfigurations, updateHostConfigurations } from '@/server/configurations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-const schema = z.object({
-    averageRentaDays: requiredWholeNumberSchema,
-    concessionFee: requiredNumberSchema,
-    concessionPercentage: requiredNumberSchema,
-    registrationFee: requiredNumberSchema,
-    stateTax: requiredNumberSchema,
-    upCharge: requiredNumberSchema
-});
-
-type FormFields = z.infer<typeof schema>;
+type FormFields = z.infer<typeof configurationsSchema>;
 
 export default function ConfigurationPage() {
     const { data: response, isLoading: loading, error, refetch } = useHostConfigutations();
@@ -67,14 +58,14 @@ function ConstraintForm({
     const {
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
-        resolver: zodResolver(schema),
-        mode: 'onChange',
+        resolver: zodResolver(configurationsSchema),
+        mode: 'all',
         defaultValues: {
-            ...data,
-            concessionPercentage: data.concessionPercentage / 100
-        } // Convert to percentage only because of the UI
+            ...data
+        }
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
@@ -83,7 +74,7 @@ function ConstraintForm({
                 averageRentaDays: formData.averageRentaDays,
                 concessionFee: formData.concessionFee,
                 //@ts-ignore
-                concessionPercentage: formData.concessionPercentage * 100, // Convert to percentage only because of the UI
+                concessionPercentage: formData.concessionPercentage, // Convert to percentage only because of the UI
                 registrationFee: formData.registrationFee,
                 stateTax: formData.stateTax,
                 upCharge: formData.upCharge,
@@ -94,6 +85,8 @@ function ConstraintForm({
                 const response = await updateHostConfigurations(payload);
                 if (response.success) {
                     toast.success(response.message);
+                    refetch();
+                    reset({ ...formData });
                 } else {
                     toast.error(`Error in updating configurations ${response.message}`);
                 }
@@ -105,7 +98,6 @@ function ConstraintForm({
                     toast.error(`Error in inserting configurations ${response.message}`);
                 }
             }
-            refetch();
         } catch (error: any) {
             console.error('Error updating configurations:', error);
             toast.error('Error in updating configurations', error.message);
@@ -182,32 +174,35 @@ function ConstraintForm({
                 <div className='flex flex-col gap-1'>
                     <Label htmlFor='concessionPercentage'>Concession Percentage</Label>
                     <FormDescription>Specify any applicable discounts or concessions that can be offered to guests.</FormDescription>
-                    <Controller
-                        name='concessionPercentage'
-                        control={control}
-                        render={({ field }) => {
-                            // Ensure field.value is a number or undefined
-                            const value = field.value === '' ? undefined : Number(field.value);
-
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    defaultValue={value || 0}
-                                    className='mt-1 max-w-44 sm:mt-0'
-                                    id='concessionPercentage'
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'percent',
-                                        minimumFractionDigits: 0,
-                                        maximumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    errorMessage={errors.concessionPercentage?.message}
-                                    isInvalid={!!errors.concessionPercentage?.message}
-                                />
-                            );
-                        }}
-                    />
+                    <div className='flex items-center gap-2'>
+                        <Controller
+                            name='concessionPercentage'
+                            control={control}
+                            render={({ field }) => {
+                                // Ensure field.value is a number or undefined
+                                const value = field.value === '' ? undefined : Number(field.value);
+                                return (
+                                    // @ts-ignore
+                                    <JollyNumberField
+                                        defaultValue={value || 0}
+                                        maxValue={100}
+                                        className='mt-1 max-w-44 sm:mt-0'
+                                        id='concessionPercentage'
+                                        isRequired
+                                        formatOptions={{
+                                            style: 'decimal',
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0
+                                        }}
+                                        {...field}
+                                        errorMessage={errors.concessionPercentage?.message}
+                                        isInvalid={!!errors.concessionPercentage?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <div className='mt-2 text-lg'>%</div>
+                    </div>
                 </div>
 
                 <div className='flex flex-col gap-1'>
