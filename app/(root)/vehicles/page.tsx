@@ -62,10 +62,11 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             { name: 'make', weight: 0.3 },
             { name: 'model', weight: 0.3 },
             { name: 'year', weight: 0.1 },
-            { name: 'vin', weight: 0.2 },
             { name: 'vehicleId', weight: 0.3 },
             { name: 'number', weight: 0.2 },
-            { name: 'color', weight: 0.3 }
+            { name: 'plate', weight: 0.2 },
+            { name: 'color', weight: 0.3 },
+            { name: 'vehicleStatus', weight: 0.3 }
         ],
         ...fuseSettings
     });

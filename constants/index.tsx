@@ -193,7 +193,7 @@ export const stateList = [
 export const fuseSettings = {
     threshold: 0.4,
     distance: 100,
-    minMatchCharLength: 2,
+    minMatchCharLength: 1,
     shouldSort: true,
     includeScore: true,
     useExtendedSearch: true,

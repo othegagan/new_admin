@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'sonner';
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: Readonly<RootLayoutProps>
             </head>
             <body className={cn(' h-dvh w-full min-w-[360px] bg-background font-sans antialiased', geistSans.variable, geistMono.variable)}>
                 <Providers session={session}>{children}</Providers>
+                <NextTopLoader color='#F97217' showSpinner={false} height={2} />
                 <Toaster position='bottom-right' closeButton={true} duration={3000} richColors className={`${geistSans.className}`} />
                 {/* {env.NODE_ENV === 'development' && <ScreenSize />} */}
             </body>

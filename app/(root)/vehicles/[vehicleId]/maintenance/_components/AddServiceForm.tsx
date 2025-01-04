@@ -208,6 +208,7 @@ export default function AddServiceForm({ vehicleId, refechServiceLogs }: { vehic
                                             description=''
                                             defaultValue={value}
                                             className='mt-1 sm:mt-0'
+                                            inputFieldClassName='md:max-w-full'
                                             isRequired
                                             {...field}
                                             onChange={field.onChange}
@@ -231,6 +232,7 @@ export default function AddServiceForm({ vehicleId, refechServiceLogs }: { vehic
                                             description=''
                                             defaultValue={value || 0}
                                             className='mt-1 sm:mt-0'
+                                            inputFieldClassName='md:max-w-full'
                                             isRequired
                                             formatOptions={{
                                                 style: 'currency',
@@ -286,7 +288,9 @@ export default function AddServiceForm({ vehicleId, refechServiceLogs }: { vehic
                         </div>
 
                         <div className='group flex flex-col gap-1.5'>
-                            <Label htmlFor='additionalNotes'>Notes</Label>
+                            <Label htmlFor='additionalNotes'>
+                                Notes <span className='text-muted-foreground'>(Optional)</span>
+                            </Label>
                             <Textarea id='additionalNotes' {...register('additionalNotes')} />
                             {errors.additionalNotes && <FormError>{errors.additionalNotes.message}</FormError>}
                         </div>

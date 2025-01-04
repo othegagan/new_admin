@@ -8,7 +8,7 @@ import { vehicleConfigTabsContent } from '@/constants';
 import { useVehicleExpenseLogs, useVehicleRepairLogs } from '@/hooks/useVehicles';
 import { ExpenseIcon, ServiceIcon } from '@/public/icons';
 import { format } from 'date-fns';
-import { CircleGauge, Paperclip } from 'lucide-react';
+import { CircleGauge, Paperclip, Plus } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import SubHeader from '../../_components/layout/subheader';
@@ -34,7 +34,7 @@ export default function MaintenancePage() {
     } = useVehicleRepairLogs(Number(vehicleId));
 
     if (isLoadingExpenseLogs || isLoadingServiceLogs) {
-        return <CarLoadingSkeleton />;
+        return <CarLoadingSkeleton className='h-40' />;
     }
 
     if (errorExpenseLogs || errorServiceLogs) {
@@ -83,16 +83,16 @@ export default function MaintenancePage() {
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button className='ml-auto w-fit' size='sm'>
-                            Add Maintenance
+                        <Button className='mr-2 ml-auto w-fit' prefix={<Plus className='size-4' />}>
+                            Add Entry
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuItem className='p-0' asChild>
-                            <AddServiceForm vehicleId={Number(vehicleId)} refechServiceLogs={refechServiceLogs} />
+                            <AddExpenseForm vehicleId={Number(vehicleId)} refetchExpenseLogs={refetchExpenseLogs} />
                         </DropdownMenuItem>
                         <DropdownMenuItem className='p-0' asChild>
-                            <AddExpenseForm vehicleId={Number(vehicleId)} refetchExpenseLogs={refetchExpenseLogs} />
+                            <AddServiceForm vehicleId={Number(vehicleId)} refechServiceLogs={refechServiceLogs} />
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

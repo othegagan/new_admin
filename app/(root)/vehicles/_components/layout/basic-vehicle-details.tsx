@@ -95,7 +95,7 @@ export default function BasicVehicleDetails({ vehicleId }: BasicVehicleDetailsPr
                 </button>
                 <div className='flex w-fit flex-col items-end gap-2'>
                     <span className='text-md capitalize'>
-                        Vehicle Status: <b>{localIsActive ? 'Active' : 'Inactive'}</b>
+                        <span className='text-muted-foreground'> Vehicle Status:</span> <b>{localIsActive ? 'Active' : 'Inactive'}</b>
                     </span>
                     <Switch
                         checked={localIsActive || false} // Ensure `false` fallback for initial render

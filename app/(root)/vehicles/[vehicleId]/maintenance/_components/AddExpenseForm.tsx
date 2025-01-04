@@ -192,6 +192,7 @@ export default function AddExpenseForm({ vehicleId, refetchExpenseLogs }: { vehi
                                             label='Odometer Reading'
                                             description=''
                                             defaultValue={value}
+                                            inputFieldClassName='md:max-w-full'
                                             className='mt-1 sm:mt-0 '
                                             isRequired
                                             {...field}
@@ -215,6 +216,7 @@ export default function AddExpenseForm({ vehicleId, refetchExpenseLogs }: { vehi
                                             label='Cost'
                                             description=''
                                             defaultValue={value || 0}
+                                            inputFieldClassName='md:max-w-full'
                                             className='mt-1 sm:mt-0'
                                             isRequired
                                             formatOptions={{
@@ -279,7 +281,9 @@ export default function AddExpenseForm({ vehicleId, refetchExpenseLogs }: { vehi
                         </div>
 
                         <div className='group flex flex-col gap-1.5'>
-                            <Label htmlFor='additionalNotes'>Notes</Label>
+                            <Label htmlFor='additionalNotes'>
+                                Notes <span className='text-muted-foreground'>(Optional)</span>
+                            </Label>
                             <Textarea id='additionalNotes' {...register('additionalNotes')} />
                             {errors.additionalNotes && <FormError>{errors.additionalNotes.message}</FormError>}
                         </div>
