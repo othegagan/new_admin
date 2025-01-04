@@ -79,11 +79,17 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
         }
 
         // Filter by trip status
-        if (tripStatus) {
+        if (tripStatus && tripStatus !== 'all') {
             filtered = filtered.filter((car) => {
                 if (car.status === null) {
                     return tripStatus.toLowerCase() === 'available';
                 }
+
+                // if tripStatus is upcoming then filter by requested and approved
+                if (tripStatus.toLowerCase() === 'upcoming') {
+                    return ['requested', 'approved'].includes(car.status.toLowerCase());
+                }
+
                 return car.status?.toLowerCase() === tripStatus.toLowerCase();
             });
         }
@@ -148,8 +154,9 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
+                                <SelectItem value='all'>All</SelectItem>
                                 <SelectItem value='started'>On Trip</SelectItem>
-                                <SelectItem value='requested'>Upcoming</SelectItem>
+                                <SelectItem value='upcoming'>Upcoming</SelectItem>
                                 <SelectItem value='available'>Available</SelectItem>
                             </SelectGroup>
                         </SelectContent>
@@ -271,10 +278,10 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                     {tripStatus ? (
                         <>
                             <span className='text-nowrap capitalize'>
-                                {tripStatus.toLowerCase() === 'completed' && 'Last'} {tripStatus.toLowerCase() === 'requested' && 'Next'}:{' '}
-                                {tripStatus.toLowerCase() === 'started' && 'On Going'}
-                                {channelName} Trip{' '}
-                            </span>{' '}
+                                {tripStatus.toLowerCase() === 'completed' && 'Last'}
+                                {['requested', 'approved'].includes(tripStatus.toLowerCase()) && 'Next'}
+                                {tripStatus.toLowerCase() === 'started' && 'On Going'} : {channelName} Trip{' '}
+                            </span>
                             ({formatedStartDate} - {formatedEndDate})
                         </>
                     ) : (
