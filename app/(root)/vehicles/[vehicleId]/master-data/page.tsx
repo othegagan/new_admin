@@ -119,8 +119,8 @@ function AdditionalDataForm({ vehicleData, vinDBData, refetchData }: any) {
         handleSubmit,
         setValue,
         control,
-        formState: { errors, isSubmitting },
-        watch
+        reset,
+        formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -130,19 +130,6 @@ function AdditionalDataForm({ vehicleData, vinDBData, refetchData }: any) {
             vehicleState: vehicleData?.vehicleState
         }
     });
-
-    // Watch for changes
-    const watchedValues = watch();
-    const initialValues = {
-        number: vehicleData?.number || '',
-        color: vehicleData?.color || '',
-        vehicleState: vehicleData?.vehicleState?.toLowerCase() || ''
-    };
-
-    const hasChanges =
-        watchedValues.number !== initialValues.number ||
-        watchedValues.color !== initialValues.color ||
-        watchedValues.vehicleState?.toLowerCase() !== initialValues.vehicleState;
 
     useEffect(() => {
         setValue('number', vehicleData?.number);
@@ -170,6 +157,9 @@ function AdditionalDataForm({ vehicleData, vinDBData, refetchData }: any) {
             if (response.success) {
                 refetchData();
                 toast.success(response.message);
+                reset({
+                    ...formData
+                });
             } else {
                 toast.error(response.message);
             }
@@ -180,56 +170,55 @@ function AdditionalDataForm({ vehicleData, vinDBData, refetchData }: any) {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-            <div className='grid grid-cols-2 gap-4 p-0.5 md:grid-cols-3 lg:grid-cols-4'>
-                <div className='flex flex-col gap-2'>
-                    <Label>Licence Plate Number</Label>
-                    <Input {...register('number')} placeholder='Vehicle Number' />
-                    {errors.number && <FormError>{errors.number.message}</FormError>}
-                </div>
-
-                <div className='flex flex-col gap-2'>
-                    <Label>Registered State</Label>
-                    <Controller
-                        control={control}
-                        name='vehicleState'
-                        render={({ field }) => (
-                            <>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    value={field.value?.toLowerCase() || ''}
-                                    defaultValue={field.value?.toLowerCase() || ''}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder='Select state' />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {stateList.map((state) => (
-                                            <SelectItem key={state.id} value={state.value.toLowerCase()}>
-                                                {state.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                {errors.vehicleState && <FormError>{errors.vehicleState.message}</FormError>}
-                            </>
-                        )}
-                    />
-                </div>
-
-                <div className='flex flex-col gap-2'>
-                    <Label>Vehicle Color</Label>
-                    <Input {...register('color')} placeholder='Vehicle Color' />
-                    {errors.color && <FormError>{errors.color.message}</FormError>}
-                </div>
+        <form onSubmit={handleSubmit(onSubmit)} className='grid max-w-3xl grid-cols-2 gap-4 p-0.5 md:grid-cols-3 lg:grid-cols-4'>
+            <div className='flex flex-col gap-2'>
+                <Label>Licence Plate Number</Label>
+                <Input {...register('number')} placeholder='Vehicle Number' />
+                {errors.number && <FormError>{errors.number.message}</FormError>}
             </div>
 
-            <div className='flex items-center justify-end gap-x-6'>
-                {hasChanges && (
-                    <Button type='submit' loading={isSubmitting} loadingText='Saving...'>
-                        Save
-                    </Button>
-                )}
+            <div className='flex flex-col gap-2'>
+                <Label>Registered State</Label>
+                <Controller
+                    control={control}
+                    name='vehicleState'
+                    render={({ field }) => (
+                        <>
+                            <Select
+                                onValueChange={field.onChange}
+                                value={field.value?.toLowerCase() || ''}
+                                defaultValue={field.value?.toLowerCase() || ''}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder='Select state' />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {stateList.map((state) => (
+                                        <SelectItem key={state.id} value={state.value.toLowerCase()}>
+                                            {state.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {errors.vehicleState && <FormError>{errors.vehicleState.message}</FormError>}
+                        </>
+                    )}
+                />
             </div>
+
+            <div className='flex flex-col gap-2'>
+                <Label>Vehicle Color</Label>
+                <Input {...register('color')} placeholder='Vehicle Color' />
+                {errors.color && <FormError>{errors.color.message}</FormError>}
+            </div>
+
+            <Button
+                type='submit'
+                loading={isSubmitting}
+                className='mt-auto ml-auto w-fit md:ml-10'
+                loadingText='Saving...'
+                disabled={!isDirty}>
+                Save
+            </Button>
         </form>
     );
 }
