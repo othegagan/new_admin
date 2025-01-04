@@ -58,7 +58,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     toolTip?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     (
         { className, variant, size, shape, asChild = false, loading, loadingText, prefix, suffix, href, children, toolTip, ...props },
         ref
@@ -70,12 +70,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const renderPrefix = !loading || !suffix;
         const renderSuffix = loading && suffix;
 
+        // Adjust focus styles dynamically
+        const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-none focus:ring focus:ring-offset-2';
+
         const buttonContent = (
             <Comp
                 className={cn(
                     'group w-auto cursor-pointer select-none gap-2 transition-all duration-300 ease-linear active:scale-95',
                     isDisabled && 'cursor-not-allowed opacity-60',
-                    buttonVariants({ variant, size, shape, className })
+                    buttonVariants({ variant, size, shape, className }),
+                    focusStyles // Apply focus styles only if Comp is not 'a'
                 )}
                 //@ts-ignore
                 ref={ref}

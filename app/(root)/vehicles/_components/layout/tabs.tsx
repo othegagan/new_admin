@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { PAGE_ROUTES, vehicleConfigTabs } from '@/constants/routes';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { SplitButtonDropdown } from './split-button-dropdown';
 
@@ -43,18 +42,17 @@ export default function Tabs() {
                 orientation='horizontal'
                 type='always'
                 className=' my-3 hidden w-full min-w-40 border-b bg-background px-1 py-2 md:block'>
-                <nav className={cn('flex space-x-2 pb-6 ')}>
+                <nav className={cn('flex space-x-2 pt-2 pb-6 pl-2')}>
                     <Button
                         variant='ghost'
+                        href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`}
                         className={cn(
                             'font-medium text-sm duration-75 hover:text-primary',
                             pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`
                                 ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
                                 : 'text-muted-foreground'
                         )}>
-                        <Link href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`}>
-                            {vehicleConfigTabs.desktop.calendar.label}
-                        </Link>
+                        {vehicleConfigTabs.desktop.calendar.label}
                     </Button>
 
                     <SplitButtonDropdown
@@ -80,6 +78,7 @@ export default function Tabs() {
 
                     {vehicleConfigTabs.desktop.remaining.map((tab) => (
                         <Button
+                            href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}
                             key={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}
                             variant='ghost'
                             className={cn(
@@ -88,7 +87,7 @@ export default function Tabs() {
                                     ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
                                     : 'text-muted-foreground'
                             )}>
-                            <Link href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${tab.href}`}>{tab.label}</Link>
+                            {tab.label}
                         </Button>
                     ))}
                 </nav>
