@@ -121,7 +121,7 @@ function DescriptionForm({ vechicleId, description = '', refetchData }: Descript
                     name='description'
                     control={control}
                     render={({ field }) => {
-                        return <Textarea {...field} rows={10} placeholder='' />;
+                        return <Textarea {...field} rows={8} placeholder='' />;
                     }}
                 />
             </div>
