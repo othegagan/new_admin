@@ -2,6 +2,7 @@
 
 import { Main } from '@/components/layout/main';
 import PageHeader from '@/components/layout/page-header';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { DataTable } from '@/components/ui/data-table';
 import { useHosts } from '@/hooks/useHostsAndEmployees';
 import AddNewHostForm from './_components/AddNewHostForm';
@@ -28,7 +29,12 @@ function HostTable() {
 
     // const filterdHostsList = allHostsList?.filter((host: any) => host.email !== 'User Deleted' && host.email !== '');
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return (
+            <div className='flex h-full w-full flex-col items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
 
     if (error) return <div>Error: {error?.message}</div>;
 

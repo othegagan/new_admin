@@ -8,6 +8,7 @@ import { useVehicleFeaturesById, useVehicleTripById } from '@/hooks/useVehicles'
 import { convertToTimeZoneISO, formatDateAndTime } from '@/lib/utils';
 import { deleteUnavailabilityById, insertUnavailability } from '@/server/dynamicPricingAndUnavailability';
 import '@/styles/fullcalendar.css';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import type FullCalendar from '@fullcalendar/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
@@ -98,7 +99,11 @@ export default function VehicleCalendarPage() {
                 />
             </div>
 
-            {isLoading && <div className='flex h-full w-full items-center justify-center'>Loading...</div>}
+            {isLoading && (
+                <div className='flex h-full w-full items-center justify-center'>
+                    <CarLoadingSkeleton />
+                </div>
+            )}
 
             {error && <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>}
 

@@ -2,6 +2,7 @@
 
 import { Main } from '@/components/layout/main';
 import PageHeader from '@/components/layout/page-header';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { DataTable } from '@/components/ui/data-table';
 import { useAllGuestsOfHost } from '@/hooks/useGuests';
 import { guestsColumns } from './_components/columns';
@@ -23,7 +24,12 @@ export default function GuestsPage() {
 function GuestsTable() {
     const { data: response, isLoading: loading, error } = useAllGuestsOfHost();
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return (
+            <div className='flex h-full w-full flex-col items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
 
     if (error) return <div>Error: {error?.message}</div>;
 

@@ -2,6 +2,7 @@
 
 import { Main } from '@/components/layout/main';
 import PageHeader from '@/components/layout/page-header';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { DataTable } from '@/components/ui/data-table';
 import { useEmployees } from '@/hooks/useHostsAndEmployees';
 import AddNewEmployeeForm from './_components/AddNewEmployeeForm';
@@ -25,7 +26,12 @@ export default function Page() {
 function HostTable() {
     const { data: response, isLoading: loading, error } = useEmployees();
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return (
+            <div className='flex h-full w-full flex-col items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
 
     if (error) return <div>Error: {error?.message}</div>;
 

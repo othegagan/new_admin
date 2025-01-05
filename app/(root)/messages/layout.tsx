@@ -1,6 +1,7 @@
 'use client';
 
 import { Main } from '@/components/layout/main';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { useAllNotifications } from '@/hooks/useNotifications';
 import type { ReactNode } from 'react';
 import MessagesList from './_components/MessagesList';
@@ -8,7 +9,12 @@ import MessagesList from './_components/MessagesList';
 export default function MessagesLayout({ children }: { children: ReactNode }) {
     const { data: response, isLoading: loading, error } = useAllNotifications();
 
-    if (loading) return <div className=' flex h-full w-full items-center justify-center'>Loading...</div>;
+    if (loading)
+        return (
+            <div className=' flex h-full w-full items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
 
     if (error) return <div className=' flex h-full w-full items-center justify-center'>Error: {error.message}</div>;
 

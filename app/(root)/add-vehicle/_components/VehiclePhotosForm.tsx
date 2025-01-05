@@ -1,3 +1,4 @@
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { CardTitle } from '@/components/ui/card';
 import { FileInput, FileUploader } from '@/components/ui/extension/file-uploader';
@@ -45,7 +46,11 @@ export default function VehiclePhotosForm({ nextStep, previousStep, alreadyUploa
     const { data: response, isLoading, error } = useVehicleFeaturesById(Number(vehicleId));
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className='flex h-full w-full flex-col items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
     }
 
     if (error) {

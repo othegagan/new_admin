@@ -1,5 +1,6 @@
 'use client';
 
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { SearchInput } from '@/components/ui/search-input';
@@ -18,7 +19,12 @@ export default function MessagesList() {
     const { data: response, isLoading: loading, error } = useAllNotifications();
     const messageNotificationsData = response?.data?.messageNotifications || [];
 
-    if (loading) return <div className='block'>Loading...</div>;
+    if (loading)
+        return (
+            <div className='flex h-full w-full flex-col items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
 
     if (error) return <div>Error: {error.message}</div>;
 

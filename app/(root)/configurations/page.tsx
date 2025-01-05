@@ -2,6 +2,7 @@
 
 import { Main } from '@/components/layout/main';
 import PageHeader from '@/components/layout/page-header';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { FormDescription } from '@/components/ui/extension/field';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
@@ -38,7 +39,11 @@ export default function ConfigurationPage() {
             />
 
             <div className='my-4'>
-                {loading && <div>Loading...</div>}
+                {loading && (
+                    <div className='flex h-full w-full flex-col items-center justify-center'>
+                        <CarLoadingSkeleton />
+                    </div>
+                )}
                 {error && <div>Error: {error.message}</div>}
                 {!loading && !error && <ConstraintForm data={data} isUpdate={isUpdate} refetch={refetch} />}
             </div>
