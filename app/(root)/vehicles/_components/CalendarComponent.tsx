@@ -15,7 +15,7 @@ interface CalendarComponentProps {
     trips: any[];
     blockedDates: any[];
     dynamicPricies: any[];
-    calendarRef: React.RefObject<FullCalendar> | any;
+    calendarRef: React.RefObject<FullCalendar | null>;
     currentMonth: Date;
     vehiclePricePerDay: number;
     zipcode: string;
@@ -93,9 +93,10 @@ export default function CalendarComponent({
             </div>
         );
     };
-    const handleEventClick = (data: { event: { id: string } }) => {
-        // console.log('Event clicked:', data.event.id);
-    };
+
+    // const handleEventClick = (data: { event: { id: string } }) => {
+    //     // console.log('Event clicked:', data.event.id);
+    // };
 
     return (
         <>
@@ -106,7 +107,7 @@ export default function CalendarComponent({
                     initialView='dayGridMonth'
                     initialDate={currentMonth}
                     events={[...formattedTrips] as EventSourceInput}
-                    eventClick={handleEventClick}
+                    // eventClick={handleEventClick}
                     headerToolbar={false}
                     eventContent={renderEventContent}
                     dayCellContent={renderDayCellContent}

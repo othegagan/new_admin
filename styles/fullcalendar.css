@@ -8,11 +8,13 @@
 }
 
 .fc .fc-scroller-liquid-absolute {
-    height: 350px !important;
+    /* height: 550px !important; */
+    height: 100% !important;
 }
 
 .fc .fc-view-harness {
-    max-height: 350px !important;
+    /* max-height: 550px !important; */
+    max-height: 100% !important;
 }
 
 .fc-day {

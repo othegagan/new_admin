@@ -40,7 +40,8 @@ export const useVehicleFeaturesById = (id: number) => {
     return {
         ...useQuery({
             queryKey: [QUERY_KEYS.vehicleFeaturesById, id],
-            queryFn: async () => getVehicleFeaturesById(id)
+            queryFn: async () => getVehicleFeaturesById(id),
+            staleTime: 0
         }),
         refetchAll: () => {
             return queryClient.invalidateQueries({

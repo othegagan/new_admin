@@ -219,6 +219,10 @@
     .fc-view {
         @apply h-full w-full bg-background;
     }
+
+    .fc .fc-view-harness {
+        max-height: 645px !important;
+    }
 }
 
 td button[disabled] {

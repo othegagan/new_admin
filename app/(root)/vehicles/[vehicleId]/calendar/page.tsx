@@ -24,12 +24,11 @@ import { DateRangeCalendar } from '../../_components/DateRangeCalendar';
 export default function VehicleCalendarPage() {
     const { vehicleId } = useParams();
     const queryClient = useQueryClient();
+    const calendarRef = useRef<FullCalendar>(null);
 
-    // const [selectedChannel, setSelectedChannel] = useState('1');
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [startDate, setStartDate] = useState(format(startOfMonth(currentMonth), 'yyyy-MM-dd'));
     const [endDate, setEndDate] = useState(format(endOfMonth(currentMonth), 'yyyy-MM-dd'));
-    const calendarRef = useRef<FullCalendar>(null);
 
     function refetchData() {
         queryClient.invalidateQueries({
@@ -56,6 +55,7 @@ export default function VehicleCalendarPage() {
         error: errorFeatures,
         refetch: refetchFeatures
     } = useVehicleFeaturesById(Number(vehicleId));
+
     const zipcode = featuresResponse?.data?.vehicleAllDetails[0]?.zipcode || '';
 
     const {
@@ -69,8 +69,6 @@ export default function VehicleCalendarPage() {
         Number(vehicleId)
     );
 
-    // const { data: channelsResponse, isLoading: isLoadingChannels, error: errorChannels } = useChannels();
-
     const isLoading = isLoadingTrips || isLoadingFeatures;
     const error = errorTrips || errorFeatures;
 
@@ -83,22 +81,10 @@ export default function VehicleCalendarPage() {
 
     const vehiclePricePerDay = featuresResponse?.data?.vehicleAllDetails[0]?.price_per_hr || 0;
 
-    // const channelsData = channelsResponse?.data?.channels || [];
-
     const vin = featuresResponse?.data?.vehicleAllDetails[0]?.vin || '';
 
     return (
         <div className='flex flex-col'>
-            <div className='mb-4 flex w-full gap-6 p-0.5'>
-                <MonthPicker
-                    currentMonth={currentMonth}
-                    onMonthChange={handleMonthChange}
-                    setCurrentMonth={setCurrentMonth}
-                    // calendarRef={calendarRef}
-                    className='w-[200px]'
-                />
-            </div>
-
             {isLoading && (
                 <div className='flex h-full w-full items-center justify-center'>
                     <CarLoadingSkeleton />
@@ -111,6 +97,15 @@ export default function VehicleCalendarPage() {
                 {!isLoading && !error && (
                     <div className='grid grid-cols-1 gap-10 md:grid-cols-6'>
                         <div className='lg:col-span-4'>
+                            <div className='mb-4 flex w-full items-center justify-center gap-6 p-0.5'>
+                                <MonthPicker
+                                    currentMonth={currentMonth}
+                                    onMonthChange={handleMonthChange}
+                                    setCurrentMonth={setCurrentMonth}
+                                    calendarRef={calendarRef}
+                                    className='w-[200px]'
+                                />
+                            </div>
                             <CalendarComponent
                                 trips={tripsData}
                                 blockedDates={unavailabilityData}
@@ -223,7 +218,12 @@ function UnavailabilityComponent({
             <div className='flex w-full items-center'>
                 <h4 className='text-nowrap text-lg'>Vehicle Unavailability</h4>
                 {!isAdding ? (
-                    <Button className='h-10 w-fit border-none p-3' size='icon' variant='outline' onClick={startAdding}>
+                    <Button
+                        className='h-10 w-fit border-none p-3'
+                        size='icon'
+                        variant='outline'
+                        onClick={startAdding}
+                        toolTip='Add unavailability'>
                         <PlusCircle className='size-6' />
                     </Button>
                 ) : null}
