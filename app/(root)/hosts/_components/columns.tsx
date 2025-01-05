@@ -1,6 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown } from 'lucide-react';
@@ -103,7 +102,7 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ cell }) => {
             return cell.getValue() ? (
                 <div className='flex-start'>
-                    <div className='my-1 w-fit rounded-md bg-green-100 px-3 py-1 text-12 text-green-700'>Active</div>
+                    <div className='my-1 w-fit rounded-md bg-[#C4F891] px-3 py-1 text-12 dark:bg-[#113019]'>Active</div>
                 </div>
             ) : (
                 <div className='flex-start'>
@@ -128,7 +127,7 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ cell }: { cell: any }) => {
             return (
                 <div className='flex-center'>
-                    <Badge>{cell?.getValue()}</Badge>
+                    <ChannelBadge channelName={cell?.getValue()} />
                 </div>
             );
         }
@@ -150,3 +149,21 @@ export const columns: ColumnDef<User>[] = [
         }
     }
 ];
+
+function ChannelBadge({ channelName }: { channelName: string }) {
+    const channelClasses: { [key: string]: string } = {
+        bundee: 'bg-primary text-white dark:bg-orange-800 dark:text-orange-100',
+        flux: 'bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100',
+        turo: 'bg-purple-200 text-purple-800 dark:bg-purple-800 dark:text-purple-100',
+        default: 'bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200'
+    };
+
+    const channelClass = channelClasses[channelName.toLowerCase()] || channelClasses.default;
+
+    return (
+        <span
+            className={`inline-flex items-center whitespace-nowrap rounded-md px-2.5 py-1 font-medium text-12 capitalize ${channelClass}`}>
+            {channelName}
+        </span>
+    );
+}

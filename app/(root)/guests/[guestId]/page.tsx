@@ -11,7 +11,8 @@ import { useDriverLicenseDetails, useGuestsHistory } from '@/hooks/useGuests';
 import { currencyFormatter } from '@/lib/utils';
 import type { Channel } from '@/types';
 import { format } from 'date-fns';
-import { AlertCircle, BadgeCheck, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, BadgeCheck, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { use } from 'react';
 import { driverBookingHistoryColumns } from '../_components/columns';
 
@@ -20,6 +21,7 @@ type params = Promise<{ [key: string]: string | string[] | undefined }>;
 export default function Driver(props: {
     params: params;
 }) {
+    const router = useRouter();
     const { guestId } = use(props.params);
 
     const { data: response, isLoading, error } = useGuestsHistory(guestId as string);
@@ -32,9 +34,15 @@ export default function Driver(props: {
     const channelName: Channel = response?.data?.driverRentalDetails[0]?.channelName;
 
     return (
-        <Main>
-            <div className='mx-auto w-full max-w-5xl'>
-                {' '}
+        <Main fixed className='overflow-y-auto pt-0'>
+            <div className='mx-auto flex w-full max-w-5xl flex-col gap-4'>
+                <button
+                    type='button'
+                    className='inline-flex w-fit items-center text-md text-muted-foreground hover:text-foreground'
+                    onClick={() => router.back()}>
+                    <ChevronLeft className='mr-1 h-4 w-4' />
+                    Back
+                </button>
                 {isLoading && <DriverProfileSkeleton />}
                 {error && <div>Error: {error?.message}</div>}
                 {!isLoading && !response?.success && <div>Error: {response?.message}</div>}

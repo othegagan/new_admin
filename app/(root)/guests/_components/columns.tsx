@@ -189,12 +189,12 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         },
         enableSorting: true,
         cell: ({ row }: { row: any }) => {
-            const bookingId = row.original.tripId;
+            const tripId = row.original.tripId;
             const vehicleName = `${row.original.make} ${row.original.model} ${row.original.year}`;
             return (
                 <div className='flex-start gap-4 text-nowrap'>
-                    <Link href={`/booking/${bookingId}/details`} className='text-nowrap font-semibold underline'>
-                        Trip: {bookingId}
+                    <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} className='text-nowrap font-semibold underline'>
+                        Trip: {tripId}
                     </Link>
                     <span className='text-nowrap'>{vehicleName}</span>
                 </div>
