@@ -13,6 +13,7 @@ export const QUERY_KEYS = {
     allHosts: 'allHosts',
     allEmployees: 'allEmployees',
     allNotifications: 'allNotifications',
+    checkNotifications: 'checkNotifications',
     telematicsDataByVehicleId: 'telematicsDataByVehicleId',
     telematicsEventsOfTripById: 'telematicsEventsOfTripById',
     allVechiclesUnderHost: 'allVechiclesUnderHost',

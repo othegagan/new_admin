@@ -5,17 +5,21 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { PAGE_ROUTES } from '@/constants/routes';
-import { useAllNotifications, useMarkNotificationAsRead } from '@/hooks/useNotifications';
+import { useAllNotifications, useCheckNotifications, useMarkNotificationAsRead } from '@/hooks/useNotifications';
 import { toTitleCase } from '@/lib/utils';
 import { BellIcon } from '@/public/icons';
+import { markAllNotificationAsRead } from '@/server/notifications';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 
 export function NotificationBellButton() {
-    const { data: response, isLoading: loading, error } = useAllNotifications();
+    const { data: checkNotificationsData } = useCheckNotifications();
+    const { data: response, isFetching: loading, error, refetch } = useAllNotifications();
+
+    const unReadNotifications = checkNotificationsData?.data?.hasNotification;
     const notificationsData = response?.data?.inAppNotifications || [];
 
-    const countOfUnreadNotifications = notificationsData.filter((notification: any) => !notification.viewed).length;
+    // const countOfUnreadNotifications = notificationsData.filter((notification: any) => !notification.viewed).length;
 
     const groupedNotifications = notificationsData.reduce((acc: any, notification: any) => {
         const date = new Date(notification.createdDate).toDateString();
@@ -26,12 +30,22 @@ export function NotificationBellButton() {
         return acc;
     }, {});
 
+    async function handleMarkAllNotificationAsRead() {
+        await markAllNotificationAsRead();
+        refetch();
+    }
+
     return (
-        <DropdownMenu>
+        <DropdownMenu
+            onOpenChange={(isOpen) => {
+                if (isOpen) {
+                    refetch();
+                }
+            }}>
             <DropdownMenuTrigger asChild>
                 <Button variant='ghost' className='relative px-2'>
                     <BellIcon className='size-6 text-muted-foreground' aria-hidden='true' />
-                    {countOfUnreadNotifications > 0 && (
+                    {unReadNotifications && (
                         <span className='absolute top-1 right-2 flex size-3'>
                             <span className='absolute inline-flex size-full rounded-full bg-primary ' />
                             <span className='relative inline-flex size-3 rounded-full bg-primary' />
@@ -45,6 +59,12 @@ export function NotificationBellButton() {
                 alignOffset={-100}>
                 <div className='mt-1 flex justify-between gap-3 p-1'>
                     <p className='font-bold text-foreground text-sm'>Notifications</p>
+
+                    {unReadNotifications && (
+                        <button type='button' className='relative px-2 text-[12px]' onClick={handleMarkAllNotificationAsRead}>
+                            Mark All as Read
+                        </button>
+                    )}
                 </div>
 
                 {loading && (
@@ -84,7 +104,7 @@ export function NotificationBellButton() {
 
 function NotificationItem({ data }: { data: any }) {
     const router = useRouter();
-    const { tripId, message, viewed, comments, createdDate } = data;
+    const { tripId, message, viewed, createdDate } = data;
     const vehicleName = toTitleCase(`${data.branchResponses[0]?.make} ${data.branchResponses[0]?.model} ${data.branchResponses[0]?.year}`);
     const { mutate: markAsRead } = useMarkNotificationAsRead(data.id);
 

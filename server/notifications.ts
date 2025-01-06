@@ -16,6 +16,26 @@ export async function getAllNotifications() {
     return response;
 }
 
+export async function checkForNotifications() {
+    const session = await getSession();
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/hostHasNotification`;
+    const payload = {
+        hostID: session?.iduser
+    };
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
+export async function markAllNotificationAsRead() {
+    const session = await getSession();
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/markHostNotificationAsRead`;
+    const payload = {
+        hostID: session?.iduser
+    };
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
 export async function markNotificationAsRead(id: number) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateNotification`;
     const payload = {
