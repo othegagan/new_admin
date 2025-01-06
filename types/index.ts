@@ -322,3 +322,33 @@ export interface SwapVehicles {
     country: any;
     isDiscountAvailable: boolean;
 }
+
+export interface TelematicsData {
+    tripId: number;
+    bundeeBookingId: number;
+    driverId: number;
+    odometerStart: number;
+    odometerEnd: number;
+    tripDistance: number;
+    tripScore: number;
+    tripMaxSpeed: number;
+    tripAverageSpeed: number;
+    scorePenalty: number;
+    isActive: boolean;
+    isEarlyMorningDriven: boolean;
+    isLateNightDriven: boolean;
+    isHighSpeedLimitCrossed: boolean;
+    isAvgSpeedLimitCrossed: boolean;
+    isImpactDetected: boolean;
+    tripUUID: string;
+    deviceId: string;
+    vin: string;
+    tripStart: any;
+    tripEnd: any;
+    hardAccelerationCount: number;
+    hardBrakingCount: number;
+    impactCount: number;
+    overSpeedingCount: number;
+    hardTurningCount: number;
+    vehicleID: number;
+}

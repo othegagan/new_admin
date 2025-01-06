@@ -1,6 +1,8 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
 import {
     getAllVehiclesUnderHost,
+    getTelematicsData,
+    getTelematicsEvents,
     getVehicleConfigurationEvents,
     getVehicleExpenseLogs,
     getVehicleFeaturesById,
@@ -200,5 +202,38 @@ export function validateBookingTimeWithDelivery(bookingDateTime: string, isCusto
     return {
         isValid: true,
         error: ''
+    };
+}
+
+export function useTelematicsData(vehicleId: number) {
+    const queryClient = useQueryClient();
+
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.telematicsDataByVehicleId, vehicleId],
+            queryFn: async () => getTelematicsData(vehicleId)
+        }),
+        refetchAll: () => {
+            return queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.telematicsDataByVehicleId]
+            });
+        }
+    };
+}
+
+export function useTelematicsEvents(telematicTripId: number) {
+    const queryClient = useQueryClient();
+
+    return {
+        ...useQuery({
+            queryKey: [QUERY_KEYS.telematicsEventsOfTripById, telematicTripId],
+            queryFn: async () => getTelematicsEvents(telematicTripId),
+            enabled: !!telematicTripId
+        }),
+        refetchAll: () => {
+            return queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.telematicsEventsOfTripById]
+            });
+        }
     };
 }
