@@ -40,6 +40,7 @@ export default function VehiclesPage() {
     // Map and add `vehicleStatus` field
     const updatedVehicleList = allHostsVehicles.map((vehicle: any) => ({
         ...vehicle,
+        tripStatus: vehicle.status,
         vehicleStatus: vehicle.uploadStatus === 'inprogress' ? STATUS_IN_PROGRESS : vehicle.isActive ? STATUS_ACTIVE : STATUS_INACTIVE
     }));
 
@@ -82,16 +83,16 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
         // Filter by trip status
         if (tripStatus && tripStatus !== 'all') {
             filtered = filtered.filter((car) => {
-                if (car.status === null) {
-                    return tripStatus.toLowerCase() === 'available';
+                if (car.tripStatus === null) {
+                    return tripStatus.toLowerCase() === 'available' && car.vehicleStatus.toLowerCase() === 'active';
                 }
 
                 // if tripStatus is upcoming then filter by requested and approved
                 if (tripStatus.toLowerCase() === 'upcoming') {
-                    return ['requested', 'approved'].includes(car.status.toLowerCase());
+                    return ['requested', 'approved'].includes(car.tripStatus.toLowerCase());
                 }
 
-                return car.status?.toLowerCase() === tripStatus.toLowerCase();
+                return car.tripStatus?.toLowerCase() === tripStatus.toLowerCase();
             });
         }
 
@@ -234,7 +235,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
         rating,
         totalTrips,
         zipCode,
-        status: tripStatus,
+        tripStatus,
         startDate,
         endDate,
         plate,
