@@ -60,7 +60,7 @@ export default function AcceptTripCancellationDialog({
                     'flex flex-row items-center gap-2 py-2 font-semibold text-[14px] text-neutral-700 dark:text-neutral-400',
                     className
                 )}
-                suffix={<X className='size-5 ' />}
+                prefix={<X className='size-5 ' />}
                 onClick={handleSubmit}>
                 {buttonText}
             </Button>
