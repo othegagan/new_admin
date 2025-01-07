@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { CHANNELS } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useReviewRequiredTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
@@ -294,6 +295,7 @@ function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellati
 function TripCard({ tripData, children, statusButton }: { tripData: Trip; children?: React.ReactNode; statusButton?: React.ReactNode }) {
     const tripId = tripData.tripid;
     const channel = tripData?.channelName;
+    const isTuroTrip = channel.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
     const carName = toTitleCase(`${tripData.vehmake} ${tripData.vehmodel} ${tripData.vehyear}`);
     const carImage = tripData?.vehicleImages[0]?.imagename || 'images/image_not_available.png';
@@ -335,6 +337,7 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
                     userId={userId}
                     userName={userName}
                     avatarSrc={avatarSrc}
+                    isTuroTrip={isTuroTrip}
                 />
             </div>
 
@@ -353,16 +356,19 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
 
                 <div className='ml-auto hidden flex-col items-end gap-2 lg:flex'>
                     <div className='flex flex-wrap items-end justify-end gap-2'>
-                        <DriverReadinessDialog
-                            tripId={tripId}
-                            isLicenceVerified={isLicenceVerified}
-                            isPhoneVerified={isPhoneVerified}
-                            isRentalAgreed={isRentalAgreed}
-                            isInsuranceVerified={isInsuranceVerified}
-                            userId={userId}
-                            userName={userName}
-                            avatarSrc={avatarSrc}
-                        />
+                        {/* Turo Trip dont have driver readiness */}
+                        {!isTuroTrip && (
+                            <DriverReadinessDialog
+                                tripId={tripId}
+                                isLicenceVerified={isLicenceVerified}
+                                isPhoneVerified={isPhoneVerified}
+                                isRentalAgreed={isRentalAgreed}
+                                isInsuranceVerified={isInsuranceVerified}
+                                userId={userId}
+                                userName={userName}
+                                avatarSrc={avatarSrc}
+                            />
+                        )}
                         {statusButton}
                     </div>
                     <UserInfo avatarSrc={avatarSrc} name={userName} tripId={tripId} className='mt-auto' userId={userId} />

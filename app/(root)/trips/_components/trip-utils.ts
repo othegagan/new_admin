@@ -1,6 +1,6 @@
-import { formatDateAndTime } from '@/lib/utils';
+import { formatDateAndTime, generateStartAndEndDates } from '@/lib/utils';
 import type { Trip } from '@/types';
-import { addDays, addMonths, format, isBefore, isSameDay, subMonths } from 'date-fns';
+import { addDays, format, isBefore, isSameDay } from 'date-fns';
 import Fuse from 'fuse.js';
 
 export const tripSearchFields = [
@@ -68,8 +68,7 @@ export function parseTrips(rawTripsData: Trip[]) {
         const endKey = formatDateAndTime(trip.endtime, zipcode, 'yyyy-MM-DD'); // always use yyyy-MM-DD format
         const startKey = formatDateAndTime(trip.starttime, zipcode, 'yyyy-MM-DD');
 
-        const startDate = `${format(subMonths(new Date(), 1), 'yyyy-MM-dd')}T05:00:00.362Z`;
-        const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T04:59:59.362Z`;
+        const { startDate, endDate } = generateStartAndEndDates('73301', 1, 1);
 
         let currentDate: any = startDate;
         while (isBefore(currentDate, endDate) || isSameDay(currentDate, endDate)) {

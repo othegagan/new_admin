@@ -2,18 +2,21 @@
 
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { CHANNELS } from '@/constants';
 import { useDailyViewTrips } from '@/hooks/useTrips';
-import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
+import { formatDateAndTime, formatDateToReadable, generateStartAndEndDates, getFullAddress, toTitleCase } from '@/lib/utils';
 import type { Trip } from '@/types';
-import { addMonths, format } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarDays, MapPin } from 'lucide-react';
 import { useQueryState } from 'nuqs';
 import { useMemo } from 'react';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
 import { getCategory, searchAndFilterTrips } from '../_components/trip-utils';
 
-const startDate = `${format(new Date(), 'yyyy-MM-dd')}T06:00:00.362Z`;
-const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T05:59:59.362Z`;
+// const startDate = `${format(new Date(), 'yyyy-MM-dd')}T06:00:00.362Z`;
+// const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T05:59:59.362Z`;
+
+const { startDate, endDate } = generateStartAndEndDates('73301', 0, 1);
 
 export default function DailayView() {
     const { data: response, isLoading, isError, error } = useDailyViewTrips(startDate, endDate);
@@ -55,8 +58,6 @@ function DailyTripsSearch({ tripsData }: any) {
 
     const dailyViewObjects = useMemo(() => {
         const rawBookingData = filteredData || [];
-        const startDate = `${format(new Date(), 'yyyy-MM-dd')}T06:00:00.362Z`;
-        const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T05:59:59.362Z`;
 
         const dailyViewObjects: Record<string, any[]> = {};
         const currentDate = new Date(startDate);
@@ -109,7 +110,7 @@ function DailyTripsSearch({ tripsData }: any) {
                 <div key={date} className='mx-auto mb-4 flex flex-col md:max-w-5xl'>
                     <div className='sticky top-0 z-20 mb-2 bg-background shadow-sm md:mb-0'>
                         <div className='mx-auto w-fit rounded-sm border border-black/20 bg-background p-3 py-1 text-center font-medium text-14'>
-                            {format(new Date(date), 'PPP')}
+                            {formatDateToReadable(date)}
                         </div>
                     </div>
                     {trips.map((tripData, index) => (
@@ -126,6 +127,7 @@ function DailyTripsSearch({ tripsData }: any) {
 function TripCard({ tripData }: { tripData: Trip }) {
     const tripId = tripData.tripid;
     const channel = tripData?.channelName;
+    const isTuroTrip = channel.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
     const carName = toTitleCase(`${tripData.vehmake} ${tripData.vehmodel} ${tripData.vehyear}`);
     const carImage = tripData?.vehicleImages[0]?.imagename || 'images/image_not_available.png';
@@ -182,6 +184,7 @@ function TripCard({ tripData }: { tripData: Trip }) {
                     userId={userId}
                     userName={userName}
                     avatarSrc={avatarSrc}
+                    isTuroTrip={isTuroTrip}
                 />
             </div>
 
@@ -209,6 +212,7 @@ function TripCard({ tripData }: { tripData: Trip }) {
                         userId={userId}
                         userName={userName}
                         avatarSrc={avatarSrc}
+                        isTuroTrip={isTuroTrip}
                     />
                     <UserInfo avatarSrc={avatarSrc} name={userName} tripId={tripId} className='mt-auto' userId={userId} />
                 </div>

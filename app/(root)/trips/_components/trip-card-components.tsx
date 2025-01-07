@@ -98,6 +98,7 @@ interface ActionButtonsProps {
     userId: number;
     userName: string;
     avatarSrc: string;
+    isTuroTrip: boolean;
 }
 
 export function ActionButtons({
@@ -110,20 +111,24 @@ export function ActionButtons({
     tripId,
     userId,
     userName,
-    avatarSrc
+    avatarSrc,
+    isTuroTrip
 }: ActionButtonsProps) {
     return (
         <div className={`flex flex-wrap items-end justify-end gap-2 ${className}`}>
-            <DriverReadinessDialog
-                tripId={tripId}
-                isLicenceVerified={isLicenceVerified}
-                isPhoneVerified={isPhoneVerified}
-                isRentalAgreed={isRentalAgreed}
-                isInsuranceVerified={isInsuranceVerified}
-                userId={userId}
-                userName={userName}
-                avatarSrc={avatarSrc}
-            />
+            {/* Turo Trip dont have driver readiness */}
+            {!isTuroTrip && (
+                <DriverReadinessDialog
+                    tripId={tripId}
+                    isLicenceVerified={isLicenceVerified}
+                    isPhoneVerified={isPhoneVerified}
+                    isRentalAgreed={isRentalAgreed}
+                    isInsuranceVerified={isInsuranceVerified}
+                    userId={userId}
+                    userName={userName}
+                    avatarSrc={avatarSrc}
+                />
+            )}
             <div className='w-fit rounded bg-[#d1d1d1] px-2 py-1 text-xs md:px-5 lg:text-[14px] dark:bg-accent'>{tripStatus}</div>
         </div>
     );

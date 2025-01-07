@@ -65,10 +65,10 @@ export function convertToTimeZoneISO(datetime: string, zipCode: string) {
  * @param format - Desired format of the converted date. ex: 'yyyy-MM-DD'. or 'YYYY-MM-DDTHH:mm:ss'
  * @returns The converted date and time in local zipcode time zone format.
  */
-export function formatDateAndTime(date: string, zipCode: string, format = 'MMM DD, YYYY | h:mm A z'): string {
-    const endTimeUTC = moment.utc(date);
+export function formatDateAndTime(date: string | Date, zipCode: string, format = 'MMM DD, YYYY | h:mm A z'): string {
+    const timeUTC = moment.utc(date);
     const timeZone = getTimeZoneByZipcode(zipCode);
-    const timeInTimeZone = endTimeUTC.tz(timeZone);
+    const timeInTimeZone = timeUTC.tz(timeZone);
 
     return timeInTimeZone.format(format);
 }
@@ -87,6 +87,46 @@ export function formatTime(dateTimeString: string, zipCode: string) {
     const timeZone = getTimeZoneByZipcode(zipCode);
     const time = moment(dateTimeString).tz(timeZone).format('HH:mm:ss');
     return time;
+}
+
+/**
+ * Generates start and end dates for a given zip code and timezone.
+ * @param {string} zipCode - The zip code to get the timezone for.
+ * @param {number} startDateOffset - The number of months to offset the start date by.
+ * @param {number} endDateOffset - The number of months to offset the end date by.
+ * @returns {Object} - An object containing `startDate` and `endDate`.
+ */
+export function generateStartAndEndDates(zipCode: string, startDateOffset = 1, endDateOffset = 1) {
+    const timeZone = getTimeZoneByZipcode(zipCode);
+
+    if (!moment.tz.zone(timeZone)) {
+        console.error('Timezone not found:', timeZone);
+        return { startDate: '', endDate: '' };
+    }
+
+    // Start date: Beginning of the day in the timezone, adjusted by months offset
+    const startDate = moment.tz(timeZone).subtract(startDateOffset, 'months').startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    // End date: End of the day in the timezone, adjusted by months offset
+    const endDate = moment.tz(timeZone).add(endDateOffset, 'months').endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    return { startDate, endDate };
+}
+
+/**
+ * Converts a date string from YYYY-MM-DD format to a readable format like Dec 7, 2024.
+ * @param {string} dateStr - The date string in YYYY-MM-DD format.
+ * @returns {string} - The formatted date string (e.g., Dec 7, 2024).
+ */
+export function formatDateToReadable(dateStr: string): string {
+    const date = moment(dateStr, 'YYYY-MM-DD', true);
+
+    if (!date.isValid()) {
+        console.error('Invalid date string:', dateStr);
+        return '';
+    }
+
+    return date.format('MMM D, YYYY');
 }
 
 export function getFullAddress({ vehicleDetails, tripDetails }: { vehicleDetails?: any; tripDetails?: any }): string {
