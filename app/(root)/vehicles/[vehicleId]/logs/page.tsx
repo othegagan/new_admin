@@ -38,26 +38,24 @@ export default function UpdateLogsPage() {
                 title={vehicleConfigTabsContent.activity_logs.title}
                 description={vehicleConfigTabsContent.activity_logs.description}
             />
-            <div className='h-[calc(75dvh-200px)] overflow-y-auto'>
-                <Accordion type='single' collapsible className='max-w-6xl '>
-                    {vehicleLogs.map((log: any) => (
-                        <AccordionItem key={log.id} value={log.id.toString()}>
-                            <AccordionTrigger className='hover:no-underline'>
-                                <div className='flex flex-col space-y-1 text-left'>
-                                    <div className='font-semibold text-lg capitalize'>{log.message}</div>
-                                    <p className='mt-1 text-muted-foreground text-sm'>
-                                        By <span className='font-medium capitalize'>{log.userName || '-'}</span> on{' '}
-                                        <span className='mx-1 font-medium'>{format(log.updatedDate, 'PPP, h:mm a')}</span>
-                                    </p>
-                                </div>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <LogContent log={log} />
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
-            </div>
+            <Accordion type='single' collapsible className='max-w-6xl '>
+                {vehicleLogs.map((log: any) => (
+                    <AccordionItem key={log.id} value={log.id.toString()}>
+                        <AccordionTrigger className='hover:no-underline'>
+                            <div className='flex flex-col space-y-1 text-left'>
+                                <div className='font-semibold text-lg capitalize'>{log.message}</div>
+                                <p className='mt-1 text-muted-foreground text-sm'>
+                                    By <span className='font-medium capitalize'>{log.userName || '-'}</span> on{' '}
+                                    <span className='mx-1 font-medium'>{format(log.updatedDate, 'PPP, h:mm a')}</span>
+                                </p>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                            <LogContent log={log} />
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
         </div>
     );
 }
