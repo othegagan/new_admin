@@ -9,7 +9,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'w-full md:w-fit inline-flex items-center justify-center text-nowrap whitespace-nowrap rounded-md text-sm font-medium  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none rounded-full',
+    'w-full md:w-fit inline-flex items-center justify-center text-nowrap whitespace-nowrap rounded-md text-sm font-medium  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring  disabled:pointer-events-none rounded-full',
     {
         variants: {
             variant: {
@@ -71,15 +71,15 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         const renderSuffix = loading && suffix;
 
         // Adjust focus styles dynamically
-        const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-none focus:ring focus:ring-offset-2';
+        // const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-none focus:ring focus:ring-offset-2';
 
         const buttonContent = (
             <Comp
                 className={cn(
                     'group w-auto cursor-pointer select-none gap-2 transition-all duration-300 ease-linear active:scale-95',
                     isDisabled && 'cursor-not-allowed opacity-60',
-                    buttonVariants({ variant, size, shape, className }),
-                    focusStyles // Apply focus styles only if Comp is not 'a'
+                    buttonVariants({ variant, size, shape, className })
+                    // focusStyles // Apply focus styles only if Comp is not 'a'
                 )}
                 //@ts-ignore
                 ref={ref}

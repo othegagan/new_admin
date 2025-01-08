@@ -41,7 +41,7 @@ export function SplitButtonDropdown({ options, defaultOption, onSelect, isActive
             <Link
                 href={selectedOption.href}
                 className={cn(
-                    'inline-flex h-9 items-center justify-center rounded-r-none rounded-l-full pr-2 pl-4 font-medium text-sm duration-75',
+                    'inline-flex h-9 items-center justify-center rounded-r-none rounded-l-full pr-2 pl-4 font-medium text-sm duration-75 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
                     isActive ? 'text-foreground hover:bg-primary' : 'text-muted-foreground group-hover:bg-accent group-hover:text-primary'
                 )}>
                 {selectedOption.label}
@@ -53,7 +53,7 @@ export function SplitButtonDropdown({ options, defaultOption, onSelect, isActive
                         id='dropdown-trigger-button'
                         type='button'
                         className={cn(
-                            'h-9 rounded-r-full rounded-l-none pr-3 pl-2 font-medium text-sm shadow duration-75',
+                            'h-9 rounded-r-full rounded-l-none pr-3 pl-2 font-medium text-sm shadow duration-75 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
                             isActive
                                 ? 'text-foreground hover:bg-primary'
                                 : 'text-muted-foreground group-hover:bg-accent group-hover:text-primary group-hover:shadow-none'
