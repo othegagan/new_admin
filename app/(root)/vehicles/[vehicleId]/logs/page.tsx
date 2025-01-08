@@ -289,9 +289,14 @@ function LogContent({ log }: { log: any }) {
                     </div>
                 );
 
-            case '12HBTRCOM':
-            case '1HATRSTR':
+            case '5MAREREQ':
             case 'REAPP':
+            case '4HBTRSTR':
+            case '2HBTRSTR':
+            case '1HBTRSTR':
+            case '1HATRSTR':
+            case '12HBTRCOM':
+            case '1HBTRCOM':
                 return (
                     <div className='flex w-full flex-col gap-4 gap-y-2'>
                         <div className='flex items-center gap-2'>
