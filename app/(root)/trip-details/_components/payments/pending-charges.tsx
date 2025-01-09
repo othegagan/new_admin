@@ -53,6 +53,8 @@ function PendingChargesDialog({ pendingCharges, zipcode }: PendingChargesDialogP
         setOpen(false);
     }
 
+    if (pendingCharges.length === 0) return null;
+
     return (
         <>
             <button onClick={() => setOpen(true)} type='button' className='pl-5 text-blue-500'>
