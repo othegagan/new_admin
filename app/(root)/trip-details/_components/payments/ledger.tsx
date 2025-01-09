@@ -216,9 +216,9 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Description</TableHead>
-                                <TableHead className='text-center'>Amount</TableHead>
-                                <TableHead className='hidden text-center md:table-cell'>Tax</TableHead>
-                                <TableHead className='hidden text-center md:table-cell'>Total</TableHead>
+                                <TableHead className='text-left'>Amount</TableHead>
+                                <TableHead className='hidden text-left md:table-cell'>Tax</TableHead>
+                                <TableHead className='hidden text-left md:table-cell'>Total</TableHead>
                                 <TableHead className='hidden text-left md:table-cell'>Status</TableHead>
                             </TableRow>
                         </TableHeader>
