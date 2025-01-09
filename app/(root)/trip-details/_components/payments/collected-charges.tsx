@@ -74,7 +74,7 @@ function CollectedChargesDialog({ processedCharges, zipcode }: CollectedChargesD
                                 <div className='grid grid-cols-4 gap-5' key={i}>
                                     <div className='col-span-3'>
                                         {payment.amount >= 0 ? 'Collected' : 'Refunded'} rental charges
-                                        <div className='text-xs'>{collectedDate}</div>
+                                        <div className='text-muted-foreground text-xs'>{collectedDate}</div>
                                     </div>
                                     <div className='col-span-1 flex items-center justify-end'>${payment.amount.toFixed(2)}</div>
                                 </div>

@@ -138,7 +138,7 @@ export default function TripDetails() {
                                 className={cn('mt-4 pr-4 pl-0.5', customDelivery ? 'h-[calc(100dvh-25rem)]' : 'h-[calc(100dvh-19rem)]')}>
                                 <ChatInterface tripId={Number(tripId)} />
                             </TabsContent>
-                            <TabsContent value='payments' className='mt-4 pl-0.5'>
+                            <TabsContent value='payments' className='mt-4 pr-4 pl-0.5'>
                                 <TripPayments fullTripResponse={fullTripResponse} />
                             </TabsContent>
                             <TabsContent value='checklist' className='mt-4 pr-4 pl-0.5'>

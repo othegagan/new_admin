@@ -3,6 +3,7 @@
 import type { Trip } from '@/types';
 import CollectedCharges from './collected-charges';
 import Ledge from './ledger';
+import PendingCharges from './pending-charges';
 import { PriceList } from './price-list';
 
 interface TripPaymentsProps {
@@ -32,6 +33,8 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
             <PriceList pricelist={pricelist} isAirportDeliveryChoosen={isAirportDeliveryChoosen} />
 
             <CollectedCharges processedPayments={fullTripResponse.processedPayments} zipcode={trip.vehzipcode} />
+
+            <PendingCharges pendingPayments={fullTripResponse.pendingPayments} zipcode={trip.vehzipcode} />
 
             <div className='h-7' />
 
