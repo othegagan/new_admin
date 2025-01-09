@@ -107,6 +107,7 @@ export function parseTrips(rawTripsData: Trip[]) {
 }
 
 export function getCategory(statusCode: string, type: 'start' | 'end'): number {
+    if (['REREQ', 'RECANREQ'].includes(statusCode)) return -1;
     if (type === 'start') {
         if (['REAPP', 'REMODHLD'].includes(statusCode)) return 0;
         if (['TRSTR', 'TRMODHLD'].includes(statusCode)) return 1;

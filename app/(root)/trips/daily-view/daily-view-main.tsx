@@ -98,7 +98,7 @@ function DailyTripsSearch({ tripsData }: any) {
                 .filter(([, bookings]) => bookings.length > 0)
                 .map(([date, bookings]) => [
                     date,
-                    bookings.sort((a, b) => new Date(a.starttime).getTime() - new Date(b.starttime).getTime())
+                    bookings.sort((a, b) => new Date(a.actionDate).getTime() - new Date(b.actionDate).getTime())
                 ])
         );
     }, [filteredData]);
