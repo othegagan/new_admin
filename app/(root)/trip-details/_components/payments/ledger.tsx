@@ -209,7 +209,7 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
         <Accordion type='single' collapsible>
             <AccordionItem value='payment-ledger' className='border-0'>
                 <AccordionTrigger className='pb-0 font-semibold text-base tracking-wide hover:no-underline'>
-                    Payment Ledger
+                    <h4>Payment Ledger</h4>
                 </AccordionTrigger>
                 <AccordionContent className='pb-0'>
                     <Table>

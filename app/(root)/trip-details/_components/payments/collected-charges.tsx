@@ -11,7 +11,6 @@ interface CollectedChargesProps {
 
 interface CollectedChargesDialogProps {
     processedCharges: any[];
-    processedPaymentsSum: number;
     zipcode: string;
 }
 
@@ -36,14 +35,18 @@ export default function CollectedCharges({ processedPayments, zipcode }: Collect
     );
 
     return (
-        <div className='flex items-center justify-between'>
-            <div>Collected Charges</div>
-            <CollectedChargesDialog processedCharges={processedCharges} processedPaymentsSum={processedPaymentsSum} zipcode={zipcode} />
+        <div className='flex items-center justify-between pt-2 font-light'>
+            <div>
+                Collected Charges
+                <CollectedChargesDialog processedCharges={processedCharges} zipcode={zipcode} />
+            </div>
+
+            <div className='font-light'> ${processedPaymentsSum.toFixed(2)}</div>
         </div>
     );
 }
 
-function CollectedChargesDialog({ processedCharges, processedPaymentsSum, zipcode }: CollectedChargesDialogProps) {
+function CollectedChargesDialog({ processedCharges, zipcode }: CollectedChargesDialogProps) {
     const [open, setOpen] = useState(false);
 
     function close() {
@@ -52,11 +55,8 @@ function CollectedChargesDialog({ processedCharges, processedPaymentsSum, zipcod
 
     return (
         <>
-            <button
-                onClick={() => setOpen(true)}
-                type='button'
-                className='p-0 py-0 font-normal text-base text-foreground tracking-wide underline underline-offset-2'>
-                ${processedPaymentsSum.toFixed(2)}
+            <button onClick={() => setOpen(true)} type='button' className='pl-5 text-blue-500'>
+                View Collection History
             </button>
 
             <AdaptiveDialog isOpen={open} onClose={close} title='Collected Charges' size='md'>

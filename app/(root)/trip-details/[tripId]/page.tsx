@@ -136,7 +136,7 @@ export default function TripDetails() {
                             <TabsContent
                                 value='chat'
                                 className={cn('mt-4 pr-4 pl-0.5', customDelivery ? 'h-[calc(100dvh-25rem)]' : 'h-[calc(100dvh-19rem)]')}>
-                                {/* <ChatInterface tripId={Number(tripId)} /> */}
+                                <ChatInterface tripId={Number(tripId)} />
                             </TabsContent>
                             <TabsContent value='payments' className='mt-4 pl-0.5'>
                                 <TripPayments fullTripResponse={fullTripResponse} />
@@ -154,7 +154,7 @@ export default function TripDetails() {
                     <div className='hidden h-[calc(100dvh-8rem)] overflow-y-auto pt-4 lg:block'>
                         <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
                             <h5 className='pl-5'>Messages</h5>
-                            {/* <MainMessageComponent tripId={Number(tripId)} className='h-full lg:h-full' /> */}
+                            <MainMessageComponent tripId={Number(tripId)} className='h-full lg:h-full' />
                         </div>
                     </div>
                 </div>

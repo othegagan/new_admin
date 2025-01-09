@@ -66,12 +66,13 @@ export function PriceList({ pricelist, isAirportDeliveryChoosen }: { pricelist: 
             {pricelist?.refundAmount > 0 && <PriceItem label='Refund ' value={pricelist?.refundAmount} sign='-' />}
             <hr />
             {/* Total Rental Charge */}
-            <div className='flex items-center justify-between font-bold'>
+            <div className='flex items-center justify-between font-light '>
                 <div>Total Rental Charge</div>
-                <div className='font-medium tracking-wide'>
+                <div className='font-bold tracking-wide'>
                     {pricelist?.tripTaxAmount < 0 ? '-' : ''} ${roundToTwoDecimalPlaces(pricelist?.tripTaxAmount)}
                 </div>
             </div>
+            <hr />
         </div>
     );
 }
@@ -96,11 +97,11 @@ function PriceItem({
 
     return (
         <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-1'>
+            <div className='flex items-center gap-1 font-light'>
                 {label}
                 {children}
             </div>
-            <div className='font-normal tracking-wide'>{formattedValue}</div>
+            <div className='font-light tracking-wide'>{formattedValue}</div>
         </div>
     );
 }
