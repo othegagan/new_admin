@@ -61,6 +61,7 @@ export default function DriverReadinessDialog({
                             {tripId && <div>Trip: #{tripId}</div>}
                             <div className='flex items-center gap-4'>
                                 <Link
+                                    prefetch={false}
                                     href={`${PAGE_ROUTES.GUESTS}/${userId}`}
                                     className='flex items-center gap-4 hover:underline hover:underline-offset-2'>
                                     <div className='relative size-9 overflow-hidden rounded-full border md:size-10'>

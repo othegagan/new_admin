@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { PAGE_ROUTES } from '@/constants/routes';
 import { useAllNotifications } from '@/hooks/useNotifications';
 import Link from 'next/link';
 
@@ -11,7 +12,7 @@ export function MessagesNotificationButton() {
     const countOfUnreadNotifications = messageNotificationsData.filter((notification: any) => !notification.isViewed).length;
 
     return (
-        <Link href='/messages'>
+        <Link href={PAGE_ROUTES.MESSAGES} prefetch={false}>
             <Button variant='ghost' className='relative px-2'>
                 <svg
                     className='size-6 text-muted-foreground'

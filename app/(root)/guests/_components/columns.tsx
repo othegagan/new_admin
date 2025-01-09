@@ -43,7 +43,7 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
                         <AvatarImage src={userImage || undefined} alt={`${userId}`} />
                         <AvatarFallback>{fullName.toString().slice(0, 1)}</AvatarFallback>
                     </Avatar>
-                    <Link href={`${PAGE_ROUTES.GUESTS}/${userId}`} className='hover:underline'>
+                    <Link href={`${PAGE_ROUTES.GUESTS}/${userId}`} prefetch={false} className='hover:underline'>
                         {fullName}
                     </Link>
                 </div>
@@ -134,7 +134,7 @@ export const guestsColumns: ColumnDef<GuestBasicInfo>[] = [
             if (upcomingTrips.length === 0) return <div className='flex-center gap-2'>-</div>;
 
             return (
-                <Link href={`${PAGE_ROUTES.TRIPS}/${upcomingTrips[0]}`} className='flex-center gap-2 hover:underline'>
+                <Link href={`${PAGE_ROUTES.TRIPS}/${upcomingTrips[0]}`} prefetch={false} className='flex-center gap-2 hover:underline'>
                     {upcomingTrips[0]}
                 </Link>
             );
@@ -193,7 +193,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
             const vehicleName = `${row.original.make} ${row.original.model} ${row.original.year}`;
             return (
                 <div className='flex-start gap-4 text-nowrap'>
-                    <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} className='text-nowrap font-semibold underline'>
+                    <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} prefetch={false} className='text-nowrap font-semibold underline'>
                         Trip: {tripId}
                     </Link>
                     <span className='text-nowrap'>{vehicleName}</span>

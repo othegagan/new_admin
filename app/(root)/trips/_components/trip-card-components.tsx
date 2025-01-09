@@ -14,16 +14,21 @@ interface UserInfoProps {
 export function UserInfo({ avatarSrc, name, className = '', userId, tripId }: UserInfoProps) {
     return (
         <div className={`flex items-center gap-3 ${className}`}>
-            <Link href={`${PAGE_ROUTES.GUESTS}/${userId}`} className='relative size-9 overflow-hidden rounded-full border md:size-10'>
+            <Link
+                href={`${PAGE_ROUTES.GUESTS}/${userId}`}
+                prefetch={false}
+                className='relative size-9 overflow-hidden rounded-full border md:size-10'>
                 <img src={avatarSrc} alt={name} className='h-full w-full object-cover object-center' />
             </Link>
             <div className='flex flex-col gap-1'>
                 <Link
+                    prefetch={false}
                     href={`${PAGE_ROUTES.GUESTS}/${userId}`}
                     className='max-w-20 truncate font-light hover:underline hover:underline-offset-2 md:max-w-fit md:font-medium md:text-base'>
                     {name}
                 </Link>
                 <Link
+                    prefetch={false}
                     href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
                     className='hidden font-light hover:underline hover:underline-offset-2 md:block'>
                     (Trip #{tripId})

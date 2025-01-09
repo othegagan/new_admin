@@ -108,7 +108,7 @@ export default function page() {
 
                         <div className='mt-2 text-center text-sm'>
                             Already have an account?{' '}
-                            <Link href={AUTH_ROUTES.SIGN_IN} className='underline'>
+                            <Link href={AUTH_ROUTES.SIGN_IN} prefetch={false} className='underline'>
                                 Sign In
                             </Link>
                         </div>

@@ -68,5 +68,11 @@ export default function Logo({ className = '', herf = '' }: LogoProps) {
         </div>
     );
 
-    return herf ? <Link href={herf}>{logoContent}</Link> : logoContent;
+    return herf ? (
+        <Link href={herf} prefetch={false}>
+            {logoContent}
+        </Link>
+    ) : (
+        logoContent
+    );
 }

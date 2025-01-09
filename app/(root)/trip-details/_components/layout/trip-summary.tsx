@@ -59,6 +59,7 @@ export default function TripSummary({ trip }: { trip: Trip }) {
                     <div className='flex flex-col md:flex-row '>
                         <div className='flex w-fit flex-col'>
                             <Link
+                                prefetch={false}
                                 href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR}`}
                                 className='font-semibold text-lg underline hover:underline-offset-2 md:max-w-sm md:text-xl'>
                                 {carName}

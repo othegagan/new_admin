@@ -26,7 +26,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
                     <DropdownMenuContent side='bottom' align='start'>
                         {links.map(({ title, href, isActive, disabled }) => (
                             <DropdownMenuItem key={`${title}-${href}`} asChild>
-                                <Link href={href} className={!isActive ? 'text-muted-foreground' : ''}>
+                                <Link href={href} prefetch={false} className={!isActive ? 'text-muted-foreground' : ''}>
                                     {title}
                                 </Link>
                             </DropdownMenuItem>
@@ -38,6 +38,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
             <nav className={cn('hidden items-center space-x-4 md:flex lg:space-x-6', className)} {...props}>
                 {links.map(({ title, href, isActive, disabled }) => (
                     <Link
+                        prefetch={false}
                         key={`${title}-${href}`}
                         href={href}
                         className={`font-medium text-sm transition-colors hover:text-primary ${isActive ? '' : 'text-muted-foreground'}`}>

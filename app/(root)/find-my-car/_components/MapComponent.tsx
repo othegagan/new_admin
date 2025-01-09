@@ -145,6 +145,7 @@ export default function MapComponent({
                         }}
                         className='rounded-lg '>
                         <Link
+                            prefetch={false}
                             href={`${PAGE_ROUTES.VEHICLES}/${carPopInfo?.id}${PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS}`}
                             className='flex flex-col border-0 text-black outline-none focus:border-0'>
                             <img

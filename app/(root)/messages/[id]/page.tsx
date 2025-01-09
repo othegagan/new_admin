@@ -67,6 +67,7 @@ function ChatHeader({ tripId }: { tripId: number }) {
 
                 <Link
                     href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
+                    prefetch={false}
                     className=' ml-auto flex items-center gap-2 text-sm underline underline-offset-2 md:pr-4'>
                     <span>View Trip</span>
                 </Link>

@@ -39,6 +39,7 @@ export function SplitButtonDropdown({ options, defaultOption, onSelect, isActive
     return (
         <div className={cn('group flex items-center text-nowrap', isActive && 'rounded-full bg-primary/80')}>
             <Link
+                prefetch={false}
                 href={selectedOption.href}
                 className={cn(
                     'inline-flex h-9 items-center justify-center rounded-r-none rounded-l-full pr-2 pl-4 font-medium text-sm duration-75 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
@@ -64,7 +65,7 @@ export function SplitButtonDropdown({ options, defaultOption, onSelect, isActive
                 <DropdownMenuContent align='end'>
                     {options.map((option, index) => (
                         <DropdownMenuItem key={index} asChild>
-                            <Link href={option.href} onClick={() => handleSelect(option)}>
+                            <Link href={option.href} prefetch={false} onClick={() => handleSelect(option)}>
                                 {option.label}
                             </Link>
                         </DropdownMenuItem>
