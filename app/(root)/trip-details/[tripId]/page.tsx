@@ -15,8 +15,8 @@ import { TripActions } from '../_components/layout/trip-actions';
 import TripChecklist from '../_components/layout/trip-checklist';
 import TripDriverDetails from '../_components/layout/trip-driver-details';
 import TripLogs from '../_components/layout/trip-logs';
-import TripPayments from '../_components/layout/trip-payments';
 import TripSummary from '../_components/layout/trip-summary';
+import TripPayments from '../_components/payments/trip-payments';
 
 export default function TripDetails() {
     const params = useParams<{ tripId: string }>();
@@ -32,6 +32,7 @@ export default function TripDetails() {
     if (!response?.success) return <div>Error: {response?.message}</div>;
 
     //@ts-ignore
+    const fullTripResponse = response.data;
     const trip: Trip = response.data.activetripresponse[0];
     const checklist = response.data.checkLists ? response.data.checkLists[0] : [];
     const isTuroTrip = checkForTuroTrip(trip.channelName);
@@ -129,16 +130,16 @@ export default function TripDetails() {
                                     Logs
                                 </TabsTrigger>
                             </TabsList>
-                            <TabsContent value='summary' className='mt-4 pr-4 pl-0.5'>
+                            <TabsContent value='summary' className='mt-4 pl-0.5'>
                                 <TripSummary trip={trip} />
                             </TabsContent>
                             <TabsContent
                                 value='chat'
                                 className={cn('mt-4 pr-4 pl-0.5', customDelivery ? 'h-[calc(100dvh-25rem)]' : 'h-[calc(100dvh-19rem)]')}>
-                                <ChatInterface tripId={Number(tripId)} />
+                                {/* <ChatInterface tripId={Number(tripId)} /> */}
                             </TabsContent>
-                            <TabsContent value='payments' className='mt-4 pr-4 pl-0.5'>
-                                <TripPayments trip={trip} />
+                            <TabsContent value='payments' className='mt-4 pl-0.5'>
+                                <TripPayments fullTripResponse={fullTripResponse} />
                             </TabsContent>
                             <TabsContent value='checklist' className='mt-4 pr-4 pl-0.5'>
                                 <TripChecklist trip={trip} checklist={checklist} />
@@ -153,7 +154,7 @@ export default function TripDetails() {
                     <div className='hidden h-[calc(100dvh-8rem)] overflow-y-auto pt-4 lg:block'>
                         <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
                             <h5 className='pl-5'>Messages</h5>
-                            <MainMessageComponent tripId={Number(tripId)} className='h-full lg:h-full' />
+                            {/* <MainMessageComponent tripId={Number(tripId)} className='h-full lg:h-full' /> */}
                         </div>
                     </div>
                 </div>
@@ -180,11 +181,12 @@ interface DeliveryLocation {
 }
 
 function getDeliveryLocation(deliveryLocations: DeliveryLocation[]) {
-    if (deliveryLocations) return '';
+    if (!deliveryLocations || deliveryLocations.length === 0) {
+        return '-'; // Return '-' if deliveryLocations is empty or not provided
+    }
 
-    const location = deliveryLocations?.[0];
-    //@ts-ignore
-    const addressParts = [location?.address1, location?.cityName, location?.state, location?.country].filter(Boolean);
+    const location = deliveryLocations[0];
+    const addressParts = [location?.address1, location?.cityName, location?.state, location?.country].filter(Boolean); // Filter out any empty or undefined values
 
-    return addressParts.join(', ') || '-';
+    return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
 }

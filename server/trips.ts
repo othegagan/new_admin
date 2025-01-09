@@ -32,6 +32,7 @@ export async function getReviewRequiredTrips() {
 }
 
 export async function getTripDetails(bookingId: number) {
+    const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
     const payload = {
         fromValue: 'tripid',
@@ -39,6 +40,15 @@ export async function getTripDetails(bookingId: number) {
     };
 
     const response = await api.post<any>(url, payload);
+
+    if (response.success) {
+        // check if the user is the host of the trip
+        const hostIsInResponse = response.data.activetripresponse[0].hostid;
+        if (hostIsInResponse !== session?.iduser) {
+            throw new Error('Unauthorized access..!');
+        }
+    }
+
     return response;
 }
 

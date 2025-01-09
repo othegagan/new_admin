@@ -173,12 +173,12 @@ interface CardDetail {
     tripId: number;
     oldMethodIdToken: string;
     newMethodIdToken: string;
-    createdDate: string; // Use Date if you plan to parse it
-    updatedDate: string | null; // Use Date if you plan to parse it
+    createdDate: string;
+    updatedDate: string | null;
     isActive: boolean;
     cardType: 'credit' | 'debit' | 'prepaid' | 'other'; // Extend as needed
-    last4Digit: string; // Can be a number if you prefer, but string is safer for leading zeros
-    cardBrand: string; // Could restrict to known brands like 'visa', 'mastercard', etc.
+    last4Digit: string;
+    cardBrand: string;
 }
 
 interface Pricelist {
