@@ -1,5 +1,6 @@
 'use client';
 
+import { PAGE_ROUTES } from '@/constants/routes';
 import { currencyFormatter, formatDateAndTime } from '@/lib/utils';
 import '@/styles/fullcalendar.css';
 import type { EventSourceInput } from '@fullcalendar/core/index.js';
@@ -8,6 +9,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { addDays, isSameDay, isWithinInterval, parseISO } from 'date-fns';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MdBlock } from 'react-icons/md';
 
@@ -30,6 +32,7 @@ export default function CalendarComponent({
     vehiclePricePerDay,
     zipcode
 }: CalendarComponentProps) {
+    const router = useRouter();
     const [formattedTrips, setFormattedTrips] = useState<any[]>([]);
 
     useEffect(() => {
@@ -94,9 +97,10 @@ export default function CalendarComponent({
         );
     };
 
-    // const handleEventClick = (data: { event: { id: string } }) => {
-    //     // console.log('Event clicked:', data.event.id);
-    // };
+    const handleEventClick = (data: { event: { id: string } }) => {
+        const tripId = data.event.id;
+        router.push(`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`);
+    };
 
     return (
         <>
@@ -107,7 +111,7 @@ export default function CalendarComponent({
                     initialView='dayGridMonth'
                     initialDate={currentMonth}
                     events={[...formattedTrips] as EventSourceInput}
-                    // eventClick={handleEventClick}
+                    eventClick={handleEventClick}
                     headerToolbar={false}
                     eventContent={renderEventContent}
                     dayCellContent={renderDayCellContent}
