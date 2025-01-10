@@ -42,6 +42,9 @@ export async function getTripDetails(bookingId: number) {
     const response = await api.post<any>(url, payload);
 
     if (response.success) {
+        if (response.data.activetripresponse.length === 0) {
+            throw new Error(response.message);
+        }
         // check if the user is the host of the trip
         const hostIsInResponse = response.data.activetripresponse[0].hostid;
         if (hostIsInResponse !== session?.iduser) {
