@@ -26,7 +26,7 @@ export function roundToTwoDecimalPlaces(num: number | string): string {
     }
 }
 
-export function currencyFormatter({ value, roundTo = 2 }: { value: number | string; roundTo?: number }): string {
+export function currencyFormatter(value: number | string, roundTo = 2): string {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',

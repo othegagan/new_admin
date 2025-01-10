@@ -234,7 +234,7 @@ export const driverBookingHistoryColumns: ColumnDef<DriverBookingHistory>[] = [
         },
         enableSorting: true,
         cell: ({ cell }: { cell: any }) => {
-            return <div className='flex-center'>{currencyFormatter({ value: cell?.getValue(), roundTo: 2 })}</div>;
+            return <div className='flex-center'>{currencyFormatter(cell?.getValue())}</div>;
         }
     }
 

@@ -35,13 +35,13 @@ export default function CollectedCharges({ processedPayments, zipcode }: Collect
     );
 
     return (
-        <div className='flex items-center justify-between pt-2 font-light'>
+        <div className='flex items-center justify-between pt-2'>
             <div>
                 Collected Charges
                 <CollectedChargesDialog processedCharges={processedCharges} zipcode={zipcode} />
             </div>
 
-            <div className='font-light'> ${processedPaymentsSum.toFixed(2)}</div>
+            <div> ${processedPaymentsSum.toFixed(2)}</div>
         </div>
     );
 }

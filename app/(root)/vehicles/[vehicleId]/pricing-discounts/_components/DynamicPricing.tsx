@@ -160,7 +160,7 @@ export default function DynamicPricingComponent() {
                             {formatDateAndTime(item.fromDate, zipcode, 'MMM DD, YYYY')} -{' '}
                             {formatDateAndTime(item.toDate, zipcode, 'MMM DD, YYYY')}
                         </div>
-                        <div className='font-semibold'>{currencyFormatter({ value: item.price, roundTo: 0 })}/Day</div>
+                        <div className='font-semibold'>{currencyFormatter(item.price, 0)}/Day</div>
                         <Button variant='secondary' size='icon' className='h-auto w-auto p-1.5' onClick={() => handleDelete(item.id)}>
                             <Trash2 className='size-4' />
                         </Button>

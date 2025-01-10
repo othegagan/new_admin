@@ -95,7 +95,7 @@ function DriverPersonalInfo({ driver }: { driver: any }) {
                 <Card className='w-full md:w-auto'>
                     <CardContent className='p-4'>
                         <h4 className='font-semibold text-lg'>Revenue Generated</h4>
-                        <p className='font-bold text-3xl'>{currencyFormatter({ value: driver?.totalEarnings, roundTo: 2 })}</p>
+                        <p className='font-bold text-3xl'>{currencyFormatter(driver?.totalEarnings)}</p>
                     </CardContent>
                 </Card>
             </div>

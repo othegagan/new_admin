@@ -91,7 +91,7 @@ export default function CalendarComponent({
                     {dayInfo.dayNumberText}
                 </div>
                 <div className='bg-muted pl-2 text-center text-[13px] text-neutral-700 dark:text-neutral-200'>
-                    {currencyFormatter({ value: price, roundTo: 0 })}
+                    {currencyFormatter(price, 0)}
                 </div>
             </div>
         );
