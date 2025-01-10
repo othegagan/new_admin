@@ -57,7 +57,8 @@ function DailyTripsSearch({ tripsData }: any) {
     }, [tripsData, searchTerm, channelName, tripStatus]);
 
     const dailyViewObjects = useMemo(() => {
-        const rawBookingData = filteredData || [];
+        // Filter out trips which are in requested and cancellation required
+        const rawBookingData = (filteredData || []).filter((trip: Trip) => !['REREQ', 'RECANREQ'].includes(trip.statusCode));
 
         const dailyViewObjects: Record<string, any[]> = {};
         const currentDate = new Date(startDate);
