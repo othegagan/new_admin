@@ -31,6 +31,8 @@ export default function TripDetails() {
 
     if (!response?.success) return <div>Error: {response?.message}</div>;
 
+    if (response.data.activetripresponse.length === 0) return <div>{response.message}</div>;
+
     //@ts-ignore
     const fullTripResponse = response.data;
     const trip: Trip = response.data.activetripresponse[0];
