@@ -145,3 +145,10 @@ export async function swapVehicle(payload: any) {
     const response = await api.post<any>(url, payload);
     return response;
 }
+
+export async function refundCharges(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/refundFromLedger`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}

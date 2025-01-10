@@ -35,13 +35,13 @@ export default function PendingCharges({ pendingPayments, zipcode }: PendingChar
     );
 
     return (
-        <div className='flex items-center justify-between pt-2 font-light'>
+        <div className='flex items-center justify-between pt-2 '>
             <div>
                 Pending Charges
                 <PendingChargesDialog pendingCharges={pendingCharges} zipcode={zipcode} />
             </div>
 
-            <div className='font-light'> ${pendingPaymentsSum.toFixed(2)}</div>
+            <div> ${pendingPaymentsSum.toFixed(2)}</div>
         </div>
     );
 }
@@ -61,27 +61,35 @@ function PendingChargesDialog({ pendingCharges, zipcode }: PendingChargesDialogP
                 View Schedule
             </button>
 
-            <AdaptiveDialog isOpen={open} onClose={close} title='Pending Charges' size='md'>
+            <AdaptiveDialog
+                isOpen={open}
+                onClose={close}
+                title='Payment Schedule'
+                size='md'
+                description='A breakdown of the upcoming payments, including amounts and due dates.'>
                 <AdaptiveBody>
-                    <div className='grid gap-4'>
-                        {pendingCharges.map((payment: { amount: number; paymentdate: string | Date }, i: Key | null | undefined) => {
-                            // Skip payments with amounts close to 0
-                            if (payment.amount < 0.01 && payment.amount > -0.01) {
-                                return null;
-                            }
+                    <div className='grid gap-3'>
+                        <div className='grid grid-cols-4 gap-5 rounded-t bg-muted px-4 py-2 font-semibold'>
+                            <div className='col-span-3'>Due Date</div>
+                            <div className='col-span-1 flex items-center '>Amount</div>
+                        </div>
+                        <div>
+                            {pendingCharges.map((payment: { amount: number; paymentdate: string | Date }, i: Key | null | undefined) => {
+                                // Skip payments with amounts close to 0
+                                if (payment.amount < 0.01 && payment.amount > -0.01) {
+                                    return null;
+                                }
 
-                            const collectedDate = formatDateAndTime(payment.paymentdate, zipcode);
+                                const collectedDate = formatDateAndTime(payment.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
 
-                            return (
-                                <div className='grid grid-cols-4 gap-5' key={i}>
-                                    <div className='col-span-3'>
-                                        To be collected in future
-                                        <div className='text-muted-foreground text-xs'>{collectedDate}</div>
+                                return (
+                                    <div className='grid grid-cols-4 gap-5 py-1' key={i}>
+                                        <div className='col-span-3'>{collectedDate}</div>
+                                        <div className='col-span-1 flex items-center font-semibold '>${payment.amount.toFixed(2)}</div>
                                     </div>
-                                    <div className='col-span-1 flex items-center justify-end'>${payment.amount.toFixed(2)}</div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
                 </AdaptiveBody>
             </AdaptiveDialog>

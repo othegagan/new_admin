@@ -3,10 +3,10 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { formatDateAndTime } from '@/lib/utils';
+import { currencyFormatter, formatDateAndTime } from '@/lib/utils';
+import type { RentalCharge, TripChargeLedgerList } from '@/types';
 import { format } from 'date-fns';
 import { ChevronDown } from 'lucide-react';
-import type { Key } from 'react';
 
 interface LedgeProps {
     fullTripResponse: any;
@@ -36,30 +36,30 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
         return collectionStatusList.find((status: any) => status.id === statusId)?.statusName;
     }
 
-    function renderPreTripLedgerRows(ledgerList: any) {
-        return ledgerList.map((log: any, index: Key | null | undefined) => {
-            if (log.chargeAmount === 0.0) return null;
+    function renderPreTripLedgerRows(tripChargeLedgerList: TripChargeLedgerList[]) {
+        return tripChargeLedgerList.map((row: TripChargeLedgerList) => {
+            if (row.chargeAmount === 0.0) return null;
 
-            const createdDateFormatted = formatDateAndTime(log?.createdDate, zipcode, 'MMM DD, YYYY, h:mm A');
+            const createdDateFormatted = formatDateAndTime(row?.createdDate, zipcode, 'MMM DD, YYYY, h:mm A');
 
-            const sign = log.isDebt ? ' ' : '-';
+            const sign = row.isDebt ? ' ' : '-';
 
-            const amount = `${sign} $${log?.chargeAmount?.toFixed(2)}`;
+            const amount = `${sign} $${row?.chargeAmount?.toFixed(2)}`;
             const concessionAmount = '0.00';
             const registrationAmount = '0.00';
             const surChargeAmount = '0.00';
-            const taxAmount = `${sign} $${log?.chargeTax?.toFixed(2)}`;
-            const totalAmount = `${sign} $${log?.chargeTotal?.toFixed(2)}`;
+            const taxAmount = `${sign} $${row?.chargeTax?.toFixed(2)}`;
+            const totalAmount = `${sign} $${row?.chargeTotal?.toFixed(2)}`;
 
-            const isPastDeadline = log?.collectionStatusId === 3 && log?.collectionDeadLine > log?.createdDate;
-            const date = isPastDeadline ? log?.collectionDeadLine : log?.createdDate;
+            const isPastDeadline = row?.collectionStatusId === 3 && row?.collectionDeadLine > row?.createdDate;
+            const date = isPastDeadline ? row?.collectionDeadLine : row?.createdDate;
             const statusDate = formatDateAndTime(date, zipcode, 'MMM DD, YYYY, h:mm A');
 
             return (
-                <TableRow key={index}>
+                <TableRow key={row.id}>
                     <TableCell className='capitalize'>
                         <div>
-                            {log.typeDescription}
+                            {row.typeDescription}
                             <br />
                             <span className='text-muted-foreground text-xs '>
                                 <span className='hidden md:inline-block'>Created on</span> {createdDateFormatted}
@@ -100,7 +100,7 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
                                 </PopoverContent>
                             </Popover>
                             <div className=' md:hidden'>
-                                <span>{getCollectionStatus(log?.collectionStatusId)}</span>
+                                <span>{getCollectionStatus(row?.collectionStatusId)}</span>
                                 <br />
                                 <span className='text-muted-foreground text-xs'>{statusDate}</span>
                             </div>
@@ -109,7 +109,7 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
                     <TableCell className='hidden text-left md:table-cell'>{taxAmount}</TableCell>
                     <TableCell className='hidden text-left md:table-cell'>{totalAmount}</TableCell>
                     <TableCell className='hidden text-left md:table-cell'>
-                        <span>{getCollectionStatus(log?.collectionStatusId)}</span>
+                        <span>{getCollectionStatus(row?.collectionStatusId)}</span>
                         <br />
                         <span className='text-muted-foreground text-xs'>{statusDate}</span>
                     </TableCell>
@@ -118,32 +118,33 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
         });
     }
 
-    function renderRentalTripLedgerRows(ledgerList: any) {
-        return ledgerList.map((log: any, index: Key | null | undefined) => {
-            if (log.chargeAmount === 0.0) return null;
+    function renderRentalTripLedgerRows(rentalCharges: RentalCharge[]) {
+        return rentalCharges.map((row: RentalCharge) => {
+            if (row.chargeAmount === 0.0) return null;
 
-            const createdDateFormatted = log.isDiscount
-                ? formatDateAndTime(log?.createdDate, zipcode, 'MMM DD, YYYY, h:mm A')
-                : format(log?.createdDate, 'PP, h:mm a');
+            const createdDateFormatted = row.isDiscount
+                ? formatDateAndTime(row?.createdDate, zipcode, 'MMM DD, YYYY, h:mm A')
+                : format(row?.createdDate, 'PP, h:mm a');
 
-            const sign = log.isDebt ? ' ' : '-';
-            const formattedDate = formatDateAndTime(log?.rentalDate, zipcode, 'MMM DD');
-            const description = log?.label?.split('-')[3];
+            const sign = row.isDebt ? ' ' : '-';
+            const formattedDate = formatDateAndTime(row?.rentalDate, zipcode, 'MMM DD');
+            const description = row?.label?.replace(/^\d{4}-\d{2}-\d{2}-/, '').replace(/-/g, ' ');
 
-            const amount = `${sign} $${log?.chargeTotal?.toFixed(2)}`;
-            const dayCost = `$${log?.chargeAmount?.toFixed(2)}`;
-            const concessionAmount = `$${log?.concessionFee?.toFixed(2)}`;
-            const registrationAmount = `$${log?.registrationRecoveryFee?.toFixed(2)}`;
-            const surChargeAmount = `$${log?.stateSurcharge?.toFixed(2)}`;
-            const taxAmount = ` $${log?.chargeTax?.toFixed(2)}`;
-            const totalAmount = `${sign} $${log?.total?.toFixed(2)}`;
+            const amount = `${sign} ${currencyFormatter(row?.chargeTotal)}`;
+            const dayCost = `${currencyFormatter(row?.chargeAmount)}`;
+            const discount = `- ${currencyFormatter(row?.chargesDiscount - row.chargesDiscountDisqualifier)}`;
+            const concession = `${currencyFormatter(row?.concessionFee)}`;
+            const registrationFee = `${currencyFormatter(row?.registrationRecoveryFee)}`;
+            const surCharge = `${currencyFormatter(row?.stateSurcharge - row.stateSurchargeDiscount + row?.stateSurchargeDiscountDisqualifier)}`;
+            const tax = ` ${currencyFormatter(row?.chargeTax - row?.taxDiscount + row?.taxDiscountDisqualifier)}`;
+            const total = `${sign} ${currencyFormatter(row?.total)}`;
 
-            const isPastDeadline = log?.collectionStatusId === 3 && log?.collectionDeadLine > log?.createdDate;
-            const date = isPastDeadline ? log?.collectionDeadLine : log?.createdDate;
+            const isPastDeadline = row?.collectionStatusId === 3 && row?.collectionDeadLine > row?.createdDate;
+            const date = isPastDeadline ? row?.collectionDeadLine : row?.createdDate;
             const statusDate = formatDateAndTime(date, zipcode, 'MMM DD, YYYY, h:mm A');
 
             return (
-                <TableRow key={index}>
+                <TableRow key={row.id}>
                     <TableCell className='capitalize'>
                         <div>
                             {formattedDate} - {description}
@@ -158,7 +159,7 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
                             <Popover>
                                 <PopoverTrigger className='flex-start gap-2'>
                                     <span className='hidden md:inline-block'> {amount}</span>
-                                    <span className='md:hidden'>{totalAmount}</span>
+                                    <span className='md:hidden'>{total}</span>
                                     <ChevronDown className='size-3' />
                                 </PopoverTrigger>
                                 <PopoverContent className='max-w-44'>
@@ -168,35 +169,39 @@ export default function Ledge({ fullTripResponse }: LedgeProps) {
                                             <span className='text-left text-xs'>{dayCost}</span>
                                         </div>
                                         <div className='flex-between gap-2'>
+                                            <span className='text-xs'>Discount</span>
+                                            <span className='text-left text-xs'>{discount}</span>
+                                        </div>
+                                        <div className='flex-between gap-2'>
                                             <span className='text-xs'>Concession</span>
-                                            <span className='text-left text-xs'>{concessionAmount}</span>
+                                            <span className='text-left text-xs'>{concession}</span>
                                         </div>
                                         <div className='flex-between gap-2'>
                                             <span className='text-xs'>Registration</span>
-                                            <span className='text-left text-xs'>{registrationAmount}</span>
+                                            <span className='text-left text-xs'>{registrationFee}</span>
                                         </div>
                                         <div className='flex-between gap-2'>
                                             <span className='text-xs'>Surcharge</span>
-                                            <span className='text-left text-xs'>{surChargeAmount}</span>
+                                            <span className='text-left text-xs'>{surCharge}</span>
                                         </div>
                                         <div className='flex-between gap-2 md:hidden'>
                                             <span className='text-xs'>Tax</span>
-                                            <span className='text-left text-xs'>{taxAmount}</span>
+                                            <span className='text-left text-xs'>{tax}</span>
                                         </div>
                                     </div>
                                 </PopoverContent>
                             </Popover>
                             <div className=' md:hidden'>
-                                <span>{getCollectionStatus(log?.collectionStatusId)}</span>
+                                <span>{getCollectionStatus(row?.collectionStatusId)}</span>
                                 <br />
                                 <span className='text-muted-foreground text-xs'>{statusDate}</span>
                             </div>
                         </div>
                     </TableCell>
-                    <TableCell className='hidden text-left md:table-cell'>{taxAmount}</TableCell>
-                    <TableCell className='hidden text-left md:table-cell'>{totalAmount}</TableCell>
+                    <TableCell className='hidden text-left md:table-cell'>{tax}</TableCell>
+                    <TableCell className='hidden text-left md:table-cell'>{total}</TableCell>
                     <TableCell className='hidden text-left md:table-cell'>
-                        <span>{getCollectionStatus(log?.collectionStatusId)}</span>
+                        <span>{getCollectionStatus(row?.collectionStatusId)}</span>
                         <br />
                         <span className='text-muted-foreground text-xs'>{statusDate}</span>
                     </TableCell>

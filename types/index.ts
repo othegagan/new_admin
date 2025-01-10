@@ -352,3 +352,65 @@ export interface TelematicsData {
     hardTurningCount: number;
     vehicleID: number;
 }
+
+export interface CollectionStatus {
+    id: number;
+    statusName: string;
+}
+
+export interface TripChargeLedgerList {
+    id: number;
+    typeCode: string;
+    typeDescription: string;
+    chargeAmount: number;
+    chargeTax: number;
+    chargeTotal: number;
+    collectionDeadLine: string;
+    collectionStatusId: number;
+    isPreTripCharge: boolean;
+    isDebt: boolean;
+    isDiscount: boolean;
+    createdDate: string;
+    bookingId: number;
+    userId: number;
+    hostId: number;
+    collectedDate: any;
+    chargesId: any;
+    code: string;
+    collectionAllowed: boolean;
+}
+
+export interface RentalCharge {
+    isCardChange: boolean;
+    id: number;
+    chargeAmount: number;
+    chargeTax: number;
+    chargeTotal: number;
+    collectionDeadLine: string;
+    rentalDate: string;
+    collectionStatusId: number;
+    isDebt: boolean;
+    toBeConsidered: boolean;
+    isDiscount: boolean;
+    createdDate: string;
+    chargesId: any;
+    bookingId: number;
+    userId: number;
+    hostId: number;
+    total: number;
+    registrationRecoveryFee: number;
+    concessionFee: number;
+    stateSurcharge: number;
+    collectedDate: any;
+    code: string;
+    label: string;
+    totalDiscount: number;
+    taxDiscountDisqualifier: number;
+    taxDiscount: number;
+    stateSurchargeDiscountDisqualifier: number;
+    stateSurchargeDiscount: number;
+    chargesDiscountDisqualifier: number;
+    chargesDiscount: number;
+    collectionAllowed: boolean;
+    isRentalChargesRefund: boolean;
+}

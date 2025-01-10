@@ -52,7 +52,7 @@ export function PriceList({ pricelist, isAirportDeliveryChoosen }: { pricelist: 
             {/* Discount */}
             {pricelist?.numberOfDaysDiscount > 0 && pricelist?.discountAmount > 0 && (
                 <PriceItem
-                    label={`Discount  ${roundToTwoDecimalPlaces(pricelist?.discountPercentage)} %`}
+                    label={`Discount (${pricelist?.numberOfDaysDiscount} Days - ${roundToTwoDecimalPlaces(pricelist?.discountPercentage)} %) `}
                     value={pricelist?.discountAmount}
                 />
             )}
@@ -66,7 +66,7 @@ export function PriceList({ pricelist, isAirportDeliveryChoosen }: { pricelist: 
             {pricelist?.refundAmount > 0 && <PriceItem label='Refund ' value={pricelist?.refundAmount} sign='-' />}
             <hr />
             {/* Total Rental Charge */}
-            <div className='flex items-center justify-between font-light '>
+            <div className='flex items-center justify-between font-bold'>
                 <div>Total Rental Charge</div>
                 <div className='font-bold tracking-wide'>
                     {pricelist?.tripTaxAmount < 0 ? '-' : ''} ${roundToTwoDecimalPlaces(pricelist?.tripTaxAmount)}
@@ -97,11 +97,11 @@ function PriceItem({
 
     return (
         <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-1 font-light'>
+            <div className='flex items-center gap-1 '>
                 {label}
                 {children}
             </div>
-            <div className='font-light tracking-wide'>{formattedValue}</div>
+            <div className=' tracking-wide'>{formattedValue}</div>
         </div>
     );
 }
