@@ -11,7 +11,6 @@ import { cn, formatDateAndTime, toTitleCase } from '@/lib/utils';
 import Fuse from 'fuse.js';
 import { Plus, Star, X } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useEffect, useState } from 'react';
@@ -253,7 +252,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
     const formatedEndDate = endDate ? formatDateAndTime(endDate, zipCode, 'MMM DD') : null;
 
     return (
-        <Link href={link} prefetch={false} className='group h-auto rounded-lg border hover:shadow'>
+        <a href={link} className='group h-auto rounded-lg border hover:shadow'>
             <div className='relative flex items-end overflow-hidden rounded-t-lg'>
                 <div className='aspect-video h-44 w-full cursor-pointer overflow-hidden rounded-t-md group-hover:opacity-[0.95] lg:aspect-video lg:h-36'>
                     <img
@@ -291,7 +290,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                     )}
                 </div>
             </div>
-        </Link>
+        </a>
     );
 }
 

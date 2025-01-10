@@ -2,7 +2,6 @@
 
 import { PAGE_ROUTES } from '@/constants/routes';
 import { getReviewRequiredTrips } from '@/server/trips';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import TripsFilter from './trips-filters';
 
@@ -15,15 +14,9 @@ const tripsHeaderTabs = [
 interface TripsHeaderProps {
     pathname: string;
 }
-export default function TripsHeader({ pathname }: TripsHeaderProps) {
-    const router = useRouter();
-    const [activeTab, setActiveTab] = useState(pathname);
-    const [showdot, setShowDot] = useState(false);
 
-    useEffect(() => {
-        setActiveTab(pathname);
-    }, [pathname]);
-    // Convert searchParams to a string, ensuring it starts with '?'
+export default function TripsHeader({ pathname }: TripsHeaderProps) {
+    const [showdot, setShowDot] = useState(false);
 
     useEffect(() => {
         async function reviewTripsDot() {
@@ -47,28 +40,23 @@ export default function TripsHeader({ pathname }: TripsHeaderProps) {
         reviewTripsDot();
     }, []);
 
-    const handleTabClick = (href: string) => {
-        setActiveTab(href);
-        router.push(href);
-    };
     return (
         <div className='mx-auto flex w-full flex-col items-center justify-between gap-3.5 px-4 py-2 text-center text-15 md:max-w-6xl'>
             <div className='flex w-full max-w-4xl flex-1 flex-row justify-between gap-2 md:justify-around'>
                 {tripsHeaderTabs.map((tab) => {
-                    const isActive = activeTab.startsWith(tab.href);
+                    const isActive = pathname.startsWith(tab.href);
                     const showDot = tab.code === 'review-required';
 
                     return (
-                        <button
-                            type='button'
+                        <a
                             key={tab.code}
-                            onClick={() => handleTabClick(tab.href)}
+                            href={tab.href}
                             className={`relative cursor-pointer rounded-md px-2 py-1 font-semibold transition-all ease-in-out hover:text-primary ${isActive ? 'text-primary' : 'text-neutral-400'}`}>
                             {tab.name}
                             {showDot && showdot && (
                                 <span className='-right-1 -top-1 absolute h-2 w-2 rounded-full bg-primary' aria-hidden='true' />
                             )}
-                        </button>
+                        </a>
                     );
                 })}
             </div>
