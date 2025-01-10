@@ -39,7 +39,7 @@ export default function TelematicsTrips() {
 
     const telematicsData = telematicsResponse?.data?.tripData || [];
 
-    const zipcode = '73301';
+    const zipcode = telematicsResponse.data.zipcode || '73301'; // Default to 73301 if no zipcode is found
 
     if (!telematicsData.length) {
         return <div>No telematics data found</div>;
