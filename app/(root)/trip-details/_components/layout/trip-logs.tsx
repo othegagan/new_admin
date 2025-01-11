@@ -11,7 +11,7 @@ interface Log {
     fromstatus: string;
     tostatus: string;
     comments: string;
-    changedby: 'HOST' | 'SYSTEM' | 'USER' | string | null;
+    changedby: 'HOST' | 'SYSTEM' | 'USER' | 'Driver' | string | null;
     createddate: string;
     modificationId: number;
     initialStartTime?: string;
@@ -27,6 +27,7 @@ export default function TripLogs({ trip }: TripLogsProps) {
 
     const logCreatorRef: Record<string, string> = {
         USER: `${trip?.userFirstName} ${trip?.userlastName || ''}`,
+        Driver: `${trip?.userFirstName} ${trip?.userlastName || ''}`,
         HOST: `${trip?.hostFirstName} ${trip?.hostLastName || ''}`,
         SYSTEM: 'SYSTEM',
         default: '-'
