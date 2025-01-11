@@ -120,3 +120,21 @@ export function getCategory(statusCode: string, type: 'start' | 'end'): number {
     }
     return -1;
 }
+
+interface DeliveryLocation {
+    address1?: string;
+    cityName?: string;
+    state?: string;
+    country?: string;
+}
+
+export function getDeliveryLocation(deliveryLocations: DeliveryLocation[]) {
+    if (!deliveryLocations || deliveryLocations.length === 0) {
+        return '-'; // Return '-' if deliveryLocations is empty or not provided
+    }
+
+    const location = deliveryLocations[0];
+    const addressParts = [location?.address1, location?.cityName, location?.state, location?.country].filter(Boolean); // Filter out any empty or undefined values
+
+    return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
+}

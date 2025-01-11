@@ -82,8 +82,8 @@ export function CarDetails({
                 <div className='mt-2 hidden w-full items-center gap-2 md:flex '>
                     <MapPin className='size-4 text-muted-foreground' />
                     <div className='max-w-md truncate text-sm md:text-base dark:text-muted-foreground'>
-                        {isCustomDelivery && <span className='hidden font-medium lg:inline'>Custom Delivery :</span>}
-                        {isAirportDelivery && <span className='hidden font-medium lg:inline'>Airport Delivery :</span>}
+                        {isCustomDelivery && <span className='hidden font-medium lg:inline'>Custom Delivery: </span>}
+                        {isAirportDelivery && <span className='hidden font-medium lg:inline'>Airport Delivery: </span>}
                         {location}
                     </div>
                 </div>

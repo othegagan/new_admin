@@ -11,6 +11,7 @@ import type { Trip } from '@/types';
 import { ChevronLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import MainMessageComponent from '../../messages/_components/MainMessage';
+import { getDeliveryLocation } from '../../trips/_components/trip-utils';
 import { TripActions } from '../_components/layout/trip-actions';
 import TripChecklist from '../_components/layout/trip-checklist';
 import TripDriverDetails from '../_components/layout/trip-driver-details';
@@ -173,22 +174,4 @@ function ChatInterface({ tripId }: { tripId: number }) {
             </div>
         </div>
     );
-}
-
-interface DeliveryLocation {
-    address1?: string;
-    cityName?: string;
-    state?: string;
-    country?: string;
-}
-
-function getDeliveryLocation(deliveryLocations: DeliveryLocation[]) {
-    if (!deliveryLocations || deliveryLocations.length === 0) {
-        return '-'; // Return '-' if deliveryLocations is empty or not provided
-    }
-
-    const location = deliveryLocations[0];
-    const addressParts = [location?.address1, location?.cityName, location?.state, location?.country].filter(Boolean); // Filter out any empty or undefined values
-
-    return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
 }

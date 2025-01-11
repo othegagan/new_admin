@@ -18,6 +18,7 @@ import type { Trip } from '@/types';
 import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
+import { getDeliveryLocation } from '../_components/trip-utils';
 
 export default function ReviewRequired() {
     const [openItem, setOpenItem] = useState<string | null>(null);
@@ -308,7 +309,7 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
 
     const isAirportDelivery = tripData.airportDelivery;
     const isCustomDelivery = tripData.delivery;
-    const deliveryAddress = tripData?.deliveryLocations || '';
+    const deliveryAddress = getDeliveryLocation(tripData?.deliveryLocations) || '';
 
     const isLicenceVerified = tripData.isLicenseVerified;
     const isPhoneVerified = tripData.isPhoneVarified;
