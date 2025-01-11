@@ -9,7 +9,7 @@ import type { Trip } from '@/types';
 import { CalendarDays, MapPin } from 'lucide-react';
 import { useQueryState } from 'nuqs';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
-import { parseTrips, searchAndFilterTrips } from '../_components/trip-utils';
+import { getDeliveryLocation, parseTrips, searchAndFilterTrips } from '../_components/trip-utils';
 
 const { startDate, endDate } = generateStartAndEndDates('73301', 1, 1);
 
@@ -82,7 +82,7 @@ function TripCard({ tripData }: { tripData: Trip }) {
 
     const isAirportDelivery = tripData.airportDelivery;
     const isCustomDelivery = tripData.delivery;
-    const deliveryAddress = tripData?.deliveryLocations || '';
+    const deliveryAddress = getDeliveryLocation(tripData?.deliveryLocations) || '';
 
     const isLicenceVerified = tripData.isLicenseVerified;
     const isPhoneVerified = tripData.isPhoneVarified;

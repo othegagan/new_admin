@@ -11,7 +11,7 @@ import { CalendarDays, MapPin } from 'lucide-react';
 import { useQueryState } from 'nuqs';
 import { useMemo } from 'react';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
-import { getCategory, searchAndFilterTrips } from '../_components/trip-utils';
+import { getCategory, getDeliveryLocation, searchAndFilterTrips } from '../_components/trip-utils';
 
 // const startDate = `${format(new Date(), 'yyyy-MM-dd')}T06:00:00.362Z`;
 // const endDate = `${format(addMonths(new Date(), 1), 'yyyy-MM-dd')}T05:59:59.362Z`;
@@ -141,7 +141,7 @@ function TripCard({ tripData }: { tripData: Trip }) {
 
     const isAirportDelivery = tripData.airportDelivery;
     const isCustomDelivery = tripData.delivery;
-    const deliveryAddress = tripData?.deliveryLocations || '';
+    const deliveryAddress = getDeliveryLocation(tripData?.deliveryLocations) || '';
 
     const isLicenceVerified = tripData.isLicenseVerified;
     const isPhoneVerified = tripData.isPhoneVarified;
