@@ -13,7 +13,7 @@ import { toast } from 'sonner';
 
 interface ChargeManuallyDialogProps {
     pendingPayments: Record<string, number>;
-    failedPayments: Record<string, string>;
+    failedPayments: Record<string, number>;
     zipcode: string;
     tripId: number;
 }
@@ -30,9 +30,9 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
         amount
     }));
 
-    const failedCharges = Object.entries(failedPayments).map(([paymentdate, error]) => ({
+    const failedCharges = Object.entries(failedPayments).map(([paymentdate, amount]) => ({
         paymentdate,
-        error
+        amount
     }));
 
     // Sort charges by date
@@ -113,6 +113,11 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                         <div className='flex flex-col gap-2 px-3'>
                             {pendingCharges.length > 0 &&
                                 pendingCharges.map((payment) => {
+                                    // Skip payments with amounts close to 0
+                                    if (payment.amount < 0.01 && payment.amount > -0.01) {
+                                        return null;
+                                    }
+
                                     const collectedDate = formatDateAndTime(payment.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
 
                                     return (
@@ -144,6 +149,11 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                 failedCharges.map((failed) => {
                                     const failedDate = formatDateAndTime(failed.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
 
+                                    // Skip failed with amounts close to 0
+                                    if (failed.amount < 0.01 && failed.amount > -0.01) {
+                                        return null;
+                                    }
+
                                     return (
                                         <label htmlFor={failed.paymentdate} key={failed.paymentdate}>
                                             className='grid cursor-pointer grid-cols-3 gap-2 py-1 '
@@ -158,6 +168,9 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                                     <div>Failed Payment</div>
                                                     <div className='text-muted-foreground text-xs'>{failedDate}</div>
                                                 </div>
+                                            </div>
+                                            <div className='col-span-1 flex items-center font-semibold'>
+                                                {currencyFormatter(failed?.amount)}
                                             </div>
                                         </label>
                                     );
