@@ -2,7 +2,7 @@
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import type { Trip } from '@/types';
-import PendingChargesDialog from './charge-manually';
+import ChargeManuallyDialog from './charge-manually';
 import CollectedCharges from './collected-charges';
 import Ledge from './ledger';
 import PendingCharges from './pending-charges';
@@ -34,7 +34,7 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                     <DropdownMenuContent className='flex flex-col p-2'>
                         {showManualCharge && (
                             <DropdownMenuItem asChild>
-                                <PendingChargesDialog
+                                <ChargeManuallyDialog
                                     pendingPayments={fullTripResponse.pendingPayments}
                                     failedPayments={fullTripResponse.failedPayments}
                                     zipcode={trip.vehzipcode}

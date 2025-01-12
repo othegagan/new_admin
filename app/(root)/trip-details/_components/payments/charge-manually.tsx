@@ -11,14 +11,14 @@ import { chargeManually } from '@/server/trips';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-interface PendingChargesDialogProps {
+interface ChargeManuallyDialogProps {
     pendingPayments: Record<string, number>;
     failedPayments: Record<string, string>;
     zipcode: string;
     tripId: number;
 }
 
-export default function PendingChargesDialog({ pendingPayments, failedPayments, tripId, zipcode }: PendingChargesDialogProps) {
+export default function ChargeManuallyDialog({ pendingPayments, failedPayments, tripId, zipcode }: ChargeManuallyDialogProps) {
     const [open, setOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedPendingRows, setSelectedPendingRows] = useState<Record<string, boolean>>({});
