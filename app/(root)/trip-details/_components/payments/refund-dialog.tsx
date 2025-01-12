@@ -137,15 +137,14 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
 
             return (
                 <TableRow
+                    id={String(row.id)}
                     key={row.id}
                     aria-disabled={row.isRentalChargesRefund}
                     className={row.isRentalChargesRefund ? 'cursor-default bg-muted' : ''}>
-                    <TableCell>
+                    <TableCell className='flex cursor-pointer gap-2 capitalize' onClick={() => toggleCheckbox(row.id)}>
                         {!row.isRentalChargesRefund && (
                             <Checkbox checked={row.checked || false} onCheckedChange={() => toggleCheckbox(row.id)} />
                         )}
-                    </TableCell>
-                    <TableCell className='capitalize'>
                         <div>
                             {formattedDate} - {description}
                             <br />
@@ -196,9 +195,13 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                             </div>
                         </div>
                     </TableCell>
-                    <TableCell className='hidden text-left md:table-cell'>{tax}</TableCell>
-                    <TableCell className='hidden text-left md:table-cell'>{total}</TableCell>
-                    <TableCell className='hidden text-left md:table-cell'>
+                    <TableCell className='hidden cursor-pointer text-left md:table-cell' onClick={() => toggleCheckbox(row.id)}>
+                        {tax}
+                    </TableCell>
+                    <TableCell className='hidden cursor-pointer text-left md:table-cell' onClick={() => toggleCheckbox(row.id)}>
+                        {total}
+                    </TableCell>
+                    <TableCell className='hidden cursor-pointer text-left md:table-cell' onClick={() => toggleCheckbox(row.id)}>
                         <span>{row.isRentalChargesRefund ? 'Refunded' : getCollectionStatus(row?.collectionStatusId)}</span>
                         <br />
                         <span className='text-muted-foreground text-xs'>{statusDate}</span>
@@ -287,8 +290,7 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                                 <Table className='rounded-lg border'>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead />
-                                            <TableHead>Description</TableHead>
+                                            <TableHead className='pl-6 md:pl-10'>Description</TableHead>
                                             <TableHead className='text-left'>Details</TableHead>
                                             <TableHead className='hidden text-left md:table-cell'>Tax</TableHead>
                                             <TableHead className='hidden text-left md:table-cell'>Total</TableHead>

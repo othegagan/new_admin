@@ -111,14 +111,18 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                             <div className='col-span-1 flex items-center'>Amount</div>
                         </div>
                         <div className='flex flex-col gap-2 px-3'>
-                            {pendingCharges.length &&
+                            {pendingCharges.length > 0 &&
                                 pendingCharges.map((payment) => {
                                     const collectedDate = formatDateAndTime(payment.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
 
                                     return (
-                                        <div className='grid grid-cols-3 gap-2 py-1' key={payment.paymentdate}>
+                                        <label
+                                            key={payment.paymentdate}
+                                            htmlFor={payment.paymentdate}
+                                            className='grid cursor-pointer grid-cols-3 gap-2 py-1 '>
                                             <div className='col-span-2 flex items-start gap-2'>
                                                 <Checkbox
+                                                    id={payment.paymentdate}
                                                     className='mt-1'
                                                     checked={!!selectedPendingRows[payment.paymentdate]}
                                                     onCheckedChange={() => togglePendingRow(payment.paymentdate)}
@@ -129,7 +133,7 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                                 </div>
                                             </div>
                                             <div className='col-span-1 flex items-center font-semibold'>${payment.amount.toFixed(2)}</div>
-                                        </div>
+                                        </label>
                                     );
                                 })}
 
@@ -139,9 +143,11 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                     const failedDate = formatDateAndTime(failed.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
 
                                     return (
-                                        <div className='grid grid-cols-3 gap-2 py-1' key={failed.paymentdate}>
+                                        <label htmlFor={failed.paymentdate} key={failed.paymentdate}>
+                                            className='grid cursor-pointer grid-cols-3 gap-2 py-1 '
                                             <div className='col-span-2 flex items-start gap-2'>
                                                 <Checkbox
+                                                    id={failed.paymentdate}
                                                     className='mt-1'
                                                     checked={!!selectedFailedRows[failed.paymentdate]}
                                                     onCheckedChange={() => toggleFailedRow(failed.paymentdate)}
@@ -151,7 +157,7 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                                     <div className='text-muted-foreground text-xs'>{failedDate}</div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </label>
                                     );
                                 })}
                         </div>
