@@ -1,7 +1,7 @@
 'use client';
 
 import { AdaptiveBody, AdaptiveDialog } from '@/components/ui/extension/adaptive-dialog';
-import { formatDateAndTime } from '@/lib/utils';
+import { currencyFormatter, formatDateAndTime } from '@/lib/utils';
 import { type Key, useState } from 'react';
 
 interface CollectedChargesProps {
@@ -11,6 +11,7 @@ interface CollectedChargesProps {
 
 interface CollectedChargesDialogProps {
     processedCharges: any[];
+    processedPaymentsSum: number;
     zipcode: string;
 }
 
@@ -38,15 +39,15 @@ export default function CollectedCharges({ processedPayments, zipcode }: Collect
         <div className='flex items-center justify-between pt-2'>
             <div>
                 Collected Charges
-                <CollectedChargesDialog processedCharges={processedCharges} zipcode={zipcode} />
+                <CollectedChargesDialog processedCharges={processedCharges} zipcode={zipcode} processedPaymentsSum={processedPaymentsSum} />
             </div>
 
-            <div> ${processedPaymentsSum.toFixed(2)}</div>
+            <div> {currencyFormatter(processedPaymentsSum)}</div>
         </div>
     );
 }
 
-function CollectedChargesDialog({ processedCharges, zipcode }: CollectedChargesDialogProps) {
+function CollectedChargesDialog({ processedCharges, zipcode, processedPaymentsSum }: CollectedChargesDialogProps) {
     const [open, setOpen] = useState(false);
 
     function close() {
@@ -76,10 +77,15 @@ function CollectedChargesDialog({ processedCharges, zipcode }: CollectedChargesD
                                         {payment.amount >= 0 ? 'Collected' : 'Refunded'} rental charges
                                         <div className='text-muted-foreground text-xs'>{collectedDate}</div>
                                     </div>
-                                    <div className='col-span-1 flex items-center justify-end'>${payment.amount.toFixed(2)}</div>
+                                    <div className='col-span-1 flex items-center justify-end'>{currencyFormatter(payment.amount)}</div>
                                 </div>
                             );
                         })}
+                    </div>
+                    <div className='mt-4 flex items-center justify-between border-t pt-2'>
+                        <div className='font-semibold'>Total Collected Charges</div>
+
+                        <div className='font-semibold'> {currencyFormatter(processedPaymentsSum)}</div>
                     </div>
                 </AdaptiveBody>
             </AdaptiveDialog>

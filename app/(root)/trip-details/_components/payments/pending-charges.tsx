@@ -1,7 +1,7 @@
 'use client';
 
 import { AdaptiveBody, AdaptiveDialog } from '@/components/ui/extension/adaptive-dialog';
-import { formatDateAndTime } from '@/lib/utils';
+import { currencyFormatter, formatDateAndTime } from '@/lib/utils';
 import { type Key, useState } from 'react';
 
 interface PendingChargesProps {
@@ -41,7 +41,7 @@ export default function PendingCharges({ pendingPayments, zipcode }: PendingChar
                 <PendingChargesDialog pendingCharges={pendingCharges} zipcode={zipcode} />
             </div>
 
-            <div> ${pendingPaymentsSum.toFixed(2)}</div>
+            <div> {currencyFormatter(pendingPaymentsSum)}</div>
         </div>
     );
 }
@@ -85,7 +85,9 @@ function PendingChargesDialog({ pendingCharges, zipcode }: PendingChargesDialogP
                                 return (
                                     <div className='grid grid-cols-4 gap-5 py-1' key={i}>
                                         <div className='col-span-3'>{collectedDate}</div>
-                                        <div className='col-span-1 flex items-center font-semibold '>${payment.amount.toFixed(2)}</div>
+                                        <div className='col-span-1 flex items-center font-semibold '>
+                                            {currencyFormatter(payment.amount)}
+                                        </div>
                                     </div>
                                 );
                             })}

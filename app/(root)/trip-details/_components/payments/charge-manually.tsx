@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
 import { Label } from '@/components/ui/extension/field';
 import { Textarea } from '@/components/ui/textarea';
-import { formatDateAndTime } from '@/lib/utils';
+import { currencyFormatter, formatDateAndTime } from '@/lib/utils';
 import { sendMessageInChat } from '@/server/chat';
 import { chargeManually } from '@/server/trips';
 import { useState } from 'react';
@@ -132,7 +132,9 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                                     <div className='text-muted-foreground text-xs'>{collectedDate}</div>
                                                 </div>
                                             </div>
-                                            <div className='col-span-1 flex items-center font-semibold'>${payment.amount.toFixed(2)}</div>
+                                            <div className='col-span-1 flex items-center font-semibold'>
+                                                {currencyFormatter(payment.amount)}
+                                            </div>
                                         </label>
                                     );
                                 })}
