@@ -9,7 +9,6 @@ import { formatDateAndTime, getFullAddress } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { format } from 'date-fns';
 import { Paperclip, Send, X } from 'lucide-react';
 import { type Key, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -251,6 +250,10 @@ function MessageItem({
 
     // const images = tripData?.vehicleImages;
 
+    const zipcode = tripData?.vehzipcode;
+
+    const deliveryDate = formatDateAndTime(message.deliveryDate, zipcode, 'MMM DD, YYYY | h:mm A');
+
     if (isClientMessage) {
         return (
             <div className='flex'>
@@ -275,9 +278,7 @@ function MessageItem({
                         />
                     )}
 
-                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
-                        {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
-                    </p>
+                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>{deliveryDate}</p>
                 </div>
             </div>
         );
@@ -295,7 +296,7 @@ function MessageItem({
                         className='md:w[250px] h-[86px] w-[200px] rounded-[7px] border object-cover object-center'
                     />
                 )}
-                <p className='flex items-center justify-end text-[10px]'> {format(new Date(message.deliveryDate), 'PP | hh:mm a')}</p>
+                <p className='flex items-center justify-end text-[10px]'> {deliveryDate}</p>
             </div>
         );
     }
@@ -346,18 +347,14 @@ function MessageItem({
                         Pickup & Return :<span className='font-medium capitalize'> {getFullAddress({ tripDetails: tripData })}</span>
                     </div>
 
-                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
-                        {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
-                    </p>
+                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>{deliveryDate}</p>
                 </div>
             ) : (
                 <div className='overflow-wrap-anywhere word-break-break-word flex max-w-[75%] flex-col gap-2 break-words rounded-lg rounded-tl-none bg-muted px-3 py-2 text-xs'>
                     <span className='overflow-wrap-anywhere word-break-break-word break-words'>{message.message}</span>
 
                     {message.mediaUrl && <img src={message.mediaUrl} alt='media content' className='mt-2 h-auto max-w-full rounded-lg' />}
-                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>
-                        {format(new Date(message.deliveryDate), 'PP | hh:mm a')}
-                    </p>
+                    <p className='flex items-center justify-end text-[10px] text-muted-foreground'>{deliveryDate}</p>
                 </div>
             )}
         </div>
