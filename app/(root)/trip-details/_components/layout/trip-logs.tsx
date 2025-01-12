@@ -36,10 +36,10 @@ export default function TripLogs({ trip }: TripLogsProps) {
     const renderMetaData = (metaData: string) => {
         const parsedMetaData = JSON.parse(metaData);
         return (
-            <div className='mt-2 flex flex-col gap-2 text-sm'>
-                <div>
-                    <span className='text-muted-foreground'>
-                        The trip was scheduled from
+            <div className='mt-2 flex max-w-xl flex-col gap-2 text-sm'>
+                <div className='text-muted-foreground'>
+                    <div>
+                        Original Dates :{' '}
                         <span className='mx-2 font-medium'>
                             {formatDateAndTime(parsedMetaData.oldStartDate ?? '', trip.vehzipcode, 'MMM DD, YYYY, h:mm A')}
                         </span>
@@ -47,12 +47,9 @@ export default function TripLogs({ trip }: TripLogsProps) {
                         <span className='mx-2 font-medium'>
                             {formatDateAndTime(parsedMetaData.oldEndDate ?? '', trip.vehzipcode, 'MMM DD, YYYY, h:mm A')}
                         </span>
-                        , but has been rescheduled.
-                    </span>
-                </div>
-                <div>
-                    <span className='text-muted-foreground'>
-                        The modified trip is now scheduled from
+                    </div>
+                    <div>
+                        Modified Dates :{' '}
                         <span className='mx-2 font-medium'>
                             {formatDateAndTime(parsedMetaData.newStartDate ?? '', trip.vehzipcode, 'MMM DD, YYYY, h:mm A')}
                         </span>
@@ -60,8 +57,7 @@ export default function TripLogs({ trip }: TripLogsProps) {
                         <span className='mx-2 font-medium'>
                             {formatDateAndTime(parsedMetaData.newEndDate ?? '', trip.vehzipcode, 'MMM DD, YYYY, h:mm A')}
                         </span>
-                        .
-                    </span>
+                    </div>
                 </div>
             </div>
         );
