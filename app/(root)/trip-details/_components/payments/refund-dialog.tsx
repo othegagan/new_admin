@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/extension/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import { currencyFormatter, formatDateAndTime } from '@/lib/utils';
+import { cn, currencyFormatter, formatDateAndTime } from '@/lib/utils';
 import { sendMessageInChat } from '@/server/chat';
 import { refundCharges } from '@/server/trips';
 import type { RentalCharge } from '@/types';
@@ -141,7 +141,11 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                     key={row.id}
                     aria-disabled={row.isRentalChargesRefund}
                     className={row.isRentalChargesRefund ? 'cursor-default bg-muted' : ''}>
-                    <TableCell className='flex cursor-pointer gap-2 capitalize' onClick={() => toggleCheckbox(row.id)}>
+                    <TableCell
+                        className={cn('flex cursor-pointer gap-2 capitalize', row.isRentalChargesRefund && 'cursor-default')}
+                        onClick={() => {
+                            !row.isRentalChargesRefund && toggleCheckbox(row.id);
+                        }}>
                         {!row.isRentalChargesRefund && (
                             <Checkbox checked={row.checked || false} onCheckedChange={() => toggleCheckbox(row.id)} />
                         )}
@@ -195,13 +199,25 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                             </div>
                         </div>
                     </TableCell>
-                    <TableCell className='hidden cursor-pointer text-left md:table-cell' onClick={() => toggleCheckbox(row.id)}>
+                    <TableCell
+                        className={cn('hidden cursor-pointer text-left md:table-cell', row.isRentalChargesRefund && 'cursor-default')}
+                        onClick={() => {
+                            !row.isRentalChargesRefund && toggleCheckbox(row.id);
+                        }}>
                         {tax}
                     </TableCell>
-                    <TableCell className='hidden cursor-pointer text-left md:table-cell' onClick={() => toggleCheckbox(row.id)}>
+                    <TableCell
+                        className={cn('hidden cursor-pointer text-left md:table-cell', row.isRentalChargesRefund && 'cursor-default')}
+                        onClick={() => {
+                            !row.isRentalChargesRefund && toggleCheckbox(row.id);
+                        }}>
                         {total}
                     </TableCell>
-                    <TableCell className='hidden cursor-pointer text-left md:table-cell' onClick={() => toggleCheckbox(row.id)}>
+                    <TableCell
+                        className={cn('hidden cursor-pointer text-left md:table-cell', row.isRentalChargesRefund && 'cursor-default')}
+                        onClick={() => {
+                            !row.isRentalChargesRefund && toggleCheckbox(row.id);
+                        }}>
                         <span>{row.isRentalChargesRefund ? 'Refunded' : getCollectionStatus(row?.collectionStatusId)}</span>
                         <br />
                         <span className='text-muted-foreground text-xs'>{statusDate}</span>
@@ -242,11 +258,6 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                 </div>
             </>
         );
-    }
-
-    function openDialog() {
-        setOpen(true);
-        setStep('select');
     }
 
     function closeDialog() {
