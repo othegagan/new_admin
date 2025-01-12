@@ -10,6 +10,7 @@ import { checkForTuroTrip, cn } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ChevronLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import MainMessageComponent from '../../messages/_components/MainMessage';
 import { getDeliveryLocation } from '../../trips/_components/trip-utils';
 import { TripActions } from '../_components/layout/trip-actions';
@@ -19,10 +20,19 @@ import TripLogs from '../_components/layout/trip-logs';
 import TripSummary from '../_components/layout/trip-summary';
 import TripPayments from '../_components/payments/trip-payments';
 
+const VALID_TABS = ['summary', 'chat', 'payments', 'checklist', 'logs'] as const;
+type TabType = (typeof VALID_TABS)[number];
+
 export default function TripDetails() {
     const params = useParams<{ tripId: string }>();
     const tripId = params.tripId;
     const router = useRouter();
+
+    const [activeTab, setActiveTab] = useQueryState('tab', {
+        defaultValue: 'summary',
+        parse: (value): TabType => (VALID_TABS.includes(value as TabType) ? (value as TabType) : 'summary'),
+        serialize: (value) => value
+    });
 
     const { data: response, isLoading, isError, error } = useTripDetails(tripId);
 
@@ -99,7 +109,11 @@ export default function TripDetails() {
                             </Card>
                         )}
 
-                        <Tabs defaultValue='summary' className='w-full rounded-none'>
+                        <Tabs
+                            value={activeTab}
+                            onValueChange={(value) => setActiveTab(value)}
+                            defaultValue='summary'
+                            className='w-full rounded-none'>
                             <TabsList className='sticky top-0 z-10 flex h-auto w-full justify-start gap-6 overflow-x-auto overflow-y-hidden rounded-none border-b bg-background px-4'>
                                 <TabsTrigger
                                     value='summary'
