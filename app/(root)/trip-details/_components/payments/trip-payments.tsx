@@ -8,6 +8,7 @@ import Ledge from './ledger';
 import PendingCharges from './pending-charges';
 import { PriceList } from './price-list';
 import RefundDialog from './refund-dialog';
+import ReleaseDepositDialog from './release-deposit';
 
 interface TripPaymentsProps {
     fullTripResponse: any;
@@ -22,6 +23,9 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
     const asPendingPayments = fullTripResponse.pendingPayments && Object.keys(fullTripResponse.pendingPayments).length > 0;
     const asFailedPayments = fullTripResponse.failedPayments && Object.keys(fullTripResponse.failedPayments).length > 0;
     const showManualCharge = asPendingPayments || asFailedPayments;
+
+    const showDepositRelease =
+        ['REREQ', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false && !(trip?.tripPaymentTokens[0]?.releasedAmountOnHold > 0);
 
     return (
         <div className='flex flex-col pb-5'>
@@ -42,6 +46,8 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                                 />
                             </DropdownMenuItem>
                         )}
+
+                        {showDepositRelease && <DropdownMenuItem asChild>{<ReleaseDepositDialog tripId={trip.tripid} />}</DropdownMenuItem>}
                         <DropdownMenuItem asChild>
                             <RefundDialog fullTripResponse={fullTripResponse} />
                         </DropdownMenuItem>
