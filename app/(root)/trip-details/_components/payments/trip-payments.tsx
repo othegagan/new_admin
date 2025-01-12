@@ -2,6 +2,7 @@
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import type { Trip } from '@/types';
+import PendingChargesDialog from './charge-manually';
 import CollectedCharges from './collected-charges';
 import Ledge from './ledger';
 import PendingCharges from './pending-charges';
@@ -18,6 +19,10 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
 
     const isAirportDeliveryChoosen = trip.airportDelivery;
 
+    const asPendingPayments = fullTripResponse.pendingPayments && Object.keys(fullTripResponse.pendingPayments).length > 0;
+    const asFailedPayments = fullTripResponse.failedPayments && Object.keys(fullTripResponse.failedPayments).length > 0;
+    const showManualCharge = asPendingPayments || asFailedPayments;
+
     return (
         <div className='flex flex-col pb-5'>
             <div className='flex-between gap-4'>
@@ -26,8 +31,18 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                     <DropdownMenuTrigger className='w-fit rounded font-medium text-primary text-sm lg:text-[14px]'>
                         Manage Payments
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem className='p-0' asChild>
+                    <DropdownMenuContent className='flex flex-col p-2'>
+                        {showManualCharge && (
+                            <DropdownMenuItem asChild>
+                                <PendingChargesDialog
+                                    pendingPayments={fullTripResponse.pendingPayments}
+                                    failedPayments={fullTripResponse.failedPayments}
+                                    zipcode={trip.vehzipcode}
+                                    tripId={trip.tripid}
+                                />
+                            </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem asChild>
                             <RefundDialog fullTripResponse={fullTripResponse} />
                         </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -27,7 +27,7 @@ interface ChargeRows extends RentalCharge {
 export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
     const [open, setOpen] = useState(false);
     const [step, setStep] = useState<'select' | 'review'>('select');
-    const [refundReason, setRefundReason] = useState('');
+    const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [chargeRows, setChargeRows] = useState<ChargeRows[]>(
@@ -44,7 +44,7 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
     const getCollectionStatus = (statusId: number) =>
         collectionStatusList.find((status: any) => status.id === statusId)?.statusName || 'Unknown';
 
-    const { selectedRefund, eligibleRefund, selectedIds, selectedCharges } = useMemo(() => {
+    const { selectedRefund, selectedIds, selectedCharges, displayEligibles } = useMemo(() => {
         let selectedRefund = 0;
         let eligibleRefund = 0;
         const selectedIds: number[] = [];
@@ -89,7 +89,7 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
             };
             const response = await refundCharges(payload);
             if (response.success) {
-                if (refundReason) await sendMessageInChat(tripId, refundReason);
+                if (message) await sendMessageInChat(tripId, message);
                 toast.success(response.message);
                 setTimeout(() => window.location.reload(), 1500);
                 closeDialog();
@@ -231,10 +231,10 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                     </div>
 
                     <div className='space-y-2'>
-                        <Label htmlFor='refund-reason' className='font-semibold'>
-                            Refund Reason <span className='font-normal text-muted-foreground'>(Optional)</span>
+                        <Label htmlFor='message' className='font-semibold'>
+                            Message <span className='font-normal text-muted-foreground'>(Optional)</span>
                         </Label>
-                        <Textarea value={refundReason} id='refund-reason' onChange={(e) => setRefundReason(e.target.value)} rows={2} />
+                        <Textarea value={message} id='message' onChange={(e) => setMessage(e.target.value)} rows={2} />
                     </div>
                 </div>
             </>
@@ -252,14 +252,14 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                 ?.map((row: ChargeRows) => ({ ...row, checked: false }))
                 .sort((a: any, b: any) => a.label.localeCompare(b.label)) || []
         );
-        setRefundReason('');
+        setMessage('');
         setStep('select');
         setOpen(false);
     }
 
     return (
         <>
-            <div onClick={openDialog} className='dropdown-item gapp-3 flex-start '>
+            <div onClick={() => setOpen(true)} className='dropdown-item'>
                 Initiate Refund
             </div>
 
@@ -275,7 +275,7 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                                 <div className='mb-5 flex w-full flex-col items-center gap-2 md:flex-row md:items-end md:justify-around'>
                                     <div className='flex-between gap-10 border-2 px-3 py-2'>
                                         <span>Eligible Refund Amount</span>
-                                        <b>{currencyFormatter(eligibleRefund)}</b>
+                                        <b>{currencyFormatter(displayEligibles)}</b>
                                     </div>
 
                                     <div className='flex gap-10 text-sm'>

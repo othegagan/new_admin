@@ -1,0 +1,184 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
+import { Label } from '@/components/ui/extension/field';
+import { Textarea } from '@/components/ui/textarea';
+import { formatDateAndTime } from '@/lib/utils';
+import { sendMessageInChat } from '@/server/chat';
+import { chargeManually } from '@/server/trips';
+import { useState } from 'react';
+import { toast } from 'sonner';
+
+interface PendingChargesDialogProps {
+    pendingPayments: Record<string, number>;
+    failedPayments: Record<string, string>;
+    zipcode: string;
+    tripId: number;
+}
+
+export default function PendingChargesDialog({ pendingPayments, failedPayments, tripId, zipcode }: PendingChargesDialogProps) {
+    const [open, setOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [selectedPendingRows, setSelectedPendingRows] = useState<Record<string, boolean>>({});
+    const [selectedFailedRows, setSelectedFailedRows] = useState<Record<string, boolean>>({});
+    const [message, setMessage] = useState('');
+
+    const pendingCharges = Object.entries(pendingPayments).map(([paymentdate, amount]) => ({
+        paymentdate,
+        amount
+    }));
+
+    const failedCharges = Object.entries(failedPayments).map(([paymentdate, error]) => ({
+        paymentdate,
+        error
+    }));
+
+    // Sort charges by date
+    pendingCharges.sort((a, b) => new Date(a.paymentdate).valueOf() - new Date(b.paymentdate).valueOf());
+    failedCharges.sort((a, b) => new Date(a.paymentdate).valueOf() - new Date(b.paymentdate).valueOf());
+
+    function togglePendingRow(paymentdate: string) {
+        setSelectedPendingRows((prev) => ({
+            ...prev,
+            [paymentdate]: !prev[paymentdate]
+        }));
+    }
+
+    function toggleFailedRow(paymentdate: string) {
+        setSelectedFailedRows((prev) => ({
+            ...prev,
+            [paymentdate]: !prev[paymentdate]
+        }));
+    }
+
+    const selectedPendingKeys = Object.keys(selectedPendingRows).filter((key) => selectedPendingRows[key]);
+    const selectedFailedKeys = Object.keys(selectedFailedRows).filter((key) => selectedFailedRows[key]);
+
+    function closeDialog() {
+        setSelectedPendingRows({});
+        setSelectedFailedRows({});
+        setMessage('');
+        setIsSubmitting(false);
+        setOpen(false);
+    }
+
+    async function collectManually() {
+        setIsSubmitting(true);
+
+        try {
+            const payload = {
+                tripid: tripId,
+                pendingPayments: selectedPendingKeys,
+                failedPayments: selectedFailedKeys
+            };
+
+            const response = await chargeManually(payload);
+            if (response.success) {
+                if (message) await sendMessageInChat(tripId, message);
+                toast.success(response.message);
+                setTimeout(() => window.location.reload(), 1500);
+                closeDialog();
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error: any) {
+            console.error(error);
+            toast.error('Failed to charge pending amounts', error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
+    return (
+        <>
+            <div onClick={() => setOpen(true)} className='dropdown-item'>
+                Charge Manually
+            </div>
+
+            <AdaptiveDialog
+                isOpen={open}
+                onClose={closeDialog}
+                title='Collect Pending Amount'
+                className='sm:w-[70%] sm:max-w-full'
+                description="This action will manually charge the selected amount to the driver's payment method.">
+                <AdaptiveBody>
+                    {/* Pending Payments */}
+                    <div className='mx-auto grid max-w-xl gap-3'>
+                        <div className='grid grid-cols-3 gap-5 rounded-t bg-muted px-4 py-2 font-semibold'>
+                            <div className='col-span-2 ml-5'>Pending Payments</div>
+                            <div className='col-span-1 flex items-center'>Amount</div>
+                        </div>
+                        <div className='flex flex-col gap-2 px-3'>
+                            {pendingCharges.length &&
+                                pendingCharges.map((payment) => {
+                                    const collectedDate = formatDateAndTime(payment.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
+
+                                    return (
+                                        <div className='grid grid-cols-3 gap-2 py-1' key={payment.paymentdate}>
+                                            <div className='col-span-2 flex items-start gap-2'>
+                                                <Checkbox
+                                                    className='mt-1'
+                                                    checked={!!selectedPendingRows[payment.paymentdate]}
+                                                    onCheckedChange={() => togglePendingRow(payment.paymentdate)}
+                                                />
+                                                <div>
+                                                    <div>Future Payment</div>
+                                                    <div className='text-muted-foreground text-xs'>{collectedDate}</div>
+                                                </div>
+                                            </div>
+                                            <div className='col-span-1 flex items-center font-semibold'>${payment.amount.toFixed(2)}</div>
+                                        </div>
+                                    );
+                                })}
+
+                            {/* Failed Payments */}
+                            {failedCharges.length > 0 &&
+                                failedCharges.map((failed) => {
+                                    const failedDate = formatDateAndTime(failed.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
+
+                                    return (
+                                        <div className='grid grid-cols-3 gap-2 py-1' key={failed.paymentdate}>
+                                            <div className='col-span-2 flex items-start gap-2'>
+                                                <Checkbox
+                                                    className='mt-1'
+                                                    checked={!!selectedFailedRows[failed.paymentdate]}
+                                                    onCheckedChange={() => toggleFailedRow(failed.paymentdate)}
+                                                />
+                                                <div>
+                                                    <div>Failed Payment</div>
+                                                    <div className='text-muted-foreground text-xs'>{failedDate}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    </div>
+
+                    {/* Message Section */}
+                    <div className='mt-5 space-y-2'>
+                        <Label htmlFor='message' className='font-semibold'>
+                            Message <span className='font-normal text-muted-foreground'>(Optional)</span>
+                        </Label>
+                        <Textarea value={message} id='message' onChange={(e) => setMessage(e.target.value)} rows={2} />
+                    </div>
+                </AdaptiveBody>
+
+                <AdaptiveFooter>
+                    <Button variant='outline' onClick={closeDialog} size='sm'>
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={collectManually}
+                        disabled={!selectedPendingKeys.length && !selectedFailedKeys.length}
+                        loading={isSubmitting}
+                        size='sm'>
+                        Collect Amount
+                    </Button>
+                </AdaptiveFooter>
+            </AdaptiveDialog>
+        </>
+    );
+}
