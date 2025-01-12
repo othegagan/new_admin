@@ -241,7 +241,7 @@ export default function TripModificationDialog({ tripData }: { tripData: Trip })
                                                 </div>
                                                 <div className='mt-3 flex w-full flex-col gap-2 text-sm'>
                                                     <div className=' flex items-center gap-3 p-1'>
-                                                        <div className='flex w-full flex-1 flex-col gap-2'>
+                                                        <div className='flex w-full flex-1 flex-col gap-3'>
                                                             <Label className='font-semibold text-14'>New Start Date</Label>
                                                             <TripModificationStartDateCalendar
                                                                 unavailableDates={unavailableDates}
@@ -264,7 +264,7 @@ export default function TripModificationDialog({ tripData }: { tripData: Trip })
                                                         />
                                                     </div>
                                                     <div className=' flex items-center gap-3 p-1'>
-                                                        <div className='flex w-full flex-1 flex-col gap-2'>
+                                                        <div className='flex w-full flex-1 flex-col gap-3'>
                                                             <Label className='font-semibold text-14'>New End Date</Label>
                                                             <TripModificationEndDateCalendar
                                                                 unavailableDates={unavailableDates}

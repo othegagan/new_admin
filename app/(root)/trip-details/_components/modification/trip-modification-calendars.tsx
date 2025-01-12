@@ -56,7 +56,7 @@ export function TripModificationStartDateCalendar({
             aria-label='Select Date'
             shouldCloseOnSelect={true}
             isDisabled={isDisabled}
-            className={`${isDisabled && 'cursor-not-allowed'}`}>
+            className={`${isDisabled && 'cursor-not-allowed opacity-50'}`}>
             <DatePickerButton date={value} />
             <DatePickerContent className='flex flex-col '>
                 <Calendar
@@ -108,7 +108,7 @@ export function TripModificationEndDateCalendar({
             aria-label='Select Date'
             shouldCloseOnSelect={true}
             isDisabled={isDisabled}
-            className={`${isDisabled && 'cursor-not-allowed'}`}>
+            className={`${isDisabled && 'cursor-not-allowed opacity-50'}`}>
             <DatePickerButton date={value} />
             <DatePickerContent className='flex flex-col '>
                 <Calendar
