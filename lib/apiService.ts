@@ -85,7 +85,7 @@ class ApiService {
                     return Promise.reject({
                         success: false,
                         data: null,
-                        message: 'No response received from server',
+                        message: `No response received from server. ${error.message}`,
                         errorCode: 'NETWORK_ERROR'
                     });
                 } else {
@@ -93,7 +93,7 @@ class ApiService {
                     return Promise.reject({
                         success: false,
                         data: null,
-                        message: 'Error setting up the request',
+                        message: `Error setting up the request. ${error.message}`,
                         errorCode: 'REQUEST_SETUP_ERROR'
                     });
                 }
