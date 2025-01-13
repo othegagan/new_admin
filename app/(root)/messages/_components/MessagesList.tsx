@@ -174,31 +174,31 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
             onClick={handleLinkClick}
             ref={ref}
             className={cn(
-                'block w-full cursor-pointer border-b py-4 hover:rounded-md hover:bg-muted',
-                isSelected ? 'rounded-md border border-primary bg-muted px-3' : ''
+                'block w-full cursor-pointer border-b py-3 hover:rounded-md hover:bg-muted',
+                isSelected ? 'rounded-md bg-muted' : ''
             )}>
             <div className='flex items-center space-x-2'>
-                <div className='relative'>
+                <div className='relative pl-2'>
                     {/* Dot Indicator */}
                     {!isViewed && <div className='absolute top-0 right-0 z-10 size-3 rounded-full bg-primary' />}
 
                     {/* Avatar Component */}
-                    <Avatar className='h-12 w-12 border'>
+                    <Avatar className='h-9 w-9 border'>
                         <AvatarImage src={driverImage} alt={driverName} />
                         <AvatarFallback>{driverName[0]}</AvatarFallback>
                     </Avatar>
                 </div>
 
                 <div>
-                    <h3 className='max-w-[280px] truncate text-left font-semibold text-lg'>{driverName}</h3>
-                    <p className='max-w-[280px] truncate text-left text-muted-foreground text-sm'>{message}</p>
+                    <h3 className='max-w-[280px] truncate text-left font-semibold text-base'>{driverName}</h3>
+                    <p className=' line-clamp-1 text-left text-muted-foreground text-xs'>{message}</p>
                 </div>
             </div>
-            <div className='mt-2.5 flex w-full items-center justify-between space-x-2 pr-3'>
-                <Badge variant='secondary'>
+            <div className='mt-2.5 flex w-full flex-wrap items-center justify-between gap-2 space-x-2 pr-3'>
+                <Badge variant='secondary' className='font-normal text-xs'>
                     Trip: {tripId} - {plate}
                 </Badge>
-                <span className='text-muted-foreground text-sm'>{notificationDate}</span>
+                <span className='text-muted-foreground text-xs'>{notificationDate}</span>
             </div>
         </div>
     );

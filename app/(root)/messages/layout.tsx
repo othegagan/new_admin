@@ -26,7 +26,7 @@ export default function MessagesLayout({ children }: { children: ReactNode }) {
 
     return (
         <Main fixed className='h-full'>
-            <section className='flex h-full gap-6'>
+            <section className='flex h-full gap-4'>
                 <MessagesList />
 
                 {children}
