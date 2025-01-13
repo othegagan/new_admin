@@ -89,7 +89,7 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
                     <span className='font-medium text-base hover:no-underline'>New Trip Requests ({newTripRequests.length})</span>
                 </AccordionTrigger>
             </div>
-            <AccordionContent className='overflow-y-auto px-4 pt-4 pb-2'>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
                 {newTripRequests.map((trip: any) => (
                     <TripCard
                         tripData={trip}
@@ -99,7 +99,7 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
                                 {trip.status}
                             </div>
                         }>
-                        <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <Button
                                 href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.tripid}${PAGE_ROUTES.TRIP_DETAILS_SWAP}`}
                                 variant='ghost'
@@ -133,7 +133,7 @@ function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
                     <span className='font-medium text-base hover:no-underline'>Failed Payments ({failedPayments.length})</span>
                 </AccordionTrigger>
             </div>
-            <AccordionContent className='overflow-y-auto px-4 pt-4 pb-2'>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
                 {failedPayments.map((trip: any) => (
                     <TripCard
                         tripData={trip}
@@ -148,7 +148,7 @@ function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
                                 <PopoverContent className='font-normal text-sm'>{trip.paymentFailedReason}</PopoverContent>
                             </Popover>
                         }>
-                        <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <TripDismissDialog tripId={trip.tripid} dismissalKey='paymentFailed' />
                         </div>
                     </TripCard>
@@ -167,7 +167,7 @@ function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: 
                     <span className='font-medium text-base hover:no-underline'>Failed Trip Extensions ({failedTripExtensions.length})</span>
                 </AccordionTrigger>
             </div>
-            <AccordionContent className='overflow-y-auto px-4 pt-4 pb-2'>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
                 {failedTripExtensions.map((trip: any) => (
                     <TripCard
                         tripData={trip}
@@ -182,7 +182,7 @@ function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: 
                                 <PopoverContent className='font-normal text-sm'>{trip.failedtripextensionmessage}</PopoverContent>
                             </Popover>
                         }>
-                        <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <TripDismissDialog tripId={trip.tripid} dismissalKey='failedautotripExtension' />
                         </div>
                     </TripCard>
@@ -203,7 +203,7 @@ function FailedDriverVerifications({ failedDriverVerifications }: { failedDriver
                     </span>
                 </AccordionTrigger>
             </div>
-            <AccordionContent className='overflow-y-auto px-4 pt-4 pb-2'>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
                 {failedDriverVerifications.map((trip: any) => (
                     <TripCard
                         tripData={trip}
@@ -218,7 +218,7 @@ function FailedDriverVerifications({ failedDriverVerifications }: { failedDriver
                                 <PopoverContent className='font-normal text-sm'>{trip.failedDriverVerificationsMessage}</PopoverContent>
                             </Popover>
                         }>
-                        <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <TripDismissDialog tripId={trip.tripid} dismissalKey='failedDriverVerifications' />
                         </div>
                     </TripCard>
@@ -237,7 +237,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                     <span className='font-medium text-base hover:no-underline'>Failed Extensions ({failedCardExtensions.length})</span>
                 </AccordionTrigger>
             </div>
-            <AccordionContent className='overflow-y-auto px-4 pt-4 pb-2'>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
                 {failedCardExtensions.map((trip: any) => (
                     <TripCard
                         tripData={trip}
@@ -252,7 +252,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                                 <PopoverContent className='font-normal text-sm'>{trip.cardExtensionFailedReason}</PopoverContent>
                             </Popover>
                         }>
-                        {/* <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                        {/* <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <TripDismissDialog tripId={trip.tripid} dismissalKey='' />
                         </div> */}
                     </TripCard>
@@ -273,7 +273,7 @@ function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellati
                     </span>
                 </AccordionTrigger>
             </div>
-            <AccordionContent className='overflow-y-auto px-4 pt-4 pb-2'>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
                 {cancellationRequestedTrips.map((trip: any) => (
                     <TripCard
                         tripData={trip}
@@ -283,7 +283,7 @@ function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellati
                                 {trip.status}
                             </div>
                         }>
-                        <div className='mt-6 ml-auto flex gap-6 md:gap-10'>
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <AcceptTripCancellationDialog tripId={trip.tripid} />
                         </div>
                     </TripCard>
