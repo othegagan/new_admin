@@ -1,6 +1,5 @@
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
-import axios from 'axios';
 import { getSession } from 'next-auth/react';
 
 const HOST_VEHICLE_SERVICES_BASEURL = env.NEXT_PUBLIC_HOST_VEHICLE_SERVICES_BASEURL;
@@ -184,61 +183,25 @@ export async function getAvailabilityDatesByVehicleId(vehicleid: number, tripid:
 }
 
 export async function getTelematicsData(vehicleId: number) {
-    const payload = JSON.stringify({
+    const payload = {
         fromValue: 'vehicleid',
         id: vehicleId
-    });
+    };
 
     const url = `${TELEMATICS_BASEURL}/v1/telematics/getTelematicsData`;
 
-    const response = await axios.post(url, payload, {
-        headers: {
-            'Content-Type': 'application/json',
-            bundee_auth_token: '79088eb079137504d408cb876a6b547c55b282a48ba86ff2205a30f840a47fc6dd7829e180cbeeab5212bdf39b5a5668'
-        }
-    });
-
-    if (response?.data?.errorCode === '1') {
-        return {
-            data: response.data,
-            success: false,
-            message: response.data.errorMessage
-        };
-    }
-
-    return {
-        data: response.data,
-        success: true,
-        message: response.data.errorMessage
-    };
+    const response = await api.post<any>(url, payload);
+    return response;
 }
 
 export async function getTelematicsEvents(telematicTripId: number) {
-    const payload = JSON.stringify({
+    const payload = {
         fromValue: 'tripId',
         id: telematicTripId
-    });
+    };
 
     const url = `${TELEMATICS_BASEURL}/v1/telematics/getTelematicsEvents`;
 
-    const response = await axios.post(url, payload, {
-        headers: {
-            'Content-Type': 'application/json',
-            bundee_auth_token: '79088eb079137504d408cb876a6b547c55b282a48ba86ff2205a30f840a47fc6dd7829e180cbeeab5212bdf39b5a5668'
-        }
-    });
-
-    if (response?.data?.errorCode === '1') {
-        return {
-            data: response.data,
-            success: false,
-            message: response.data.errorMessage
-        };
-    }
-
-    return {
-        data: response.data,
-        success: true,
-        message: response.data.errorMessage
-    };
+    const response = await api.post<any>(url, payload);
+    return response;
 }
