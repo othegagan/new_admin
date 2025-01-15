@@ -54,7 +54,7 @@ export function NotificationBellButton() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-                className='flex h-full w-[330px] flex-col rounded-md shadow-lg md:w-[500px]'
+                className='flex h-full w-[330px] flex-col rounded-md drop-shadow-xl md:w-[500px]'
                 align='end'
                 alignOffset={-100}>
                 <div className='mt-1 flex justify-between gap-3 p-1'>
@@ -87,7 +87,7 @@ export function NotificationBellButton() {
                             <div key={date} className='mx-auto mb-2 max-w-5xl pt-1'>
                                 <div className='sticky top-0 mb-2 flex items-center justify-between gap-4 bg-background'>
                                     <div className='h-1.5 w-full rounded-md bg-black/5' />
-                                    <div className='w-fit whitespace-nowrap rounded-sm border border-black/20 bg-background p-3 py-1 text-center font-medium text-sm'>
+                                    <div className='w-fit whitespace-nowrap rounded-sm border border-black/20 bg-background p-3 py-1 text-center font-medium text-xs'>
                                         {format(new Date(date), 'eee PP')}
                                     </div>
                                     <div className='h-1.5 w-full rounded-md bg-black/5' />

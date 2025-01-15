@@ -41,7 +41,7 @@ export default function TripDriverDetails({
                 <Link
                     prefetch={false}
                     href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
-                    className='hidden font-normal hover:underline hover:underline-offset-2 md:block'>
+                    className=' font-normal hover:underline hover:underline-offset-2'>
                     (Trip #{tripId})
                 </Link>
                 <p className='text-muted-foreground text-sm'>{formatDateAndTime(createdDate, zipcode, 'MMM DD, YYYY, h:mm A')}</p>
