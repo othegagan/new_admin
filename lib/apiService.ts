@@ -193,11 +193,19 @@ class ApiService {
                 ...config
             });
 
-            // console.log('response', response.data);
-
-            // Return the transformed data
             return (response as any).transformedData;
         } catch (error: any) {
+            const errorDetails = {
+                url,
+                method,
+                message: error.message || 'An unexpected error occurred',
+                errorCode: 'UNHANDLED_ERROR',
+                ...(error.response && { status: error.response.status, statusText: error.response.statusText })
+            };
+
+            // Log the error details
+            console.error('API Error:', errorDetails);
+
             // If the error has a transformedData property (from our interceptor), return it
             if (error.response && (error.response as any).transformedData) {
                 return (error.response as any).transformedData;
@@ -207,8 +215,8 @@ class ApiService {
             return {
                 success: false,
                 data: null,
-                message: error.message || 'An unexpected error occurred',
-                errorCode: 'UNHANDLED_ERROR'
+                message: errorDetails.message,
+                errorCode: errorDetails.errorCode
             };
         }
     }
