@@ -43,11 +43,9 @@ export default function ActionRequiredAlert() {
                                 <TriangleAlert className='mt-0.5 shrink-0 text-amber-500' size={20} strokeWidth={2} aria-hidden='true' />
                                 Host Action Required
                             </p>
-                            <div className=' text-muted-foreground text-sm'>
+                            <div className='text-muted-foreground text-sm'>
                                 There are some items that need your review.
-                                <div className=' ml-2 inline-block whitespace-nowrap font-medium underline underline-offset-2 hover:text-primary'>
-                                    See More
-                                </div>
+                                <span className='ml-2.5 font-medium underline underline-offset-2 hover:text-primary'>See More</span>
                             </div>
                         </div>
                     </div>

@@ -25,7 +25,7 @@ export function TripDetails({ selectedTrip, zipcode }: { selectedTrip: Telematic
                 <div className='mt-4 flex flex-col gap-6'>
                     <div className='flex w-fit items-center gap-10 '>
                         <div className='rounded bg-blue-400 px-4 py-1 text-black'>
-                            Booking ID : <b>{selectedTrip.bundeeBookingId}</b>
+                            Booking ID : <b>{selectedTrip.bundeeBookingId ? selectedTrip.bundeeBookingId : 'Off Rental'}</b>
                         </div>
                         <div>
                             Trip ID : <b>{selectedTrip.tripId}</b>

@@ -68,7 +68,9 @@ export function NotificationBellButton() {
                 </div>
 
                 {loading && (
-                    <div className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>Loading Notifications...</div>
+                    <div className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2 text-muted-foreground text-sm'>
+                        Loading Notifications...
+                    </div>
                 )}
 
                 {!loading && error && <p className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>{error.message}</p>}
@@ -121,8 +123,8 @@ function NotificationItem({ data }: { data: any }) {
             className='my-2.5 flex w-full flex-col rounded-md border p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800'
             onClick={handleLinkClick}>
             <div className='flex w-full flex-wrap items-center justify-between font-medium text-foreground text-sm'>
-                <div className='flex items-center gap-2 font-medium text-12 capitalize md:text-14'>
-                    {!viewed && <div className='size-2 rounded-full bg-primary' />}
+                <div className='flex gap-2 text-left font-medium text-12 capitalize md:text-14'>
+                    {!viewed && <div className='mt-1 size-2 rounded-full bg-primary' />}
                     {`${message}. `}
                 </div>
                 <Badge variant='secondary' className='hidden border font-medium text-[10px] md:block'>
@@ -134,7 +136,7 @@ function NotificationItem({ data }: { data: any }) {
                 <div className='font-semibold text-muted-foreground text-xs'>
                     {vehicleName} ({data.branchResponses[0]?.vehicleNumber})
                 </div>
-                <Badge variant='outline' className='block font-medium text-[10px] md:hidden'>
+                <Badge variant='outline' className='block font-medium text-[12px] md:hidden'>
                     Trip: {tripId}
                 </Badge>
                 <div className='ml-auto font-normal text-[11px] text-muted-foreground'>{format(new Date(createdDate), 'E, PP, p')}</div>
