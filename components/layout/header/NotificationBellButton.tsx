@@ -43,7 +43,7 @@ export function NotificationBellButton() {
                 }
             }}>
             <DropdownMenuTrigger asChild>
-                <Button variant='ghost' className='relative px-2'>
+                <Button variant='ghost' className='relative ml-0 px-2'>
                     <BellIcon className='size-6 text-muted-foreground' aria-hidden='true' />
                     {unReadNotifications && (
                         <span className='absolute top-1 right-2 flex size-3'>

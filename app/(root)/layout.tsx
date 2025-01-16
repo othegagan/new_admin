@@ -29,8 +29,8 @@ export default async function RouteComponent({ children }: { children: React.Rea
                     'flex h-svh flex-col'
                 )}>
                 <Header sticky>
-                    <Logo className='-ml-3 w-[72px] pt-2 md:hidden md:w-20' herf={PAGE_ROUTES.DASHBOARD} />
-                    <div className='ml-auto flex items-center space-x-3'>
+                    <Logo className='-ml-3 w-[72px] pt-2 md:hidden md:w-24' herf={PAGE_ROUTES.DASHBOARD} />
+                    <div className='ml-auto flex items-center gap-3'>
                         <MessagesNotificationButton />
                         <NotificationBellButton />
 
