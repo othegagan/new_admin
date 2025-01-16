@@ -283,10 +283,10 @@ export default function RefundDialog({ fullTripResponse }: RefundDialogProps) {
                     onClose={closeDialog}
                     title={step === 'select' ? 'Initiate Refund' : 'Review Refund'}
                     className='sm:w-[70%] sm:max-w-full'>
-                    <AdaptiveBody>
+                    <AdaptiveBody className='p-0'>
                         {step === 'select' ? (
                             <div>
-                                <div className='mb-5 flex w-full flex-col items-center gap-2 md:flex-row md:items-end md:justify-around'>
+                                <div className=' sticky top-0 z-10 mb-5 flex w-full flex-col items-center gap-2 bg-background pb-5 md:flex-row md:items-end md:justify-around'>
                                     <div className='flex-between gap-10 border-2 px-3 py-2'>
                                         <span>Eligible Refund Amount</span>
                                         <b>{currencyFormatter(displayEligibles)}</b>
