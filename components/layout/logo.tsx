@@ -10,8 +10,8 @@ const primaryColor = '#F97217';
 
 export default function Logo({ className = '', herf = '' }: LogoProps) {
     const logoContent = (
-        <div className={`flex items-center gap-2 font-semibold text-lg md:text-base ${className}`}>
-            <svg xmlns='http://www.w3.org/2000/svg' className='h-10 w-20' viewBox='0 0 200 103' fill='none'>
+        <>
+            <svg xmlns='http://www.w3.org/2000/svg' className={`h-10 w-20 ${className}`} viewBox='0 0 200 103' fill='none'>
                 <path
                     className=' text-black dark:text-white'
                     fill='currentColor'
@@ -65,7 +65,7 @@ export default function Logo({ className = '', herf = '' }: LogoProps) {
             </svg>
 
             <span className='sr-only'>MyBundee</span>
-        </div>
+        </>
     );
 
     return herf ? (

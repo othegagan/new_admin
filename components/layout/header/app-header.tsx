@@ -35,7 +35,7 @@ export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(
             )}
             {...props}>
             {children}
-            <Separator orientation='vertical' className='h-6' />
+            <Separator orientation='vertical' className='hidden h-6 md:block' />
             <SidebarTrigger variant='outline' className='scale-125 text-muted-foreground sm:scale-100' />
         </header>
     );

@@ -25,7 +25,7 @@ export function ProfileDropdown({ session }: { session: Session | null }) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant='ghost' className='px-0 md:px-2'>
-                    <Avatar className='size-9'>
+                    <Avatar className='size-8'>
                         <AvatarImage src={session?.userimage || ''} alt={session?.name ?? ''} />
                         <AvatarFallback className='uppercase'>{session?.name?.[0]}</AvatarFallback>
                     </Avatar>
