@@ -80,12 +80,14 @@ export default function TripModificationDialog({ tripData }: { tripData: Trip })
                 return;
             }
 
-            // check for short notice late night reservation
-            const { isValid, error } = validateBookingTime(`${newStartDate}T${newStartTime}`);
+            // Don't check if the trip status is started
+            if (!(tripData?.status.toLowerCase() === 'started')) {
+                // check for short notice late night reservation
+                const { isValid, error } = validateBookingTime(`${newStartDate}T${newStartTime}`);
 
-            if (!isValid) {
-                setPriceError(error);
-                return;
+                if (!isValid) {
+                    throw new Error(error);
+                }
             }
 
             // Check for any unavailable dates within the new date range
