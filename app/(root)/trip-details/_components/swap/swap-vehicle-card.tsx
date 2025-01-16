@@ -40,7 +40,7 @@ export default function SwapVehicleCard({ vehicle, hideButtons = false }: SwapVe
             </div>
             <div className='flex flex-col gap-1 p-2'>
                 <div className='flex-between gap-4'>
-                    <div className='truncate font-semibold text-md'>{vehicleName}</div>
+                    <div className='max-w-[200px] truncate font-semibold text-md'>{vehicleName}</div>
                     <div className='font-medium text-primary'>${price_per_hr}/Day</div>
                 </div>
                 <div className='flex-between gap-4'>
