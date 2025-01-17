@@ -2,17 +2,17 @@ import { QUERY_KEYS } from '@/constants/query-keys';
 import { getAllTripsOfHost, getReviewRequiredTrips, getTripDetails, getVehiclesForSwap } from '@/server/trips';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useAllTrips = (startTime: string, endTime: string) => {
+export const useAllTrips = (startDate: string, endDate: string) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.allTripsOfHost, { startTime, endTime }],
-        queryFn: async () => getAllTripsOfHost(startTime, endTime)
+        queryKey: [QUERY_KEYS.allTripsOfHost, { startDate, endDate }],
+        queryFn: async () => getAllTripsOfHost(startDate, endDate)
     });
 };
 
-export const useDailyViewTrips = (startTime: string, endTime: string) => {
+export const useDailyViewTrips = (startDate: string, endDate: string) => {
     return useQuery({
-        queryKey: [QUERY_KEYS.allDailyViewTrips, { startTime, endTime }],
-        queryFn: async () => getAllTripsOfHost(startTime, endTime)
+        queryKey: [QUERY_KEYS.allDailyViewTrips, { startDate, endDate }],
+        queryFn: async () => getAllTripsOfHost(startDate, endDate)
     });
 };
 

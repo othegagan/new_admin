@@ -8,10 +8,11 @@ interface ScrollAreaProps extends React.ComponentPropsWithoutRef<typeof ScrollAr
     orientation?: 'horizontal' | 'vertical';
 }
 
-const ScrollArea = React.forwardRef<React.ElementRef<typeof ScrollAreaPrimitive.Root>, ScrollAreaProps>(
+const ScrollArea = React.forwardRef<React.ComponentRef<typeof ScrollAreaPrimitive.Viewport>, ScrollAreaProps>(
     ({ className, children, orientation = 'vertical', ...props }, ref) => (
-        <ScrollAreaPrimitive.Root ref={ref} className={cn('relative overflow-hidden', className)} {...props}>
+        <ScrollAreaPrimitive.Root className={cn('relative overflow-hidden', className)} {...props}>
             <ScrollAreaPrimitive.Viewport
+                ref={ref}
                 className={cn('h-full w-full rounded-[inherit]', orientation === 'horizontal' && '!overflow-x-auto')}>
                 {children}
             </ScrollAreaPrimitive.Viewport>

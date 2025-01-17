@@ -5,14 +5,13 @@ import { getSession } from 'next-auth/react';
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const AVAILABILITY_SERVICES_BASEURL = env.NEXT_PUBLIC_AVAILABILITY_BASEURL;
 
-export async function getAllTripsOfHost(startTime: string, endTime: string) {
+export async function getAllTripsOfHost(startDate: string, endDate: string) {
     const session = await getSession();
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
+    const url = `${BOOKING_SERVICES_BASEURL}/v2/booking/hostTripBetweenDays`;
     const payload = {
-        fromValue: 'hostidbetweendays',
-        startTime: startTime,
-        endTime: endTime,
-        id: session?.iduser
+        startDate: startDate,
+        endDate: endDate,
+        hostId: session?.iduser
     };
 
     const response = await api.post<any>(url, payload);

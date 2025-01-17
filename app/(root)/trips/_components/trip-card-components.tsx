@@ -1,7 +1,116 @@
 import DriverReadinessDialog from '@/components/extra/driver-readiness-dialog';
+import { CHANNELS } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
+import { formatDateAndTime, toTitleCase } from '@/lib/utils';
 import { CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import { type AllTrip, getDeliveryLocation, getVehicleLocation } from '../_components/trip-utils';
+
+export function TripCard({ tripData }: { tripData: AllTrip }) {
+    const tripId = tripData.tripId;
+    const zipCode = tripData.address.zipcode || '73301';
+    const channel = tripData?.channelName;
+    const isTuroTrip = channel?.toLowerCase() === CHANNELS.TURO.toLowerCase();
+
+    const carName = toTitleCase(`${tripData.make} ${tripData.model} ${tripData.year}`);
+    const carImage = tripData?.imagename || 'images/image_not_available.png';
+    const licensePlate = tripData.vnumber;
+    const carAddress = getVehicleLocation(tripData.address);
+
+    const userId = tripData?.userId;
+    const userName = toTitleCase(`${tripData?.firstName || ''} ${tripData?.lastName || ''}`);
+    const avatarSrc = tripData?.userImage || '/images/dummy_avatar.png';
+
+    const isAirportDelivery = tripData.airportDelivery;
+    const isCustomDelivery = tripData.delivery;
+    const deliveryAddress = getDeliveryLocation(tripData?.metaData?.DeliveryLocation) || '';
+
+    const isLicenceVerified = tripData.isLicenseVerified;
+    const isPhoneVerified = tripData.isPhoneVerified;
+    const isRentalAgreed = false;
+    const isInsuranceVerified = tripData.isInsuranceVerified;
+
+    const startDate = formatDateAndTime(tripData.startTime, zipCode, 'MMM DD, YYYY | h:mm A ');
+    const endDate = formatDateAndTime(tripData.endTime, zipCode, 'MMM DD, YYYY | h:mm A  ');
+    const dateRange = `${startDate} - ${endDate}`;
+
+    const location = isAirportDelivery || isCustomDelivery ? deliveryAddress : carAddress;
+
+    let tripStatusText = tripData.status;
+
+    enum CategoryText {
+        'Starts at' = 0,
+        'Started at' = 1,
+        'Ends at' = 2,
+        'Ended on' = 3
+    }
+
+    if (tripData.category !== undefined) {
+        const date = tripData.category === 0 || tripData.category === 1 ? tripData.startTime : tripData.endTime;
+        const time = formatDateAndTime(date, zipCode, 'MMM DD, h:mm A');
+        const text = `${CategoryText[tripData.category]} ${time}`;
+
+        tripStatusText = text;
+    }
+
+    return (
+        <div className='flex w-full flex-col gap-1 text-nowrap border-b py-2.5 md:max-w-5xl lg:max-w-6xl xl:max-w-7xl'>
+            <div className='flex items-start justify-between gap-4 lg:hidden'>
+                <UserInfo avatarSrc={avatarSrc} name={userName} tripId={tripId} userId={userId} />
+                <ActionButtons
+                    isLicenceVerified={isLicenceVerified}
+                    isPhoneVerified={isPhoneVerified}
+                    isRentalAgreed={isRentalAgreed}
+                    isInsuranceVerified={isInsuranceVerified}
+                    tripStatus={tripStatusText}
+                    tripId={tripId}
+                    userId={userId}
+                    userName={userName}
+                    avatarSrc={avatarSrc}
+                    isTuroTrip={isTuroTrip}
+                />
+            </div>
+
+            <div className='flex gap-3'>
+                <CarDetails
+                    carImage={carImage}
+                    carName={carName}
+                    licensePlate={licensePlate}
+                    channel={channel}
+                    dateRange={dateRange}
+                    location={location}
+                    isAirportDelivery={isAirportDelivery}
+                    isCustomDelivery={isCustomDelivery}
+                    tripId={tripId}
+                />
+
+                <div className='ml-auto hidden flex-col items-end gap-2 lg:flex'>
+                    <ActionButtons
+                        isLicenceVerified={isLicenceVerified}
+                        isPhoneVerified={isPhoneVerified}
+                        isRentalAgreed={isRentalAgreed}
+                        isInsuranceVerified={isInsuranceVerified}
+                        tripStatus={tripStatusText}
+                        tripId={tripId}
+                        userId={userId}
+                        userName={userName}
+                        avatarSrc={avatarSrc}
+                        isTuroTrip={isTuroTrip}
+                    />
+                    <UserInfo avatarSrc={avatarSrc} name={userName} tripId={tripId} className='mt-auto' userId={userId} />
+                </div>
+            </div>
+            <div className='mt-2 flex w-full items-center gap-2 md:hidden'>
+                <CalendarDays className='size-4 text-muted-foreground' />
+                <div className='text-sm md:text-base dark:text-muted-foreground'>{dateRange}</div>
+            </div>
+            <div className=' flex w-full items-center gap-2 font-light md:hidden dark:text-muted-foreground'>
+                <MapPin className='size-4' />
+                <div className='text-sm md:text-base'>{location}</div>
+            </div>
+        </div>
+    );
+}
 
 interface UserInfoProps {
     avatarSrc: string;

@@ -91,7 +91,6 @@ export function formatTime(dateTimeString: string, zipCode: string) {
 
 /**
  * Generates start and end dates for a given zip code and timezone.
- * @param {string} zipCode - The zip code to get the timezone for.
  * @param {number} startDateOffset - The number of months to offset the start date by.
  * @param {number} endDateOffset - The number of months to offset the end date by.
  * @returns {Object} - An object containing `startDate` and `endDate`.
@@ -105,10 +104,10 @@ export function generateStartAndEndDates(zipCode: string, startDateOffset = 1, e
     }
 
     // Start date: Beginning of the day in the timezone, adjusted by months offset
-    const startDate = moment.tz(timeZone).subtract(startDateOffset, 'months').startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    const startDate = moment.tz(timeZone).subtract(startDateOffset, 'months').startOf('day').utc().format('YYYY-MM-DD');
 
     // End date: End of the day in the timezone, adjusted by months offset
-    const endDate = moment.tz(timeZone).add(endDateOffset, 'months').endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    const endDate = moment.tz(timeZone).add(endDateOffset, 'months').endOf('day').utc().format('YYYY-MM-DD');
 
     return { startDate, endDate };
 }

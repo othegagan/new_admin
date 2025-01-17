@@ -1,22 +1,27 @@
-import { formatDateAndTime, generateStartAndEndDates } from '@/lib/utils';
-import type { Trip } from '@/types';
-import { addDays, format, isBefore, isSameDay } from 'date-fns';
 import Fuse from 'fuse.js';
 
+// Function to find a vehicle by ID
+export const findVehicle = (vehicles: any[], vehicleId: number) => {
+    return vehicles.find((vehicle: { vehicleId: any }) => vehicle.vehicleId === vehicleId);
+};
+
+// Function to find a user by ID
+export const findUser = (users: any[], userId: number) => {
+    return users.find((user: { userId: any }) => user.userId === userId);
+};
+
 export const tripSearchFields = [
-    { name: 'vehmake', weight: 1 },
-    { name: 'vehmodel', weight: 1 },
-    { name: 'vehyear', weight: 0.8 },
-    { name: 'tripid', weight: 1 },
+    { name: 'make', weight: 1 },
+    { name: 'model', weight: 1 },
+    { name: 'year', weight: 0.8 },
+    { name: 'tripId', weight: 1 },
     { name: 'vehicleId', weight: 1 },
-    { name: 'vehicleNumber', weight: 0.9 },
-    { name: 'userFirstName', weight: 1 },
-    { name: 'userlastName', weight: 1 },
-    { name: 'vehaddress1', weight: 0.6 },
-    { name: 'vehaddress2', weight: 0.6 },
-    { name: 'vehcityname', weight: 0.6 },
-    { name: 'vehstate', weight: 0.6 },
-    { name: 'vehzipcode', weight: 0.6 },
+    { name: 'vnumber', weight: 0.9 },
+    { name: 'firstName', weight: 1 },
+    { name: 'middleName', weight: 1 },
+    { name: 'lastName', weight: 1 },
+    { name: 'address.address1', weight: 0.6 },
+    { name: 'address.address2', weight: 0.6 },
     { name: 'status', weight: 0.9 }
 ];
 
@@ -37,7 +42,6 @@ export function searchAndFilterTrips(data: any[], searchTerm: string | null, cha
             weight: field.weight
         })),
         threshold: 0.4,
-        distance: 100,
         minMatchCharLength: 2,
         shouldSort: true,
         includeScore: true,
@@ -62,50 +66,6 @@ export function searchAndFilterTrips(data: any[], searchTerm: string | null, cha
     return results;
 }
 
-export function parseTrips(rawTripsData: Trip[]) {
-    const trips = rawTripsData.reduce((acc: Record<string, any[]>, trip: Trip) => {
-        const zipcode = trip.vehzipcode;
-        const endKey = formatDateAndTime(trip.endtime, zipcode, 'yyyy-MM-DD'); // always use yyyy-MM-DD format
-        const startKey = formatDateAndTime(trip.starttime, zipcode, 'yyyy-MM-DD');
-
-        const { startDate, endDate } = generateStartAndEndDates('73301', 1, 1);
-
-        let currentDate: any = startDate;
-        while (isBefore(currentDate, endDate) || isSameDay(currentDate, endDate)) {
-            const formattedDate = format(currentDate, 'yyyy-MM-dd');
-            if (!acc[formattedDate]) {
-                acc[formattedDate] = [];
-            }
-            currentDate = addDays(currentDate, 1);
-        }
-
-        if (acc[startKey]) {
-            acc[startKey].push(trip);
-        } else if (acc[endKey]) {
-            acc[endKey].push(trip);
-        }
-
-        return acc;
-    }, {});
-
-    // Sort bookings for each date and remove empty dates
-    const sortedTrips = Object.entries(trips)
-        .sort(([dateA], [dateB]) => new Date(dateA).valueOf() - new Date(dateB).valueOf()) // Sort dates in ascending order
-        .reduce(
-            (acc, [date, bookingsForDate]: any) => {
-                if (bookingsForDate.length > 0) {
-                    acc[date] = bookingsForDate.sort(
-                        (a: any, b: any) => new Date(a.starttime).valueOf() - new Date(b.starttime).valueOf() // Change to ascending order
-                    );
-                }
-                return acc;
-            },
-            {} as Record<string, any[]>
-        );
-
-    return sortedTrips;
-}
-
 export function getCategory(statusCode: string, type: 'start' | 'end'): number {
     if (['REREQ', 'RECANREQ'].includes(statusCode)) return -1;
     if (type === 'start') {
@@ -121,20 +81,102 @@ export function getCategory(statusCode: string, type: 'start' | 'end'): number {
     return -1;
 }
 
-interface DeliveryLocation {
-    address1?: string;
-    cityName?: string;
-    state?: string;
-    country?: string;
-}
+type Location = {
+    id: number;
+    hostId: number;
+    cityName: string;
+    zipCode: string;
+    address1: string;
+    address2: string;
+    latitude: string | number;
+    longitude: string | number;
+    state: string;
+    country: string;
+    tripId: number;
+    vehicleId: number;
+    isActive: boolean;
+    airportDelivery: boolean;
+    createdDate: string | null;
+    updatedDate: string | null;
+};
 
-export function getDeliveryLocation(deliveryLocations: DeliveryLocation[]) {
-    if (!deliveryLocations || deliveryLocations.length === 0) {
+type MetaData = {
+    DeliveryLocation: Location;
+};
+
+type Address = {
+    address1: string;
+    address2: string;
+    address3: string;
+    zipcode: string;
+    cityname: string;
+    state: string;
+    latitude: number;
+    longitude: number;
+    country: string;
+    timezone: string | null;
+};
+
+export type AllTrip = {
+    createdTime: string;
+    delivery: boolean;
+    airportDelivery: boolean;
+    metaData: MetaData;
+    userId: number;
+    tripId: number;
+    vehicleId: number;
+    startTime: string;
+    endTime: string;
+    statusCode: string;
+    status: string;
+    channelId: number;
+    make: string;
+    model: string;
+    vnumber: string;
+    year: string;
+    imagename: string;
+    address: Address;
+    isLicenseVerified: boolean;
+    isInsuranceVerified: boolean;
+    isLicenseExpired: boolean;
+    isInsuranceExpired: boolean;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+    mobilePhone: string;
+    language: string;
+    driverLicense: string;
+    isActive: boolean;
+    vehicleOwner: boolean;
+    createdDate: string;
+    updatedDate: string;
+    userImage: string;
+    channelName: string;
+    isVerified: boolean;
+    isPhoneVerified: boolean;
+    isEmailVerified: boolean;
+    isEmployee: boolean;
+    phoneNumberUpdatedDate: string;
+    category?: number;
+};
+
+export function getDeliveryLocation(location: any) {
+    if (!location) {
         return '-'; // Return '-' if deliveryLocations is empty or not provided
     }
 
-    const location = deliveryLocations[0];
-    const addressParts = [location?.address1, location?.cityName, location?.state, location?.country].filter(Boolean); // Filter out any empty or undefined values
+    const addressParts = [location?.address1, location?.cityName, location?.state, location?.zipCode].filter(Boolean); // Filter out any empty or undefined values
+
+    return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
+}
+
+export function getVehicleLocation(location: any) {
+    if (!location) {
+        return '-'; // Return '-' if deliveryLocations is empty or not provided
+    }
+
+    const addressParts = [location?.address1, location.address2, location?.cityname, location?.state, location?.zipcode].filter(Boolean); // Filter out any empty or undefined values
 
     return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
 }
