@@ -45,7 +45,9 @@ export default function ActionRequiredAlert() {
                             </p>
                             <div className='text-muted-foreground text-sm'>
                                 There are some items that need your review.
-                                <span className='ml-2.5 font-medium underline underline-offset-2 hover:text-primary'>See More</span>
+                                <span className='ml-2.5 font-medium underline underline-offset-2 hover:text-primary'>
+                                    Click to view them.
+                                </span>
                             </div>
                         </div>
                     </div>
