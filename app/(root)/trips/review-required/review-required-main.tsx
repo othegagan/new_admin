@@ -16,13 +16,10 @@ import { useReviewRequiredTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
-import { useState } from 'react';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
 import { getDeliveryLocation } from '../_components/trip-utils';
 
 export default function ReviewRequired() {
-    const [openItem, setOpenItem] = useState<string | null>(null);
-
     const { data: response, isLoading, error, isError } = useReviewRequiredTrips();
 
     if (isLoading) {
@@ -57,18 +54,9 @@ export default function ReviewRequired() {
         return <div>No Trips</div>;
     }
 
-    const handleItemToggle = (value: string) => {
-        setOpenItem((prevOpen) => (prevOpen === value ? null : value));
-    };
-
     return (
         <ScrollArea className='relative flex h-[calc(100dvh_-_100px)] w-full flex-col px-4'>
-            <Accordion
-                type='single'
-                collapsible
-                value={openItem || undefined}
-                onValueChange={handleItemToggle}
-                className='mx-auto mb-4 flex flex-col gap-5 md:max-w-5xl'>
+            <Accordion type='single' collapsible className='mx-auto mb-4 flex flex-col gap-5 md:max-w-5xl'>
                 <NewTripRequests newTripRequests={newTripRequests} />
                 <FailedPayments failedPayments={failedPayments} />
                 <FailedTripExtensions failedTripExtensions={failedTripExtensions} />
