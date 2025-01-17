@@ -1,4 +1,3 @@
-import { CHANNELS } from '@/constants';
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
 import type { Channel } from '@/types';
@@ -32,7 +31,8 @@ export async function getGuestsHistory(driverId: string) {
 export async function getDriverLicenseDetails(requestId: string, channel: Channel) {
     try {
         const url = `https://dvs2.idware.net/api/v3/Request/${requestId}/result`;
-        const token = channel === CHANNELS.FLUX ? env.NEXT_PUBLIC_IDSCAN_BEARER_TOKEN_FLUX : env.NEXT_PUBLIC_IDSCAN_BEARER_TOKEN_BUNDEE;
+        // const token = channel === CHANNELS.FLUX ? env.NEXT_PUBLIC_IDSCAN_BEARER_TOKEN_FLUX : env.NEXT_PUBLIC_IDSCAN_BEARER_TOKEN_BUNDEE;
+        const token = env.NEXT_PUBLIC_IDSCAN_BEARER_TOKEN_FLUX;
         const response = await axios.get(url, {
             headers: {
                 'Content-Type': 'application/json',
