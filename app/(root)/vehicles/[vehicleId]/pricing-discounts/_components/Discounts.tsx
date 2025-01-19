@@ -10,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { getSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -90,11 +89,10 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = [0, 0, 0] }: DiscountsFormProps) {
+function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage = [0, 0, 0], refetchData }: DiscountsFormProps) {
     const {
         register,
         handleSubmit,
-        setValue,
         control,
         reset,
         formState: { errors, isSubmitting, isDirty }
@@ -108,13 +106,6 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
             discount30Days: discountPercentage[2] / 100
         }
     });
-
-    useEffect(() => {
-        setValue('pricePerDay', vehiclePricePerDay);
-        setValue('discount3Days', discountPercentage[0] / 100); // Converting to percentage only because of the input number field
-        setValue('discount7Days', discountPercentage[1] / 100);
-        setValue('discount30Days', discountPercentage[2] / 100);
-    }, [setValue, vehiclePricePerDay, discountPercentage]);
 
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
         try {
@@ -138,7 +129,7 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
                 payload
             });
             if (response.success) {
-                // refetchData();
+                refetchData();
                 toast.success(response.message);
                 reset({
                     pricePerDay: pricePerDay,
@@ -152,8 +143,6 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
         } catch (error: any) {
             console.error('Error updating pricing:', error);
             toast.error('Error in updating pricing :', error.message);
-        } finally {
-            reset();
         }
     };
 
