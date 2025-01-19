@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 
 export function NotificationBellButton() {
     const { data: checkNotificationsData } = useCheckNotifications();
-    const { data: response, isFetching: loading, error, refetch } = useAllNotifications();
+    const { data: response, isLoading: loading, error, refetch } = useAllNotifications();
 
     const unReadNotifications = checkNotificationsData?.data?.hasNotification;
     const notificationsData = response?.data?.inAppNotifications || [];
