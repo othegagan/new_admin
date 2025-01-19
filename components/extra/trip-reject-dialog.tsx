@@ -85,9 +85,9 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
             {isOpen && (
                 <AdaptiveDialog onClose={handleClose} isOpen={isOpen} size='xl' title={buttonText} interactOutside={false}>
                     <AdaptiveBody className='flex flex-col gap-4'>
-                        <div className='flex flex-col gap-1 text-sm'>
-                            Rejecting this trip will notify the renter that their booking has been declined. You can optionally provide a
-                            reason in the comments below. This action cannot be undone.
+                        <div className='flex flex-col gap-1 text-muted-foreground text-sm'>
+                            Rejecting this trip will notify the renter that their booking has been declined. <br /> You can optionally
+                            provide a reason in the comments below. <br /> This action cannot be undone.
                         </div>
                         <div className='space-y-2'>
                             <Label>

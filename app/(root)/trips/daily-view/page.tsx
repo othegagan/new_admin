@@ -1,7 +1,6 @@
 'use client';
 
 import { CarLoadingSkeleton } from '@/components/skeletons';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useDailyViewTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, formatDateToReadable, generateStartAndEndDates } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -117,7 +116,7 @@ function DailyTripsSearch({ tripsData }: any) {
 
     // Handle object of trips
     return (
-        <ScrollArea ref={scrollRef} className='flex h-[calc(100dvh_-_100px)] w-full flex-col px-4'>
+        <div ref={scrollRef} className='flex h-[calc(100dvh_-_100px)] w-full flex-col overflow-y-auto px-4'>
             {Object.entries(dailyViewObjects).map(([date, trips]) => (
                 <div key={date} className='mx-auto mb-4 flex flex-col md:max-w-5xl'>
                     <div className='sticky top-0 z-20 mb-2 bg-background shadow-sm md:mb-0'>
@@ -132,6 +131,6 @@ function DailyTripsSearch({ tripsData }: any) {
                     ))}
                 </div>
             ))}
-        </ScrollArea>
+        </div>
     );
 }

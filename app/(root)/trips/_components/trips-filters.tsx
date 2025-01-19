@@ -37,6 +37,20 @@ export default function TripsFilter() {
                 />
             </div>
             <div className='flex flex-wrap items-center gap-4 md:ml-auto'>
+                <Select
+                    value={selectedChannel}
+                    onValueChange={(value) => {
+                        setSelectedChannel(value);
+                    }}>
+                    <SelectTrigger className='w-[100px]'>
+                        <SelectValue placeholder='Channel' />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value='Flux'>Flux</SelectItem>
+                        <SelectItem value='Bundee'>Bundee</SelectItem>
+                        <SelectItem value='Turo'>Turo</SelectItem>
+                    </SelectContent>
+                </Select>
                 {pathname !== `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}` && (
                     <Select
                         value={selectedStatus}
@@ -55,23 +69,11 @@ export default function TripsFilter() {
                         </SelectContent>
                     </Select>
                 )}
-                <Select
-                    value={selectedChannel}
-                    onValueChange={(value) => {
-                        setSelectedChannel(value);
-                    }}>
-                    <SelectTrigger className='w-[100px]'>
-                        <SelectValue placeholder='Channel' />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value='Flux'>Flux</SelectItem>
-                        <SelectItem value='Bundee'>Bundee</SelectItem>
-                        <SelectItem value='Turo'>Turo</SelectItem>
-                    </SelectContent>
-                </Select>
-                <Button variant='ghost' onClick={clearFilters} className='ml-auto w-fit px-0 text-muted-foreground'>
-                    Clear <span className='hidden lg:inline-block'>Filters</span>
-                </Button>
+                {(searchTerm || selectedChannel || selectedStatus) && (
+                    <Button variant='ghost' onClick={clearFilters} className=' w-fit px-0 text-muted-foreground'>
+                        Clear <span className='hidden lg:inline-block'>Filters</span>
+                    </Button>
+                )}
             </div>
         </div>
     );

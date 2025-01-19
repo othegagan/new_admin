@@ -100,13 +100,13 @@ export function TripCard({ tripData }: { tripData: AllTrip }) {
                     <UserInfo avatarSrc={avatarSrc} name={userName} tripId={tripId} className='mt-auto' userId={userId} />
                 </div>
             </div>
-            <div className='mt-2 flex w-full items-center gap-2 md:hidden'>
+            <div className='mt-2 flex items-center gap-2 md:hidden'>
                 <CalendarDays className='size-4 text-muted-foreground' />
                 <div className='text-sm md:text-base dark:text-muted-foreground'>{dateRange}</div>
             </div>
-            <div className=' flex w-full items-center gap-2 font-light md:hidden dark:text-muted-foreground'>
+            <div className=' flex w-full max-w-md items-center gap-2 text-wrap md:hidden dark:text-muted-foreground'>
                 <MapPin className='size-4' />
-                <div className='text-sm md:text-base'>{location}</div>
+                <div className='line-clamp-1 text-sm md:text-base'>{location}</div>
             </div>
         </div>
     );
@@ -122,7 +122,7 @@ interface UserInfoProps {
 
 export function UserInfo({ avatarSrc, name, className = '', userId, tripId }: UserInfoProps) {
     return (
-        <div className={`flex items-center gap-3 ${className}`}>
+        <div className={`flex items-start gap-3 ${className}`}>
             <Link
                 href={`${PAGE_ROUTES.GUESTS}/${userId}`}
                 prefetch={false}
@@ -133,13 +133,13 @@ export function UserInfo({ avatarSrc, name, className = '', userId, tripId }: Us
                 <Link
                     prefetch={false}
                     href={`${PAGE_ROUTES.GUESTS}/${userId}`}
-                    className='max-w-20 truncate font-light hover:underline hover:underline-offset-2 md:max-w-fit md:font-medium md:text-base'>
+                    className='max-w-28 truncate font-light hover:underline hover:underline-offset-2 md:max-w-fit md:font-medium md:text-base'>
                     {name}
                 </Link>
                 <Link
                     prefetch={false}
                     href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
-                    className='hidden font-light hover:underline hover:underline-offset-2 md:block'>
+                    className=' font-light hover:underline hover:underline-offset-2'>
                     (Trip #{tripId})
                 </Link>
             </div>
@@ -171,7 +171,7 @@ export function CarDetails({
     tripId
 }: CarDetailsProps) {
     return (
-        <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} className='flex flex-1 gap-3'>
+        <Link href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`} className='flex w-fit gap-3'>
             <div className='relative'>
                 <div className='absolute top-0 w-fit rounded border bg-white px-2 font-bold text-black text-sm capitalize'>{channel}</div>
                 <div className='col-span-2 h-20 w-32 flex-center overflow-hidden rounded-md border md:h-32 md:w-44'>
@@ -188,12 +188,12 @@ export function CarDetails({
                     <CalendarDays className='size-4 text-muted-foreground' />
                     <div className='text-sm md:text-base dark:text-muted-foreground'>{dateRange}</div>
                 </div>
-                <div className='mt-2 hidden w-full items-center gap-2 md:flex '>
-                    <MapPin className='size-4 text-muted-foreground' />
+                <div className='mt-2 hidden w-full items-start gap-2 md:flex '>
+                    <MapPin className='mt-1 size-4 text-muted-foreground' />
                     <div className='max-w-md truncate text-sm md:text-base dark:text-muted-foreground'>
                         {isCustomDelivery && <span className='hidden font-medium lg:inline'>Custom Delivery: </span>}
                         {isAirportDelivery && <span className='hidden font-medium lg:inline'>Airport Delivery: </span>}
-                        {location}
+                        <span>{location}</span>
                     </div>
                 </div>
             </div>

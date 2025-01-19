@@ -95,13 +95,13 @@ export default function TripApproveDialog({
             {isOpen && (
                 <AdaptiveDialog onClose={handleClose} isOpen={isOpen} size='xl' title='Approve Trip' interactOutside={false}>
                     <AdaptiveBody className='flex flex-col gap-4'>
-                        <div className='flex flex-col gap-1 text-sm'>
+                        <div className='flex flex-col gap-4 text-sm'>
                             <div>
                                 This booking was made using a <span className='capitalize'>{debitOrCreditCard}</span> Card.
                             </div>
-                            <div>
+                            <div className='text-muted-foreground '>
                                 We recommend the collection of ${DEPOSIT_HOLD_AMOUNT} as security deposit from the guest to ensure smooth
-                                transactions. The funds will be released after the trip is completed, provided there are no issues.
+                                transactions. <br /> The funds will be released after the trip is completed, provided there are no issues.
                             </div>
                         </div>
                         <div className='space-y-2'>
@@ -130,7 +130,8 @@ export default function TripApproveDialog({
                                     Collect Deposit
                                 </label>
                                 <p className='text-muted-foreground text-sm'>
-                                    By checking this box, you agree to collect security deposit for this customer on all future bookings.
+                                    By checking this box, you agree to collect security deposit for this customer on all future bookings.{' '}
+                                    <br />
                                     This can be reversed later in the Customer's Profile.
                                 </p>
                             </div>

@@ -79,7 +79,7 @@ const AdaptiveDialog = forwardRef<HTMLDivElement, AdaptiveDialogProps>(
             <DialogPrimitive.Root open={isOpen} onOpenChange={onClose}>
                 <DialogPrimitive.Portal>
                     <div className={cn('fixed inset-0 z-50 flex items-center justify-center ', isOpen ? ' fade-in-0' : 'fade-out-0')}>
-                        <DialogPrimitive.Overlay className={cn('fixed inset-0 bg-black/50 backdrop-blur-[1px] ')} />
+                        <DialogPrimitive.Overlay className={cn('fixed inset-0 bg-black/50 backdrop-blur-[2px] ')} />
                         <DialogPrimitive.Content
                             aria-describedby={description ? 'dialog-description' : undefined}
                             ref={ref || dialogRef}

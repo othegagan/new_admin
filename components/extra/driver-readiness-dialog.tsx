@@ -55,7 +55,7 @@ export default function DriverReadinessDialog({
                         <DialogTitle className='text-left'>Driver Checklist</DialogTitle>
                     </DialogHeader>
                     <div className='flex flex-col gap-4'>
-                        <p className='text-sm'>{isReadyToDrive ? readyDescription : notReadyDescription}</p>
+                        <p className='text-muted-foreground text-sm'>{isReadyToDrive ? readyDescription : notReadyDescription}</p>
 
                         <div className='w-full flex-between gap-4'>
                             {tripId && <div>Trip: #{tripId}</div>}

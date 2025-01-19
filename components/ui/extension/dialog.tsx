@@ -47,7 +47,7 @@ const DialogOverlay = ({ className, isDismissable = true, ...props }: AriaModalO
         isDismissable={isDismissable}
         className={composeRenderProps(className, (className) =>
             cn(
-                'fixed inset-0 z-50 bg-black/50 backdrop-blur-[1px]',
+                'fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px]',
                 /* Exiting */
                 'data-[exiting]:fade-out-0 data-[exiting]:animate-out data-[exiting]:duration-300',
                 /* Entering */

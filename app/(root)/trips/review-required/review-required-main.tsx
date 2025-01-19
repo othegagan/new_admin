@@ -7,7 +7,6 @@ import TripDismissDialog from '@/components/extra/trip-dismiss-dialog';
 import TripRejectDialog from '@/components/extra/trip-reject-dialog';
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CHANNELS } from '@/constants';
@@ -16,6 +15,7 @@ import { useReviewRequiredTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
+import Link from 'next/link';
 import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
 import { getDeliveryLocation } from '../_components/trip-utils';
 
@@ -74,7 +74,7 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
         <AccordionItem value='new-requests' className='border-0'>
             <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
                 <AccordionTrigger className='accordion-trigger hover:no-underline'>
-                    <span className='font-medium text-base hover:no-underline'>New Trip Requests ({newTripRequests.length})</span>
+                    <span className='font-medium text-sm hover:no-underline'>New Trip Requests ({newTripRequests.length})</span>
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
@@ -88,14 +88,13 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
                             </div>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <Button
+                            <Link
                                 href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.tripid}${PAGE_ROUTES.TRIP_DETAILS_SWAP}`}
-                                variant='ghost'
                                 type='button'
-                                className='font-semibold text-neutral-700 dark:text-neutral-300'>
+                                className='ont-semibold flex h-9 items-center gap-2 rounded-full px-4 py-1 text-neutral-700 hover:bg-muted dark:text-neutral-300'>
                                 <ArrowLeftRight className='size-5' />
                                 Swap Vehicle
-                            </Button>
+                            </Link>
 
                             <TripRejectDialog tripId={trip.tripid} />
 
@@ -118,7 +117,7 @@ function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
         <AccordionItem value='failed-payments' className='border-0'>
             <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
                 <AccordionTrigger className='accordion-trigger hover:no-underline'>
-                    <span className='font-medium text-base hover:no-underline'>Failed Payments ({failedPayments.length})</span>
+                    <span className='font-medium text-sm hover:no-underline'>Failed Payments ({failedPayments.length})</span>
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
@@ -152,7 +151,7 @@ function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: 
         <AccordionItem value='failed-trip-extensions' className='border-0'>
             <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
                 <AccordionTrigger className='accordion-trigger hover:no-underline'>
-                    <span className='font-medium text-base hover:no-underline'>Failed Trip Extensions ({failedTripExtensions.length})</span>
+                    <span className='font-medium text-sm hover:no-underline'>Failed Trip Extensions ({failedTripExtensions.length})</span>
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
@@ -186,7 +185,7 @@ function FailedDriverVerifications({ failedDriverVerifications }: { failedDriver
         <AccordionItem value='failed-driving-verifications' className='border-0'>
             <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
                 <AccordionTrigger className='accordion-trigger hover:no-underline'>
-                    <span className='font-medium text-base hover:no-underline'>
+                    <span className='font-medium text-sm hover:no-underline'>
                         Failed Verifications ({failedDriverVerifications.length})
                     </span>
                 </AccordionTrigger>
@@ -222,7 +221,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
         <AccordionItem value='failed-card-extensions' className='border-0'>
             <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
                 <AccordionTrigger className='accordion-trigger hover:no-underline'>
-                    <span className='font-medium text-base hover:no-underline'>Failed Extensions ({failedCardExtensions.length})</span>
+                    <span className='font-medium text-sm hover:no-underline'>Failed Extensions ({failedCardExtensions.length})</span>
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
@@ -256,7 +255,7 @@ function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellati
         <AccordionItem value='cancellation-requested-trips' className='border-0'>
             <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
                 <AccordionTrigger className='accordion-trigger hover:no-underline'>
-                    <span className='font-medium text-base hover:no-underline'>
+                    <span className='font-medium text-sm hover:no-underline'>
                         Cancellation Requested ({cancellationRequestedTrips.length})
                     </span>
                 </AccordionTrigger>
@@ -365,11 +364,11 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
             </div>
             <div className='mt-2 flex w-full items-center gap-2 md:hidden'>
                 <CalendarDays className='size-4 text-muted-foreground' />
-                <div className='text-sm md:text-base dark:text-muted-foreground'>{dateRange}</div>
+                <div className='text-sm md:text-sm dark:text-muted-foreground'>{dateRange}</div>
             </div>
-            <div className=' flex w-full items-center gap-2 font-light md:hidden dark:text-muted-foreground'>
+            <div className=' flex w-full items-center gap-2 md:hidden dark:text-muted-foreground'>
                 <MapPin className='size-4' />
-                <div className='text-sm md:text-base'>{location}</div>
+                <div className='text-sm md:text-sm'>{location}</div>
             </div>
             {children}
         </div>

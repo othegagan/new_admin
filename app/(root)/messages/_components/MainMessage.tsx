@@ -198,12 +198,12 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
                         </div>
                     </Card>
                 )}
-                <div className='flex flex-1 items-center gap-2 rounded-md border border-input bg-background px-3 py-1 focus-within:ring-1 focus-within:ring-ring'>
+                <div className='flex flex-1 items-end gap-2 rounded-md border border-input bg-background px-3 py-2 focus-within:ring-1 focus-within:ring-ring'>
                     <label htmlFor='image-upload' className='cursor-pointer'>
                         <Paperclip className='h-5 w-5 text-muted-foreground' />
                         <input id='image-upload' type='file' accept='image/*' onChange={handleImageUpload} className='sr-only' />
                     </label>
-                    <label className='flex-1'>
+                    <label className='min-h-[1.5rem] flex-1'>
                         <span className='sr-only'>Chat Text Box</span>
                         <textarea
                             ref={textareaRef}
@@ -212,7 +212,7 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
                             placeholder='Type your message...'
                             className='flex max-h-20 w-full overflow-y-auto bg-inherit text-sm placeholder:text-muted-foreground placeholder:text-sm focus-visible:outline-none'
                             rows={1}
-                            style={{ overflow: 'hidden' }} // Prevent scrollbars from appearing
+                            style={{ resize: 'none' }} // Prevent scrollbars from appearing
                         />
                     </label>
                     <Button
