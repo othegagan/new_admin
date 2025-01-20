@@ -233,7 +233,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                             <Popover>
                                 <PopoverTrigger>
                                     <div className='w-fit rounded bg-[#d1d1d1] px-2 py-1 font-medium text-red-600 text-xs md:px-5 lg:text-[14px] dark:bg-accent'>
-                                        Verification Failed
+                                        Failed Extension
                                     </div>
                                 </PopoverTrigger>
                                 <PopoverContent className='font-normal text-sm'>{trip.cardExtensionFailedReason}</PopoverContent>
