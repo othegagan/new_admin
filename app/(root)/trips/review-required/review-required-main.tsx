@@ -43,15 +43,23 @@ export default function ReviewRequired() {
     const failedCardExtensions = sortByCreatedDate(data?.failedCardExtensions || []);
     const cancellationRequestedTrips = sortByCreatedDate(data?.cancellationRequestedTrips || []);
 
-    if (
-        !newTripRequests ||
-        !failedPayments ||
-        !failedTripExtensions ||
-        !failedDriverVerifications ||
-        !failedCardExtensions ||
-        !cancellationRequestedTrips
-    ) {
-        return <div>No Trips</div>;
+    const actionRequired =
+        data?.newRequests?.length > 0 ||
+        data?.failedPayments?.length > 0 ||
+        data?.failedTripExtensions?.length > 0 ||
+        data?.failedDriverVerifications?.length > 0 ||
+        data?.failedCardExtensions?.length > 0 ||
+        data?.cancellationRequestedTrips?.length > 0;
+
+    if (!actionRequired) {
+        return (
+            <div className='flex h-[calc(100dvh_-_300px)] w-full flex-col items-center justify-center'>
+                <img src='/images/car_loading_2.gif' className='h-auto w-48 opacity-50 dark:invert' alt='Loading...' />
+                <h3 className='mt-6 text-center text-muted-foreground'>
+                    No more bumps! <br /> You're all caught up.
+                </h3>
+            </div>
+        );
     }
 
     return (
