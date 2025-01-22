@@ -4,21 +4,29 @@ import { Button } from '@/components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { FormError, Label } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
+import { PAGE_ROUTES } from '@/constants/routes';
+import { env } from '@/env';
 import { delay } from '@/lib/utils';
 import { ExcelIcon } from '@/public/icons';
 import { createVehicle } from '@/server/vehicles';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
 import { ArrowRight } from 'lucide-react';
 import { getSession } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { type SubmitHandler, useForm } from 'react-hook-form';
+import { useRef, useState } from 'react';
+import { type SubmitHandler, type UseFormSetError, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 interface UploadVINFormProps {
     nextStep: () => void;
+}
+
+interface ExcelUploadData {
+    fileName: string;
+    b64Contents: string;
+    hostId: number | undefined;
 }
 
 const schema = z.object({
@@ -33,8 +41,6 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 export default function UploadVINForm({ nextStep }: UploadVINFormProps) {
-    const [excelFile, setExcelFile] = useState<File | null>(null);
-
     const {
         register,
         handleSubmit,
@@ -49,6 +55,8 @@ export default function UploadVINForm({ nextStep }: UploadVINFormProps) {
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
+        setError('root', { type: 'manual', message: undefined });
+
         try {
             const session = await getSession();
             const { vin } = formData;
@@ -115,19 +123,26 @@ export default function UploadVINForm({ nextStep }: UploadVINFormProps) {
                         <FormError>{errors.vin?.message}</FormError>
                     </div>
                     <div className='my-auto flex items-center md:w-2/4'>
-                        <div className='flex-1 border-neutral-300 border-t' />
-                        <span className=' px-3 text-neutral-500'>OR</span>
-                        <div className='flex-1 border-neutral-300 border-t' />
+                        <div className='flex-1 border-muted-foreground/50 border-t' />
+                        <span className=' px-3 text-muted-foreground/50'>OR</span>
+                        <div className='flex-1 border-muted-foreground/50 border-t' />
                     </div>
                     <div className='flex w-full flex-col gap-2'>
-                        <UploadExcelFile nextStep={nextStep} setError={setError} />
-                        <Link href='as' download={true} className='text-12 underline underline-offset-2'>
+                        <UploadExcelFile setError={setError} />
+                        <a
+                            href='/vehicle_upload_template.csv'
+                            download={true}
+                            className='text-12 text-muted-foreground underline underline-offset-2'>
                             Download Sample Template
-                        </Link>
+                        </a>
                     </div>
                 </div>
 
-                <FormError>{errors.root?.message}</FormError>
+                {errors.root?.message && (
+                    <div className='my-3 flex select-none items-center gap-4 rounded-md bg-red-50 p-3 dark:bg-red-200'>
+                        <p className='font-medium text-red-600 text-sm'>{errors.root?.message}</p>
+                    </div>
+                )}
             </div>
 
             <div className='mt-6 flex justify-end'>
@@ -139,79 +154,122 @@ export default function UploadVINForm({ nextStep }: UploadVINFormProps) {
     );
 }
 
-function UploadExcelFile({
-    nextStep,
-    setError
-}: {
-    nextStep: () => void;
-    setError: any;
-}) {
+function UploadExcelFile({ setError }: { setError: UseFormSetError<FormFields> }) {
     const router = useRouter();
+    const [uploading, setUploading] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const [excelUpload, setExcelUpload] = useState({});
+    async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+        try {
+            const file = event.target?.files?.[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    if (!e.target?.result) {
+                        throw new Error('Failed to read file.');
+                    }
+                    const b64Contents = Buffer.from(new Uint8Array(e.target.result as ArrayBuffer)).toString('base64');
 
-    const branchIDCode = 1;
-
-    async function handleFileChange(event: any) {
-        const file = event.target.files[0];
-        if (file) {
-            if (file.type !== 'text/csv') {
-                setError('root', {
-                    type: 'manual',
-                    message: 'Please select a CSV file'
-                });
-                return;
-            }
-
-            const session = await getSession();
-            const reader: any = new FileReader();
-
-            reader.onload = () => {
-                setTimeout(() => {
-                    const b64Contents = btoa(reader.result.toString());
-                    setExcelUpload({
+                    const uploadData = {
                         fileName: file.name,
-                        b64Contents,
-                        branchId: branchIDCode,
-                        hostId: session?.iduser
-                    });
-                    bulkUpload();
-                }, 500);
-            };
+                        b64Contents
+                    };
 
-            reader.readAsBinaryString(file);
-        } else {
-            setError('root', { type: 'manual', message: 'Please select a file' });
+                    await bulkUpload(uploadData);
+                    resetFileInput(); // Reset the file input after processing
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                setError('root', { type: 'manual', message: 'Please select a file' });
+            }
+        } catch (error) {
+            console.error('Error in reading file:', error);
+            setError('root', { type: 'manual', message: 'Something went wrong! Please try again.' });
+            resetFileInput(); // Reset the file input on error
         }
     }
 
-    async function bulkUpload() {
-        // if (branchIDCode === -1) {
-        //     toastService.showWarning('Please select a branch');
-        //     return;
-        // }
-        // const uploadData = { ...excelUpload, branchId: branchIDCode };
-        // try {
-        //     const response = await restService.vehiclesPost('/api/v1/vehicle/createVehiclesWithImageByCsv', uploadData);
-        //     const { failedVins, unavailableDbVins, wrongVins, duplicateVins } = response.data;
-        //     let isHavingError = false;
-        //     const showErrorMessages = (vins: any[], message: string) => {
-        //         if (vins.length > 0) {
-        //             isHavingError = true;
-        //             setError('root', { type: 'manual', message: `${message} ${vins.join(', ')}` });
-        //         }
-        //     };
-        //     showErrorMessages(failedVins, 'Failed VINs!!!');
-        //     showErrorMessages(unavailableDbVins, 'Unavailable Db VINs!!!');
-        //     showErrorMessages(wrongVins, 'Wrong VINs!!!');
-        //     showErrorMessages(duplicateVins, 'Duplicate VINs!!!');
-        //     if (!isHavingError) {
-        //         toast.success('Successfully Added CSV records!!!');
-        //         router.replace('/vehicles');
-        //     }
-        // } catch (error) {
-        //     setError('root', { type: 'manual', message: 'Something went wrong!!!, please try again' });
-        // }
+    async function bulkUpload(uploadData: { fileName: string; b64Contents: string }) {
+        setUploading(true);
+        setError('root', { type: 'manual', message: undefined });
+        try {
+            const session = await getSession();
+
+            const url = `${env.NEXT_PUBLIC_HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/createVehiclesWithImageByCsv`;
+
+            const payload: ExcelUploadData = {
+                ...uploadData,
+                hostId: session?.iduser
+            };
+
+            const response = await axios.post(url, payload, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    bundee_auth_token: session?.bundeeToken
+                }
+            });
+
+            // Ensure response.data exists and is an object
+            if (!response || !response.data) {
+                throw new Error('Invalid response data');
+            }
+
+            const {
+                errorCode = '0',
+                errorMessage = '',
+                failedVins = [],
+                unavailableDbVins = [],
+                wrongVins = [],
+                duplicateVins = []
+            } = response.data;
+
+            if (errorCode === '1') {
+                // Initialize an array to collect error messages
+                const errorMessages: string[] = [];
+
+                // Add the main error message
+                if (errorMessage) {
+                    errorMessages.push(`Upload failed: ${errorMessage}`);
+                }
+
+                // Helper function to add VIN-related errors
+                const addVinErrors = (vins: string[], message: string) => {
+                    if (vins.length > 0) {
+                        errorMessages.push(`${message}: ${vins.join(', ')}`);
+                    }
+                };
+
+                // Add VIN-related errors to the array
+                addVinErrors(failedVins, 'Failed VINs');
+                addVinErrors(unavailableDbVins, 'Unavailable DB VINs');
+                addVinErrors(wrongVins, 'Wrong VINs');
+                addVinErrors(duplicateVins, 'Duplicate VINs');
+
+                // Combine all error messages and assign to setError
+                setError('root', { type: 'manual', message: errorMessages.join('\n') });
+
+                return; // Exit if there's an error
+            }
+
+            // If no errorCode, assume success
+            toast.success('Successfully uploaded vehicles!');
+            router.replace(PAGE_ROUTES.VEHICLES);
+        } catch (error: any) {
+            console.error('Error in bulk upload:', error);
+
+            setError('root', {
+                type: 'manual',
+                message: `Something went wrong! Please try again. ${error.message}`
+            });
+        } finally {
+            setUploading(false);
+        }
+    }
+
+    function resetFileInput() {
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ''; // Reset the input value
+        }
     }
 
     return (
@@ -219,7 +277,16 @@ function UploadExcelFile({
             <Label className='flex items-center gap-2'>
                 Upload Excel File <ExcelIcon className='mr-2 size-6' />
             </Label>
-            <Input id='picture' type='file' accept='.csv' className='cursor-pointer' onChange={handleFileChange} />
+            <Input
+                ref={fileInputRef}
+                disabled={uploading}
+                id='excel-upload'
+                type='file'
+                accept='.csv'
+                className='cursor-pointer'
+                onChange={handleFileChange}
+            />
+            {uploading && <div className='mt-4 w-full space-y-2'>Uploading...</div>}
         </div>
     );
 }
