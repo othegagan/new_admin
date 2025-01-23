@@ -32,18 +32,14 @@ export default function ConfigurationPage() {
     const isUpdate: boolean = !!response?.data.hostBusinessConstraints[0]?.constraintValueObject[0];
 
     return (
-        <Main>
+        <Main className='h-full'>
             <PageHeader
                 title='Tax Configurations'
                 description='Configure your tax calculations to ensure accurate earnings and tax compliance.'
             />
 
-            <div className='my-4'>
-                {loading && (
-                    <div className='flex h-full w-full flex-col items-center justify-center'>
-                        <CarLoadingSkeleton />
-                    </div>
-                )}
+            <div className='my-4 h-full'>
+                {loading && <CarLoadingSkeleton />}
                 {error && <div>Error: {error.message}</div>}
                 {!loading && !error && <ConstraintForm data={data} isUpdate={isUpdate} refetch={refetch} />}
             </div>

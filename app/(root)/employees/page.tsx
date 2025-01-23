@@ -10,13 +10,13 @@ import { columns } from './_components/columns';
 
 export default function Page() {
     return (
-        <Main fixed className='overflow-y-auto'>
+        <Main fixed className='h-full overflow-y-auto'>
             <div className='flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
                 <PageHeader title='Employees' description='List of all the employees under the host' />
                 <AddNewEmployeeForm />
             </div>
 
-            <div className='my-4'>
+            <div className='my-4 h-full'>
                 <HostTable />
             </div>
         </Main>
@@ -26,12 +26,7 @@ export default function Page() {
 function HostTable() {
     const { data: response, isLoading: loading, error } = useEmployees();
 
-    if (loading)
-        return (
-            <div className='flex h-full w-full flex-col items-center justify-center'>
-                <CarLoadingSkeleton />
-            </div>
-        );
+    if (loading) return <CarLoadingSkeleton />;
 
     if (error) return <div>Error: {error?.message}</div>;
 

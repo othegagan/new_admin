@@ -42,11 +42,9 @@ export default function VehicleSearch() {
 
     if (isLoading)
         return (
-            <div className='flex flex-col gap-4'>
+            <div className='flex h-full w-full flex-col gap-4'>
                 <h3>Find My Car</h3>
-                <div className='flex h-[50dvh] w-full items-center justify-center'>
-                    <CarLoadingSkeleton />
-                </div>
+                <CarLoadingSkeleton />
             </div>
         );
     if (error)

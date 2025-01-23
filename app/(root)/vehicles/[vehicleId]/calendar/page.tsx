@@ -83,51 +83,49 @@ export default function VehicleCalendarPage() {
 
     const vin = featuresResponse?.data?.vehicleAllDetails[0]?.vin || '';
 
+    if (isLoading) {
+        return (
+            <div className='flex h-full w-full items-center justify-center'>
+                <CarLoadingSkeleton />
+            </div>
+        );
+    }
+
+    if (error) {
+        return <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>;
+    }
+
     return (
-        <div className='flex flex-col'>
-            {isLoading && (
-                <div className='flex h-full w-full items-center justify-center'>
-                    <CarLoadingSkeleton />
+        <div className='grid grid-cols-1 gap-10 md:grid-cols-6'>
+            <div className='lg:col-span-4'>
+                <div className='mb-4 flex w-full items-center justify-center gap-6 p-0.5'>
+                    <MonthPicker
+                        currentMonth={currentMonth}
+                        onMonthChange={handleMonthChange}
+                        setCurrentMonth={setCurrentMonth}
+                        calendarRef={calendarRef}
+                        className='w-[200px]'
+                    />
                 </div>
-            )}
+                <CalendarComponent
+                    trips={tripsData}
+                    blockedDates={unavailabilityData}
+                    dynamicPricies={dynamicPricing}
+                    calendarRef={calendarRef}
+                    currentMonth={currentMonth}
+                    vehiclePricePerDay={vehiclePricePerDay}
+                    zipcode={zipcode}
+                />
+            </div>
 
-            {error && <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>}
-
-            <div className='flex flex-col gap-4'>
-                {!isLoading && !error && (
-                    <div className='grid grid-cols-1 gap-10 md:grid-cols-6'>
-                        <div className='lg:col-span-4'>
-                            <div className='mb-4 flex w-full items-center justify-center gap-6 p-0.5'>
-                                <MonthPicker
-                                    currentMonth={currentMonth}
-                                    onMonthChange={handleMonthChange}
-                                    setCurrentMonth={setCurrentMonth}
-                                    calendarRef={calendarRef}
-                                    className='w-[200px]'
-                                />
-                            </div>
-                            <CalendarComponent
-                                trips={tripsData}
-                                blockedDates={unavailabilityData}
-                                dynamicPricies={dynamicPricing}
-                                calendarRef={calendarRef}
-                                currentMonth={currentMonth}
-                                vehiclePricePerDay={vehiclePricePerDay}
-                                zipcode={zipcode}
-                            />
-                        </div>
-
-                        <div className='lg:col-span-2'>
-                            <UnavailabilityComponent
-                                vin={vin}
-                                vehicleId={Number(vehicleId)}
-                                refetchData={refetchData}
-                                unavailabilityData={unavailabilityData}
-                                zipcode={zipcode}
-                            />
-                        </div>
-                    </div>
-                )}
+            <div className='lg:col-span-2'>
+                <UnavailabilityComponent
+                    vin={vin}
+                    vehicleId={Number(vehicleId)}
+                    refetchData={refetchData}
+                    unavailabilityData={unavailabilityData}
+                    zipcode={zipcode}
+                />
             </div>
         </div>
     );
