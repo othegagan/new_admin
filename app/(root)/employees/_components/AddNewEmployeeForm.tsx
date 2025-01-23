@@ -26,7 +26,7 @@ const schema = z.object({
         .refine(
             (value) => {
                 const phoneNumber = value.replace(/\s/g, '');
-                return phoneNumber.length >= 11;
+                return phoneNumber.length >= 12;
             },
             { message: 'Invalid mobile number, must be 10 digits' }
         )
@@ -72,7 +72,7 @@ export default function AddNewEmployeeForm() {
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
-                mobilePhone: mobilePhone ? `+${mobilePhone}` : '',
+                mobilePhone: mobilePhone || '',
                 channelName: session?.channelName || 'Bundee',
                 hostId: session?.iduser
             });
@@ -123,7 +123,7 @@ export default function AddNewEmployeeForm() {
                                 <Controller
                                     control={control}
                                     name='mobilePhone'
-                                    render={({ field: { onChange, value } }) => <PhoneNumber onValueChange={onChange} value={value} />}
+                                    render={({ field: { onChange, value } }) => <PhoneNumber onChange={onChange} value={value || ''} />}
                                 />
                                 <FormError>{errors.mobilePhone?.message}</FormError>
                             </div>

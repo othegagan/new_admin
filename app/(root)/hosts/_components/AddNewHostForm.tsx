@@ -70,7 +70,7 @@ export default function AddNewHostForm() {
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
-                mobilePhone: `+${mobilePhone}`,
+                mobilePhone: mobilePhone,
                 channelName: channelName
             });
 
@@ -120,7 +120,7 @@ export default function AddNewHostForm() {
                                 <Controller
                                     control={control}
                                     name='mobilePhone'
-                                    render={({ field: { onChange, value } }) => <PhoneNumber onValueChange={onChange} value={value} />}
+                                    render={({ field: { onChange, value } }) => <PhoneNumber onChange={onChange} value={value || ''} />}
                                 />
                                 <FormError>{errors.mobilePhone?.message}</FormError>
                             </div>

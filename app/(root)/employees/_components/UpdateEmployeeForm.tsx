@@ -74,7 +74,7 @@ export default function UpdateEmployeeForm({ cell }: { cell: any }) {
                 language: selectedRow?.language || '',
                 lastname: lastName || '',
                 middlename: '',
-                mobilePhone: mobilePhone ? `+${mobilePhone}` : '',
+                mobilePhone: mobilePhone || '',
                 postcode: selectedRow?.postcode || '',
                 state: selectedRow?.state || '',
                 userimage: selectedRow?.userimage || '',
@@ -131,7 +131,7 @@ export default function UpdateEmployeeForm({ cell }: { cell: any }) {
                                     control={control}
                                     name='mobilePhone'
                                     defaultValue={selectedRow?.mobilephone || ''}
-                                    render={({ field: { onChange, value } }) => <PhoneNumber onValueChange={onChange} value={value} />}
+                                    render={({ field: { onChange, value } }) => <PhoneNumber onChange={onChange} value={value || ''} />}
                                 />
                                 <FormError>{errors.mobilePhone?.message}</FormError>
                             </div>

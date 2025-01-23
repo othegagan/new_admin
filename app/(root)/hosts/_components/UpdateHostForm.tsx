@@ -128,7 +128,7 @@ export default function UpdateHostForm({ cell }: { cell: any }) {
                                     control={control}
                                     name='mobilePhone'
                                     defaultValue={selectedRow?.mobilephone || ''}
-                                    render={({ field: { onChange, value } }) => <PhoneNumber onValueChange={onChange} value={value} />}
+                                    render={({ field: { onChange, value } }) => <PhoneNumber onChange={onChange} value={value || ''} />}
                                 />
                                 <FormError>{errors.mobilePhone?.message}</FormError>
                             </div>
