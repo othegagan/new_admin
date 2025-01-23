@@ -321,7 +321,7 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
         <div className='flex w-full flex-col gap-1 text-nowrap border-b py-2.5 md:max-w-5xl lg:max-w-6xl xl:max-w-7xl'>
             <div className='flex items-center gap-4 lg:hidden'>
                 <UserInfo className='text-[14px]' avatarSrc={avatarSrc} name={userName} tripId={tripId} userId={userId} />
-                <div className='flex flex-wrap items-end justify-end gap-2'>
+                <div className='ml-auto flex flex-wrap items-end justify-end gap-2'>
                     {/* Turo Trip dont have driver readiness */}
                     {!isTuroTrip && (
                         <DriverReadinessDialog
