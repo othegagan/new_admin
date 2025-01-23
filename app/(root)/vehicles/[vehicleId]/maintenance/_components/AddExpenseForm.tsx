@@ -19,9 +19,10 @@ import { useState } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { SuggestionInput } from './suggestion-input';
 
 const expenseFormSchema = z.object({
-    serviceType: z.string().nonempty({ message: 'Please select a service type' }),
+    serviceType: z.string().nonempty({ message: 'Please enter/select a service type' }),
     date: z.string().nonempty({ message: 'Please select a date' }),
     time: z.string().nonempty({ message: 'Please select a time' }),
     odometerReading: requiredNumberSchema,
@@ -143,18 +144,25 @@ export default function AddExpenseForm({ vehicleId, refetchExpenseLogs }: { vehi
                                     name='serviceType'
                                     control={control}
                                     render={({ field }) => (
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder='Select' />
-                                            </SelectTrigger>
-                                            <SelectContent className='max-h-44 w-full'>
-                                                {expenseTypes.map((type) => (
-                                                    <SelectItem key={type} value={type}>
-                                                        {type}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        // <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        //     <SelectTrigger>
+                                        //         <SelectValue placeholder='Select' />
+                                        //     </SelectTrigger>
+                                        //     <SelectContent className='max-h-44 w-full'>
+                                        //         {expenseTypes.map((type) => (
+                                        //             <SelectItem key={type} value={type}>
+                                        //                 {type}
+                                        //             </SelectItem>
+                                        //         ))}
+                                        //     </SelectContent>
+                                        // </Select>
+
+                                        <SuggestionInput
+                                            value={field.value}
+                                            onChange={(value) => field.onChange(value)}
+                                            suggestions={expenseTypes}
+                                            placeholder=''
+                                        />
                                     )}
                                 />
                                 {errors.serviceType && <FormError>{errors.serviceType.message}</FormError>}

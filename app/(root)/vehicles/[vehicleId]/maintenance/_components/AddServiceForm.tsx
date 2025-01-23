@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { SuggestionInput } from './suggestion-input';
 
 const serviceFormSchema = z.object({
     serviceType: z.string().nonempty({ message: 'Please select a service type' }),
@@ -158,18 +159,25 @@ export default function AddServiceForm({ vehicleId, refechServiceLogs }: { vehic
                                     name='serviceType'
                                     control={control}
                                     render={({ field }) => (
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder='Select' />
-                                            </SelectTrigger>
-                                            <SelectContent className='max-h-44 w-full'>
-                                                {serviceTypes.map((type) => (
-                                                    <SelectItem key={type} value={type}>
-                                                        {type}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        // <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        //     <SelectTrigger>
+                                        //         <SelectValue placeholder='Select' />
+                                        //     </SelectTrigger>
+                                        //     <SelectContent className='max-h-44 w-full'>
+                                        //         {serviceTypes.map((type) => (
+                                        //             <SelectItem key={type} value={type}>
+                                        //                 {type}
+                                        //             </SelectItem>
+                                        //         ))}
+                                        //     </SelectContent>
+                                        // </Select>
+
+                                        <SuggestionInput
+                                            value={field.value}
+                                            onChange={(value) => field.onChange(value)}
+                                            suggestions={serviceTypes}
+                                            placeholder=''
+                                        />
                                     )}
                                 />
                                 {errors.serviceType && <FormError>{errors.serviceType.message}</FormError>}
