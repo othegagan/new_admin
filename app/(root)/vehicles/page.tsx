@@ -110,9 +110,20 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
 
     const filteredCount = filteredCars.length;
     const allCarsCount = cars.length;
-    const activeCarsCount = cars.filter((car) => car.vehicleStatus === 'Active').length;
-    const inprogressCarsCount = cars.filter((car) => car.vehicleStatus === 'In Progress').length;
-    const inactiveCarsCount = cars.filter((car) => car.vehicleStatus === 'Inactive').length;
+
+    const vehicleStatusCounts = {
+        all: allCarsCount,
+        active: cars.filter((car) => car.vehicleStatus === 'Active').length,
+        inactive: cars.filter((car) => car.vehicleStatus === 'Inactive').length,
+        inprogress: cars.filter((car) => car.vehicleStatus === 'In Progress').length
+    };
+
+    const tripStatusCounts = {
+        all: allCarsCount,
+        started: cars.filter((car) => car.tripStatus?.toLowerCase() === 'started').length,
+        upcoming: cars.filter((car) => ['requested', 'approved'].includes(car.tripStatus?.toLowerCase())).length,
+        available: cars.filter((car) => car.tripStatus === null && car.vehicleStatus.toLowerCase() === 'active').length
+    };
 
     function clearFilters() {
         setSearchTerm('');
@@ -155,10 +166,18 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                <SelectItem value='all'>All</SelectItem>
-                                <SelectItem value='started'>On Trip</SelectItem>
-                                <SelectItem value='upcoming'>Upcoming</SelectItem>
-                                <SelectItem value='available'>Available</SelectItem>
+                                {[
+                                    { label: 'All', value: 'all', count: tripStatusCounts.all },
+                                    { label: 'On Trip', value: 'started', count: tripStatusCounts.started },
+                                    { label: 'Upcoming', value: 'upcoming', count: tripStatusCounts.upcoming },
+                                    { label: 'Available', value: 'available', count: tripStatusCounts.available }
+                                ].map((status) => (
+                                    <SelectItem key={status.value} value={status.value}>
+                                        <div className='flex w-full items-center justify-between'>
+                                            {status.label} <span className='ml-4'>({status.count})</span>
+                                        </div>
+                                    </SelectItem>
+                                ))}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -170,10 +189,10 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                         <SelectContent>
                             <SelectGroup>
                                 {[
-                                    { label: 'All', value: 'all', count: allCarsCount },
-                                    { label: 'Active', value: 'active', count: activeCarsCount },
-                                    { label: STATUS_IN_PROGRESS, value: 'in progress', count: inprogressCarsCount },
-                                    { label: 'Inactive', value: 'inactive', count: inactiveCarsCount }
+                                    { label: 'All', value: 'all', count: vehicleStatusCounts.all },
+                                    { label: 'Active', value: 'active', count: vehicleStatusCounts.active },
+                                    { label: STATUS_IN_PROGRESS, value: 'in progress', count: vehicleStatusCounts.inprogress },
+                                    { label: 'Inactive', value: 'inactive', count: vehicleStatusCounts.inactive }
                                 ].map((status) => (
                                     <SelectItem key={status.value} value={status.value}>
                                         <div className='flex w-full items-center justify-between'>
