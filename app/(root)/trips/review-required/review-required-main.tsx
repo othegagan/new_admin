@@ -247,9 +247,9 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                                 <PopoverContent className='font-normal text-sm'>{trip.cardExtensionFailedReason}</PopoverContent>
                             </Popover>
                         }>
-                        {/* <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <TripDismissDialog tripId={trip.tripid} dismissalKey='' />
-                        </div> */}
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
+                            <TripDismissDialog tripId={trip.tripid} dismissalKey='cardExtensionFailed' />
+                        </div>
                     </TripCard>
                 ))}
             </AccordionContent>
