@@ -16,7 +16,7 @@ import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
-import { ActionButtons, CarDetails, UserInfo } from '../_components/trip-card-components';
+import { CarDetails, UserInfo } from '../_components/trip-card-components';
 import { getDeliveryLocation } from '../_components/trip-utils';
 
 export default function ReviewRequired() {
@@ -310,7 +310,6 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
     const isPhoneVerified = tripData.isPhoneVarified;
     const isRentalAgreed = tripData.isRentalAgreed;
     const isInsuranceVerified = tripData.isInsuranceVerified;
-    const tripStatus = tripData.status;
 
     const startDate = formatDateAndTime(tripData.starttime, tripData.vehzipcode, 'MMM DD, YYYY | h:mm A ');
     const endDate = formatDateAndTime(tripData.endtime, tripData.vehzipcode, 'MMM DD, YYYY | h:mm A  ');
@@ -322,19 +321,22 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
         <div className='flex w-full flex-col gap-1 text-nowrap border-b py-2.5 md:max-w-5xl lg:max-w-6xl xl:max-w-7xl'>
             <div className='flex items-center gap-4 lg:hidden'>
                 <UserInfo className='text-[14px]' avatarSrc={avatarSrc} name={userName} tripId={tripId} userId={userId} />
-                <ActionButtons
-                    className='ml-auto pr-6'
-                    isLicenceVerified={isLicenceVerified}
-                    isPhoneVerified={isPhoneVerified}
-                    isRentalAgreed={isRentalAgreed}
-                    isInsuranceVerified={isInsuranceVerified}
-                    tripStatus={tripStatus}
-                    tripId={tripId}
-                    userId={userId}
-                    userName={userName}
-                    avatarSrc={avatarSrc}
-                    isTuroTrip={isTuroTrip}
-                />
+                <div className='flex flex-wrap items-end justify-end gap-2'>
+                    {/* Turo Trip dont have driver readiness */}
+                    {!isTuroTrip && (
+                        <DriverReadinessDialog
+                            tripId={tripId}
+                            isLicenceVerified={isLicenceVerified}
+                            isPhoneVerified={isPhoneVerified}
+                            isRentalAgreed={isRentalAgreed}
+                            isInsuranceVerified={isInsuranceVerified}
+                            userId={userId}
+                            userName={userName}
+                            avatarSrc={avatarSrc}
+                        />
+                    )}
+                    {statusButton}
+                </div>
             </div>
 
             <div className='flex gap-3'>
