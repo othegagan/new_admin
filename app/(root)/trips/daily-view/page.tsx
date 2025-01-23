@@ -28,8 +28,17 @@ export default function DailyViewPage() {
 
     const data = response.data;
 
+    if (data?.trips?.length === 0) {
+        return (
+            <div className='flex h-[calc(100dvh_-_300px)] w-full flex-col items-center justify-center'>
+                <img src='/images/car_loading_2.gif' className='h-auto w-48 opacity-50 dark:invert' alt='Loading...' />
+                <h3 className='mt-6 text-center text-muted-foreground'>No trips yet.</h3>
+            </div>
+        );
+    }
+
     // Mapping through trips and adding vehicle and user details
-    const modifiedTrips = data.trips.map((trip: { vehicleId: number; userId: number }) => {
+    const modifiedTrips = data?.trips.map((trip: { vehicleId: number; userId: number }) => {
         const vehicle = findVehicle(data.vehicles, trip.vehicleId);
         const user = findUser(data.users, trip.userId);
 

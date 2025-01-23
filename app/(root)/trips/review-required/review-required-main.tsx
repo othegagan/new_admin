@@ -12,12 +12,49 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { CHANNELS } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useReviewRequiredTrips } from '@/hooks/useTrips';
-import { formatDateAndTime, getFullAddress, toTitleCase } from '@/lib/utils';
-import type { Trip } from '@/types';
+import { formatDateAndTime, toTitleCase } from '@/lib/utils';
 import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { CarDetails, UserInfo } from '../_components/trip-card-components';
-import { getDeliveryLocation } from '../_components/trip-utils';
+import { type AllTrip, findUser, findVehicle, getDeliveryLocation, getVehicleLocation, sortByCreatedDate } from '../_components/trip-utils';
+
+const flags = [
+    'cardExtensionFailed',
+    'cancellationRequested',
+    'failedDriverVerification',
+    'failedAutoTripExtension',
+    'newRequest',
+    'paymentFailed',
+    'startFailed'
+] as const;
+
+type CategorizedTrips = Record<(typeof flags)[number], any[]>;
+
+interface ReviewRequiredTrip extends AllTrip {
+    newRequest: boolean;
+    newRequestMessage: string | null;
+
+    paymentFailed: boolean;
+    paymentFailedReason: string | null;
+
+    failedAutoTripExtension: boolean;
+    failedTripExtensionMessage: string | null;
+
+    startFailed: boolean;
+    startFailedMessage: string | null;
+
+    cardExtensionFailed: boolean;
+    cardExtensionFailedReason: string | null;
+
+    failedDriverVerification: boolean;
+    failedDriverVerificationMessage: string | null;
+
+    cancellationRequested: boolean;
+    cancellationRequestedMessage: string | null;
+
+    isDebitCard: boolean;
+    depositToBeCollected: boolean;
+}
 
 export default function ReviewRequired() {
     const { data: response, isLoading, error, isError } = useReviewRequiredTrips();
@@ -36,22 +73,9 @@ export default function ReviewRequired() {
 
     const data = response.data;
 
-    const newTripRequests = sortByCreatedDate(data?.newRequests || []);
-    const failedPayments = sortByCreatedDate(data?.failedPayments || []);
-    const failedTripExtensions = sortByCreatedDate(data?.failedTripExtensions || []);
-    const failedDriverVerifications = sortByCreatedDate(data?.failedDriverVerifications || []);
-    const failedCardExtensions = sortByCreatedDate(data?.failedCardExtensions || []);
-    const cancellationRequestedTrips = sortByCreatedDate(data?.cancellationRequestedTrips || []);
+    const trips = data?.trips || [];
 
-    const actionRequired =
-        data?.newRequests?.length > 0 ||
-        data?.failedPayments?.length > 0 ||
-        data?.failedTripExtensions?.length > 0 ||
-        data?.failedDriverVerifications?.length > 0 ||
-        data?.failedCardExtensions?.length > 0 ||
-        data?.cancellationRequestedTrips?.length > 0;
-
-    if (!actionRequired) {
+    if (trips.length === 0) {
         return (
             <div className='flex h-[calc(100dvh_-_300px)] w-full flex-col items-center justify-center'>
                 <img src='/images/car_loading_2.gif' className='h-auto w-48 opacity-50 dark:invert' alt='Loading...' />
@@ -62,21 +86,66 @@ export default function ReviewRequired() {
         );
     }
 
+    // Mapping through trips and combining vehicle and user details
+    const modifiedTrips = trips?.map((trip: ReviewRequiredTrip) => {
+        const vehicle = findVehicle(data.vehicles, trip.vehicleId);
+        const user = findUser(data.users, trip.userId);
+
+        // Creating a new object with combined details
+        return {
+            ...trip,
+            ...vehicle,
+            ...user
+        };
+    });
+
+    // Initialize categorized trips
+    const categorizedTrips: CategorizedTrips = flags.reduce((acc, flag) => {
+        acc[flag] = [];
+        return acc;
+    }, {} as CategorizedTrips);
+
+    // Categorize trips based on flags
+    modifiedTrips?.forEach((trip: ReviewRequiredTrip) => {
+        flags?.forEach((flag) => {
+            if (trip[flag]) {
+                categorizedTrips[flag].push(trip);
+            }
+        });
+    });
+
+    // Sort each category by `createdTime`
+    Object.keys(categorizedTrips).forEach((flag) => {
+        const key = flag as keyof CategorizedTrips;
+        categorizedTrips[key] = sortByCreatedDate(categorizedTrips[key] || []);
+    });
+
+    const {
+        cancellationRequested,
+        cardExtensionFailed,
+        failedAutoTripExtension,
+        failedDriverVerification,
+        newRequest,
+        paymentFailed,
+        startFailed
+    } = categorizedTrips;
+
     return (
         <ScrollArea className='relative flex h-[calc(100dvh_-_100px)] w-full flex-col px-4'>
             <Accordion type='single' collapsible className='mx-auto mb-4 flex flex-col gap-5 md:max-w-5xl'>
-                <NewTripRequests newTripRequests={newTripRequests} />
-                <FailedPayments failedPayments={failedPayments} />
-                <FailedTripExtensions failedTripExtensions={failedTripExtensions} />
-                <FailedDriverVerifications failedDriverVerifications={failedDriverVerifications} />
-                <FailedCardExtensions failedCardExtensions={failedCardExtensions} />
-                <CancellationRequestedTrips cancellationRequestedTrips={cancellationRequestedTrips} />
+                <NewTripRequests newTripRequests={newRequest} />
+                <FailedPayments failedPayments={paymentFailed} />
+                <FailedTripExtensions failedTripExtensions={failedAutoTripExtension} />
+                <FailedDriverVerifications failedDriverVerifications={failedDriverVerification} />
+                <FailedCardExtensions failedCardExtensions={cardExtensionFailed} />
+                <StartFailedTrips startFailedTrips={startFailed} />
+                <CancellationRequestedTrips cancellationRequestedTrips={cancellationRequested} />
             </Accordion>
         </ScrollArea>
     );
 }
 
-function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
+function NewTripRequests({ newTripRequests }: { newTripRequests: ReviewRequiredTrip[] }) {
     if (newTripRequests.length === 0) return null;
     return (
         <AccordionItem value='new-requests' className='border-0'>
@@ -86,10 +155,10 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
-                {newTripRequests.map((trip: any) => (
+                {newTripRequests.map((trip: ReviewRequiredTrip) => (
                     <TripCard
                         tripData={trip}
-                        key={trip.tripid}
+                        key={trip.tripId}
                         statusButton={
                             <div className='w-fit rounded bg-[#d1d1d1] px-2 py-1 text-xs md:px-5 lg:text-[14px] dark:bg-accent'>
                                 {trip.status}
@@ -97,19 +166,19 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
                             <Link
-                                href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.tripid}${PAGE_ROUTES.TRIP_DETAILS_SWAP}`}
+                                href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.tripId}${PAGE_ROUTES.TRIP_DETAILS_SWAP}`}
                                 type='button'
                                 className='ont-semibold flex h-9 items-center gap-2 rounded-full px-4 py-1 text-neutral-700 hover:bg-muted dark:text-neutral-300'>
                                 <ArrowLeftRight className='size-5' />
                                 Swap Vehicle
                             </Link>
 
-                            <TripRejectDialog tripId={trip.tripid} />
+                            <TripRejectDialog tripId={trip.tripId} />
 
                             <TripApproveDialog
-                                tripId={trip.tripid}
-                                debitOrCreditCard={trip.isDebitCard ? 'debit' : 'credit'}
-                                defaultDepositToBeCollectedFlag={trip.depositToBeCollected}
+                                tripId={trip.tripId}
+                                debitOrCreditCard={trip?.isDebitCard ? 'debit' : 'credit'}
+                                defaultDepositToBeCollectedFlag={trip?.depositToBeCollected}
                             />
                         </div>
                     </TripCard>
@@ -119,7 +188,7 @@ function NewTripRequests({ newTripRequests }: { newTripRequests: any[] }) {
     );
 }
 
-function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
+function FailedPayments({ failedPayments }: { failedPayments: ReviewRequiredTrip[] }) {
     if (failedPayments.length === 0) return null;
     return (
         <AccordionItem value='failed-payments' className='border-0'>
@@ -129,10 +198,10 @@ function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
-                {failedPayments.map((trip: any) => (
+                {failedPayments.map((trip: ReviewRequiredTrip) => (
                     <TripCard
                         tripData={trip}
-                        key={trip.tripid}
+                        key={trip.tripId}
                         statusButton={
                             <Popover>
                                 <PopoverTrigger>
@@ -144,7 +213,7 @@ function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
                             </Popover>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <TripDismissDialog tripId={trip.tripid} dismissalKey='paymentFailed' />
+                            <TripDismissDialog tripId={trip.tripId} dismissalKey='paymentFailed' />
                         </div>
                     </TripCard>
                 ))}
@@ -153,7 +222,7 @@ function FailedPayments({ failedPayments }: { failedPayments: any[] }) {
     );
 }
 
-function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: any[] }) {
+function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: ReviewRequiredTrip[] }) {
     if (failedTripExtensions.length === 0) return null;
     return (
         <AccordionItem value='failed-trip-extensions' className='border-0'>
@@ -163,10 +232,10 @@ function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: 
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
-                {failedTripExtensions.map((trip: any) => (
+                {failedTripExtensions.map((trip: ReviewRequiredTrip) => (
                     <TripCard
                         tripData={trip}
-                        key={trip.tripid}
+                        key={trip.tripId}
                         statusButton={
                             <Popover>
                                 <PopoverTrigger>
@@ -174,11 +243,11 @@ function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: 
                                         Extension Failed
                                     </div>
                                 </PopoverTrigger>
-                                <PopoverContent className='font-normal text-sm'>{trip.failedtripextensionmessage}</PopoverContent>
+                                <PopoverContent className='font-normal text-sm'>{trip.failedTripExtensionMessage}</PopoverContent>
                             </Popover>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <TripDismissDialog tripId={trip.tripid} dismissalKey='failedautotripExtension' />
+                            <TripDismissDialog tripId={trip.tripId} dismissalKey='failedautotripExtension' />
                         </div>
                     </TripCard>
                 ))}
@@ -187,7 +256,7 @@ function FailedTripExtensions({ failedTripExtensions }: { failedTripExtensions: 
     );
 }
 
-function FailedDriverVerifications({ failedDriverVerifications }: { failedDriverVerifications: any[] }) {
+function FailedDriverVerifications({ failedDriverVerifications }: { failedDriverVerifications: ReviewRequiredTrip[] }) {
     if (failedDriverVerifications.length === 0) return null;
     return (
         <AccordionItem value='failed-driving-verifications' className='border-0'>
@@ -199,10 +268,10 @@ function FailedDriverVerifications({ failedDriverVerifications }: { failedDriver
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
-                {failedDriverVerifications.map((trip: any) => (
+                {failedDriverVerifications.map((trip: ReviewRequiredTrip) => (
                     <TripCard
                         tripData={trip}
-                        key={trip.tripid}
+                        key={trip.tripId}
                         statusButton={
                             <Popover>
                                 <PopoverTrigger>
@@ -210,11 +279,11 @@ function FailedDriverVerifications({ failedDriverVerifications }: { failedDriver
                                         Verification Failed
                                     </div>
                                 </PopoverTrigger>
-                                <PopoverContent className='font-normal text-sm'>{trip.failedDriverVerificationsMessage}</PopoverContent>
+                                <PopoverContent className='font-normal text-sm'>{trip.failedDriverVerificationMessage}</PopoverContent>
                             </Popover>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <TripDismissDialog tripId={trip.tripid} dismissalKey='failedDriverVerifications' />
+                            <TripDismissDialog tripId={trip.tripId} dismissalKey='failedDriverVerifications' />
                         </div>
                     </TripCard>
                 ))}
@@ -223,7 +292,7 @@ function FailedDriverVerifications({ failedDriverVerifications }: { failedDriver
     );
 }
 
-function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: any[] }) {
+function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: ReviewRequiredTrip[] }) {
     if (failedCardExtensions.length === 0) return null;
     return (
         <AccordionItem value='failed-card-extensions' className='border-0'>
@@ -233,10 +302,10 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
-                {failedCardExtensions.map((trip: any) => (
+                {failedCardExtensions.map((trip: ReviewRequiredTrip) => (
                     <TripCard
                         tripData={trip}
-                        key={trip.tripid}
+                        key={trip.tripId}
                         statusButton={
                             <Popover>
                                 <PopoverTrigger>
@@ -248,7 +317,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                             </Popover>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <TripDismissDialog tripId={trip.tripid} dismissalKey='cardExtensionFailed' />
+                            <TripDismissDialog tripId={trip.tripId} dismissalKey='cardExtensionFailed' />
                         </div>
                     </TripCard>
                 ))}
@@ -257,7 +326,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
     );
 }
 
-function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellationRequestedTrips: any[] }) {
+function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellationRequestedTrips: ReviewRequiredTrip[] }) {
     if (cancellationRequestedTrips.length === 0) return null;
     return (
         <AccordionItem value='cancellation-requested-trips' className='border-0'>
@@ -269,17 +338,17 @@ function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellati
                 </AccordionTrigger>
             </div>
             <AccordionContent className='overflow-y-auto pt-4 pb-2'>
-                {cancellationRequestedTrips.map((trip: any) => (
+                {cancellationRequestedTrips.map((trip: ReviewRequiredTrip) => (
                     <TripCard
                         tripData={trip}
-                        key={trip.tripid}
+                        key={trip.tripId}
                         statusButton={
                             <div className='w-fit rounded bg-[#d1d1d1] px-2 py-1 font-medium text-red-600 text-xs md:px-5 lg:text-[14px] dark:bg-accent'>
                                 {trip.status}
                             </div>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <AcceptTripCancellationDialog tripId={trip.tripid} />
+                            <AcceptTripCancellationDialog tripId={trip.tripId} />
                         </div>
                     </TripCard>
                 ))}
@@ -288,31 +357,70 @@ function CancellationRequestedTrips({ cancellationRequestedTrips }: { cancellati
     );
 }
 
-function TripCard({ tripData, children, statusButton }: { tripData: Trip; children?: React.ReactNode; statusButton?: React.ReactNode }) {
-    const tripId = tripData.tripid;
+function StartFailedTrips({ startFailedTrips }: { startFailedTrips: ReviewRequiredTrip[] }) {
+    if (startFailedTrips.length === 0) return null;
+    return (
+        <AccordionItem value='failed-start' className='border-0'>
+            <div className='sticky top-0 z-20 w-full rounded-lg bg-[#ffba89] dark:bg-[#3d2718] '>
+                <AccordionTrigger className='accordion-trigger hover:no-underline'>
+                    <span className='font-medium text-sm hover:no-underline'>Trip Start Failed ({startFailedTrips.length})</span>
+                </AccordionTrigger>
+            </div>
+            <AccordionContent className='overflow-y-auto pt-4 pb-2'>
+                {startFailedTrips.map((trip: ReviewRequiredTrip) => (
+                    <TripCard
+                        tripData={trip}
+                        key={trip.tripId}
+                        statusButton={
+                            <Popover>
+                                <PopoverTrigger>
+                                    <div className='w-fit rounded bg-[#d1d1d1] px-2 py-1 font-medium text-red-600 text-xs md:px-5 lg:text-[14px] dark:bg-accent'>
+                                        Trip Start Failed
+                                    </div>
+                                </PopoverTrigger>
+                                <PopoverContent className='font-normal text-sm'>{trip.startFailedMessage}</PopoverContent>
+                            </Popover>
+                        }>
+                        <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
+                            <TripDismissDialog tripId={trip.tripId} dismissalKey='startFailed' />
+                        </div>
+                    </TripCard>
+                ))}
+            </AccordionContent>
+        </AccordionItem>
+    );
+}
+
+function TripCard({
+    tripData,
+    children,
+    statusButton
+}: { tripData: ReviewRequiredTrip; children?: React.ReactNode; statusButton?: React.ReactNode }) {
+    const tripId = tripData.tripId;
+    const zipCode = tripData.address.zipcode || '73301';
     const channel = tripData?.channelName;
-    const isTuroTrip = channel.toLowerCase() === CHANNELS.TURO.toLowerCase();
+    const isTuroTrip = channel?.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
-    const carName = toTitleCase(`${tripData.vehmake} ${tripData.vehmodel} ${tripData.vehyear}`);
-    const carImage = tripData?.vehicleImages[0]?.imagename || 'images/image_not_available.png';
-    const licensePlate = tripData.vehicleNumber;
-    const carAddress = getFullAddress({ tripDetails: tripData });
+    const carName = toTitleCase(`${tripData.make} ${tripData.model} ${tripData.year}`);
+    const carImage = tripData?.imagename || 'images/image_not_available.png';
+    const licensePlate = tripData.vnumber;
+    const carAddress = getVehicleLocation(tripData.address);
 
-    const userId = tripData?.userid;
-    const userName = toTitleCase(`${tripData?.userFirstName || ''} ${tripData?.userlastName || ''}`);
+    const userId = tripData?.userId;
+    const userName = toTitleCase(`${tripData?.firstName || ''} ${tripData?.lastName || ''}`);
     const avatarSrc = tripData?.userImage || '/images/dummy_avatar.png';
 
     const isAirportDelivery = tripData.airportDelivery;
     const isCustomDelivery = tripData.delivery;
-    const deliveryAddress = getDeliveryLocation(tripData?.deliveryLocations) || '';
+    const deliveryAddress = getDeliveryLocation(tripData?.metaData?.DeliveryLocation) || '';
 
     const isLicenceVerified = tripData.isLicenseVerified;
-    const isPhoneVerified = tripData.isPhoneVarified;
-    const isRentalAgreed = tripData.isRentalAgreed;
+    const isPhoneVerified = tripData.isPhoneVerified;
+    const isRentalAgreed = tripData.rentalAgreement;
     const isInsuranceVerified = tripData.isInsuranceVerified;
 
-    const startDate = formatDateAndTime(tripData.starttime, tripData.vehzipcode, 'MMM DD, YYYY | h:mm A ');
-    const endDate = formatDateAndTime(tripData.endtime, tripData.vehzipcode, 'MMM DD, YYYY | h:mm A  ');
+    const startDate = formatDateAndTime(tripData.startTime, zipCode, 'MMM DD, YYYY | h:mm A ');
+    const endDate = formatDateAndTime(tripData.endTime, zipCode, 'MMM DD, YYYY | h:mm A  ');
     const dateRange = `${startDate} - ${endDate}`;
 
     const location = isAirportDelivery || isCustomDelivery ? deliveryAddress : carAddress;
@@ -383,8 +491,4 @@ function TripCard({ tripData, children, statusButton }: { tripData: Trip; childr
             {children}
         </div>
     );
-}
-
-function sortByCreatedDate(array: any[]): any[] {
-    return array.sort((a, b) => new Date(b.createddate).getTime() - new Date(a.createddate).getTime());
 }

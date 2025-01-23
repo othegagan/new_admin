@@ -20,10 +20,9 @@ export async function getAllTripsOfHost(startDate: string, endDate: string) {
 
 export async function getReviewRequiredTrips() {
     const session = await getSession();
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
+    const url = `${BOOKING_SERVICES_BASEURL}/v2/booking/hostNeedsReviewTrips`;
     const payload = {
-        fromValue: 'needsReviewTrips',
-        id: session?.iduser
+        hostId: session?.iduser
     };
 
     const response = await api.post<any>(url, payload);

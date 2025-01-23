@@ -158,6 +158,7 @@ export type AllTrip = {
     isEmailVerified: boolean;
     isEmployee: boolean;
     phoneNumberUpdatedDate: string;
+    rentalAgreement: boolean;
     category?: number;
 };
 
@@ -179,4 +180,8 @@ export function getVehicleLocation(location: any) {
     const addressParts = [location?.address1, location.address2, location?.cityname, location?.state, location?.zipcode].filter(Boolean); // Filter out any empty or undefined values
 
     return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
+}
+
+export function sortByCreatedDate(array: any[]): any[] {
+    return array?.sort((a, b) => new Date(b.createdTime).getTime() - new Date(a.createdTime).getTime());
 }

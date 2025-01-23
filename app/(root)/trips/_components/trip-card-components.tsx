@@ -27,7 +27,7 @@ export function TripCard({ tripData }: { tripData: AllTrip }) {
 
     const isLicenceVerified = tripData.isLicenseVerified;
     const isPhoneVerified = tripData.isPhoneVerified;
-    const isRentalAgreed = false;
+    const isRentalAgreed = tripData.rentalAgreement;
     const isInsuranceVerified = tripData.isInsuranceVerified;
 
     const startDate = formatDateAndTime(tripData.startTime, zipCode, 'MMM DD, YYYY | h:mm A ');
