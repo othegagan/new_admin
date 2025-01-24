@@ -63,7 +63,7 @@ export default function DisableEmployeeForm({ cell }: { cell: any }) {
 
     return (
         <div className='flex-center'>
-            <Button variant='outline' size='icon' toolTip='Delete Employee' onClick={() => handleEdit(cell.getValue())}>
+            <Button variant='outline' size='icon' className='px-2' toolTip='Delete Employee' onClick={() => handleEdit(cell.getValue())}>
                 <Trash2 className='size-4 text-muted-foreground' />
             </Button>
             {selectedRow && (

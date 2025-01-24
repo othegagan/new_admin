@@ -99,7 +99,12 @@ export default function UpdateEmployeeForm({ cell }: { cell: any }) {
 
     return (
         <div className='flex-center'>
-            <Button variant='outline' size='icon' toolTip='Edit Employee Details' onClick={() => handleEdit(cell.getValue())}>
+            <Button
+                variant='outline'
+                size='icon'
+                className='px-2'
+                toolTip='Edit Employee Details'
+                onClick={() => handleEdit(cell.getValue())}>
                 <Pencil className='size-4 text-muted-foreground' />
             </Button>
 
