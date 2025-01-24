@@ -150,7 +150,7 @@ export const columns: ColumnDef<User>[] = [
     }
 ];
 
-function ChannelBadge({ channelName }: { channelName: string }) {
+export function ChannelBadge({ channelName }: { channelName: string }) {
     const channelClasses: { [key: string]: string } = {
         bundee: 'bg-primary text-white dark:bg-orange-800 dark:text-orange-100',
         flux: 'bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100',

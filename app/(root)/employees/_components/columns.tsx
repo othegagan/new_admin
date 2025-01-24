@@ -1,10 +1,10 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { ColumnDef } from '@tanstack/react-table';
 import { ChevronsUpDown } from 'lucide-react';
 import type { User } from 'next-auth';
+import { ChannelBadge } from '../../hosts/_components/columns';
 import DisableEmployeeForm from './DisableEmployeeForm';
 import UpdateEmployeeForm from './UpdateEmployeeForm';
 
@@ -87,7 +87,7 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ cell }) => {
             return cell.getValue() ? (
                 <div className='flex-start'>
-                    <div className='my-1 w-fit rounded-md bg-green-100 px-3 py-1 text-12 text-green-700'>Active</div>
+                    <div className='my-1 w-fit rounded-md bg-[#C4F891] px-3 py-1 text-12 dark:bg-[#113019]'>Active</div>
                 </div>
             ) : (
                 <div className='flex-start'>
@@ -111,8 +111,8 @@ export const columns: ColumnDef<User>[] = [
         enableSorting: true,
         cell: ({ cell }: { cell: any }) => {
             return (
-                <div className='flex-start'>
-                    <Badge>{cell?.getValue()}</Badge>
+                <div className='flex-center'>
+                    <ChannelBadge channelName={cell?.getValue()} />
                 </div>
             );
         }
