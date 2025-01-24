@@ -1,6 +1,7 @@
 'use client';
 
 import { Skeleton } from '@/components/skeletons';
+import { DEFAULT_ZIPCODE } from '@/constants';
 import { useTelematicsEvents } from '@/hooks/useVehicles';
 import { formatDateAndTime } from '@/lib/utils';
 import type { TelematicsData } from '@/types';
@@ -34,11 +35,11 @@ export function TripDetails({ selectedTrip, zipcode }: { selectedTrip: Telematic
                     <div className='space-y-3'>
                         <div className='flex items-center gap-2'>
                             <div className='h-2 w-2 rounded-full bg-red-500' />
-                            <div>Ended at {formatDateAndTime(selectedTrip.tripEnd, '73301')}</div>
+                            <div>Ended at {formatDateAndTime(selectedTrip.tripEnd, DEFAULT_ZIPCODE)}</div>
                         </div>
                         <div className='flex items-center gap-2'>
                             <div className='h-2 w-2 rounded-full bg-green-500' />
-                            <div>Started at {formatDateAndTime(selectedTrip.tripStart, '73301')}</div>
+                            <div>Started at {formatDateAndTime(selectedTrip.tripStart, DEFAULT_ZIPCODE)}</div>
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ import { ChevronLeft } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import MainMessageComponent from '../../messages/_components/MainMessage';
-import { getDeliveryLocation } from '../../trips/_components/trip-utils';
+import { getFullLocation } from '../../trips/_components/trip-utils';
 import { TripActions } from '../_components/layout/trip-actions';
 import TripChecklist from '../_components/layout/trip-checklist';
 import TripDriverDetails from '../_components/layout/trip-driver-details';
@@ -51,7 +51,7 @@ export default function TripDetails() {
     const isTuroTrip = checkForTuroTrip(trip.channelName);
 
     const customDelivery = trip?.delivery || trip?.airportDelivery;
-    const deliveryLocation = getDeliveryLocation(trip?.deliveryLocations?.[0] || null);
+    const deliveryLocation = getFullLocation(trip?.deliveryLocations?.[0] || null);
 
     return (
         <Main fixed className='mx-auto h-full w-full max-w-[1600px] py-4'>

@@ -3,6 +3,7 @@
 import { Main } from '@/components/layout/main';
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { DEFAULT_ZIPCODE } from '@/constants';
 import { useTelematicsData } from '@/hooks/useVehicles';
 import type { TelematicsData } from '@/types';
 import { useParams } from 'next/navigation';
@@ -39,7 +40,7 @@ export default function TelematicsTrips() {
 
     const telematicsData = telematicsResponse?.data?.tripData || [];
 
-    const zipcode = telematicsResponse.data.zipcode || '73301'; // Default to 73301 if no zipcode is found
+    const zipcode = telematicsResponse.data.zipcode || DEFAULT_ZIPCODE;
 
     if (!telematicsData.length) {
         return <div>No telematics data found</div>;

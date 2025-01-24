@@ -1,4 +1,4 @@
-import { CHANNELS } from '@/constants';
+import { CHANNELS, DEFAULT_ZIPCODE } from '@/constants';
 import { parseZonedDateTime } from '@internationalized/date';
 import { type ClassValue, clsx } from 'clsx';
 import moment from 'moment-timezone';
@@ -39,7 +39,7 @@ export function delay(ms: number) {
 }
 
 export function getTimeZoneByZipcode(zipCode: string): string {
-    return zipToTimeZone.lookup(zipCode || 73301) || ''; // 73301, (Los angeles zip code : 90274) (MST : 85323)
+    return zipToTimeZone.lookup(zipCode || DEFAULT_ZIPCODE) || ''; // 73301, (Los angeles zip code : 90274) (MST : 85323)
 }
 
 /**

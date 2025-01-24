@@ -135,7 +135,7 @@ export type AllTrip = {
     vnumber: string;
     year: string;
     imagename: string;
-    address: Address;
+    vehicleAddress: Address;
     isLicenseVerified: boolean;
     isInsuranceVerified: boolean;
     isLicenseExpired: boolean;
@@ -162,22 +162,12 @@ export type AllTrip = {
     category?: number;
 };
 
-export function getDeliveryLocation(location: any) {
+export function getFullLocation(location: any) {
     if (!location) {
         return '-'; // Return '-' if deliveryLocations is empty or not provided
     }
 
     const addressParts = [location?.address1, location?.cityName, location?.state, location?.zipCode].filter(Boolean); // Filter out any empty or undefined values
-
-    return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
-}
-
-export function getVehicleLocation(location: any) {
-    if (!location) {
-        return '-'; // Return '-' if deliveryLocations is empty or not provided
-    }
-
-    const addressParts = [location?.address1, location.address2, location?.cityname, location?.state, location?.zipcode].filter(Boolean); // Filter out any empty or undefined values
 
     return addressParts.join(', ') || '-'; // Join the non-empty parts with commas or return '-'
 }

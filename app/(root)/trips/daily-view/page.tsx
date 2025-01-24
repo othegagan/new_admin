@@ -1,6 +1,7 @@
 'use client';
 
 import { CarLoadingSkeleton } from '@/components/skeletons';
+import { DEFAULT_ZIPCODE } from '@/constants';
 import { useDailyViewTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, formatDateToReadable, generateStartAndEndDates } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -9,7 +10,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { TripCard } from '../_components/trip-card-components';
 import { type AllTrip, findUser, findVehicle, getCategory, searchAndFilterTrips } from '../_components/trip-utils';
 
-const { startDate, endDate } = generateStartAndEndDates('73301', 0, 1);
+const { startDate, endDate } = generateStartAndEndDates(DEFAULT_ZIPCODE, 0, 1);
 
 export default function DailyViewPage() {
     const { data: response, isLoading, isError, error } = useDailyViewTrips(startDate, endDate);
@@ -46,7 +47,8 @@ export default function DailyViewPage() {
         return {
             ...trip,
             ...vehicle,
-            ...user
+            ...user,
+            vehicleAddress: vehicle?.address
         };
     });
 
@@ -79,7 +81,7 @@ function DailyTripsSearch({ tripsData }: any) {
         }
 
         rawBookingData.forEach((trip: AllTrip) => {
-            const zipcode = trip.address.zipcode || '73301';
+            const zipcode = trip.vehicleAddress.zipcode || DEFAULT_ZIPCODE;
             const startKey = formatDateAndTime(trip.startTime, zipcode, 'yyyy-MM-DD');
             const endKey = formatDateAndTime(trip.endTime, zipcode, 'yyyy-MM-DD');
 

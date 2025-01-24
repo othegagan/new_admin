@@ -16,6 +16,8 @@ export const CHANNELS = {
 } as const;
 
 export const DEPOSIT_HOLD_AMOUNT = 250;
+
+export const DEFAULT_ZIPCODE = '73301';
 /**
  * Nav Items
  * This is the main navigation items for the application.

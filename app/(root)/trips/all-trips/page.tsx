@@ -1,6 +1,7 @@
 'use client';
 
 import { CarLoadingSkeleton } from '@/components/skeletons';
+import { DEFAULT_ZIPCODE } from '@/constants';
 import { useAllTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, formatDateToReadable, generateStartAndEndDates } from '@/lib/utils';
 import { addDays, format, isBefore, isSameDay } from 'date-fns';
@@ -9,7 +10,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { TripCard } from '../_components/trip-card-components';
 import { type AllTrip, findUser, findVehicle, searchAndFilterTrips } from '../_components/trip-utils';
 
-const { startDate, endDate } = generateStartAndEndDates('73301', 1, 1);
+const { startDate, endDate } = generateStartAndEndDates(DEFAULT_ZIPCODE, 1, 1);
 
 export default function AllTripsPage() {
     const { data: response, isLoading, isError, error } = useAllTrips(startDate, endDate);
@@ -46,7 +47,8 @@ export default function AllTripsPage() {
         return {
             ...trip,
             ...vehicle,
-            ...user
+            ...user,
+            vehicleAddress: vehicle?.address
         };
     });
 
@@ -66,11 +68,11 @@ function AllTripsSearch({ tripsData }: any) {
 
     const allTripsObjects = useMemo(() => {
         const trips = filteredData.reduce((acc: Record<string, any[]>, trip: AllTrip) => {
-            const zipcode = trip.address.zipcode || '73301';
+            const zipcode = trip.vehicleAddress.zipcode || DEFAULT_ZIPCODE;
             const endKey = formatDateAndTime(trip.endTime, zipcode, 'yyyy-MM-DD'); // always use yyyy-MM-DD format
             const startKey = formatDateAndTime(trip.startTime, zipcode, 'yyyy-MM-DD');
 
-            const { startDate, endDate } = generateStartAndEndDates('73301', 1, 1);
+            const { startDate, endDate } = generateStartAndEndDates(DEFAULT_ZIPCODE, 1, 1);
 
             let currentDate: any = startDate;
             while (isBefore(currentDate, endDate) || isSameDay(currentDate, endDate)) {

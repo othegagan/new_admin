@@ -9,14 +9,14 @@ import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CHANNELS } from '@/constants';
+import { CHANNELS, DEFAULT_ZIPCODE } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useReviewRequiredTrips } from '@/hooks/useTrips';
 import { formatDateAndTime, toTitleCase } from '@/lib/utils';
 import { ArrowLeftRight, CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { CarDetails, UserInfo } from '../_components/trip-card-components';
-import { type AllTrip, findUser, findVehicle, getDeliveryLocation, getVehicleLocation, sortByCreatedDate } from '../_components/trip-utils';
+import { type AllTrip, findUser, findVehicle, getFullLocation, sortByCreatedDate } from '../_components/trip-utils';
 
 const flags = [
     'cardExtensionFailed',
@@ -95,7 +95,8 @@ export default function ReviewRequired() {
         return {
             ...trip,
             ...vehicle,
-            ...user
+            ...user,
+            vehicleAddress: vehicle?.address
         };
     });
 
@@ -397,14 +398,14 @@ function TripCard({
     statusButton
 }: { tripData: ReviewRequiredTrip; children?: React.ReactNode; statusButton?: React.ReactNode }) {
     const tripId = tripData.tripId;
-    const zipCode = tripData.address.zipcode || '73301';
+    const zipCode = tripData.vehicleAddress.zipcode || DEFAULT_ZIPCODE;
     const channel = tripData?.channelName;
     const isTuroTrip = channel?.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
     const carName = toTitleCase(`${tripData.make} ${tripData.model} ${tripData.year}`);
     const carImage = tripData?.imagename || 'images/image_not_available.png';
     const licensePlate = tripData.vnumber;
-    const carAddress = getVehicleLocation(tripData.address);
+    const carAddress = getFullLocation(tripData.vehicleAddress);
 
     const userId = tripData?.userId;
     const userName = toTitleCase(`${tripData?.firstName || ''} ${tripData?.lastName || ''}`);
@@ -412,7 +413,7 @@ function TripCard({
 
     const isAirportDelivery = tripData.airportDelivery;
     const isCustomDelivery = tripData.delivery;
-    const deliveryAddress = getDeliveryLocation(tripData?.metaData?.DeliveryLocation) || '';
+    const deliveryAddress = getFullLocation(tripData?.metaData?.DeliveryLocation) || '';
 
     const isLicenceVerified = tripData.isLicenseVerified;
     const isPhoneVerified = tripData.isPhoneVerified;

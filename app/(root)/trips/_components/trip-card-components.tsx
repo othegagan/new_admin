@@ -1,21 +1,21 @@
 import DriverReadinessDialog from '@/components/extra/driver-readiness-dialog';
-import { CHANNELS } from '@/constants';
+import { CHANNELS, DEFAULT_ZIPCODE } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { formatDateAndTime, toTitleCase } from '@/lib/utils';
 import { CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
-import { type AllTrip, getDeliveryLocation, getVehicleLocation } from '../_components/trip-utils';
+import { type AllTrip, getFullLocation } from '../_components/trip-utils';
 
 export function TripCard({ tripData }: { tripData: AllTrip }) {
     const tripId = tripData.tripId;
-    const zipCode = tripData.address.zipcode || '73301';
+    const zipCode = tripData.vehicleAddress.zipcode || DEFAULT_ZIPCODE;
     const channel = tripData?.channelName;
     const isTuroTrip = channel?.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
     const carName = toTitleCase(`${tripData.make} ${tripData.model} ${tripData.year}`);
     const carImage = tripData?.imagename || 'images/image_not_available.png';
     const licensePlate = tripData.vnumber;
-    const carAddress = getVehicleLocation(tripData.address);
+    const carAddress = getFullLocation(tripData.vehicleAddress);
 
     const userId = tripData?.userId;
     const userName = toTitleCase(`${tripData?.firstName || ''} ${tripData?.lastName || ''}`);
@@ -23,7 +23,7 @@ export function TripCard({ tripData }: { tripData: AllTrip }) {
 
     const isAirportDelivery = tripData.airportDelivery;
     const isCustomDelivery = tripData.delivery;
-    const deliveryAddress = getDeliveryLocation(tripData?.metaData?.DeliveryLocation) || '';
+    const deliveryAddress = getFullLocation(tripData?.metaData?.DeliveryLocation) || '';
 
     const isLicenceVerified = tripData.isLicenseVerified;
     const isPhoneVerified = tripData.isPhoneVerified;
