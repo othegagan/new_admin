@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { PAGE_ROUTES } from '@/constants/routes';
-import { useAllNotifications } from '@/hooks/useNotifications';
+import { useAllMessageNotifications } from '@/hooks/useNotifications';
 import Link from 'next/link';
 
 export function MessagesNotificationButton() {
-    const { data: response } = useAllNotifications();
+    const { data: response } = useAllMessageNotifications();
     const messageNotificationsData = response?.data?.messageNotifications || [];
 
     const countOfUnreadNotifications = messageNotificationsData.filter((notification: any) => !notification.isViewed).length;
