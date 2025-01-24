@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { SearchInput } from '@/components/ui/search-input';
 import { PAGE_ROUTES } from '@/constants/routes';
-import { useAllNotifications, useMarkMessageNotificationAsRead } from '@/hooks/useNotifications';
+import { useAllMessageNotifications, useMarkMessageNotificationAsRead } from '@/hooks/useNotifications';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import Fuse from 'fuse.js';
@@ -16,7 +16,7 @@ export default function MessagesList() {
     const pathname = usePathname();
     const showMobileDetail = pathname !== PAGE_ROUTES.MESSAGES;
 
-    const { data: response, isLoading: loading, error } = useAllNotifications();
+    const { data: response, isLoading: loading, error } = useAllMessageNotifications();
     const messageNotificationsData = response?.data?.messageNotifications || [];
 
     if (loading)

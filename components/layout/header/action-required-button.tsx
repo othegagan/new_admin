@@ -16,17 +16,13 @@ export default function ActionRequiredButton() {
         return null;
     }
 
-    const data = response?.data;
+    if (!response?.success) {
+        return null;
+    }
 
-    const actionRequired =
-        data?.newRequests?.length > 0 ||
-        data?.failedPayments?.length > 0 ||
-        data?.failedTripExtensions?.length > 0 ||
-        data?.failedDriverVerifications?.length > 0 ||
-        data?.failedCardExtensions?.length > 0 ||
-        data?.cancellationRequestedTrips?.length > 0;
+    const trips = response?.data?.trips || [];
 
-    if (!actionRequired) {
+    if (trips.length === 0) {
         return null;
     }
 

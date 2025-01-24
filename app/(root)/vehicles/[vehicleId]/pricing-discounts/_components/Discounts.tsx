@@ -155,7 +155,9 @@ function DiscountsForm({ vechicleId, vehiclePricePerDay = 0, discountPercentage 
             <div className='flex flex-col gap-6'>
                 <div className='space-y-1'>
                     <h3>Discounts </h3>
-                    <p className='text-muted-foreground text-sm'>The configured discounts will be applied to the total rental cost.</p>
+                    <p className='text-muted-foreground text-sm'>
+                        The configured discount rate will be applied to the total reservation amount.
+                    </p>
                 </div>
 
                 <div className='flex flex-col gap-6 md:flex-row md:items-end'>
