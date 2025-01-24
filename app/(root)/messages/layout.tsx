@@ -2,12 +2,12 @@
 
 import { Main } from '@/components/layout/main';
 import { CarLoadingSkeleton } from '@/components/skeletons';
-import { useAllNotifications } from '@/hooks/useNotifications';
+import { useAllMessageNotifications } from '@/hooks/useNotifications';
 import type { ReactNode } from 'react';
 import MessagesList from './_components/MessagesList';
 
 export default function MessagesLayout({ children }: { children: ReactNode }) {
-    const { data: response, isLoading: loading, error } = useAllNotifications();
+    const { data: response, isLoading: loading, error } = useAllMessageNotifications();
 
     if (loading)
         return (

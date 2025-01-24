@@ -16,6 +16,18 @@ export async function getAllNotifications() {
     return response;
 }
 
+export async function getAllMessageNotifications() {
+    const session = await getSession();
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getNotification`;
+    const payload = {
+        id: session?.iduser,
+        fromValue: 'allhostnotification',
+        pageNumber: 1
+    };
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
 export async function checkForNotifications() {
     const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/hostHasNotification`;

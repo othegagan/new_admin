@@ -1,5 +1,11 @@
 import { QUERY_KEYS } from '@/constants/query-keys';
-import { checkForNotifications, getAllNotifications, markMessageNotificationAsRead, markNotificationAsRead } from '@/server/notifications';
+import {
+    checkForNotifications,
+    getAllMessageNotifications,
+    getAllNotifications,
+    markMessageNotificationAsRead,
+    markNotificationAsRead
+} from '@/server/notifications';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useAllNotifications = () => {
@@ -7,6 +13,14 @@ export const useAllNotifications = () => {
         queryKey: [QUERY_KEYS.allNotifications],
         refetchOnWindowFocus: false,
         queryFn: async () => getAllNotifications()
+    });
+};
+
+export const useAllMessageNotifications = () => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.allMessageNotifications],
+        refetchOnWindowFocus: false,
+        queryFn: async () => getAllMessageNotifications()
     });
 };
 
