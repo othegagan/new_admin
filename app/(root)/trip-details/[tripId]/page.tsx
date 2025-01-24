@@ -51,7 +51,7 @@ export default function TripDetails() {
     const isTuroTrip = checkForTuroTrip(trip.channelName);
 
     const customDelivery = trip?.delivery || trip?.airportDelivery;
-    const deliveryLocation = getDeliveryLocation(trip?.deliveryLocations);
+    const deliveryLocation = getDeliveryLocation(trip?.deliveryLocations?.[0] || null);
 
     return (
         <Main fixed className='mx-auto h-full w-full max-w-[1600px] py-4'>
