@@ -3,25 +3,39 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { PAGE_ROUTES } from '@/constants/routes';
-import { useAllNotifications, useCheckNotifications, useMarkNotificationAsRead } from '@/hooks/useNotifications';
+import { useCheckNotifications, useMarkNotificationAsRead, usePaginatedNotifications } from '@/hooks/useNotifications';
 import { toTitleCase } from '@/lib/utils';
 import { BellIcon } from '@/public/icons';
 import { markAllNotificationAsRead } from '@/server/notifications';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
+import { type Key, useEffect, useRef } from 'react';
 
 export function NotificationBellButton() {
     const { data: checkNotificationsData } = useCheckNotifications();
-    const { data: response, isLoading: loading, error, refetch } = useAllNotifications();
+    const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage, error, refetch } = usePaginatedNotifications();
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollPositionRef = useRef<number>(0); // Track scroll position
 
     const unReadNotifications = checkNotificationsData?.data?.hasNotification;
-    const notificationsData = response?.data?.inAppNotifications || [];
 
-    // const countOfUnreadNotifications = notificationsData.filter((notification: any) => !notification.viewed).length;
+    const handleScroll = () => {
+        if (!scrollRef.current || isLoading || !hasNextPage) return;
 
-    const groupedNotifications = notificationsData.reduce((acc: any, notification: any) => {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+        if (scrollTop + clientHeight >= scrollHeight - 50) {
+            fetchNextPage(); // Fetch the next page when the user scrolls near the bottom
+        }
+
+        // Save the current scroll position
+        scrollPositionRef.current = scrollTop;
+    };
+
+    const notifications = data?.pages.flatMap((page) => page.inAppNotifications) || [];
+
+    const groupedNotifications = notifications.reduce((acc: any, notification: any) => {
         const date = new Date(notification.createdDate).toDateString();
         if (!acc[date]) {
             acc[date] = [];
@@ -34,6 +48,13 @@ export function NotificationBellButton() {
         await markAllNotificationAsRead();
         refetch();
     }
+
+    // Restore scroll position after re-render
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollPositionRef.current;
+        }
+    }, [notifications]); // Restore scroll position when notifications change
 
     return (
         <DropdownMenu
@@ -59,7 +80,6 @@ export function NotificationBellButton() {
                 alignOffset={-100}>
                 <div className='mt-1 flex justify-between gap-3 p-1'>
                     <p className='font-bold text-foreground text-sm'>Notifications</p>
-
                     {unReadNotifications && (
                         <button type='button' className='relative px-2 text-[12px]' onClick={handleMarkAllNotificationAsRead}>
                             Mark All as Read
@@ -67,24 +87,25 @@ export function NotificationBellButton() {
                     )}
                 </div>
 
-                {loading && (
+                {isLoading && !isFetchingNextPage && (
                     <div className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2 text-muted-foreground text-sm'>
                         Loading Notifications...
                     </div>
                 )}
 
-                {!loading && error && <p className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>{error.message}</p>}
+                {error && <div className='flex h-20 items-center justify-center'>{error.message}</div>}
 
-                {!loading && !error && notificationsData.length === 0 && (
-                    <div className='flex h-full w-full flex-1 flex-col gap-2 px-2'>
-                        <p className='flex h-20 w-full flex-col items-center justify-center gap-2 px-2'>No notifications.</p>
-                    </div>
+                {!isLoading && !error && notifications.length === 0 && (
+                    <div className='flex h-20 items-center justify-center'>No notifications found.</div>
                 )}
 
-                {!loading && !error && notificationsData.length > 0 && (
-                    <ScrollArea className='flex h-[440px] w-[320px] select-none flex-col rounded-none border-1 p-1 md:w-full'>
-                        {Object.keys(groupedNotifications).map((date: string) => (
-                            <div key={date} className='mx-auto mb-2 max-w-5xl pt-1'>
+                {!error && notifications.length > 0 && (
+                    <div
+                        ref={scrollRef}
+                        onScroll={handleScroll}
+                        className='flex h-[400px] select-none flex-col overflow-y-auto rounded-none border-1 md:w-full'>
+                        {Object.keys(groupedNotifications).map((date: string, index: Key | null | undefined) => (
+                            <div key={index} className='mb-2 max-w-5xl pt-1'>
                                 <div className='sticky top-0 mb-2 flex items-center justify-between gap-4 bg-background'>
                                     <div className='h-1.5 w-full rounded-md bg-black/5' />
                                     <div className='w-fit whitespace-nowrap rounded-sm border border-black/20 bg-background p-3 py-1 text-center font-medium text-xs'>
@@ -92,12 +113,18 @@ export function NotificationBellButton() {
                                     </div>
                                     <div className='h-1.5 w-full rounded-md bg-black/5' />
                                 </div>
-                                {groupedNotifications[date].map((notification: any) => (
-                                    <NotificationItem key={notification.id} data={notification} />
+                                {groupedNotifications[date].map((notification: any, index: Key | null | undefined) => (
+                                    <NotificationItem key={index} data={notification} />
                                 ))}
                             </div>
                         ))}
-                    </ScrollArea>
+
+                        {isFetchingNextPage && (
+                            <div className='my-5 flex h-20 w-full flex-col items-center justify-center gap-2 px-2 text-muted-foreground text-sm'>
+                                Loading More...
+                            </div>
+                        )}
+                    </div>
                 )}
             </DropdownMenuContent>
         </DropdownMenu>
@@ -144,15 +171,3 @@ function NotificationItem({ data }: { data: any }) {
         </button>
     );
 }
-
-// return (
-//     <Link href='/notifications'>
-//         <Button variant='ghost' className='relative px-2'>
-//             <BellIcon className='size-7 md:size-6 text-neutral-600 group-hover:text-neutral-800' aria-hidden='true' />
-//             <span className='absolute right-2 top-1 flex size-3'>
-//                 {ping && <span className='absolute inline-flex size-full animate-ping rounded-full bg-orange-500' />}
-//                 <span className='relative inline-flex size-3 rounded-full bg-primary' />
-//             </span>
-//         </Button>
-//     </Link>
-// );

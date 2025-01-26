@@ -6,15 +6,24 @@ import {
     markMessageNotificationAsRead,
     markNotificationAsRead
 } from '@/server/notifications';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useAllNotifications = () => {
-    return useQuery({
+export function usePaginatedNotifications() {
+    return useInfiniteQuery({
         queryKey: [QUERY_KEYS.allNotifications],
-        refetchOnWindowFocus: false,
-        queryFn: async () => getAllNotifications()
+        queryFn: async ({ pageParam = 1 }) => {
+            const response = await getAllNotifications(pageParam);
+            if (!response.success) {
+                throw new Error(response.message);
+            }
+            return response.data;
+        },
+        getNextPageParam: (lastPage) => {
+            return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
+        },
+        initialPageParam: 1
     });
-};
+}
 
 export const useAllMessageNotifications = () => {
     return useQuery({
