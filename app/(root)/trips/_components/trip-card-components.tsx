@@ -9,7 +9,7 @@ import { type AllTrip, getFullLocation } from '../_components/trip-utils';
 export function TripCard({ tripData }: { tripData: AllTrip }) {
     const tripId = tripData.tripId;
     const zipCode = tripData.vehicleAddress.zipcode || DEFAULT_ZIPCODE;
-    const channel = tripData?.channelName;
+    const channel = tripData?.channel;
     const isTuroTrip = channel?.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
     const carName = toTitleCase(`${tripData.make} ${tripData.model} ${tripData.year}`);

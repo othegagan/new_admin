@@ -56,7 +56,7 @@ export function searchAndFilterTrips(data: any[], searchTerm: string | null, cha
     }
 
     if (channelName) {
-        results = results.filter((item: any) => item.channelName.toLowerCase() === channelName.toLowerCase());
+        results = results.filter((item: any) => item.channel.toLowerCase() === channelName.toLowerCase());
     }
 
     if (tripStatus) {
@@ -152,6 +152,7 @@ export type AllTrip = {
     createdDate: string;
     updatedDate: string;
     userImage: string;
+    channel: string;
     channelName: string;
     isVerified: boolean;
     isPhoneVerified: boolean;

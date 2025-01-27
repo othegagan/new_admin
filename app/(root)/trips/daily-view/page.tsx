@@ -41,7 +41,7 @@ export default function DailyViewPage() {
     }
 
     // Mapping through trips and adding vehicle and user details
-    const modifiedTrips = trips.map((trip: { vehicleId: number; userId: number }) => {
+    const modifiedTrips = trips.map((trip: { vehicleId: number; userId: number; channelName: string }) => {
         const vehicle = findVehicle(data.vehicles, trip.vehicleId);
         const user = findUser(data.users, trip.userId);
 
@@ -50,7 +50,8 @@ export default function DailyViewPage() {
             ...trip,
             ...vehicle,
             ...user,
-            vehicleAddress: vehicle?.address
+            vehicleAddress: vehicle?.address,
+            channel: trip?.channelName
         };
     });
 
@@ -129,9 +130,9 @@ function DailyTripsSearch({ tripsData }: any) {
 
     // Handle object of trips
     return (
-        <div ref={scrollRef} className='flex h-[calc(100dvh_-_100px)] w-full flex-col overflow-y-auto px-4'>
+        <div ref={scrollRef} className='flex h-[calc(100dvh_-_100px)] w-full flex-col items-center overflow-y-auto px-4'>
             {Object.entries(dailyViewObjects).map(([date, trips]) => (
-                <div key={date} className='mx-auto mb-4 flex flex-col md:max-w-5xl'>
+                <div key={date} className='mb-4 flex w-full flex-col md:max-w-5xl'>
                     <div className='sticky top-0 z-20 mb-2 bg-background shadow-sm md:mb-0'>
                         <div className='mx-auto w-fit rounded-sm border border-black/20 bg-background p-3 py-1 text-center font-medium text-14'>
                             {formatDateToReadable(date)}

@@ -96,7 +96,8 @@ export default function ReviewRequired() {
             ...trip,
             ...vehicle,
             ...user,
-            vehicleAddress: vehicle?.address
+            vehicleAddress: vehicle?.address,
+            channel: trip?.channelName
         };
     });
 
@@ -399,7 +400,7 @@ function TripCard({
 }: { tripData: ReviewRequiredTrip; children?: React.ReactNode; statusButton?: React.ReactNode }) {
     const tripId = tripData.tripId;
     const zipCode = tripData.vehicleAddress.zipcode || DEFAULT_ZIPCODE;
-    const channel = tripData?.channelName;
+    const channel = tripData?.channel;
     const isTuroTrip = channel?.toLowerCase() === CHANNELS.TURO.toLowerCase();
 
     const carName = toTitleCase(`${tripData.make} ${tripData.model} ${tripData.year}`);
