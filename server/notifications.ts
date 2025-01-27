@@ -7,7 +7,7 @@ const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 
 export async function getAllNotifications(pageNumber = 0) {
     const session = await getSession();
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getNotification`;
+    const url = `${BOOKING_SERVICES_BASEURL}/v2/booking/getNotification`;
     const payload = {
         id: session?.iduser,
         fromValue: 'allhostnotification',
@@ -19,7 +19,7 @@ export async function getAllNotifications(pageNumber = 0) {
 
 export async function getAllMessageNotifications() {
     const session = await getSession();
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getNotification`;
+    const url = `${BOOKING_SERVICES_BASEURL}/v2/booking/getNotification`;
     const payload = {
         id: session?.iduser,
         fromValue: 'allhostnotification',
