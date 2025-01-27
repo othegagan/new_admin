@@ -12,7 +12,7 @@ import {
     getVehicleUpdateLogsById,
     getVehiclesForMapView
 } from '@/server/vehicles';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { add, addDays, differenceInHours, format, isAfter, isBefore, parse, parseISO, set } from 'date-fns';
 
 export const useVehiclesUnderHost = () => {
@@ -206,19 +206,20 @@ export function validateBookingTimeWithDelivery(bookingDateTime: string, isCusto
 }
 
 export function useTelematicsData(vehicleId: number) {
-    const queryClient = useQueryClient();
-
-    return {
-        ...useQuery({
-            queryKey: [QUERY_KEYS.telematicsDataByVehicleId, vehicleId],
-            queryFn: async () => getTelematicsData(vehicleId)
-        }),
-        refetchAll: () => {
-            return queryClient.invalidateQueries({
-                queryKey: [QUERY_KEYS.telematicsDataByVehicleId]
-            });
-        }
-    };
+    return useInfiniteQuery({
+        queryKey: [QUERY_KEYS.telematicsDataByVehicleId, vehicleId],
+        queryFn: async ({ pageParam = 0 }) => {
+            const response = await getTelematicsData(vehicleId, pageParam);
+            if (!response.success) {
+                throw new Error(response.message);
+            }
+            return response.data;
+        },
+        getNextPageParam: (lastPage) => {
+            return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
+        },
+        initialPageParam: 0
+    });
 }
 
 export function useTelematicsEvents(telematicTripId: number) {

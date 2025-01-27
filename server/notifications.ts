@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/react';
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 
-export async function getAllNotifications(pageNumber = 1) {
+export async function getAllNotifications(pageNumber = 0) {
     const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getNotification`;
     const payload = {

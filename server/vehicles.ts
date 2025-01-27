@@ -182,10 +182,11 @@ export async function getAvailabilityDatesByVehicleId(vehicleid: number, tripid:
     return response;
 }
 
-export async function getTelematicsData(vehicleId: number) {
+export async function getTelematicsData(vehicleId: number, pageNumber = 0) {
     const payload = {
         fromValue: 'vehicleid',
-        id: vehicleId
+        id: vehicleId,
+        pageNumber
     };
 
     const url = `${TELEMATICS_BASEURL}/v1/telematics/getTelematicsData`;
