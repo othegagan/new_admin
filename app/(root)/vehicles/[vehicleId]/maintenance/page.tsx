@@ -34,7 +34,7 @@ export default function MaintenancePage() {
     } = useVehicleRepairLogs(Number(vehicleId));
 
     if (isLoadingExpenseLogs || isLoadingServiceLogs) {
-        return <CarLoadingSkeleton className='h-40' />;
+        return <CarLoadingSkeleton />;
     }
 
     if (errorExpenseLogs || errorServiceLogs) {
