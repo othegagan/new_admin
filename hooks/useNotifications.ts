@@ -11,7 +11,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 export function usePaginatedNotifications() {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.allNotifications],
-        queryFn: async ({ pageParam = 0 }) => {
+        queryFn: async ({ pageParam = 1 }) => {
             const response = await getAllNotifications(pageParam);
             if (!response.success) {
                 throw new Error(response.message);
@@ -21,7 +21,7 @@ export function usePaginatedNotifications() {
         getNextPageParam: (lastPage) => {
             return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
         },
-        initialPageParam: 0
+        initialPageParam: 1
     });
 }
 
