@@ -34,7 +34,7 @@ export const configurationsSchema = z.object({
             .number({
                 message: 'Must be a number'
             })
-            .max(10000, 'Must be less than or equal to 100'),
+            .max(100, 'Must be less than or equal to 100'),
         z.literal('').refine(() => false, {
             message: 'This field is required'
         })

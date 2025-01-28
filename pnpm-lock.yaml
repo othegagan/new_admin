@@ -197,6 +197,9 @@ importers:
       react-map-gl:
         specifier: ^7.1.9
         version: 7.1.9(mapbox-gl@3.9.4)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-number-format:
+        specifier: ^5.4.3
+        version: 5.4.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-otp-input:
         specifier: ^3.1.1
         version: 3.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -2940,6 +2943,12 @@ packages:
         optional: true
       maplibre-gl:
         optional: true
+
+  react-number-format@5.4.3:
+    resolution: {integrity: sha512-VCY5hFg/soBighAoGcdE+GagkJq0230qN6jcS5sp8wQX1qy1fYN/RX7/BXkrs0oyzzwqR8/+eSUrqXbGeywdUQ==}
+    peerDependencies:
+      react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-otp-input@3.1.1:
     resolution: {integrity: sha512-bjPavgJ0/Zmf/AYi4onj8FbH93IjeD+e8pWwxIJreDEWsU1ILR5fs8jEJmMGWSBe/yyvPP6X/W6Mk9UkOCkTPw==}
@@ -6536,6 +6545,11 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
     optionalDependencies:
       mapbox-gl: 3.9.4
+
+  react-number-format@5.4.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   react-otp-input@3.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
