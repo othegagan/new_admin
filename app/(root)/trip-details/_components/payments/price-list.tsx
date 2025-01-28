@@ -54,6 +54,7 @@ export function PriceList({ pricelist, isAirportDeliveryChoosen }: { pricelist: 
                 <PriceItem
                     label={`Discount (${pricelist?.numberOfDaysDiscount} Days - ${roundToTwoDecimalPlaces(pricelist?.discountPercentage)} %) `}
                     value={pricelist?.discountAmount}
+                    sign='-'
                 />
             )}
 
