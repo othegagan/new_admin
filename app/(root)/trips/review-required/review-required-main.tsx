@@ -319,7 +319,7 @@ function FailedCardExtensions({ failedCardExtensions }: { failedCardExtensions: 
                             </Popover>
                         }>
                         <div className='mt-6 ml-auto flex gap-3 md:gap-10'>
-                            <TripDismissDialog tripId={trip.tripId} dismissalKey='cardExtensionFailed' />
+                            <TripDismissDialog tripId={trip.tripId} dismissalKey='isCardExtensionFailed' />
                         </div>
                     </TripCard>
                 ))}

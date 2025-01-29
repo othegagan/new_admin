@@ -13,7 +13,7 @@ interface TripDismissDialogProps {
     className?: string;
     tripId: number;
     dismissalKey:
-        | 'cardExtensionFailed'
+        | 'isCardExtensionFailed'
         | 'failedautotripExtension'
         | 'failedDriverVerifications'
         | 'newRequest'
@@ -40,7 +40,7 @@ export default function TripDismissDialog({ className, tripId, dismissalKey }: T
         setIsSubmitting(true);
         try {
             const payload: any = {
-                cardExtensionFailed: false,
+                isCardExtensionFailed: false,
                 failedautotripExtension: false,
                 failedDriverVerifications: false,
                 newRequest: false,
