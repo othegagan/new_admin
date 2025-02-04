@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useAllMessageNotifications } from '@/hooks/useNotifications';
 import Link from 'next/link';
@@ -13,7 +12,7 @@ export function MessagesNotificationButton() {
 
     return (
         <Link href={PAGE_ROUTES.MESSAGES} prefetch={false}>
-            <Button variant='ghost' className='relative px-2'>
+            <div className='group relative inline-flex h-9 w-full cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap text-nowrap rounded-full px-2 py-2 font-medium text-sm transition-all duration-300 ease-linear hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring active:scale-95 disabled:pointer-events-none md:w-fit'>
                 <svg
                     className='size-6 text-muted-foreground'
                     aria-hidden='true'
@@ -35,7 +34,7 @@ export function MessagesNotificationButton() {
                         <span className='relative inline-flex size-3 rounded-full bg-primary' />
                     </span>
                 )}
-            </Button>
+            </div>
         </Link>
     );
 }
