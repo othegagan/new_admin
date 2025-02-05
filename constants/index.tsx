@@ -17,6 +17,8 @@ export const CHANNELS = {
 
 export const DEPOSIT_HOLD_AMOUNT = 250;
 
+export const LATEST_TRIP_VERSION = 5;
+
 export const DEFAULT_ZIPCODE = '73301';
 /**
  * Nav Items

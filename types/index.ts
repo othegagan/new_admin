@@ -41,6 +41,7 @@ export interface CreateUserProps {
 
 export interface Trip {
     tripid: number;
+    version: number;
     statusCode: string;
     reservationid: number;
     channelId: number;
@@ -131,6 +132,7 @@ export interface Trip {
     transactionCheckLists: any[];
     tripConstraints: any[];
     completedDate: string;
+    depositCollected?: boolean;
 
     category?: 0 | 1 | 2 | 3 | 4;
 

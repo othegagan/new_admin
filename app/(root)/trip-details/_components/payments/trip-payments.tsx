@@ -1,8 +1,10 @@
 'use client';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import type { Trip } from '@/types';
+import { LATEST_TRIP_VERSION } from '@/constants';
+import type { RentalCharge, Trip } from '@/types';
 import ChargeManuallyDialog from './charge-manually';
+import CollectDepositDialog from './collect-deposit';
 import CollectedCharges from './collected-charges';
 import Ledge from './ledger';
 import PendingCharges from './pending-charges';
@@ -25,7 +27,24 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
     const showManualCharge = asPendingPayments || asFailedPayments;
 
     const showDepositRelease =
-        ['REREQ', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false && !(trip?.tripPaymentTokens[0]?.releasedAmountOnHold > 0);
+        ['REREQ', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false && trip?.version >= LATEST_TRIP_VERSION && trip?.depositCollected;
+
+    const showCollectDeposit =
+        ['REAPP', 'TRSTR'].includes(trip?.statusCode) && trip?.version >= LATEST_TRIP_VERSION && !trip?.depositCollected;
+
+    const rowsAlreadyCharged = fullTripResponse?.rentalCharges.map((row: RentalCharge) => {
+        if (row.chargeAmount === 0.0) return null;
+
+        // Exclude Debt, Collected and Discounted rows
+        if (!(row.isDebt && row.collectionStatusId === 2 && !row.isDiscount)) {
+            return null;
+        }
+
+        return row;
+    });
+
+    // Show refund option if there is any row that is already charged
+    const showRefundOption = rowsAlreadyCharged.filter((row: RentalCharge) => row !== null).length;
 
     return (
         <div className='flex flex-col pb-5'>
@@ -36,7 +55,7 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                         Manage Payments
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='flex flex-col p-2'>
-                        {showManualCharge && (
+                        {showManualCharge ? (
                             <DropdownMenuItem asChild>
                                 <ChargeManuallyDialog
                                     pendingPayments={fullTripResponse.pendingPayments}
@@ -45,12 +64,23 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                                     tripId={trip.tripid}
                                 />
                             </DropdownMenuItem>
-                        )}
+                        ) : null}
 
-                        {showDepositRelease && <DropdownMenuItem asChild>{<ReleaseDepositDialog tripId={trip.tripid} />}</DropdownMenuItem>}
-                        <DropdownMenuItem asChild>
-                            <RefundDialog fullTripResponse={fullTripResponse} />
-                        </DropdownMenuItem>
+                        {showDepositRelease ? (
+                            <DropdownMenuItem asChild>{<ReleaseDepositDialog tripId={trip.tripid} />}</DropdownMenuItem>
+                        ) : null}
+
+                        {showCollectDeposit ? (
+                            <DropdownMenuItem asChild>
+                                <CollectDepositDialog tripId={trip.tripid} />
+                            </DropdownMenuItem>
+                        ) : null}
+
+                        {showRefundOption ? (
+                            <DropdownMenuItem asChild>
+                                <RefundDialog fullTripResponse={fullTripResponse} />
+                            </DropdownMenuItem>
+                        ) : null}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
