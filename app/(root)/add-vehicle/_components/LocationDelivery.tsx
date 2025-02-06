@@ -71,8 +71,8 @@ export default function LocationDelivery({ nextStep, previousStep }: LocationDel
     let deliveryEnabled = false;
     let deliveryToAirport = false;
     let deliveryRadius = 1;
-    let airportDeliveryCost = 1;
-    let nonAirportDeliveryCost = 1;
+    let airportDeliveryCost = 0;
+    let nonAirportDeliveryCost = 0;
 
     const vehicleBusinessConstraints = response?.data?.vehicleBusinessConstraints;
 
@@ -139,7 +139,7 @@ const schema = z.object({
             .number({
                 message: 'Must be a number'
             })
-            .min(1, ' Cost must be greater than 0')
+            .min(0, ' Cost must be greater than 0')
             .optional(),
         z.literal('').refine(() => false, {
             message: 'This field is required'
@@ -150,7 +150,7 @@ const schema = z.object({
             .number({
                 message: 'Must be a number'
             })
-            .min(1, ' Cost must be greater than 0')
+            .min(0, ' Cost must be greater than 0')
             .optional(),
         z.literal('').refine(() => false, {
             message: 'This field is required'
@@ -177,8 +177,8 @@ function LocationDeliveryForm({
     vechicleId,
     deliveryEnabled = false,
     deliveryRadius = 1,
-    airportDeliveryCost = 1,
-    nonAirportDeliveryCost = 1,
+    airportDeliveryCost = 0,
+    nonAirportDeliveryCost = 0,
     deliveryToAirport = false,
     fullAddress,
     refetchData,

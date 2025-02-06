@@ -71,8 +71,8 @@ export default function LocationDeliveryPage() {
             const constraint = JSON.parse(value.constraintValue);
             deliveryEnabled = true;
             deliveryRadius = Number(constraint?.deliveryRadius) || 1;
-            airportDeliveryCost = Number(constraint?.airportDeliveryCost) || 1;
-            nonAirportDeliveryCost = Number(constraint?.nonAirportDeliveryCost) || 1;
+            airportDeliveryCost = Number(constraint?.airportDeliveryCost) || 0;
+            nonAirportDeliveryCost = Number(constraint?.nonAirportDeliveryCost) || 0;
             deliveryToAirport = constraint?.deliveryToAirport || false;
         }
     });
@@ -127,7 +127,6 @@ const schema = z.object({
             .number({
                 message: 'Must be a number'
             })
-            .min(1, ' Cost must be greater than 0')
             .optional(),
         z.literal('').refine(() => false, {
             message: 'This field is required'
@@ -138,7 +137,6 @@ const schema = z.object({
             .number({
                 message: 'Must be a number'
             })
-            .min(1, ' Cost must be greater than 0')
             .optional(),
         z.literal('').refine(() => false, {
             message: 'This field is required'
@@ -165,8 +163,8 @@ function LocationDeliveryForm({
     vechicleId,
     deliveryEnabled = false,
     deliveryRadius = 1,
-    airportDeliveryCost = 1,
-    nonAirportDeliveryCost = 1,
+    airportDeliveryCost = 0,
+    nonAirportDeliveryCost = 0,
     deliveryToAirport = false,
     fullAddress,
     refetchData
