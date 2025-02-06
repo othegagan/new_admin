@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
 import { Label } from '@/components/ui/extension/field';
 import { Textarea } from '@/components/ui/textarea';
+import { DEPOSIT_HOLD_AMOUNT } from '@/constants';
 import { sendMessageInChat } from '@/server/chat';
 import { collectDeposit } from '@/server/trips';
 import { useState } from 'react';
@@ -53,7 +54,10 @@ export default function CollectDepositDialog({ tripId }: CollectDepositDialogPro
 
             <AdaptiveDialog isOpen={open} onClose={closeDialog} title='Collect Security Deposit'>
                 <AdaptiveBody className='flex flex-col gap-4'>
-                    <p className='text-sm'>This action will place a security deposit hold.</p>
+                    <p className='text-sm'>
+                        A security deposit of ${DEPOSIT_HOLD_AMOUNT} will be authorized for this trip to ensure smooth transactions. The
+                        funds will be released after the trip is completed, provided there are no issues.{' '}
+                    </p>
 
                     {/* Message Section */}
                     <div className=' space-y-2'>

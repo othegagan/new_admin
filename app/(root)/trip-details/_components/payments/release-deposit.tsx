@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
 import { Label } from '@/components/ui/extension/field';
 import { Textarea } from '@/components/ui/textarea';
+import { DEPOSIT_HOLD_AMOUNT } from '@/constants';
 import { sendMessageInChat } from '@/server/chat';
 import { releaseDeposit } from '@/server/trips';
 import { useState } from 'react';
@@ -55,7 +56,10 @@ export default function ReleaseDepositDialog({ tripId }: ReleaseDepositDialogPro
 
             <AdaptiveDialog isOpen={open} onClose={closeDialog} title='Release Security Deposit'>
                 <AdaptiveBody className='flex flex-col gap-4'>
-                    <p className='text-sm'>This action will immediately release the security deposit hold. This cannot be undone.</p>
+                    <p className='text-sm'>
+                        This action will immediately release the security deposit authorization of ${DEPOSIT_HOLD_AMOUNT}. You can capture
+                        it at any point in case of transaction issues.
+                    </p>
 
                     {/* Message Section */}
                     <div className=' space-y-2'>
