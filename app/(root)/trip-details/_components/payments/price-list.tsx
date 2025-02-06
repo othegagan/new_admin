@@ -1,6 +1,12 @@
 import { roundToTwoDecimalPlaces } from '@/lib/utils';
 
-export function PriceList({ pricelist, isAirportDeliveryChoosen }: { pricelist: any; isAirportDeliveryChoosen: boolean }) {
+interface PriceListProps {
+    pricelist: any;
+    isAirportDeliveryChoosen: boolean;
+    isCustomDeliveryChoosen: boolean;
+}
+
+export function PriceList({ pricelist, isAirportDeliveryChoosen, isCustomDeliveryChoosen }: PriceListProps) {
     return (
         <div className='w-full space-y-2'>
             {/* Rental Charges */}
@@ -22,7 +28,7 @@ export function PriceList({ pricelist, isAirportDeliveryChoosen }: { pricelist: 
             )}
 
             {/* Additional Services */}
-            {pricelist?.deliveryCost > 0 && (
+            {(isAirportDeliveryChoosen || isCustomDeliveryChoosen) && (
                 <PriceItem
                     label={isAirportDeliveryChoosen ? 'Airport Delivery Fee' : 'Custom Delivery Fee'}
                     value={pricelist?.deliveryCost}

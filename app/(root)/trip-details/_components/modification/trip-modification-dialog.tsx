@@ -321,6 +321,7 @@ export default function TripModificationDialog({ tripData }: { tripData: Trip })
                                                                         }
                                                                         isExtension={isExtension}
                                                                         isAirportDeliveryChoosen={tripData.airportDelivery}
+                                                                        isCustomDeliveryChoosen={tripData.delivery}
                                                                     />
                                                                 )}
                                                             </div>

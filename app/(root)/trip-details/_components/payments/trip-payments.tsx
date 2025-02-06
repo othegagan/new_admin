@@ -20,8 +20,6 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
     const trip: Trip = fullTripResponse.activetripresponse[0];
     const pricelist = trip?.tripPaymentTokens[0];
 
-    const isAirportDeliveryChoosen = trip.airportDelivery;
-
     const asPendingPayments = fullTripResponse.pendingPayments && Object.keys(fullTripResponse.pendingPayments).length > 0;
     const asFailedPayments = fullTripResponse.failedPayments && Object.keys(fullTripResponse.failedPayments).length > 0;
     const showManualCharge = asPendingPayments || asFailedPayments;
@@ -93,7 +91,7 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                 </div>
             )}
 
-            <PriceList pricelist={pricelist} isAirportDeliveryChoosen={isAirportDeliveryChoosen} />
+            <PriceList pricelist={pricelist} isAirportDeliveryChoosen={trip.airportDelivery} isCustomDeliveryChoosen={trip.delivery} />
 
             <CollectedCharges processedPayments={fullTripResponse.processedPayments} zipcode={trip.vehzipcode} />
 

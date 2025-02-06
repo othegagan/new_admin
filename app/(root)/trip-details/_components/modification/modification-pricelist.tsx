@@ -14,6 +14,7 @@ interface TripModificationPriceListComponentProps {
     originalTripTaxAmount: number;
     isExtension: boolean;
     isAirportDeliveryChoosen: boolean;
+    isCustomDeliveryChoosen: boolean;
 }
 
 export default function TripModificationPriceListComponent({
@@ -25,7 +26,8 @@ export default function TripModificationPriceListComponent({
     newEndTime,
     originalTripTaxAmount,
     isExtension,
-    isAirportDeliveryChoosen
+    isAirportDeliveryChoosen,
+    isCustomDeliveryChoosen
 }: TripModificationPriceListComponentProps) {
     let differenceAmount = 0;
 
@@ -80,9 +82,9 @@ export default function TripModificationPriceListComponent({
                     </div>
                 )}
 
-                {pricelist?.delivery > 0 && (
+                {(isAirportDeliveryChoosen || isCustomDeliveryChoosen) && (
                     <div className='flex items-center justify-between gap-2 px-2'>
-                        <div className='flex items-center gap-1 text-xs'>
+                        <div className='flex items-center gap-1'>
                             <p>Additional services chosen</p>
                             <PopoverTrigger>
                                 <Button variant='ghost' className=' h-fit w-fit p-0' type='button'>
@@ -91,18 +93,16 @@ export default function TripModificationPriceListComponent({
                                 <Popover className='w-64'>
                                     <PopoverDialog className='space-y-2'>
                                         <div className='grid select-none gap-4'>
-                                            <p className='font-medium leading-none'> Additional services chosen</p>
+                                            <p className='font-medium text-muted-foreground leading-none'> Additional services chosen</p>
                                             <div className='space-y-1'>
-                                                {pricelist?.delivery > 0 && (
-                                                    <div className='flex items-center justify-between'>
-                                                        <div className='text-sm'>
-                                                            {isAirportDeliveryChoosen ? 'Airport Delivery fee' : 'Custom Delivery fee'}
-                                                        </div>
-                                                        <div className='font-medium text-sm'>
-                                                            ${roundToTwoDecimalPlaces(pricelist?.delivery)}
-                                                        </div>
+                                                <div className='flex items-center justify-between'>
+                                                    <div className='text-sm'>
+                                                        {isAirportDeliveryChoosen ? 'Airport Delivery fee' : 'Custom Delivery fee'}
                                                     </div>
-                                                )}
+                                                    <div className='font-medium text-sm'>
+                                                        ${roundToTwoDecimalPlaces(pricelist?.delivery)}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </PopoverDialog>
@@ -126,7 +126,7 @@ export default function TripModificationPriceListComponent({
                                         <PopoverDialog className='space-y-2'>
                                             <div className='grid select-none gap-4'>
                                                 <div className='space-y-2'>
-                                                    <p className='font-medium leading-none'>Discount</p>
+                                                    <p className='font-medium text-muted-foreground leading-none'>Discount</p>
                                                 </div>
                                                 <div className='space-y-1'>
                                                     {pricelist?.discountAmount > 0 && (
@@ -171,7 +171,7 @@ export default function TripModificationPriceListComponent({
                                         <PopoverDialog className='space-y-2'>
                                             <div className='grid select-none gap-4'>
                                                 <div className='space-y-2'>
-                                                    <p className='font-medium leading-none'>Trip Fee</p>
+                                                    <p className='font-medium text-muted-foreground leading-none'>Trip Fee</p>
                                                 </div>
                                                 <div className='space-y-1'>
                                                     {pricelist?.concessionCalculated > 0 && (
