@@ -131,47 +131,34 @@ export function formatDateToReadable(dateStr: string): string {
 export function getFullAddress({ vehicleDetails, tripDetails }: { vehicleDetails?: any; tripDetails?: any }): string {
     if (!vehicleDetails && !tripDetails) return '';
 
-    const addressParts = [];
-    if (vehicleDetails) {
-        if (vehicleDetails.address1) {
-            addressParts.push(toTitleCase(vehicleDetails.address1));
-        }
-        if (vehicleDetails.address2) {
-            addressParts.push(toTitleCase(vehicleDetails.address2));
-        }
-        if (vehicleDetails.zipcode || vehicleDetails.zipCode) {
-            addressParts.push(vehicleDetails.zipcode || vehicleDetails.zipCode);
-        }
-        if (vehicleDetails.cityname || vehicleDetails.cityName) {
-            addressParts.push(toTitleCase(vehicleDetails.cityname || vehicleDetails.cityName));
-        }
-        if (vehicleDetails.state) {
-            addressParts.push(toTitleCase(vehicleDetails.state));
-        }
-        if (vehicleDetails.country) {
-            addressParts.push(toTitleCase(vehicleDetails.country));
-        }
-    } else if (tripDetails) {
-        if (tripDetails.vehaddress1) {
-            addressParts.push(toTitleCase(tripDetails.vehaddress1));
-        }
-        if (tripDetails.vehaddress2) {
-            addressParts.push(toTitleCase(tripDetails.vehaddress2));
-        }
-        if (tripDetails.vehzipcode) {
-            addressParts.push(tripDetails.vehzipcode);
-        }
-        if (tripDetails.vehcityname) {
-            addressParts.push(toTitleCase(tripDetails.vehcityname));
-        }
-        if (tripDetails.vehstate) {
-            addressParts.push(toTitleCase(tripDetails.vehstate));
-        }
+    const addressParts: any[] = [];
+
+    const details = vehicleDetails || tripDetails;
+    if (details) {
+        const fields = [
+            'address1',
+            'address2',
+            'zipcode',
+            'zipCode',
+            'cityname',
+            'cityName',
+            'state',
+            'country',
+            'vehaddress1',
+            'vehaddress2',
+            'vehzipcode',
+            'vehcityname',
+            'vehstate'
+        ];
+
+        fields.forEach((field) => {
+            if (details[field]) {
+                addressParts.push(toTitleCase(details[field]));
+            }
+        });
     }
 
-    const address = toTitleCase(addressParts.join(', '));
-
-    return address;
+    return toTitleCase(addressParts.join(', '));
 }
 
 /**
