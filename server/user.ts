@@ -4,6 +4,7 @@ import { api } from '@/lib/apiService';
 import { JSONparsefy } from '@/lib/utils';
 import type { CreateUserProps } from '@/types';
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
 
 const USER_MANAGEMENT_BASEURL = env.NEXT_PUBLIC_USER_MANAGEMENT_BASEURL;
 const USER_TOKEN_BASEURL = env.NEXT_PUBLIC_USER_TOKEN_BASEURL;
@@ -17,13 +18,26 @@ export async function getBundeeToken(firebaseToken: string) {
     const response = await axios.post(url, payload);
     return JSONparsefy(response.data);
 }
-export async function getUserByEmail(email: string) {
+export async function getUserByEmail(email?: string) {
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/getUserByEmail`;
-    const payload = {
-        email: email,
-        channelName: CHANNELS.BUNDEE
-    };
-    return await api.post<any>(url, payload);
+    if (email) {
+        const payload = {
+            email: email,
+            channelName: CHANNELS.BUNDEE
+        };
+        return await api.post<any>(url, payload);
+    }
+
+    const session = await getSession();
+    if (session) {
+        const payload = {
+            email: session.email,
+            channelName: CHANNELS.BUNDEE
+        };
+        return await api.post<any>(url, payload);
+    }
+
+    return null;
 }
 
 export async function createHostUser({ firstName, lastName, email, mobilePhone, channelName }: CreateUserProps) {

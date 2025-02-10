@@ -11,12 +11,13 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import ThemeToggleSwitch from '@/components/ui/theme-toggle';
-import { AUTH_ROUTES } from '@/constants/routes';
+import { AUTH_ROUTES, PAGE_ROUTES } from '@/constants/routes';
 import { auth } from '@/lib/firebase';
 import { signOut as firebaseSignOut } from 'firebase/auth';
 import { LogOutIcon } from 'lucide-react';
 import type { Session } from 'next-auth';
 import { signOut as nextAuthSignOut } from 'next-auth/react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -41,7 +42,11 @@ export function ProfileDropdown({ session }: { session: Session | null }) {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <Link
+                    href={PAGE_ROUTES.PROFILE}
+                    className='relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground [&amp;>svg]:size-4 [&amp;>svg]:shrink-0'>
+                    Profile
+                </Link>
 
                 <DropdownMenuItem className='flex-between gap-2 text-accent-foreground'>
                     Theme <ThemeToggleSwitch />
