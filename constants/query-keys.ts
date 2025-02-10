@@ -1,30 +1,46 @@
 export const QUERY_KEYS = {
-    allTripsOfHost: 'allTripsOfHost',
-    allDailyViewTrips: 'allDailyViewTrips',
-    allReviewRequiredTrips: 'allReviewRequiredTrips',
-    tripDetails: 'tripDetails',
-    allMasterHostCheckList: 'allMasterHostCheckList',
+    // Channels
     allChannels: 'allChannels',
     chatHistory: 'chatHistory',
-    allDriversOfHost: 'allDriversOfHost',
-    guestsRentalHistory: 'guestsRentalHistory',
-    driverLicenseDetails: 'driverLicenseDetails',
-    hostConstraints: 'hostConstraints',
-    allHosts: 'allHosts',
+
+    // Employees
     allEmployees: 'allEmployees',
-    allNotifications: 'allNotifications',
+
+    // Hosts
+    allDriversOfHost: 'allDriversOfHost',
+    allHosts: 'allHosts',
+    allMasterHostCheckList: 'allMasterHostCheckList',
+    hostConstraints: 'hostConstraints',
+
+    // Notifications
     allMessageNotifications: 'allMessageNotifications',
+    allNotifications: 'allNotifications',
     checkNotifications: 'checkNotifications',
+
+    // Telematics
     telematicsDataByVehicleId: 'telematicsDataByVehicleId',
     telematicsEventsOfTripById: 'telematicsEventsOfTripById',
+
+    // Trips
+    allDailyViewTrips: 'allDailyViewTrips',
+    allReviewRequiredTrips: 'allReviewRequiredTrips',
+    allTripsOfHost: 'allTripsOfHost',
+    tripDetails: 'tripDetails',
+
+    // Users
+    driverLicenseDetails: 'driverLicenseDetails',
+    guestsRentalHistory: 'guestsRentalHistory',
+    userDetails: 'userDetails',
+
+    // Vehicles
     allVechiclesUnderHost: 'allVechiclesUnderHost',
-    vehiclesForMapView: 'vehiclesForMapView',
-    vehiclesByVin: 'vehiclesByVin',
-    vehicleFeaturesById: 'vehicleFeaturesById',
-    vehicleUpdateLogsById: 'vehicleUpdateLogsById',
-    vehicleTripById: 'vehicleTripById',
     vehicleConfigurationEvents: 'vehicleConfigurationEvents',
-    vehicleRepairLogs: 'vehicleRepairLogs',
     vehicleExpenseLogs: 'vehicleExpenseLogs',
+    vehicleFeaturesById: 'vehicleFeaturesById',
+    vehicleRepairLogs: 'vehicleRepairLogs',
+    vehicleTripById: 'vehicleTripById',
+    vehicleUpdateLogsById: 'vehicleUpdateLogsById',
+    vehiclesByVin: 'vehiclesByVin',
+    vehiclesForMapView: 'vehiclesForMapView',
     vehiclesForSwap: 'vehiclesForSwap'
 };

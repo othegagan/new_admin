@@ -416,3 +416,35 @@ export interface RentalCharge {
     collectionAllowed: boolean;
     isRentalChargesRefund: boolean;
 }
+
+export interface UserDetail {
+    iduser: number;
+    firstname: string;
+    phoneNumberUpdatedDate: any;
+    middlename: string;
+    lastname: string;
+    email: string;
+    mobilephone: string;
+    address_1: string;
+    address_2: string;
+    address_3: string;
+    city: string;
+    state: string;
+    postcode: string;
+    country: string;
+    language: string;
+    driverlisense: string;
+    isactive: boolean;
+    employee: boolean;
+    vehicleowner: boolean;
+    createddate: string;
+    updateddate: string;
+    userimage: string;
+    firebaseId: any;
+    userRole: string;
+    channelName: string;
+    channelId: number;
+    isVerified: boolean;
+    isPhoneVarified: boolean;
+    isEmailVarified: boolean;
+}
