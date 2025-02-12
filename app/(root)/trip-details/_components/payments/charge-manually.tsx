@@ -101,18 +101,15 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                 isOpen={open}
                 onClose={closeDialog}
                 title='Collect Pending Amount'
-                className='sm:w-[70%] sm:max-w-full'
+                className='sm:w-[40%] sm:max-w-full'
                 description="This action will manually charge the selected amount to the driver's payment method.">
                 <AdaptiveBody>
-                    {/* Pending Payments */}
                     <div className='mx-auto grid max-w-xl gap-3'>
-                        <div className='grid grid-cols-3 gap-5 rounded-t bg-muted px-4 py-2 font-semibold'>
-                            <div className='col-span-2 ml-5'>Pending Payments</div>
-                            <div className='col-span-1 flex items-center'>Amount</div>
-                        </div>
-                        <div className='flex flex-col gap-2 px-3'>
-                            {pendingCharges.length > 0 &&
-                                pendingCharges.map((payment) => {
+                        {/* Future Payments */}
+                        {pendingCharges?.length > 0 ? (
+                            <div>
+                                <div className=' font-semibold'>Future Collections</div>
+                                {pendingCharges.map((payment) => {
                                     // Skip payments with amounts close to 0
                                     if (payment.amount < 0.01 && payment.amount > -0.01) {
                                         return null;
@@ -131,9 +128,10 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                                     className='mt-1'
                                                     checked={!!selectedPendingRows[payment.paymentdate]}
                                                     onCheckedChange={() => togglePendingRow(payment.paymentdate)}
+                                                    autoFocus={false}
                                                 />
                                                 <div>
-                                                    <div>Future Payment</div>
+                                                    <div>To be collected in future</div>
                                                     <div className='text-muted-foreground text-xs'>{collectedDate}</div>
                                                 </div>
                                             </div>
@@ -143,39 +141,47 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                                         </label>
                                     );
                                 })}
+                            </div>
+                        ) : null}
 
-                            {/* Failed Payments */}
-                            {failedCharges.length > 0 &&
-                                failedCharges.map((failed) => {
-                                    const failedDate = formatDateAndTime(failed.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
+                        {/* Failed Payments */}
+                        {failedCharges?.length > 0 ? (
+                            <div>
+                                <div className=' font-semibold'>Failed Collections</div>
+                                {failedCharges.length > 0 &&
+                                    failedCharges.map((failed) => {
+                                        const failedDate = formatDateAndTime(failed.paymentdate, zipcode, 'MMM DD, YYYY, h:mm A ');
 
-                                    // Skip failed with amounts close to 0
-                                    if (failed.amount < 0.01 && failed.amount > -0.01) {
-                                        return null;
-                                    }
+                                        // Skip failed with amounts close to 0
+                                        if (failed.amount < 0.01 && failed.amount > -0.01) {
+                                            return null;
+                                        }
 
-                                    return (
-                                        <label htmlFor={failed.paymentdate} key={failed.paymentdate}>
-                                            className='grid cursor-pointer grid-cols-3 gap-2 py-1 '
-                                            <div className='col-span-2 flex items-start gap-2'>
-                                                <Checkbox
-                                                    id={failed.paymentdate}
-                                                    className='mt-1'
-                                                    checked={!!selectedFailedRows[failed.paymentdate]}
-                                                    onCheckedChange={() => toggleFailedRow(failed.paymentdate)}
-                                                />
-                                                <div>
-                                                    <div>Failed Payment</div>
-                                                    <div className='text-muted-foreground text-xs'>{failedDate}</div>
+                                        return (
+                                            <label
+                                                htmlFor={failed.paymentdate}
+                                                key={failed.paymentdate}
+                                                className='grid cursor-pointer grid-cols-3 gap-2 py-1 '>
+                                                <div className='col-span-2 flex items-start gap-2'>
+                                                    <Checkbox
+                                                        id={failed.paymentdate}
+                                                        className='mt-1'
+                                                        checked={!!selectedFailedRows[failed.paymentdate]}
+                                                        onCheckedChange={() => toggleFailedRow(failed.paymentdate)}
+                                                    />
+                                                    <div>
+                                                        <div>Retry failed charges</div>
+                                                        <div className='text-muted-foreground text-xs'>{failedDate}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className='col-span-1 flex items-center font-semibold'>
-                                                {currencyFormatter(failed?.amount)}
-                                            </div>
-                                        </label>
-                                    );
-                                })}
-                        </div>
+                                                <div className='col-span-1 flex items-center font-semibold'>
+                                                    {currencyFormatter(failed?.amount)}
+                                                </div>
+                                            </label>
+                                        );
+                                    })}
+                            </div>
+                        ) : null}
                     </div>
 
                     {/* Message Section */}

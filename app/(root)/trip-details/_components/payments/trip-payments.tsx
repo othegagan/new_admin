@@ -21,7 +21,7 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
     const pricelist = trip?.tripPaymentTokens[0];
 
     const asPendingPayments = fullTripResponse.pendingPayments && Object.keys(fullTripResponse.pendingPayments).length > 0;
-    const asFailedPayments = fullTripResponse.failedPayments && Object.keys(fullTripResponse.failedPayments).length > 0;
+    const asFailedPayments = fullTripResponse.failedPaymentLogs && Object.keys(fullTripResponse.failedPaymentLogs).length > 0;
     const showManualCharge = asPendingPayments || asFailedPayments;
 
     const showDepositRelease =
@@ -57,7 +57,7 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
                             <DropdownMenuItem asChild>
                                 <ChargeManuallyDialog
                                     pendingPayments={fullTripResponse.pendingPayments}
-                                    failedPayments={fullTripResponse.failedPayments}
+                                    failedPayments={fullTripResponse.failedPaymentLogs}
                                     zipcode={trip.vehzipcode}
                                     tripId={trip.tripid}
                                 />
