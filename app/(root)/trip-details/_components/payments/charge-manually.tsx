@@ -101,7 +101,7 @@ export default function ChargeManuallyDialog({ pendingPayments, failedPayments, 
                 isOpen={open}
                 onClose={closeDialog}
                 title='Collect Pending Amount'
-                className='sm:w-[40%] sm:max-w-full'
+                className='sm:w-[70%] sm:max-w-full'
                 description="This action will manually charge the selected amount to the driver's payment method.">
                 <AdaptiveBody>
                     <div className='mx-auto grid max-w-xl gap-3'>
