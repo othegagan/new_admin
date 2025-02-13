@@ -36,6 +36,7 @@ export default async function RootLayout({ children }: Readonly<RootLayoutProps>
     return (
         <html lang='en' suppressHydrationWarning>
             <head>
+                <meta name='app-version' content='0.2.1' />
                 <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
                 <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js' />
             </head>
