@@ -24,11 +24,19 @@ export default function TripPayments({ fullTripResponse }: TripPaymentsProps) {
     const asFailedPayments = fullTripResponse.failedPaymentLogs && Object.keys(fullTripResponse.failedPaymentLogs).length > 0;
     const showManualCharge = asPendingPayments || asFailedPayments;
 
+    // const showDepositRelease =
+    //     ['REREQ', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false && trip?.version >= LATEST_TRIP_VERSION && trip?.depositCollected;
+
+    // const showCollectDeposit =
+    //     ['REAPP', 'TRSTR'].includes(trip?.statusCode) && trip?.version >= LATEST_TRIP_VERSION && !trip?.depositCollected;
+
     const showDepositRelease =
-        ['REREQ', 'RECAN', 'REREJ'].includes(trip?.statusCode) === false && trip?.version >= LATEST_TRIP_VERSION && trip?.depositCollected;
+        !['REREQ', 'RECAN', 'REREJ'].includes(trip?.statusCode) &&
+        (trip?.version >= LATEST_TRIP_VERSION ? trip?.depositCollected : trip?.tripPaymentTokens[0]?.releasedAmountOnHold > 0);
 
     const showCollectDeposit =
-        ['REAPP', 'TRSTR'].includes(trip?.statusCode) && trip?.version >= LATEST_TRIP_VERSION && !trip?.depositCollected;
+        ['REAPP', 'TRSTR'].includes(trip?.statusCode) &&
+        (trip?.version >= LATEST_TRIP_VERSION ? !trip?.depositCollected : !(trip?.tripPaymentTokens[0]?.depositHoldAmount > 0));
 
     const rowsAlreadyCharged = fullTripResponse?.rentalCharges.map((row: RentalCharge) => {
         if (row.chargeAmount === 0.0) return null;
