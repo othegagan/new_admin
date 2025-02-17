@@ -43,7 +43,11 @@ export default function TripMediaUploadDialog() {
 
     return (
         <>
-            <Button onClick={handleOpen} variant='ghost' className='ml-auto w-fit font-semibold text-primary hover:text-primary'>
+            <Button
+                onClick={handleOpen}
+                variant='ghost'
+                type='button'
+                className='ml-auto w-fit font-semibold text-primary hover:text-primary'>
                 <Camera className='mr-2 h-4 w-4' /> Add Photos
             </Button>
 
