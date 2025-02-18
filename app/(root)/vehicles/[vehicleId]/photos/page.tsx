@@ -234,7 +234,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages }: PhotoRearrangeFormProp
             const formData = new FormData();
             formData.append(`${vehicleId},${session?.iduser}`, file);
 
-            const response = await axios.post(url, formData, {
+            await axios.post(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     bundee_auth_token: session?.bundeeToken || ''

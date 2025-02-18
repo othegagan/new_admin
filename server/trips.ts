@@ -171,3 +171,10 @@ export async function collectDeposit(payload: any) {
     const response = await api.post<any>(url, payload);
     return response;
 }
+
+export async function deleteImageVideoUploaded(id: number) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/deleteMediaFile`;
+    const payload = { id };
+    const response = await api.post<any>(url, payload);
+    return response;
+}

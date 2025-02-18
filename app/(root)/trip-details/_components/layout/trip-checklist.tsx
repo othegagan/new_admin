@@ -11,6 +11,7 @@ import { tripEndChecklist, tripStartChecklist } from '@/server/trips';
 import type { Trip } from '@/types';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import TripMediaDisplay from './trip-media-display';
 import TripMediaUploadDialog from './trip-media-upload-dialog';
 
 interface TripChecklistProps {
@@ -115,8 +116,15 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
         }
     }
 
+    const asMediaFile = [
+        trip?.hostTripStartingBlobs,
+        trip?.hostTripCompletingBlobs,
+        trip?.driverTripStartingBlobs,
+        trip?.driverTripCompletingBlobs
+    ].some((blobs) => blobs && blobs.length > 0);
+
     return (
-        <div className='w-full space-y-4'>
+        <div className='mb-6 w-full space-y-4 lg:space-y-8'>
             <Accordion type='single' collapsible className='w-full space-y-4'>
                 <AccordionItem value='trip-start' className='border-0'>
                     <AccordionTrigger className='rounded-md border-0 bg-primary/10 px-4 shadow-none'>Trip Start Checklist</AccordionTrigger>
@@ -124,7 +132,12 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
                         {!['TRSTR', 'TRCOM'].includes(trip.statusCode) ? (
                             <form onSubmit={handleStartSubmit(onSubmitStart)} className='mt-4 flex flex-col gap-4'>
                                 <div className='flex flex-col gap-4 md:flex-row-reverse md:justify-between'>
-                                    <TripMediaUploadDialog />
+                                    <TripMediaUploadDialog
+                                        hostId={trip.hostid}
+                                        tripid={trip.tripid}
+                                        belongsTo='starting'
+                                        hostTripStartingBlobs={trip.hostTripStartingBlobs}
+                                    />
                                     <div className='grid grid-cols-2 gap-4'>
                                         <Controller
                                             name='openingMiles'
@@ -257,10 +270,15 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
                 <AccordionItem value='trip-end' className='border-0'>
                     <AccordionTrigger className='rounded-md border-0 bg-primary/10 px-4 shadow-none'>Trip End Checklist</AccordionTrigger>
                     <AccordionContent>
-                        {['TRSTR'].includes(trip.statusCode) ? (
+                        {['TRSTR', 'TRCOM'].includes(trip.statusCode) ? (
                             <form onSubmit={handleEndSubmit(onSubmitEnd)} className='mt-4 flex flex-col gap-4'>
                                 <div className='flex flex-col gap-4 md:flex-row-reverse md:justify-between'>
-                                    <TripMediaUploadDialog />
+                                    <TripMediaUploadDialog
+                                        hostId={trip.hostid}
+                                        tripid={trip.tripid}
+                                        belongsTo='ending'
+                                        hostTripCompletingBlobs={trip.hostTripCompletingBlobs}
+                                    />
                                     <div className='grid grid-cols-2 gap-4'>
                                         <div className='space-y-2 px-0.5'>
                                             <Label htmlFor='closingMiles'>Odometer End (miles)</Label>
@@ -354,6 +372,22 @@ export default function TripChecklist({ trip, checklist }: TripChecklistProps) {
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
+
+            {asMediaFile && (
+                <div className='space-y-5'>
+                    <div className='font-medium'>Media</div>
+                    <TripMediaDisplay
+                        hostTripStartingBlobs={trip?.hostTripStartingBlobs}
+                        hostTripCompletingBlobs={trip?.hostTripCompletingBlobs}
+                        driverTripStartingBlobs={trip?.driverTripStartingBlobs}
+                        driverTripCompletingBlobs={trip?.driverTripCompletingBlobs}
+                        hostAvatar={trip?.hostImage || '/dummy_avatar.png'}
+                        hostName={`${trip?.hostFirstName} ${trip?.hostLastName}` || 'Host'}
+                        driverAvatar={trip?.userImage || '/dummy_avatar.png'}
+                        driverName={`${trip?.userFirstName} ${trip?.userlastName}` || 'Driver'}
+                    />
+                </div>
+            )}
         </div>
     );
 }
