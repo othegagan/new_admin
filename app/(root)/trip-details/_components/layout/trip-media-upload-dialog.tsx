@@ -75,9 +75,9 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
             }
 
             toast.success('File(s) uploaded successfully!');
-            // setTimeout(() => {
-            //     window.location.reload();
-            // }, 500);
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
         } catch (error) {
             console.error('Error uploading files', error);
             setIsUploading(false);
