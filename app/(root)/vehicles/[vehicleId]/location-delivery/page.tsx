@@ -191,25 +191,27 @@ function LocationDeliveryForm({
     });
 
     const setFullAddress = (address: any) => {
-        setValue('fullAddress.address1', address.address1);
-        setValue('fullAddress.address2', address.address2);
-        setValue('fullAddress.city', address.city);
-        setValue('fullAddress.state', address.state);
-        setValue('fullAddress.zipcode', String(address.zipcode));
-        setValue('fullAddress.latitude', String(address.latitude));
-        setValue('fullAddress.longitude', String(address.longitude));
+        setValue('fullAddress.address1', address.address1, { shouldDirty: true });
+        setValue('fullAddress.address2', address.address2, { shouldDirty: true });
+        setValue('fullAddress.city', address.city, { shouldDirty: true });
+        setValue('fullAddress.state', address.state, { shouldDirty: true });
+        setValue('fullAddress.zipcode', String(address.zipcode), { shouldDirty: true });
+        setValue('fullAddress.latitude', String(address.latitude), { shouldDirty: true });
+        setValue('fullAddress.longitude', String(address.longitude), { shouldDirty: true });
     };
 
     const deliveryEnabledState = watch('deliveryEnabled');
 
     useEffect(() => {
-        setValue('deliveryEnabled', deliveryEnabled);
-        setValue('deliveryRadius', deliveryRadius);
-        setValue('airportDeliveryCost', airportDeliveryCost);
-        setValue('nonAirportDeliveryCost', nonAirportDeliveryCost);
-        setValue('deliveryToAirport', deliveryToAirport);
-        setValue('fullAddress', fullAddress);
-    }, [setValue, deliveryEnabled, deliveryRadius, airportDeliveryCost, nonAirportDeliveryCost, deliveryToAirport, fullAddress]);
+        reset({
+            deliveryEnabled,
+            deliveryRadius,
+            airportDeliveryCost,
+            nonAirportDeliveryCost,
+            deliveryToAirport,
+            fullAddress
+        });
+    }, [deliveryEnabled, deliveryRadius, airportDeliveryCost, nonAirportDeliveryCost, deliveryToAirport, fullAddress, reset]);
 
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
         try {
@@ -228,7 +230,7 @@ function LocationDeliveryForm({
                 country: 'USA',
                 latitude: fullAddress.latitude || '',
                 longitude: fullAddress.longitude || '',
-                hasDelivery: deliveryEnabledState
+                hasDelivery: deliveryEnabled
             };
 
             if (deliveryEnabled) {
@@ -244,12 +246,15 @@ function LocationDeliveryForm({
                 type: 'upload_location_delivery',
                 payload
             });
+
             if (response.success) {
                 toast.success(response.message);
-                refetchData();
+
                 reset({
                     ...formData
                 });
+
+                refetchData();
             } else {
                 toast.error(response.message);
             }
