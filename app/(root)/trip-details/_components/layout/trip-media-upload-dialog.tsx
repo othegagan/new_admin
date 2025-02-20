@@ -2,14 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
-import { FileInput, FileUploader } from '@/components/ui/extension/file-uploader';
 import { env } from '@/env';
-import { FileUploadDropzoneIcon } from '@/public/icons';
 import axios from 'axios';
-import { Camera, Files } from 'lucide-react';
+import { Camera, ImageIcon, RotateCcw, X } from 'lucide-react';
 import { getSession } from 'next-auth/react';
-import { useState } from 'react';
-import type { DropzoneOptions } from 'react-dropzone';
+import { useCallback, useRef, useState } from 'react';
+import Webcam from 'react-webcam';
 import { toast } from 'sonner';
 
 interface TripMediaUploadDialogProps {
@@ -20,36 +18,78 @@ interface TripMediaUploadDialogProps {
     hostTripCompletingBlobs?: any[] | [];
 }
 
+const MAX_IMAGES = 10;
+
 export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: TripMediaUploadDialogProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
     const [isUploading, setIsUploading] = useState(false);
-    const [error, setError] = useState('');
+    const [selectedImages, setSelectedImages] = useState<string[]>([]);
+    const [showCamera, setShowCamera] = useState(false);
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    const webcamRef = useRef<Webcam>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    function handleFileUpload(selectedFiles: File[] | null) {
-        if (!selectedFiles) return;
-        setFiles((prevFiles) => {
-            const fileNames = prevFiles.map((file) => file.name.toLowerCase());
-            const newFiles = selectedFiles.filter(
-                (file) => !fileNames.includes(file.name.toLowerCase()) // Prevent duplicates
-            );
-            return [...prevFiles, ...newFiles];
-        });
-    }
+    const videoConstraints = {
+        width: 1280,
+        height: 720,
+        facingMode: 'environment' // Default to back camera for better photos
+    };
+
+    const capture = useCallback(() => {
+        if (webcamRef.current && selectedImages.length < MAX_IMAGES) {
+            const imageSrc = webcamRef.current.getScreenshot();
+            if (imageSrc) {
+                setSelectedImages((prev) => [...prev, imageSrc]);
+                // Show success toast
+                toast.success('Photo captured successfully');
+            }
+        }
+    }, [selectedImages]);
+
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files) {
+            const remainingSlots = MAX_IMAGES - selectedImages.length;
+            const filesToProcess = Array.from(files).slice(0, remainingSlots);
+
+            if (filesToProcess.length + selectedImages.length > MAX_IMAGES) {
+                toast.warning(`You can only select up to ${MAX_IMAGES} images`);
+            }
+
+            filesToProcess.forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    setSelectedImages((prev) => [...prev, e.target?.result as string]);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        event.target.value = '';
+    };
 
     async function handleSubmit() {
-        if (files.length === 0) return;
+        if (selectedImages.length === 0) {
+            toast.error('Please select at least one image');
+            return;
+        }
 
         setIsUploading(true);
-
         const session = await getSession();
 
         try {
-            // Loop over files sequentially instead of running them all concurrently
-            for (let index = 0; index < files.length; index++) {
-                const file = files[index];
-                const url = `${env.BOOKING_SERVICES_BASEURL}/v1/booking/uploadMediaFiles`;
+            // Convert base64 images to files
+            const imageFiles = await Promise.all(
+                selectedImages.map(async (base64, index) => {
+                    const response = await fetch(base64);
+                    const blob = await response.blob();
+                    return new File([blob], `image-${index}.jpg`, { type: 'image/jpeg' });
+                })
+            );
 
+            const url = `${env.BOOKING_SERVICES_BASEURL}/v1/booking/uploadMediaFiles`;
+
+            // Upload each file sequentially
+            for (const file of imageFiles) {
                 const formData = new FormData();
                 const jsonData = {
                     tripId: tripid,
@@ -59,7 +99,7 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
                     storageRef: '',
                     caption: '',
                     userId: hostId,
-                    video: file.type.includes('video')
+                    video: false
                 };
                 formData.append('json', JSON.stringify(jsonData));
                 formData.append('hostid', hostId);
@@ -74,14 +114,17 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
                 });
             }
 
-            toast.success('File(s) uploaded successfully!');
+            toast.success('All images uploaded successfully!');
+            handleClose();
             setTimeout(() => {
                 window.location.reload();
             }, 500);
         } catch (error) {
             console.error('Error uploading files', error);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            toast.error(`Failed to upload images. Please try again. ${errorMessage}`);
+        } finally {
             setIsUploading(false);
-            setError('Error uploading files. Please try again later.');
         }
     }
 
@@ -91,19 +134,16 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
 
     function handleClose() {
         setIsOpen(false);
-        setFiles([]);
-        setError('');
         setIsUploading(false);
+        setSelectedImages([]);
+        setShowCamera(false);
+        setIsCameraReady(false);
     }
 
-    const dropzone = {
-        accept: {
-            'image/*': ['.jpg', '.jpeg', '.png']
-        },
-        multiple: true,
-        maxFiles: 10,
-        maxSize: 15 * 1024 * 1024
-    } as DropzoneOptions;
+    const removeImage = (index: number) => {
+        setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+        // toast.info('Photo removed');
+    };
 
     return (
         <>
@@ -116,47 +156,132 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
             </Button>
 
             {isOpen && (
-                <AdaptiveDialog onClose={handleClose} isOpen={isOpen} size='xl' title='Add Photos' interactOutside={false}>
+                <AdaptiveDialog
+                    onClose={handleClose}
+                    isOpen={isOpen}
+                    size='xl'
+                    title={`Add Photos (${selectedImages.length}/${MAX_IMAGES})`}
+                    interactOutside={false}
+                    description='You can upload up to 10 photos at once.'>
                     <AdaptiveBody className='flex flex-col gap-4'>
-                        <div className='flex flex-col gap-4 text-sm'>
-                            <div>
-                                Upload media files to be displayed on the trip detail page. Supported file types are JPG, PNG, and PDF.
-                            </div>
+                        <div className='grid gap-4'>
+                            {/* Selected Images Grid */}
+                            {selectedImages.length > 0 && (
+                                <div className='grid grid-cols-4 gap-4 md:grid-cols-5'>
+                                    {selectedImages.map((image, index) => (
+                                        <div key={index} className='group relative aspect-square'>
+                                            <img
+                                                src={image}
+                                                alt={`Selected media ${index + 1}`}
+                                                className='h-full w-full rounded-lg object-cover'
+                                            />
+                                            <button
+                                                type='button'
+                                                onClick={() => removeImage(index)}
+                                                className='absolute top-2 right-2 rounded-full bg-destructive/90 p-1.5 text-destructive-foreground transition-colors hover:bg-destructive'>
+                                                <X className='h-4 w-4' />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
-                            <div className='flex w-full flex-col gap-4 overflow-hidden'>
-                                <FileUploader
-                                    value={files}
-                                    onValueChange={handleFileUpload}
-                                    dropzoneOptions={dropzone}
-                                    className='relative h-40 rounded-lg '>
-                                    <FileInput className='flex h-full flex-col items-center justify-center bg-muted'>
-                                        <FileUploadDropzoneIcon />
-                                        <p className='mb-1 text-muted-foreground text-sm'>
-                                            <span className='font-semibold'>Click to upload vehicle photos</span>
-                                            &nbsp; or drag and drop
-                                        </p>
-                                        <p className='text-muted-foreground text-xs'>SVG, PNG, JPG or GIF</p>
-                                    </FileInput>
-                                </FileUploader>
+                            {/* Camera View */}
+                            {showCamera && (
+                                <div className='grid gap-4'>
+                                    <div className='relative aspect-video overflow-hidden rounded-md bg-muted'>
+                                        <Webcam
+                                            audio={false}
+                                            ref={webcamRef}
+                                            screenshotFormat='image/jpeg'
+                                            videoConstraints={videoConstraints}
+                                            onUserMedia={() => setIsCameraReady(true)}
+                                            className='h-full w-full object-cover'
+                                        />
+                                        <div className='absolute right-0 bottom-4 left-0 flex justify-center gap-4'>
+                                            <Button
+                                                onClick={capture}
+                                                disabled={!isCameraReady || selectedImages.length >= MAX_IMAGES}
+                                                className='w-fit rounded-full bg-white/90 hover:bg-white'>
+                                                <Camera className='h-6 w-6 text-primary' />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
-                                {error && <div className='mt-4 text-red-500 text-sm'>{error}</div>}
-                            </div>
-
-                            {files.length > 0 && (
-                                <div className='flex items-center gap-4 text-base'>
-                                    <Files />
-                                    {files.length} file{files.length !== 1 ? 's' : ''} selected
+                            {/* Selection Buttons */}
+                            {!showCamera && selectedImages.length < MAX_IMAGES && (
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <Button
+                                        onClick={() => setShowCamera(true)}
+                                        variant='outline'
+                                        className='flex h-auto flex-col gap-2 rounded-md py-6 md:w-full'>
+                                        <Camera className='h-8 w-8' />
+                                        <span>Take Photo</span>
+                                    </Button>
+                                    <Button
+                                        onClick={() => fileInputRef.current?.click()}
+                                        variant='outline'
+                                        className='flex h-auto flex-col gap-2 rounded-md py-6 md:w-full'>
+                                        <ImageIcon className='h-8 w-8' />
+                                        <span>Choose from Gallery</span>
+                                    </Button>
+                                    <input
+                                        type='file'
+                                        accept='image/*'
+                                        multiple
+                                        className='hidden'
+                                        ref={fileInputRef}
+                                        onChange={handleFileSelect}
+                                    />
                                 </div>
                             )}
                         </div>
                     </AdaptiveBody>
+
                     <AdaptiveFooter>
-                        <Button variant='ghost' className='w-fit' disabled={isUploading} onClick={handleClose}>
-                            Cancel
-                        </Button>
-                        <Button className='w-fit' loading={isUploading} onClick={handleSubmit} loadingText='Uploading...'>
-                            Upload Media
-                        </Button>
+                        {showCamera ? (
+                            <>
+                                <Button variant='ghost' onClick={() => setShowCamera(false)} className='flex-1'>
+                                    Back
+                                </Button>
+                                <Button
+                                    variant='default'
+                                    onClick={capture}
+                                    disabled={!isCameraReady || selectedImages.length >= MAX_IMAGES}
+                                    className='flex-1'>
+                                    Capture Photo
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <div className='flex gap-2'>
+                                    <Button variant='ghost' onClick={handleClose} disabled={isUploading}>
+                                        Back to Trip
+                                    </Button>
+                                    {selectedImages.length > 0 && (
+                                        <Button
+                                            variant='outline'
+                                            onClick={() => setSelectedImages([])}
+                                            disabled={isUploading}
+                                            className='gap-2'>
+                                            <RotateCcw className='h-4 w-4' />
+                                            Clear All
+                                        </Button>
+                                    )}
+                                </div>
+                                <Button
+                                    variant='default'
+                                    onClick={handleSubmit}
+                                    disabled={selectedImages.length === 0 || isUploading}
+                                    loading={isUploading}
+                                    loadingText='Uploading...'
+                                    className='gap-2'>
+                                    Upload {selectedImages.length > 0 ? `(${selectedImages.length})` : ''}
+                                </Button>
+                            </>
+                        )}
                     </AdaptiveFooter>
                 </AdaptiveDialog>
             )}
