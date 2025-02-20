@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 # Enable and install pnpm manually to avoid Corepack issues
 RUN npm install -g pnpm@10.4.0
 
-WORKDIR /app
+WORKDIR /appdod
 
 # Copy package files
 COPY package.json pnpm-lock.yaml* ./
@@ -19,7 +19,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the application
-RUN pnpm run builddocker
+RUN pnpm run build
 
 # Production stage
 FROM node:20-alpine AS runner
