@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
 import { env } from '@/env';
 import axios from 'axios';
-import { Camera, Flashlight, ImageIcon, RotateCcw, X } from 'lucide-react';
+import { Camera, ImageIcon, RotateCcw, X } from 'lucide-react';
 import { getSession } from 'next-auth/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import { toast } from 'sonner';
 
@@ -27,22 +27,13 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
     const [showCamera, setShowCamera] = useState(false);
     const [isCameraReady, setIsCameraReady] = useState(false);
     const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');
-    const [flashEnabled, setFlashEnabled] = useState(false);
-    const [hasFlash, setHasFlash] = useState(false);
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        if ('mediaDevices' in navigator && 'torch' in navigator.mediaDevices) {
-            setHasFlash(true);
-        }
-    }, []);
-
-    const videoConstraints = {
+    const videoConstraints: MediaTrackConstraintSet = {
         width: 1280,
         height: 720,
-        facingMode: facingMode,
-        advanced: flashEnabled ? [{ torch: true }] : []
+        facingMode: facingMode
     };
 
     const capture = useCallback(() => {
@@ -159,29 +150,6 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
         setFacingMode((current) => (current === 'environment' ? 'user' : 'environment'));
     };
 
-    const toggleFlash = async () => {
-        if (!hasFlash) return;
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: facingMode,
-                    advanced: [{ torch: !flashEnabled }]
-                }
-            });
-
-            const track = stream.getVideoTracks()[0];
-            await track.applyConstraints({
-                advanced: [{ torch: !flashEnabled }]
-            });
-
-            setFlashEnabled(!flashEnabled);
-        } catch (error) {
-            console.error('Error toggling flash:', error);
-            toast.error('Unable to toggle flash');
-        }
-    };
-
     return (
         <>
             <Button
@@ -237,15 +205,6 @@ export default function TripMediaUploadDialog({ tripid, hostId, belongsTo }: Tri
                                         />
                                         {/* Camera Controls */}
                                         <div className='absolute top-4 right-4 flex gap-2'>
-                                            {hasFlash && (
-                                                <Button
-                                                    onClick={toggleFlash}
-                                                    variant='secondary'
-                                                    size='icon'
-                                                    className={`rounded-full px-2 ${flashEnabled ? 'text-yellow-400' : 'text-white'}`}>
-                                                    <Flashlight className='h-4 w-4' />
-                                                </Button>
-                                            )}
                                             <Button onClick={toggleCamera} variant='secondary' size='icon' className='rounded-full px-2'>
                                                 <RotateCcw className='h-4 w-4' />
                                             </Button>
