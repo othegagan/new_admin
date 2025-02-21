@@ -78,7 +78,7 @@ export default function UpdateEmployeeForm({ cell }: { cell: any }) {
                 postcode: selectedRow?.postcode || '',
                 state: selectedRow?.state || '',
                 userimage: selectedRow?.userimage || '',
-                vehicleowner: true,
+                vehicleowner: false,
                 fromValue: 'completeProfile',
                 channelName: selectedRow?.channelName || ''
             };
