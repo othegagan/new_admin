@@ -1,8 +1,8 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { AUTH_ROUTES, PAGE_ROUTES } from './constants/routes';
-import { auth } from './lib/auth';
 import { createRouterMatcher } from './lib/routeMatcher';
+import { getSession } from './lib/sessionCache';
 
 const routeMatcher = createRouterMatcher([
     { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
@@ -13,7 +13,7 @@ const routeMatcher = createRouterMatcher([
 ]);
 
 export async function middleware(request: NextRequest) {
-    const session = await auth();
+    const session = await getSession();
     const { pathname } = request.nextUrl;
 
     const isLoggedIn = session;
