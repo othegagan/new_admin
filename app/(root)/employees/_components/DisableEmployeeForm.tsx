@@ -80,11 +80,7 @@ export default function DisableEmployeeForm({ cell }: { cell: any }) {
                             <Button variant='outline' type='button' onClick={handleClose}>
                                 Cancel
                             </Button>
-                            <Button
-                                variant='black'
-                                type='submit'
-                                loading={isSubmitting}
-                                loadingText={cell.getValue().isactive ? 'Disabling...' : 'Enabling...'}>
+                            <Button variant='black' type='submit' loading={isSubmitting} loadingText='Deleting...'>
                                 Delete Employee
                             </Button>
                         </AdaptiveFooter>

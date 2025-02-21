@@ -92,7 +92,7 @@ export const columns: ColumnDef<User>[] = [
     {
         accessorKey: 'isactive',
         header: ({ column }) => (
-            <div className='flex-start py-1'>
+            <div className='flex-center py-1'>
                 <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
                     Status
                     <ChevronsUpDown className='ml-2 size-3' />
@@ -101,11 +101,11 @@ export const columns: ColumnDef<User>[] = [
         ),
         cell: ({ cell }) => {
             return cell.getValue() ? (
-                <div className='flex-start'>
+                <div className='flex-center'>
                     <div className='my-1 w-fit rounded-md bg-[#C4F891] px-3 py-1 text-12 dark:bg-[#113019]'>Active</div>
                 </div>
             ) : (
-                <div className='flex-start'>
+                <div className='flex-center'>
                     <div className='my-1 w-fit rounded-md bg-red-100 px-3 py-1 text-12 text-red-700'>Disabled</div>
                 </div>
             );

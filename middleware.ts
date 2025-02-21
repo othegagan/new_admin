@@ -1,8 +1,8 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { AUTH_ROUTES, PAGE_ROUTES } from './constants/routes';
+import { auth } from './lib/auth';
 import { createRouterMatcher } from './lib/routeMatcher';
-import { getSession } from './lib/sessionCache';
 
 const routeMatcher = createRouterMatcher([
     { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
@@ -13,7 +13,7 @@ const routeMatcher = createRouterMatcher([
 ]);
 
 export async function middleware(request: NextRequest) {
-    const session = await getSession();
+    const session = await auth();
     const { pathname } = request.nextUrl;
 
     const isLoggedIn = session;
@@ -68,8 +68,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-        // Always run for API routes
-        '/(api|trpc)(.*)'
+        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)'
     ]
 };

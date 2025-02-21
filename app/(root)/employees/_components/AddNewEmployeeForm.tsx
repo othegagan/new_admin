@@ -7,10 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PhoneNumber from '@/components/ui/phone-number';
 import { useEmployees } from '@/hooks/useHostsAndEmployees';
-import { auth } from '@/lib/auth';
 import { sendFirebaseResetPasswordEmail } from '@/lib/firebase';
 import { addNewUserToFirebase, createEmployeeUser } from '@/server/user';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getSession } from 'next-auth/react';
 import { useState } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -64,7 +64,7 @@ export default function AddNewEmployeeForm() {
         try {
             const { email, firstName, lastName, mobilePhone } = data;
 
-            const session = await auth();
+            const session = await getSession();
 
             await addNewUserToFirebase({ email, firstName, lastName });
 
@@ -87,6 +87,7 @@ export default function AddNewEmployeeForm() {
             }
         } catch (error: any) {
             console.error(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -128,6 +129,8 @@ export default function AddNewEmployeeForm() {
                                 <FormError>{errors.mobilePhone?.message}</FormError>
                             </div>
                         </div>
+
+                        <FormError>{errors.root?.message}</FormError>
                     </AdaptiveBody>
                     <AdaptiveFooter>
                         <Button variant='outline' onClick={closeDialog}>

@@ -3,10 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
 import { FormError } from '@/components/ui/extension/field';
+import { Switch } from '@/components/ui/switch';
 import { useHosts } from '@/hooks/useHostsAndEmployees';
 import { diableUser } from '@/server/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash2 } from 'lucide-react';
 import type { User } from 'next-auth';
 import { useState } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
@@ -66,9 +66,8 @@ export default function DisableHostForm({ cell }: { cell: any }) {
 
     return (
         <>
-            <Button variant='outline' size='icon' className='px-2' toolTip={operation} onClick={() => handleEdit(cell.getValue())}>
-                <Trash2 className='size-4 text-muted-foreground' />
-            </Button>
+            <Switch checked={cell.getValue().isactive} onCheckedChange={() => handleEdit(cell.getValue())} />
+
             {selectedRow && (
                 <AdaptiveDialog isOpen={open} onClose={handleClose} title={operation}>
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
