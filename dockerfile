@@ -1,13 +1,12 @@
 # Build stage
 FROM node:20-alpine AS builder
 
-# Install required system dependencies
-RUN apk add --no-cache libc6-compat
+# Install required dependencies and pnpm
+RUN apk add --no-cache libc6-compat curl
+RUN npm install -g pnpm@latest
 
-# Enable and install pnpm manually to avoid Corepack issues
-RUN npm install -g pnpm@10.4.0
-
-WORKDIR /appdod
+# Set working directory
+WORKDIR /app
 
 # Copy package files
 COPY package.json pnpm-lock.yaml* ./
@@ -24,18 +23,17 @@ RUN pnpm run build
 # Production stage
 FROM node:20-alpine AS runner
 
-# Install required system dependencies
-RUN apk add --no-cache libc6-compat
+# Install required dependencies and pnpm
+RUN apk add --no-cache libc6-compat curl
+RUN npm install -g pnpm@latest
 
-# Install pnpm manually to avoid Corepack issues
-RUN npm install -g pnpm@10.4.0
-
+# Set working directory
 WORKDIR /app
 
-# Set production environment variable
+# Set environment variable
 ENV NODE_ENV=production
 
-# Copy necessary files from build stage
+# Copy necessary files from the build stage
 COPY --from=builder /app ./
 
 # Install only production dependencies
