@@ -12,7 +12,7 @@ export default function TripSummary({ trip }: { trip: Trip }) {
     const carName = toTitleCase(`${trip.vehmake} ${trip.vehmodel} ${trip.vehyear}`);
     const carImage = trip.vehicleImages[0]?.imagename || '/images/image_not_available.png';
     const vehicleId = trip.vehicleId;
-    const licensePlate = trip.vehzipcode;
+    const licensePlate = trip.vehicleNumber;
     const perDayAmount = trip.tripPaymentTokens[0]?.perdayamount;
 
     const status = trip.status;
