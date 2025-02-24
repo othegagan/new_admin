@@ -1,17 +1,14 @@
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
-import { getSession } from 'next-auth/react';
 
 const BOOKING_SERVICES_BASEURL = env.NEXT_PUBLIC_BOOKING_SERVICES_BASEURL;
 const AVAILABILITY_SERVICES_BASEURL = env.NEXT_PUBLIC_AVAILABILITY_BASEURL;
 
 export async function getAllTripsOfHost(startDate: string, endDate: string) {
-    const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v2/booking/hostTripBetweenDays`;
     const payload = {
         startDate: startDate,
-        endDate: endDate,
-        hostId: session?.iduser
+        endDate: endDate
     };
 
     const response = await api.post<any>(url, payload);
@@ -19,36 +16,21 @@ export async function getAllTripsOfHost(startDate: string, endDate: string) {
 }
 
 export async function getReviewRequiredTrips() {
-    const session = await getSession();
     const url = `${BOOKING_SERVICES_BASEURL}/v2/booking/hostNeedsReviewTrips`;
-    const payload = {
-        hostId: session?.iduser
-    };
+    const payload = {};
 
     const response = await api.post<any>(url, payload);
     return response;
 }
 
 export async function getTripDetails(bookingId: number) {
-    const session = await getSession();
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripById`;
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/getActiveTripForHost`;
     const payload = {
         fromValue: 'tripid',
         id: bookingId
     };
 
     const response = await api.post<any>(url, payload);
-
-    if (response.success) {
-        if (response.data.activetripresponse.length === 0) {
-            throw new Error(response.message);
-        }
-        // check if the user is the host of the trip
-        const hostIsInResponse = response.data.activetripresponse[0].hostid;
-        if (hostIsInResponse !== session?.iduser) {
-            throw new Error('Unauthorized access..!');
-        }
-    }
 
     return response;
 }
