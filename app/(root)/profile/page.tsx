@@ -1,21 +1,20 @@
 'use client';
 
+import { AddressCombobox } from '@/components/extra/address-combo-box';
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
+import { stateList } from '@/constants';
 import { useUser } from '@/hooks/useUser';
 import { getUserByEmail, updateUser } from '@/server/user';
 import type { UserDetail } from '@/types';
 import { format } from 'date-fns';
 import { Pencil } from 'lucide-react';
-
-import { stateList } from '@/constants';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { MdVerified } from 'react-icons/md';
 import { toast } from 'sonner';
-import AddressSearchBox from './AddressSearchBox';
 
 export default function ProfilePage() {
     const { data: response, isLoading, error, isError } = useUser();
@@ -210,6 +209,10 @@ function ProfileDetailsComponent({ userDetails }: { userDetails: UserDetail }) {
         }
     };
 
+    function handleAddressChange(address: any) {
+        setSavedData({ ...savedData, address_1: address.address1, city: address.city, state: address.state, postcode: address.zipcode });
+    }
+
     return (
         <div className='flex flex-col gap-6 md:gap-10'>
             <div className='space-y-4'>
@@ -345,7 +348,11 @@ function ProfileDetailsComponent({ userDetails }: { userDetails: UserDetail }) {
                         <div className='mt-5 flex flex-col gap-4'>
                             <div className='flex flex-col gap-2'>
                                 <Label>Address 1</Label>
-                                <AddressSearchBox address1={savedData.address_1} setSavedData={setSavedData} />
+                                <AddressCombobox
+                                    locationDetails={savedData.address_1}
+                                    setLocationDetails={handleAddressChange}
+                                    searchType='address'
+                                />
                             </div>
 
                             <div className='flex flex-col gap-2'>
