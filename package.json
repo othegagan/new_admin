@@ -92,6 +92,7 @@
         "tailwind-merge": "^2.6.0",
         "tailwindcss-animate": "^1.0.7",
         "tz-lookup": "^6.1.25",
+        "use-debounce": "^10.0.4",
         "uuid": "^11.0.5",
         "zipcode-to-timezone": "^0.0.9",
         "zod": "^3.24.1",

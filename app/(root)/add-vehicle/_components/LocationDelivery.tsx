@@ -1,3 +1,4 @@
+import { AddressCombobox } from '@/components/extra/address-combo-box';
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
@@ -19,7 +20,6 @@ import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import AddressSearchBox from '../../vehicles/_components/AddressSearchBox';
 
 interface LocationDeliveryProps {
     nextStep: () => void;
@@ -289,7 +289,7 @@ function LocationDeliveryForm({
             <div className='grid grid-cols-3 gap-2 md:grid-cols-12 md:gap-4'>
                 <div className='col-span-3 flex flex-col gap-2 md:col-span-6'>
                     <Label> Address line 1</Label>
-                    <AddressSearchBox address1={fullAddress.address1} setSavedData={setFullAddress} />
+                    <AddressCombobox locationDetails={fullAddress.address1} setLocationDetails={setFullAddress} searchType='address' />
                     <FormError>{errors.fullAddress?.address1?.message}</FormError>
                 </div>
 

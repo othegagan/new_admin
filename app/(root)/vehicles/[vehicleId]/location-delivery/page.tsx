@@ -1,5 +1,6 @@
 'use client';
 
+import { AddressCombobox } from '@/components/extra/address-combo-box';
 import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { FormDescription, FormError, Label } from '@/components/ui/extension/field';
@@ -19,7 +20,6 @@ import { useEffect } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import AddressSearchBox from '../../_components/AddressSearchBox';
 import SubHeader from '../../_components/layout/subheader';
 
 export default function LocationDeliveryPage() {
@@ -192,7 +192,7 @@ function LocationDeliveryForm({
 
     const setFullAddress = (address: any) => {
         setValue('fullAddress.address1', address.address1, { shouldDirty: true });
-        setValue('fullAddress.address2', address.address2, { shouldDirty: true });
+        setValue('fullAddress.address2', address?.address2, { shouldDirty: true });
         setValue('fullAddress.city', address.city, { shouldDirty: true });
         setValue('fullAddress.state', address.state, { shouldDirty: true });
         setValue('fullAddress.zipcode', String(address.zipcode), { shouldDirty: true });
@@ -269,7 +269,7 @@ function LocationDeliveryForm({
             <div className='grid grid-cols-3 gap-2 md:grid-cols-12 md:gap-4'>
                 <div className='col-span-3 flex flex-col gap-2 md:col-span-6'>
                     <Label> Address line 1</Label>
-                    <AddressSearchBox address1={fullAddress.address1} setSavedData={setFullAddress} />
+                    <AddressCombobox locationDetails={fullAddress.address1} setLocationDetails={setFullAddress} searchType='address' />
                     <FormError>{errors.fullAddress?.address1?.message}</FormError>
                 </div>
 
