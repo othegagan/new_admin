@@ -6,7 +6,9 @@ import { PAGE_ROUTES } from './routes';
 export const ROLES = {
     DRIVER: 'Driver',
     HOST: 'Host',
-    EMPLOYEE: 'Host Employee'
+    EMPLOYEE: 'Employee',
+    ADMIN: 'Admin',
+    SUPER_HOST: 'SuperHost'
 } as const;
 
 export const CHANNELS = {
