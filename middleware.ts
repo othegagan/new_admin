@@ -9,7 +9,8 @@ const routeMatcher = createRouterMatcher([
     { matcher: AUTH_ROUTES.SIGN_IN, auth: false },
     { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false },
     { matcher: PAGE_ROUTES.TRIPS, auth: true },
-    { matcher: PAGE_ROUTES.TRIP_DETAILS, auth: true }
+    { matcher: PAGE_ROUTES.TRIP_DETAILS, auth: true },
+    { matcher: PAGE_ROUTES.EMPLOYEES, auth: true, roles: ['Admin', 'SuperHost', 'Host'] }
 ]);
 
 export async function middleware(request: NextRequest) {
@@ -31,7 +32,6 @@ export async function middleware(request: NextRequest) {
         }
         return NextResponse.next();
     }
-
     const matchedRoute = routeMatcher(pathname);
 
     if (!matchedRoute) {
@@ -45,10 +45,10 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`${AUTH_ROUTES.SIGN_IN}?callbackUrl=${callbackUrl}`, request.url));
     }
 
-    if (matchedRoute.role) {
-        const roles = Array.isArray(matchedRoute.role) ? matchedRoute.role : [matchedRoute.role];
-        if (userRole && !roles.includes(userRole)) {
-            // Redirect users without the required role
+    if (matchedRoute.roles) {
+        const roles = Array.isArray(matchedRoute.roles) ? matchedRoute.roles : [matchedRoute.roles];
+        if (!userRole || !roles.includes(userRole)) {
+            // console.warn(`Access denied for ${pathname}: UserRole ${userRole} not in ${roles}`);
             return NextResponse.redirect(new URL(PAGE_ROUTES.DASHBOARD, request.url));
         }
     }
@@ -67,7 +67,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        // Skip Next.js internals and all static files, unless found in search params
-        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)'
+        // Apply middleware to all routes except `_next` assets, static files, and excluded API routes
+        '/((?!_next|api/auth/session|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)'
     ]
 };
