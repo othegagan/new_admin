@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveDialog, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
 import { FormError } from '@/components/ui/extension/field';
 import { useEmployees } from '@/hooks/useHostsAndEmployees';
-import { diableUser } from '@/server/user';
+import { deleteEmployee } from '@/server/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Trash2 } from 'lucide-react';
 import type { User } from 'next-auth';
@@ -14,7 +14,8 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const schema = z.object({
-    iduser: z.string()
+    iduser: z.string(),
+    email: z.string().email()
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -46,8 +47,8 @@ export default function DisableEmployeeForm({ cell }: { cell: any }) {
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         try {
-            const { iduser } = data;
-            const response = await diableUser(iduser, !cell.getValue().isactive);
+            const { iduser, email } = data;
+            const response = await deleteEmployee(iduser, email);
             if (response.success) {
                 toast.success(response.message);
             } else {
@@ -71,6 +72,8 @@ export default function DisableEmployeeForm({ cell }: { cell: any }) {
                     <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
                         <AdaptiveBody>
                             <input type='text' hidden={true} {...register('iduser')} defaultValue={selectedRow.iduser} />
+                            <input type='text' hidden={true} {...register('email')} defaultValue={selectedRow.email || ''} />
+
                             <p>
                                 Are you sure you want to delete {selectedRow.firstname} {selectedRow.lastname} employee?
                             </p>

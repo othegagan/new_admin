@@ -75,6 +75,12 @@ export async function updateUser(payload: any) {
     return await api.post<any>(url, payload);
 }
 
+export async function deleteEmployee(iduser: string, email: string) {
+    const url = `${USER_MANAGEMENT_BASEURL}/v1/user/deleteEmployees`;
+    const payload = { email: email, iduser: iduser };
+    return await api.post<any>(url, payload);
+}
+
 export async function diableUser(iduser: string, isactive: boolean) {
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/disableUser`;
     const payload = { fromValue: iduser, isactive: isactive };
