@@ -10,6 +10,7 @@ import { deleteDynamicPricingById, insertDynamicPricing } from '@/server/dynamic
 import { useQueryClient } from '@tanstack/react-query';
 import { addDays, endOfMonth, format, startOfMonth } from 'date-fns';
 import { PlusCircle, Trash2 } from 'lucide-react';
+import { getSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -60,13 +61,14 @@ export default function DynamicPricingComponent() {
 
     const handleAddPrice = async () => {
         try {
+            const session = await getSession();
             const payload = {
                 configuration: 'per_day',
                 vehicleId: Number(vehicleId),
                 fromDate: convertToTimeZoneISO(`${startDate}T00:00:00`, zipcode),
                 toDate: convertToTimeZoneISO(`${endDate}T23:59:59`, zipcode),
                 channelId: selectedChannel,
-                hostId: 123, // Replace with actual hostId from session/auth.
+                hostId: session?.iduser,
                 price
             };
 

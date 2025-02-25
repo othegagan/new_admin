@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: Readonly<RootLayoutProps>
                 <SessionProvider session={session}>
                     <Providers>{children}</Providers>
                 </SessionProvider>
-                <Toaster position='bottom-right' closeButton={true} duration={3000} richColors className={`${geistSans.className}`} />
+                <Toaster position='bottom-right' closeButton={true} duration={3500} richColors className={`${geistSans.className}`} />
                 {/* {env.NODE_ENV === 'development' && <ScreenSize />} */}
             </body>
         </html>

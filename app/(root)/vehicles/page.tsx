@@ -1,6 +1,7 @@
 'use client';
 
 import { Main } from '@/components/layout/main';
+import { CarLoadingSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -23,13 +24,10 @@ const STATUS_IN_PROGRESS = 'In Progress';
 export default function VehiclesPage() {
     const { data: response, error, isLoading: loading } = useVehiclesUnderHost();
 
-    if (loading)
-        return (
-            <div className='flex h-full w-full flex-col items-center justify-center gap-6'>
-                <img src='./images/car_loading.gif' className='h-auto w-40 dark:invert' alt='Loading...' />
-            </div>
-        );
+    if (loading) return <CarLoadingSkeleton />;
+
     if (error) return <div className='flex h-full w-full items-center justify-center'>Error: {error?.message}</div>;
+
     if (!response?.success) return <div className='flex h-full w-full items-center justify-center'>Error: {response?.message}</div>;
 
     const allHostsVehicles = response?.data?.vehicleAndTripDetails || [];
@@ -344,14 +342,14 @@ function EmptyGarage() {
     const router = useRouter();
     return (
         <div className='my-10 flex h-[70dvh] w-full flex-col items-center justify-center gap-4 text-center'>
-            <div className='-z-10 h-[400px] w-[400px] flex-center overflow-hidden dark:hidden'>
+            <div className='-z-10 h-[400px] w-[400px] flex-center overflow-hidden dark:invert'>
                 <Image
                     src='/images/empty-garage.gif'
                     unoptimized
                     alt='Garage empty'
                     width={300}
                     height={300}
-                    className='scale-[1.6] md:scale-[2]'
+                    className='scale-[1.6] md:scale-[2] '
                 />
             </div>
             <h3 className='md:-mt-12 font-bold text-2xl text-muted-foreground tracking-tight'>Your Bundee garage is looking a bit bare.</h3>

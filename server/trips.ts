@@ -35,20 +35,6 @@ export async function getTripDetails(bookingId: number) {
     return response;
 }
 
-export async function createHostCheckList(payload: any) {
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/createTransactionCheckList`;
-
-    const response = await api.post<any>(url, payload);
-    return response;
-}
-
-export async function enterTripMiles(payload: any) {
-    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/enterMiles`;
-
-    const response = await api.post<any>(url, payload);
-    return response;
-}
-
 export async function tripApproval(payload: any) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateReservationApproval`;
 

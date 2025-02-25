@@ -20,6 +20,7 @@ export async function insertDynamicPricing(payload: any) {
     return response;
 }
 
+// Deprecated - Not in use
 export async function updatetDynamicPricingById(payload: any) {
     const url = `${HOST_VEHICLE_SERVICES_BASEURL}/v1/vehicle/updateHostPriceConfiguration`;
 

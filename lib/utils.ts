@@ -66,11 +66,16 @@ export function convertToTimeZoneISO(datetime: string, zipCode: string) {
  * @returns The converted date and time in local zipcode time zone format.
  */
 export function formatDateAndTime(date: string | Date, zipCode: string, format = 'MMM DD, YYYY | h:mm A z'): string {
-    const timeUTC = moment.utc(date);
-    const timeZone = getTimeZoneByZipcode(zipCode);
-    const timeInTimeZone = timeUTC.tz(timeZone);
+    try {
+        const timeUTC = moment.utc(date);
+        const timeZone = getTimeZoneByZipcode(zipCode);
+        const timeInTimeZone = timeUTC.tz(timeZone);
 
-    return timeInTimeZone.format(format);
+        return timeInTimeZone.format(format);
+    } catch (error) {
+        console.error(`Error formatting date and time ${date} with zipcode ${zipCode} and format ${format}`, error);
+        return '';
+    }
 }
 
 /**
