@@ -1,5 +1,6 @@
 'use client';
 
+import { Label } from '@/components/ui/extension/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import React from 'react';
@@ -42,9 +43,9 @@ const TimeSelect = ({
 
     return (
         <div className='flex w-full flex-col gap-2'>
-            <label htmlFor='time' className={cn('font-semibold', labelVariants[variant])}>
+            <Label htmlFor='time' className={cn(labelVariants[variant])}>
                 {label}
-            </label>
+            </Label>
             <Select onValueChange={onChange} defaultValue={defaultValue} disabled={isDisabled}>
                 <SelectTrigger className={`md:w-[150px] ${className}`}>
                     <SelectValue placeholder='Select end time' />
