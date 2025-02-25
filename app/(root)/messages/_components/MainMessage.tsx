@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import ImagePreview from '@/components/ui/image-preview';
+import { CHANNELS, CHAT_CREATE_RESERVATION_MESSAGE, CHAT_TRIP_APPROVAL_MESSAGE, getTuroVehicleLink } from '@/constants';
 import { env } from '@/env';
 import useChat from '@/hooks/useChat';
 import { useTripDetails } from '@/hooks/useTrips';
@@ -28,6 +29,12 @@ interface ErrorType {
     message?: string;
 }
 
+interface MessageItemProps {
+    message: any;
+    tripData: Trip;
+    turoId?: string | number | null;
+}
+
 const isError = (value: unknown): value is ErrorType => {
     return typeof value === 'object' && value !== null && 'message' in value;
 };
@@ -43,6 +50,23 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
 
     const { data: response, isLoading: loadingBookingDetails, error } = useTripDetails(tripId);
     const tripData = response?.data?.activetripresponse[0];
+
+    const turoVehicleId =
+        tripData?.vehicleBusinessConstraints
+            ?.filter(
+                (constraint: { constraintName: string; constraintValueObject: any[] }) =>
+                    constraint.constraintName === 'VehicleConstraintLink' &&
+                    constraint.constraintValueObject.some((obj) =>
+                        obj.constraintValue.some((value: { channelName: string }) => value.channelName === 'Turo')
+                    )
+            )
+            ?.flatMap((constraint: { constraintValueObject: any[] }) =>
+                constraint.constraintValueObject.flatMap((obj) =>
+                    obj.constraintValue
+                        .filter((value: { channelName: string }) => value?.channelName?.toLowerCase() === CHANNELS.TURO.toLowerCase())
+                        .map((value: { url: string | number | null }) => value.url)
+                )
+            ) || [];
 
     // Handle sending a message
     const handleSendMessage = (event: { preventDefault: () => void }) => {
@@ -172,7 +196,7 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
                                 })()}
 
                                 {messageList.map((message: any, index: Key | null | undefined) => (
-                                    <MessageItem key={index} message={message} tripData={tripData} />
+                                    <MessageItem key={index} message={message} tripData={tripData} turoId={turoVehicleId?.[0] ?? null} />
                                 ))}
                             </>
                         )}
@@ -231,13 +255,7 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
     );
 }
 
-function MessageItem({
-    message,
-    tripData
-}: {
-    message: any;
-    tripData: Trip;
-}) {
+function MessageItem({ message, tripData, turoId }: MessageItemProps) {
     const authorImage = {
         [AUTHOR_TYPE.SYSTEM]: '/images/robot.png',
         [AUTHOR_TYPE.HOST]: tripData?.hostImage || '/images/dummy_avatar.png',
@@ -313,7 +331,7 @@ function MessageItem({
                 />
             )}
 
-            {message.message.toLocaleLowerCase() === 'a new reservation was requested' ? (
+            {message.message.toLocaleLowerCase() === CHAT_CREATE_RESERVATION_MESSAGE.toLowerCase() ? (
                 <div className='flex flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm'>
                     <span className='overflow-wrap-anywhere break-words'>{message.message}</span>
                     {/*
@@ -352,6 +370,16 @@ function MessageItem({
             ) : (
                 <div className='overflow-wrap-anywhere flex flex-col gap-2 break-words rounded-lg rounded-tl-none bg-muted px-3 py-2 text-xs'>
                     <span className='overflow-wrap-anywhere word-break-break-word break-words'>{message.message}</span>
+
+                    {turoId && message.message.toLowerCase() === CHAT_TRIP_APPROVAL_MESSAGE.toLowerCase() ? (
+                        <a
+                            href={getTuroVehicleLink(turoId)}
+                            target='_blank'
+                            rel='noreferrer'
+                            className='flex w-fit items-center gap-2 rounded-lg bg-yellow-500 px-4 py-2 font-semibold text-black text-xs transition-colors hover:bg-yellow-600'>
+                            Block on Turo
+                        </a>
+                    ) : null}
 
                     {message.mediaUrl && <img src={message.mediaUrl} alt='media content' className='mt-2 h-auto max-w-full rounded-lg' />}
                     <p className='flex items-center justify-end text-[10px] text-muted-foreground'>{deliveryDate}</p>

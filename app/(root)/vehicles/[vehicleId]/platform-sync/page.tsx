@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { vehicleConfigTabsContent } from '@/constants';
+import { CHANNELS, vehicleConfigTabsContent } from '@/constants';
 import { useVehicleFeaturesById } from '@/hooks/useVehicles';
 import { updateVehicleFeaturesById } from '@/server/vehicles';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -86,8 +86,7 @@ function TuroIdForm({ vechicleId, url = '', channelName = '', constraintId, isUp
     const {
         register,
         handleSubmit,
-        reset,
-        formState: { errors, isSubmitting, isDirty }
+        formState: { isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(schema),
         mode: 'onChange',
@@ -101,9 +100,9 @@ function TuroIdForm({ vechicleId, url = '', channelName = '', constraintId, isUp
     const onSubmit: SubmitHandler<FormFields> = async (formData) => {
         try {
             const session = await getSession();
-            const { url, channelName } = formData;
+            const { url } = formData;
 
-            const channels = ['Turo'];
+            const channels = [CHANNELS.TURO];
             const urls = [url];
 
             const createPayload = {

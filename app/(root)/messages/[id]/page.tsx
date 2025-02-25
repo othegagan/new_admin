@@ -55,13 +55,26 @@ function ChatHeader({ tripId }: { tripId: number }) {
                     <ArrowLeft /> <span className='sr-only'>Back</span>
                 </button>
                 <div className='flex items-center gap-4 md:px-4 md:py-1 lg:gap-4'>
-                    <Avatar className='size-10 border'>
-                        <AvatarImage src={trip.userImage || '/images/dummy_avatar.png'} alt={trip.userFirstName || 'Guest'} />
-                    </Avatar>
+                    <Link href={`${PAGE_ROUTES.GUESTS}/${trip.userid}`} prefetch={false}>
+                        <Avatar className='size-10 border'>
+                            <AvatarImage src={trip.userImage || '/images/dummy_avatar.png'} alt={trip.userFirstName || 'Guest'} />
+                        </Avatar>
+                    </Link>
 
                     <div>
-                        <h5 className='capitalize'>{`${trip.userFirstName} ${trip.userlastName}`}</h5>
-                        <p className='text-muted-foreground'>{trip.vehicleNumber}</p>
+                        <Link
+                            href={`${PAGE_ROUTES.GUESTS}/${trip.userid}`}
+                            prefetch={false}
+                            className='font-semibold text-sm underline-offset-1 hover:underline'>
+                            <h5 className='capitalize'>{`${trip.userFirstName} ${trip.userlastName}`}</h5>
+                        </Link>
+
+                        <Link
+                            href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.vehicleId}`}
+                            prefetch={false}
+                            className='text-muted-foreground underline-offset-1 hover:underline'>
+                            {trip.vehicleNumber}
+                        </Link>
                     </div>
                 </div>
 

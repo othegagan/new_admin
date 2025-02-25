@@ -351,3 +351,11 @@ export const vehicleRepairAndMaintenance = [
     'Wiper Blade Replacement',
     'Other'
 ];
+
+export function getTuroVehicleLink(vehicleId: string | number) {
+    return `https://turo.com/us/en/your-car/${vehicleId}/availability`;
+}
+
+export const CHAT_CREATE_RESERVATION_MESSAGE = 'a new reservation was requested';
+
+export const CHAT_TRIP_APPROVAL_MESSAGE = 'the reservation request has been approved';
