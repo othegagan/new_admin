@@ -10,7 +10,8 @@ const routeMatcher = createRouterMatcher([
     { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false },
     { matcher: PAGE_ROUTES.TRIPS, auth: true },
     { matcher: PAGE_ROUTES.TRIP_DETAILS, auth: true },
-    { matcher: PAGE_ROUTES.EMPLOYEES, auth: true, roles: ['Admin', 'SuperHost', 'Host'] }
+    { matcher: PAGE_ROUTES.EMPLOYEES, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
+    { matcher: PAGE_ROUTES.ACTIVITY_LOGS, auth: true }
 ]);
 
 export async function middleware(request: NextRequest) {

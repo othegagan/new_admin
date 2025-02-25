@@ -16,6 +16,7 @@ export const QUERY_KEYS = {
     allMessageNotifications: 'allMessageNotifications',
     allNotifications: 'allNotifications',
     checkNotifications: 'checkNotifications',
+    activityLogs: 'activityLogs',
 
     // Telematics
     telematicsDataByVehicleId: 'telematicsDataByVehicleId',

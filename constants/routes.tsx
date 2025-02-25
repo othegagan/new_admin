@@ -1,5 +1,5 @@
 import { EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
-import { MessageSquareText, SlidersHorizontal } from 'lucide-react';
+import { Clock, MessageSquareText, SlidersHorizontal } from 'lucide-react';
 
 export const AUTH_ROUTES = {
     SIGN_IN: '/sign-in',
@@ -43,7 +43,8 @@ export const PAGE_ROUTES = {
     EMPLOYEES: '/employees',
     GUESTS: '/guests',
     FIND_MY_CAR: '/find-my-car',
-    MESSAGES: '/messages'
+    MESSAGES: '/messages',
+    ACTIVITY_LOGS: '/activity-logs'
 };
 
 export const vehicleConfigTabs = {
@@ -116,6 +117,11 @@ export const homePageItems = [
         icon: <FindMyCarIcon className='size-20' />,
         label: 'Find My Car',
         href: PAGE_ROUTES.FIND_MY_CAR
+    },
+    {
+        icon: <Clock className='size-20' />,
+        label: 'Activity Logs',
+        href: PAGE_ROUTES.ACTIVITY_LOGS
     },
     {
         icon: <EmployeesIcon className='size-20' />,

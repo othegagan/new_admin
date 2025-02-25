@@ -1,6 +1,6 @@
 import { EmployeesIcon, GuestsIcon, HostsIcon, TripsIcon } from '@/public/icons';
 import type { ISidebar, Role } from '@/types';
-import { Car, HomeIcon, SearchIcon, SlidersHorizontal } from 'lucide-react';
+import { Car, Clock, HomeIcon, SearchIcon, SlidersHorizontal } from 'lucide-react';
 import { PAGE_ROUTES } from './routes';
 
 export const ROLES = {
@@ -37,49 +37,55 @@ export const sidebarData: ISidebar[] = [
                 title: 'Home',
                 url: PAGE_ROUTES.DASHBOARD,
                 icon: <HomeIcon />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Trips',
                 url: `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`,
                 icon: <TripsIcon />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Vehicles',
                 url: PAGE_ROUTES.VEHICLES,
                 icon: <Car className='' />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Find My Car',
                 url: PAGE_ROUTES.FIND_MY_CAR,
                 icon: <SearchIcon />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
+            },
+            {
+                title: 'Activity Logs',
+                url: PAGE_ROUTES.ACTIVITY_LOGS,
+                icon: <Clock />,
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Hosts',
                 url: PAGE_ROUTES.HOSTS,
                 icon: <HostsIcon />,
-                roles: [ROLES.HOST]
+                roles: [ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Guests',
                 url: PAGE_ROUTES.GUESTS,
                 icon: <GuestsIcon />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Employees',
                 url: PAGE_ROUTES.EMPLOYEES,
                 icon: <EmployeesIcon />,
-                roles: [ROLES.HOST]
+                roles: [ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             },
             {
                 title: 'Configurations',
                 url: PAGE_ROUTES.CONFIGURATIONS,
                 icon: <SlidersHorizontal />,
-                roles: [ROLES.EMPLOYEE, ROLES.HOST]
+                roles: [ROLES.EMPLOYEE, ROLES.HOST, ROLES.ADMIN, ROLES.SUPER_HOST]
             }
         ]
     }
