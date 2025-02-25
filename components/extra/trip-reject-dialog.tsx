@@ -87,7 +87,7 @@ export default function TripRejectDialog({ className, tripId, buttonText = 'Reje
                     <AdaptiveBody className='flex flex-col gap-4'>
                         <div className='flex flex-col gap-1 text-muted-foreground text-sm'>
                             Rejecting this trip will notify the renter that their booking has been declined. <br /> You can optionally
-                            provide a reason in the comments below. <br /> This action cannot be undone.
+                            provide a reason in the comments below.
                         </div>
                         <div className='space-y-2'>
                             <Label>

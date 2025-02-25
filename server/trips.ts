@@ -49,6 +49,13 @@ export async function tripRejection(payload: any) {
     return response;
 }
 
+export async function undoTripRejectionOrCancellation(payload: any) {
+    const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/bringBackToOldTrip`;
+
+    const response = await api.post<any>(url, payload);
+    return response;
+}
+
 export async function tripDismissalFromNeedsReview(payload: any) {
     const url = `${BOOKING_SERVICES_BASEURL}/v1/booking/updateNeedsReview`;
 

@@ -5,6 +5,7 @@ import TripApproveDialog from '@/components/extra/trip-approve-dialog';
 import TripCompleteDialog from '@/components/extra/trip-complete-dialog';
 import TripRejectDialog from '@/components/extra/trip-reject-dialog';
 import TripStartDialog from '@/components/extra/trip-start-dialog';
+import TripUndoDialog from '@/components/extra/trip-undo-dialog';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { PAGE_ROUTES } from '@/constants/routes';
@@ -96,6 +97,30 @@ function TripActionButtons({ trip, isMobile, onActionComplete }: { trip: Trip; i
                         tripId={trip.tripid}
                         captureAmount={trip?.tripPaymentTokens[0]?.tripTaxAmount + trip.deductionAmount}
                         buttonText='End Trip'
+                        onActionComplete={onActionComplete}
+                    />
+                )}
+
+            {['RECAN'].includes(trip?.statusCode) &&
+                renderButton(
+                    <TripUndoDialog
+                        tripId={trip.tripid}
+                        buttonText='Undo Cancellation'
+                        startDate={trip.starttime}
+                        endDate={trip.endtime}
+                        zipcode={trip.vehzipcode}
+                        onActionComplete={onActionComplete}
+                    />
+                )}
+
+            {['REREJ'].includes(trip?.statusCode) &&
+                renderButton(
+                    <TripUndoDialog
+                        tripId={trip.tripid}
+                        buttonText='Undo Rejection'
+                        startDate={trip.starttime}
+                        endDate={trip.endtime}
+                        zipcode={trip.vehzipcode}
                         onActionComplete={onActionComplete}
                     />
                 )}
