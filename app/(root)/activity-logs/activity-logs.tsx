@@ -84,7 +84,7 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
     // Clear all filters
     const clearAllFilters = () => {
         setSearchQuery('');
-        setTimeFilter('all');
+        setTimeFilter('today');
         setSortBy('newest');
     };
 
