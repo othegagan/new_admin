@@ -5,13 +5,22 @@ import { auth } from './lib/auth';
 import { createRouterMatcher } from './lib/routeMatcher';
 
 const routeMatcher = createRouterMatcher([
+    { matcher: PAGE_ROUTES.ACTIVITY_LOGS, auth: true },
+    { matcher: PAGE_ROUTES.ADD_VEHICLE, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
+    { matcher: PAGE_ROUTES.CONFIGURATIONS, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
     { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
-    { matcher: AUTH_ROUTES.SIGN_IN, auth: false },
-    { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false },
-    { matcher: PAGE_ROUTES.TRIPS, auth: true },
-    { matcher: PAGE_ROUTES.TRIP_DETAILS, auth: true },
     { matcher: PAGE_ROUTES.EMPLOYEES, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
-    { matcher: PAGE_ROUTES.ACTIVITY_LOGS, auth: true }
+    { matcher: PAGE_ROUTES.FIND_MY_CAR, auth: true },
+    { matcher: PAGE_ROUTES.GUESTS, auth: true },
+    { matcher: PAGE_ROUTES.HOSTS, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
+    { matcher: PAGE_ROUTES.MESSAGES, auth: true },
+    { matcher: PAGE_ROUTES.PROFILE, auth: true },
+    { matcher: PAGE_ROUTES.TRIP_DETAILS, auth: true },
+    { matcher: PAGE_ROUTES.TRIP_DETAILS_SWAP, auth: true },
+    { matcher: PAGE_ROUTES.TRIPS, auth: true },
+    { matcher: PAGE_ROUTES.VEHICLES, auth: true },
+    { matcher: AUTH_ROUTES.FORGOT_PASSWORD, auth: false },
+    { matcher: AUTH_ROUTES.SIGN_IN, auth: false }
 ]);
 
 export async function middleware(request: NextRequest) {
