@@ -148,7 +148,7 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
 }
 
 function TripLog({ log, user }: { log: ActivityLog; user: User }) {
-    const desc = `${log.message}. (Trip ID: ${log.referenceId})`;
+    const desc = `${log.message} (Trip ID: ${log.referenceId})`;
     return (
         <Link
             key={log.id}
@@ -162,7 +162,7 @@ function TripLog({ log, user }: { log: ActivityLog; user: User }) {
             <div className='flex-1 space-y-1'>
                 <div className='flex flex-col gap-2 text-sm md:flex-start '>
                     <div className='font-medium'>
-                        {user.firstname} {user.lastname}.
+                        {user.firstname} {user.lastname}
                     </div>
                     <div className='text-muted-foreground'>{desc}</div>
                 </div>
@@ -173,7 +173,7 @@ function TripLog({ log, user }: { log: ActivityLog; user: User }) {
 }
 
 function VehicleLog({ log, user }: { log: ActivityLog; user: User }) {
-    const desc = `${log.message}. (Vehicle ID: ${log.referenceId})`;
+    const desc = `${log.message} (Vehicle ID: ${log.referenceId})`;
     return (
         <Accordion type='single' collapsible className=''>
             <AccordionItem key={log.id} value={log.id.toString()}>
@@ -185,7 +185,7 @@ function VehicleLog({ log, user }: { log: ActivityLog; user: User }) {
                     <div className='flex-1 space-y-1'>
                         <div className='flex flex-col gap-2 text-sm md:flex-start '>
                             <div className='font-medium'>
-                                {user.firstname} {user.lastname}.
+                                {user.firstname} {user.lastname}
                             </div>
                             <div className='text-muted-foreground'>{desc}</div>
                         </div>
