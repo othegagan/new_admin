@@ -7,7 +7,7 @@ import { createRouterMatcher } from './lib/routeMatcher';
 const routeMatcher = createRouterMatcher([
     { matcher: PAGE_ROUTES.ACTIVITY_LOGS, auth: true },
     { matcher: PAGE_ROUTES.ADD_VEHICLE, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
-    { matcher: PAGE_ROUTES.CONFIGURATIONS, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
+    { matcher: PAGE_ROUTES.CONFIGURATIONS, auth: true },
     { matcher: PAGE_ROUTES.DASHBOARD, auth: true },
     { matcher: PAGE_ROUTES.EMPLOYEES, auth: true, roles: ['Admin', 'SuperHost', 'Host'] },
     { matcher: PAGE_ROUTES.FIND_MY_CAR, auth: true },

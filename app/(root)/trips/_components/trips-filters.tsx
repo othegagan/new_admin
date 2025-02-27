@@ -46,6 +46,7 @@ export default function TripsFilter() {
                         <SelectValue placeholder='Channel' />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value=''>All</SelectItem>
                         <SelectItem value='Flux'>Flux</SelectItem>
                         <SelectItem value='Bundee'>Bundee</SelectItem>
                         <SelectItem value='Turo'>Turo</SelectItem>
@@ -61,6 +62,7 @@ export default function TripsFilter() {
                             <SelectValue placeholder='Trip Status' />
                         </SelectTrigger>
                         <SelectContent>
+                            <SelectItem value=''>All</SelectItem>
                             {['Requested', 'Approved', 'Started', 'Completed', 'Cancelled', 'Rejected'].map((status) => (
                                 <SelectItem key={status} value={status}>
                                     <span className='capitalize'>{status}</span>
