@@ -32,14 +32,14 @@ export default function Error({ error }: CustomErrorComponentProps) {
                     aria-expanded={showDetails}>
                     {showDetails ? 'Hide' : 'Show'} Error Details
                 </Button>
-                {showDetails && (
-                    <pre className='mt-4 max-w-2xl break-all rounded-md bg-muted p-4 text-left font-mono text-muted-foreground text-sm'>
-                        {error.message}
-                    </pre>
-                )}
                 <Button className='mt-4 ml-2' size='sm' onClick={() => window.location.reload()}>
                     Refresh
                 </Button>
+                {showDetails && (
+                    <pre className='mt-4 max-w-2xl text-wrap break-all rounded-md bg-muted p-4 text-left font-mono text-muted-foreground text-sm'>
+                        {error.message}
+                    </pre>
+                )}
             </div>
         </div>
     );
