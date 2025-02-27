@@ -8,15 +8,19 @@ type RouteConfig = {
 
 export function createRouterMatcher(routes: RouteConfig[]) {
     return (pathname: string): RouteConfig | null => {
-        for (const route of routes) {
-            const matcher = typeof route.matcher === 'string' ? route.matcher : route.matcher.source;
-            const regex = new RegExp(`^${matcher}$`);
-            if (regex.test(pathname)) {
-                // console.log(`Matched Route: ${JSON.stringify(route)} for Pathname: ${pathname}`);
-                return route;
-            }
-        }
-        console.warn(`No match found for pathname: ${pathname}`);
+        // First check for exact matches
+        const exactMatch = routes.find((route) =>
+            // console.log(`Matched Route: ${JSON.stringify(route)} for Pathname: ${pathname}`)
+            typeof route.matcher === 'string' ? route.matcher === pathname : route.matcher.test(pathname)
+        );
+
+        if (exactMatch) return exactMatch;
+
+        // Then check for dynamic routes (path segments)
+        const dynamicMatch = routes.find((route) => typeof route.matcher === 'string' && pathname.startsWith(`${route.matcher}/`));
+
+        if (dynamicMatch) return dynamicMatch;
+
         return null;
     };
 }
