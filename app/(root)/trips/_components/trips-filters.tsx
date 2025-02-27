@@ -11,13 +11,13 @@ export default function TripsFilter() {
     const pathname = usePathname();
 
     const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
-    const [selectedChannel, setSelectedChannel] = useQueryState('channel', { defaultValue: '' });
-    const [selectedStatus, setSelectedStatus] = useQueryState('status', { defaultValue: '' });
+    const [selectedChannel, setSelectedChannel] = useQueryState('channel', { defaultValue: 'all' });
+    const [selectedStatus, setSelectedStatus] = useQueryState('status', { defaultValue: 'all' });
 
     const clearFilters = () => {
         setSearchTerm('');
-        setSelectedChannel('');
-        setSelectedStatus('');
+        setSelectedChannel('all');
+        setSelectedStatus('all');
     };
 
     if (pathname === `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`) {
@@ -42,11 +42,11 @@ export default function TripsFilter() {
                     onValueChange={(value) => {
                         setSelectedChannel(value);
                     }}>
-                    <SelectTrigger className='w-[100px]'>
+                    <SelectTrigger className='w-[130px]'>
                         <SelectValue placeholder='Channel' />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value=''>All</SelectItem>
+                        <SelectItem value='all'>All Channels</SelectItem>
                         <SelectItem value='Flux'>Flux</SelectItem>
                         <SelectItem value='Bundee'>Bundee</SelectItem>
                         <SelectItem value='Turo'>Turo</SelectItem>
@@ -62,7 +62,7 @@ export default function TripsFilter() {
                             <SelectValue placeholder='Trip Status' />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value=''>All</SelectItem>
+                            <SelectItem value='all'>All Status</SelectItem>
                             {['Requested', 'Approved', 'Started', 'Completed', 'Cancelled', 'Rejected'].map((status) => (
                                 <SelectItem key={status} value={status}>
                                     <span className='capitalize'>{status}</span>
@@ -71,7 +71,7 @@ export default function TripsFilter() {
                         </SelectContent>
                     </Select>
                 )}
-                {(searchTerm || selectedChannel || selectedStatus) && (
+                {(searchTerm || (selectedChannel && selectedChannel !== 'all') || (selectedStatus && selectedStatus !== 'all')) && (
                     <Button variant='ghost' onClick={clearFilters} className=' w-fit px-0 text-muted-foreground'>
                         Clear <span className='hidden lg:inline-block'>Filters</span>
                     </Button>

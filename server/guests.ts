@@ -18,10 +18,8 @@ export async function getGuestsOfHost() {
 }
 
 export async function getGuestsHistory(driverId: string) {
-    const session = await getSession();
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/getDriverRentalDetails`;
     const payload = {
-        hostId: session?.iduser,
         iduser: driverId
     };
 

@@ -16,12 +16,12 @@ export const tripSearchFields = [
     { name: 'year', weight: 0.8 },
     { name: 'tripId', weight: 1 },
     { name: 'vehicleId', weight: 1 },
-    { name: 'vnumber', weight: 0.9 },
+    { name: 'vnumber', weight: 1 },
     { name: 'firstName', weight: 1 },
     { name: 'middleName', weight: 1 },
     { name: 'lastName', weight: 1 },
-    { name: 'address.address1', weight: 0.6 },
-    { name: 'address.address2', weight: 0.6 },
+    { name: 'address.address1', weight: 0.8 },
+    { name: 'address.address2', weight: 0.8 },
     { name: 'status', weight: 0.9 }
 ];
 
@@ -41,7 +41,7 @@ export function searchAndFilterTrips(data: any[], searchTerm: string | null, cha
             name: field.name,
             weight: field.weight
         })),
-        threshold: 0.4,
+        threshold: 0.2,
         minMatchCharLength: 2,
         shouldSort: true,
         includeScore: true,
@@ -55,11 +55,11 @@ export function searchAndFilterTrips(data: any[], searchTerm: string | null, cha
         results = fuse.search(searchTerm).map((result) => result.item);
     }
 
-    if (channelName) {
-        results = results.filter((item: any) => item.channel.toLowerCase() === channelName.toLowerCase());
+    if (channelName !== 'all' && channelName) {
+        results = results.filter((item: any) => item.channel.toLowerCase() === channelName?.toLowerCase());
     }
 
-    if (tripStatus) {
+    if (tripStatus !== 'all' && tripStatus) {
         results = results.filter((item: any) => item.status.toLowerCase() === tripStatus.toLowerCase());
     }
 
