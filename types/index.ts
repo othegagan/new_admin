@@ -37,6 +37,7 @@ export interface CreateUserProps {
     channelName: string;
     employee?: boolean;
     hostId?: number | null;
+    userRole: Role;
 }
 
 export interface Trip {

@@ -54,14 +54,14 @@ export async function createHostUser({ firstName, lastName, email, mobilePhone, 
     return await api.post<any>(url, payload);
 }
 
-export async function createEmployeeUser({ firstName, lastName, email, mobilePhone, channelName, hostId }: CreateUserProps) {
+export async function createEmployeeUser({ firstName, lastName, email, mobilePhone, channelName, hostId, userRole }: CreateUserProps) {
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/createUser`;
     const payload = {
         firstname: firstName,
         lastname: lastName,
         email: email,
         mobilephone: mobilePhone,
-        userRole: ROLES.EMPLOYEE,
+        userRole: userRole,
         channelName: channelName || CHANNELS.BUNDEE,
         vehicleowner: false,
         employee: true,

@@ -6,6 +6,8 @@ import { FormError } from '@/components/ui/extension/field';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PhoneNumber from '@/components/ui/phone-number';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ROLES } from '@/constants';
 import { useEmployees } from '@/hooks/useHostsAndEmployees';
 import { sendFirebaseResetPasswordEmail } from '@/lib/firebase';
 import { addNewUserToFirebase, createEmployeeUser } from '@/server/user';
@@ -30,7 +32,8 @@ const schema = z.object({
             },
             { message: 'Invalid mobile number, must be 10 digits' }
         )
-        .optional()
+        .optional(),
+    userRole: z.string().default(ROLES.EMPLOYEE)
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -62,7 +65,7 @@ export default function AddNewEmployeeForm() {
 
     const onSubmit: SubmitHandler<FormFields | any> = async (data) => {
         try {
-            const { email, firstName, lastName, mobilePhone } = data;
+            const { email, firstName, lastName, mobilePhone, userRole } = data;
 
             const session = await getSession();
 
@@ -74,7 +77,8 @@ export default function AddNewEmployeeForm() {
                 lastName: lastName,
                 mobilePhone: mobilePhone || '',
                 channelName: session?.channelName || 'Bundee',
-                hostId: session?.iduser
+                hostId: session?.iduser,
+                userRole: userRole
             });
 
             if (createUserResponse?.success) {
@@ -125,6 +129,25 @@ export default function AddNewEmployeeForm() {
                                     control={control}
                                     name='mobilePhone'
                                     render={({ field: { onChange, value } }) => <PhoneNumber onChange={onChange} value={value || ''} />}
+                                />
+                                <FormError>{errors.mobilePhone?.message}</FormError>
+                            </div>
+                            <div className='space-y-2'>
+                                <Label htmlFor='userRole'>Role </Label>
+                                <Controller
+                                    control={control}
+                                    name='userRole'
+                                    render={({ field: { onChange, value } }) => (
+                                        <Select value={value} onValueChange={onChange} defaultValue={ROLES.EMPLOYEE}>
+                                            <SelectTrigger className='w-[180px]'>
+                                                <SelectValue placeholder='Select Role' />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value={ROLES.EMPLOYEE}>Employee</SelectItem>
+                                                <SelectItem value={ROLES.ADMIN}>ADMIN</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    )}
                                 />
                                 <FormError>{errors.mobilePhone?.message}</FormError>
                             </div>
