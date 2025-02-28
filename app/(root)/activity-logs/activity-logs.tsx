@@ -284,12 +284,12 @@ const displayData = (data: any, type: 'old' | 'new', updateTag: string) => {
                         {icon} {type === 'old' ? 'Old' : 'New'} Configurations
                     </div>
                     <div>
-                        <p>Average Rental Days: {data?.averageRentalDays}</p>
-                        <p>Concession Fee: {data?.concessionFee}</p>
+                        <p>Average Rental Days: {data?.averageRentaDays} Days</p>
+                        <p>Concession Fee: $ {data?.concessionFee}</p>
                         <p>Concession Percentage: {data?.concessionPercentage} %</p>
-                        <p>Registration Fee: {data?.registrationFee}</p>
+                        <p>Registration Fee: $ {data?.registrationFee}</p>
                         <p>State Rental Tax: {data?.stateTax} %</p>
-                        <p>Short Notice Fee: {data?.upCharge}</p>
+                        <p>Short Notice Fee: $ {data?.upCharge}</p>
                     </div>
                 </div>
             );
