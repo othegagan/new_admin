@@ -9,7 +9,7 @@ import { JollyNumberField } from '@/components/ui/extension/numberfield';
 import { Label } from '@/components/ui/label';
 import { useHostConfigutations } from '@/hooks/useHostConfigutations';
 import { configurationsSchema } from '@/schemas';
-import { insertHostConfigurations, updateHostConfigurations } from '@/server/configurations';
+import { updateHostConfigurations } from '@/server/configurations';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -82,26 +82,17 @@ function ConstraintForm({
                 constraintName: 'PriceConstraint'
             };
 
-            if (isUpdate) {
-                const response = await updateHostConfigurations(payload);
-                if (response.success) {
-                    toast.success(response.message);
-                    refetch();
-                    reset({ ...formData });
-                } else {
-                    toast.error(`Error in updating configurations ${response.message}`);
-                }
+            const response = await updateHostConfigurations(payload);
+            if (response.success) {
+                toast.success(response.message);
+                refetch();
+                reset({ ...formData });
             } else {
-                const response = await insertHostConfigurations(payload);
-                if (response.success) {
-                    toast.success(response.message);
-                } else {
-                    toast.error(`Error in inserting configurations ${response.message}`);
-                }
+                toast.error(`Error in ${isUpdate ? 'updating' : 'inserting'} configurations ${response.message}`);
             }
         } catch (error: any) {
             console.error('Error updating configurations:', error);
-            toast.error('Error in updating configurations', error.message);
+            toast.error(`Error in ${isUpdate ? 'updating' : 'inserting'} configurations ${error.message}`);
         }
     };
 

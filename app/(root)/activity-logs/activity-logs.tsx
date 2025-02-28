@@ -141,6 +141,8 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
                     const user = getUserInfo(log.changedBy);
                     if (log.isTrip) return <TripLog key={log.id} log={log} user={user} />;
                     if (log.isVehicle) return <VehicleLog key={log.id} log={log} user={user} />;
+
+                    if (!log.isTrip && !log.isVehicle && log.updateTag === 'PriceConstraint') return `Price Constraint Log: ${log.id}`;
                 })}
             </div>
         </div>
