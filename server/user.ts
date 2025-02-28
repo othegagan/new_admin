@@ -1,4 +1,4 @@
-import { CHANNELS, ROLES } from '@/constants';
+import { CHANNELS } from '@/constants';
 import { env } from '@/env';
 import { api } from '@/lib/apiService';
 import { JSONparsefy } from '@/lib/utils';
@@ -40,14 +40,14 @@ export async function getUserByEmail(email?: string) {
     return null;
 }
 
-export async function createHostUser({ firstName, lastName, email, mobilePhone, channelName }: CreateUserProps) {
+export async function createHostUser({ firstName, lastName, email, mobilePhone, channelName, userRole }: CreateUserProps) {
     const url = `${USER_MANAGEMENT_BASEURL}/v1/user/createUser`;
     const payload = {
         firstname: firstName,
         lastname: lastName,
         email: email,
         mobilephone: mobilePhone,
-        userRole: ROLES.HOST,
+        userRole: userRole,
         channelName: channelName || CHANNELS.BUNDEE,
         vehicleowner: true
     };

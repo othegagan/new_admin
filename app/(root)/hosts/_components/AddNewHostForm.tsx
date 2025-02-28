@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PhoneNumber from '@/components/ui/phone-number';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ROLES } from '@/constants';
 import { useHosts } from '@/hooks/useHostsAndEmployees';
 import { sendFirebaseResetPasswordEmail } from '@/lib/firebase';
 import { addNewUserToFirebase } from '@/server/user';
@@ -71,7 +72,8 @@ export default function AddNewHostForm() {
                 firstName: firstName,
                 lastName: lastName,
                 mobilePhone: mobilePhone,
-                channelName: channelName
+                channelName: channelName,
+                userRole: ROLES.HOST
             });
 
             if (createUserResponse?.success) {
