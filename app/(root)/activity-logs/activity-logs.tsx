@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { fuseSettings } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { getFullAddress } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -41,6 +40,15 @@ interface ActivityLogsProps {
     users: User[];
 }
 
+export const searchFields = [
+    { name: 'message', weight: 0.8 },
+    { name: 'from', weight: 0.7 },
+    { name: 'to', weight: 0.7 },
+    { name: 'userFullName', weight: 0.9 },
+    { name: 'userRole', weight: 1 },
+    { name: 'referenceId', weight: 1 }
+];
+
 export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [timeFilter, setTimeFilter] = useState('today');
@@ -57,9 +65,18 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
     });
 
     const fuse = new Fuse(searchableData, {
-        keys: ['message', 'from', 'to', 'userFullName', 'userRole', 'referenceId'],
-        ...fuseSettings,
-        threshold: 0.3
+        keys: searchFields.map((field) => ({
+            name: field.name,
+            weight: field.weight
+        })),
+        threshold: 0.2,
+        minMatchCharLength: 2,
+        shouldSort: true,
+        includeScore: true,
+        useExtendedSearch: true,
+        ignoreLocation: true,
+        findAllMatches: true,
+        isCaseSensitive: false
     });
 
     // Filter and sort logs
