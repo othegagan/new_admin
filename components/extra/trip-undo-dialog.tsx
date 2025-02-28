@@ -145,7 +145,7 @@ export default function TripUndoDialog({ buttonText, tripId, startDate, endDate,
                     <DialogOverlay isDismissable={false} onOpenChange={handleClose} isOpen={isOpen}>
                         <DialogContent role='alertdialog' className='xl:max-w-[60%]'>
                             <DialogHeader>
-                                <DialogTitle className='text-left' aria-labelledby={`${buttonText}-dialog`}>
+                                <DialogTitle className='text-left' aria-labelledby='dialog-title' aria-label='Dialog Header'>
                                     {buttonText}?
                                 </DialogTitle>
                             </DialogHeader>
