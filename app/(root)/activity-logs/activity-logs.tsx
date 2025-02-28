@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/search-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { fuseSettings } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { getFullAddress } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -56,7 +57,8 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
     });
 
     const fuse = new Fuse(searchableData, {
-        keys: ['message', 'from', 'to', 'userFullName', 'userRole'],
+        keys: ['message', 'from', 'to', 'userFullName', 'userRole', 'referenceId'],
+        ...fuseSettings,
         threshold: 0.3
     });
 
@@ -96,7 +98,7 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
             <div className='flex flex-col gap-5 md:flex-row md:items-center md:justify-between'>
                 <div className='flex w-full max-w-2xl items-center gap-2'>
                     <SearchInput
-                        placeholder='Search by user name, role, status, trip ID, vehicle'
+                        placeholder='Search by user name, role, status, trip id, vehicle id'
                         value={searchQuery}
                         onChange={(value) => setSearchQuery(value)}
                         className='w-full'
