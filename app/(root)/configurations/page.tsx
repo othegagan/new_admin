@@ -74,10 +74,9 @@ function ConstraintForm({
             const payload = {
                 averageRentaDays: formData.averageRentaDays,
                 concessionFee: formData.concessionFee,
-                //@ts-ignore
                 concessionPercentage: formData.concessionPercentage, // Convert to percentage only because of the UI
                 registrationFee: formData.registrationFee,
-                stateTax: formData.stateTax,
+                stateTax: formData.stateTax, // Convert to percentage only because of the UI
                 upCharge: formData.upCharge,
                 constraintName: 'PriceConstraint'
             };
@@ -232,33 +231,35 @@ function ConstraintForm({
                 <div className='flex flex-col gap-1'>
                     <Label htmlFor='stateTax'>State Rental Tax</Label>
                     <FormDescription>Enter the applicable state rental tax rate for your vehicle.</FormDescription>
-                    <Controller
-                        name='stateTax'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    defaultValue={value || 0}
-                                    className='mt-1 max-w-44 sm:mt-0'
-                                    id='stateTax'
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'currency',
-                                        currency: 'USD',
-                                        currencyDisplay: 'symbol',
-                                        currencySign: 'standard',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.stateTax?.message}
-                                    isInvalid={!!errors.stateTax?.message}
-                                />
-                            );
-                        }}
-                    />
+                    <div className='flex items-center gap-2'>
+                        <Controller
+                            name='stateTax'
+                            control={control}
+                            render={({ field }) => {
+                                const value = field.value === '' ? undefined : Number(field.value);
+                                return (
+                                    // @ts-ignore
+                                    <JollyNumberField
+                                        defaultValue={value || 0}
+                                        maxValue={100}
+                                        className='mt-1 max-w-44 sm:mt-0'
+                                        id='stateTax'
+                                        isRequired
+                                        formatOptions={{
+                                            style: 'decimal',
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0
+                                        }}
+                                        {...field}
+                                        onChange={field.onChange}
+                                        errorMessage={errors.stateTax?.message}
+                                        isInvalid={!!errors.stateTax?.message}
+                                    />
+                                );
+                            }}
+                        />
+                        <div className='mt-2 text-lg'>%</div>
+                    </div>
                 </div>
 
                 <div className='flex flex-col gap-1'>
