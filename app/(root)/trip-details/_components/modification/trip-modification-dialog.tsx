@@ -3,8 +3,10 @@
 import { PriceCalculatedListSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { AdaptiveBody, AdaptiveFooter } from '@/components/ui/extension/adaptive-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/extension/dialog';
 import { Label } from '@/components/ui/extension/field';
 import useAvailabilityDates from '@/hooks/useAvailabilityDates';
+import useTripModification from '@/hooks/useTripModification';
 import { validateBookingTime } from '@/hooks/useVehicles';
 import { cn, convertToTimeZoneISO, formatDateAndTime, formatTime, roundToTwoDecimalPlaces } from '@/lib/utils';
 import { calculatePrice } from '@/server/priceCalculation';
@@ -18,9 +20,6 @@ import TripModificationPriceListComponent from './modification-pricelist';
 import TimeSelect from './time-select';
 import { TripModificationEndDateCalendar, TripModificationStartDateCalendar } from './trip-modification-calendars';
 import useTripModificationDialog from './useTripModificatonDialog';
-
-import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/extension/dialog';
-import useTripModification from '@/hooks/useTripModification';
 
 export default function TripModificationDialog({ tripData }: { tripData: Trip }) {
     const tripModificationModal = useTripModificationDialog();

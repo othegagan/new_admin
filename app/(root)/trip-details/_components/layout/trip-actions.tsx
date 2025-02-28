@@ -102,6 +102,7 @@ function TripActionButtons({ trip, isMobile, onActionComplete }: { trip: Trip; i
                 )}
 
             {['RECAN'].includes(trip?.statusCode) &&
+                trip.version === 6 &&
                 renderButton(
                     <TripUndoDialog
                         tripId={trip.tripid}
@@ -114,6 +115,7 @@ function TripActionButtons({ trip, isMobile, onActionComplete }: { trip: Trip; i
                 )}
 
             {['REREJ'].includes(trip?.statusCode) &&
+                trip.version === 6 &&
                 renderButton(
                     <TripUndoDialog
                         tripId={trip.tripid}

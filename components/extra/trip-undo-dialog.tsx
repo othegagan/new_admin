@@ -1,19 +1,6 @@
 'use client';
 
 import TimeSelect from '@/app/(root)/trip-details/_components/modification/time-select';
-import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/extension/dialog';
-import { cn, convertToTimeZoneISO, formatDateAndTime, formatTime } from '@/lib/utils';
-import { sendMessageInChat } from '@/server/chat';
-import { undoTripRejectionOrCancellation } from '@/server/trips';
-import { getLocalTimeZone, parseDate } from '@internationalized/date';
-import { Undo2 } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { Button } from '../ui/button';
-import { AdaptiveBody, AdaptiveFooter } from '../ui/extension/adaptive-dialog';
-import { Label } from '../ui/extension/field';
-import { Textarea } from '../ui/textarea';
-
 import {
     Calendar,
     CalendarCell,
@@ -24,7 +11,20 @@ import {
     CalendarHeading
 } from '@/components/ui/extension/calendar';
 import { DatePicker, DatePickerButton, DatePickerContent } from '@/components/ui/extension/date-picker';
+import { Dialog, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/extension/dialog';
+import { cn, convertToTimeZoneISO, formatDateAndTime, formatTime } from '@/lib/utils';
+import { sendMessageInChat } from '@/server/chat';
+import { undoTripRejectionOrCancellation } from '@/server/trips';
+import { getLocalTimeZone, parseDate } from '@internationalized/date';
 import { format } from 'date-fns';
+import { Undo2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Button } from '../ui/button';
+import { AdaptiveBody, AdaptiveFooter } from '../ui/extension/adaptive-dialog';
+import { Label } from '../ui/extension/field';
+import { Textarea } from '../ui/textarea';
+import useTripUndoDialog from './useTripUndoDialog';
 
 interface UndoDialogProps {
     className?: string;
@@ -43,7 +43,7 @@ const cancellationText =
     'This action will reinstate the trip. If a refund was previously issued, a chargeback will be initiated. Are you sure you want to undo the cancellation?';
 
 export default function TripUndoDialog({ buttonText, tripId, startDate, endDate, zipcode, onActionComplete, className }: UndoDialogProps) {
-    const [isOpen, setIsOpen] = useState(false);
+    const { isOpen, onOpen, onClose } = useTripUndoDialog();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [comments, setComments] = useState('');
 
@@ -54,11 +54,11 @@ export default function TripUndoDialog({ buttonText, tripId, startDate, endDate,
     const [newEndTime, setNewEndTime] = useState(formatTime(endDate, zipcode) || '10:00:00');
 
     function handleOpen() {
-        setIsOpen(true);
+        onOpen();
     }
 
     function handleClose() {
-        setIsOpen(false);
+        onClose();
         setComments('');
         setIsSubmitting(false);
         onActionComplete?.();
@@ -108,7 +108,7 @@ export default function TripUndoDialog({ buttonText, tripId, startDate, endDate,
             if (response.success) {
                 if (comments) await sendMessageInChat(tripId, comments);
                 toast.success(response.message);
-                setIsOpen(false);
+                onClose();
                 handleClose();
                 onActionComplete?.();
                 setTimeout(() => {
@@ -158,7 +158,6 @@ export default function TripUndoDialog({ buttonText, tripId, startDate, endDate,
                                         Message <span className='text-muted-foreground'>(Optional)</span>
                                     </Label>
                                     <Textarea
-                                        autoFocus={false}
                                         className='w-full'
                                         placeholder=''
                                         value={comments}
