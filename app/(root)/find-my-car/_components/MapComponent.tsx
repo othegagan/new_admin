@@ -12,7 +12,7 @@ import {
     NavigationControl,
     Popup,
     ScaleControl
-} from 'react-map-gl';
+} from 'react-map-gl/mapbox';
 
 export default function MapComponent({
     filteredCars = []
