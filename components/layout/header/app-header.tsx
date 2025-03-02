@@ -9,7 +9,15 @@ interface HeaderProps extends React.HTMLAttributes<React.ElementRef<'header'>> {
     sticky?: boolean;
 }
 
-export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(({ className, sticky, children, ...props }, ref) => {
+export const Header = ({
+    ref,
+    className,
+    sticky,
+    children,
+    ...props
+}: HeaderProps & {
+    ref: React.RefObject<React.ElementRef<'header'>>;
+}) => {
     const [offset, setOffset] = React.useState(0);
 
     React.useEffect(() => {
@@ -39,5 +47,5 @@ export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(
             <SidebarTrigger variant='outline' className='scale-125 text-muted-foreground sm:scale-100' />
         </header>
     );
-});
+};
 Header.displayName = 'Header';

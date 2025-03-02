@@ -21,7 +21,16 @@ export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement>, Var
     asChild?: boolean;
 }
 
-const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(({ className, size, loading = true, asChild = false, ...props }, ref) => {
+const Spinner = ({
+    ref,
+    className,
+    size,
+    loading = true,
+    asChild = false,
+    ...props
+}: SpinnerProps & {
+    ref: React.RefObject<HTMLSpanElement>;
+}) => {
     const Comp = asChild ? Slot : 'span';
 
     const [bgColorClass, filteredClassName] = React.useMemo(() => {
@@ -47,7 +56,7 @@ const Spinner = React.forwardRef<HTMLSpanElement, SpinnerProps>(({ className, si
             ))}
         </Comp>
     );
-});
+};
 
 Spinner.displayName = 'Spinner';
 
