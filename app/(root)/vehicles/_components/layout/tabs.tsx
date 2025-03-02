@@ -14,7 +14,7 @@ export default function Tabs() {
     const basePath = `${PAGE_ROUTES.VEHICLES}/${vehicleId}`;
 
     const selectedTabMobileValue =
-        vehicleConfigTabs.mobile.find((tab) => pathname === `${basePath}${tab.herf}`)?.herf || PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR;
+        vehicleConfigTabs.mobile.find((tab) => pathname === `${basePath}${tab.href}`)?.href || PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR;
 
     function handleNavigation(href: string) {
         router.push(`${PAGE_ROUTES.VEHICLES}/${vehicleId}${href}`);
@@ -31,7 +31,7 @@ export default function Tabs() {
                     defaultValue={selectedTabMobileValue}
                     onChange={(e) => handleNavigation(e.target.value)}>
                     {vehicleConfigTabs.mobile.map((tab) => (
-                        <option key={tab.id} value={tab.herf}>
+                        <option key={tab.id} value={tab.href}>
                             {tab.label}
                         </option>
                     ))}
@@ -44,10 +44,10 @@ export default function Tabs() {
                 className=' my-3 hidden w-full min-w-40 border-b bg-background px-1 py-2 md:block'>
                 <nav className={cn('flex space-x-2 pt-2 pb-6 pl-2 lg:pb-10')}>
                     <Link
-                        href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`}
+                        href={`${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.href}`}
                         className={cn(
                             'flex h-9 items-center justify-center rounded-full px-4 font-medium text-sm duration-75 hover:bg-muted hover:text-primary',
-                            pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.herf}`
+                            pathname === `${PAGE_ROUTES.VEHICLES}/${vehicleId}${vehicleConfigTabs.desktop.calendar.href}`
                                 ? 'bg-primary/80 hover:bg-primary hover:text-foreground '
                                 : 'text-muted-foreground'
                         )}>
