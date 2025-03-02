@@ -70,7 +70,7 @@ function ChatHeader({ tripId }: { tripId: number }) {
                         </Link>
 
                         <Link
-                            href={`${PAGE_ROUTES.TRIP_DETAILS}/${trip.vehicleId}`}
+                            href={`${PAGE_ROUTES.VEHICLE_DETAILS}/${trip.vehicleId}${PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR}`}
                             prefetch={false}
                             className='text-muted-foreground underline-offset-1 hover:underline'>
                             {trip.vehicleNumber}
