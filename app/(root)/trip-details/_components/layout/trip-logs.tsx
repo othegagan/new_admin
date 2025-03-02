@@ -79,7 +79,7 @@ export default function TripLogs({ trip }: TripLogsProps) {
                         return (
                             <div
                                 key={index}
-                                className='relative flex flex-col before:absolute before:top-2 before:left-[-33px] before:z-[1] before:size-3 before:rounded-full before:bg-primary/70'>
+                                className='relative flex flex-col before:absolute before:top-2 before:left-[-33px] before:z-1 before:size-3 before:rounded-full before:bg-primary/70'>
                                 <div className='font-medium'>{log.changedby ? logCreatorRef[log.changedby] : '-'}</div>
                                 <div className='text-muted-foreground text-xs uppercase'>
                                     {formatDateAndTime(log.createddate ?? '', trip.vehzipcode, 'MMM DD, YYYY | h:mm A ')}

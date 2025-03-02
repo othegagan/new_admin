@@ -26,7 +26,7 @@ export default function SwapVehicleCard({ vehicle, hideButtons = false }: SwapVe
     }
 
     return (
-        <div className='group h-fit rounded-lg border hover:shadow'>
+        <div className='group h-fit rounded-lg border hover:shadow-sm'>
             <div className='relative flex items-end overflow-hidden rounded-t-lg'>
                 <div className='aspect-video h-44 w-full overflow-hidden rounded-t-md group-hover:opacity-[0.95] lg:aspect-video lg:h-36'>
                     <img

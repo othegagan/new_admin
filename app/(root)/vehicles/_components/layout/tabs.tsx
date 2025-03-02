@@ -27,7 +27,7 @@ export default function Tabs() {
                 <select
                     name='vehicle-config-tabs'
                     id='vehicle-config-tabs'
-                    className='flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-accent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
+                    className='flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-accent px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-ring'
                     defaultValue={selectedTabMobileValue}
                     onChange={(e) => handleNavigation(e.target.value)}>
                     {vehicleConfigTabs.mobile.map((tab) => (

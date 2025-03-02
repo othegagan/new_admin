@@ -12,7 +12,7 @@ export function MessagesNotificationButton() {
 
     return (
         <Link href={PAGE_ROUTES.MESSAGES} prefetch={false}>
-            <div className='group relative inline-flex h-9 w-full cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap text-nowrap rounded-full px-2 py-2 font-medium text-sm transition-all duration-300 ease-linear hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring active:scale-95 disabled:pointer-events-none md:w-fit'>
+            <div className='group relative inline-flex h-9 w-full cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap text-nowrap rounded-full px-2 py-2 font-medium text-sm transition-all duration-300 ease-linear hover:bg-accent hover:text-accent-foreground focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring active:scale-95 disabled:pointer-events-none md:w-fit'>
                 <svg
                     className='size-6 text-muted-foreground'
                     aria-hidden='true'

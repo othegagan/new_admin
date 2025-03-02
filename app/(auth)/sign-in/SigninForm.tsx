@@ -137,7 +137,7 @@ export default function SigninForm() {
                             </div>
                         )}
 
-                        <Button className='!w-full' type='submit' loading={isPending} loadingText='Signing in...'>
+                        <Button className='w-full!' type='submit' loading={isPending} loadingText='Signing in...'>
                             Sign In
                         </Button>
                     </form>

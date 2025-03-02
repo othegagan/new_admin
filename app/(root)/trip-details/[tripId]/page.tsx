@@ -71,7 +71,7 @@ export default function TripDetails() {
 
             {/* Main Content */}
             <div className='px-0'>
-                <div className='grid lg:grid-cols-[1fr,400px]'>
+                <div className='grid lg:grid-cols-[1fr_400px]'>
                     {/* Left Column - Trip Details */}
                     <div className='h-[calc(100dvh-8rem)] space-y-6 overflow-y-auto md:border-r md:pr-2'>
                         {/* User Info */}
@@ -169,7 +169,7 @@ export default function TripDetails() {
 
                     {/* Right Column - Chat (Desktop Only) */}
                     <div className='hidden h-[calc(100dvh-8rem)] overflow-y-auto pt-4 lg:block'>
-                        <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
+                        <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-xs sm:static sm:z-auto'>
                             <h5 className='pl-5'>Messages</h5>
                             <MainMessageComponent tripId={Number(tripId)} className='h-full lg:h-full' />
                         </div>
@@ -183,7 +183,7 @@ export default function TripDetails() {
 function ChatInterface({ tripId }: { tripId: number }) {
     return (
         <div className='flex h-full flex-1 flex-col'>
-            <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
+            <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-xs sm:static sm:z-auto'>
                 <MainMessageComponent tripId={tripId} className='h-full lg:h-full' />
             </div>
         </div>

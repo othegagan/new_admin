@@ -14,7 +14,7 @@ interface ImagePreviewProps {
 export default function ImagePreview({ url: imageUrl, alt = 'Image preview', className }: ImagePreviewProps) {
     if (!imageUrl) {
         return (
-            <div className='flex aspect-[3/2] h-24 w-full select-none items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100 text-center text-neutral-500 text-xs dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-400'>
+            <div className='flex aspect-3/2 h-24 w-full select-none items-center justify-center rounded-lg border border-neutral-200 bg-neutral-100 text-center text-neutral-500 text-xs dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-400'>
                 No image
             </div>
         );

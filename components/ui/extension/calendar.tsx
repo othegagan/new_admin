@@ -35,7 +35,7 @@ const _CalendarHeading = ({ ...props }: React.HTMLAttributes<HTMLHeadElement>) =
                 slot='next'
                 className={cn(
                     buttonVariants({ variant: 'outline' }),
-                    'h-7 w-7 bg-transparent p-0 opacity-50 data-[hovered]:opacity-100',
+                    'h-7 w-7 bg-transparent p-0 opacity-50 data-hovered:opacity-100',
                     'absolute right-1 text-popover-foreground'
                 )}>
                 <ChevronRightIcon className='h-4 w-4' />
@@ -44,7 +44,7 @@ const _CalendarHeading = ({ ...props }: React.HTMLAttributes<HTMLHeadElement>) =
                 slot='previous'
                 className={cn(
                     buttonVariants({ variant: 'outline' }),
-                    'h-7 w-7 bg-transparent p-0 opacity-50 data-[hovered]:opacity-100',
+                    'h-7 w-7 bg-transparent p-0 opacity-50 data-hovered:opacity-100',
                     'absolute left-1 text-popover-foreground'
                 )}>
                 <ChevronLeftIcon className='h-4 w-4' />
@@ -83,16 +83,16 @@ const _CalendarCell = ({ className, date, ...props }: CalendarCellProps) => {
         <CalendarCell
             className={(values) =>
                 cn(
-                    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors data-[disabled]:pointer-events-none data-[hovered]:bg-accent data-[hovered]:text-accent-foreground data-[disabled]:opacity-50',
-                    'h-8 w-8 p-0 font-normal outline-none transition-none data-[unavailable]:cursor-not-allowed data-[invalid]:bg-red-500 data-[invalid]:text-red-300 data-[unavailable]:line-through data-[selected]:opacity-100 data-[unavailable]:opacity-90',
+                    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm transition-colors data-disabled:pointer-events-none data-hovered:bg-accent data-hovered:text-accent-foreground data-disabled:opacity-50',
+                    'h-8 w-8 p-0 font-normal outline-hidden transition-none data-unavailable:cursor-not-allowed data-invalid:bg-red-500 data-invalid:text-red-300 data-unavailable:line-through data-selected:opacity-100 data-unavailable:opacity-90',
                     date.compare(today(getLocalTimeZone())) === 0 && 'bg-accent text-accent-foreground',
                     values.isDisabled && 'text-muted-foreground opacity-50',
-                    values.isFocusVisible && values.isFocused && 'outline-none ring-2 ring-ring ring-offset-2',
+                    values.isFocusVisible && values.isFocused && 'outline-hidden ring-2 ring-ring ring-offset-2',
                     values.isSelected && isRange && 'rounded-none bg-accent text-accent-foreground',
                     ((values.isSelected && !isRange) || values.isSelectionStart || values.isSelectionEnd) &&
-                        'rounded-md bg-primary text-primary-foreground data-[focused]:bg-primary data-[hovered]:bg-primary data-[focused]:text-primary-foreground data-[hovered]:text-primary-foreground',
+                        'rounded-md bg-primary text-primary-foreground data-focused:bg-primary data-hovered:bg-primary data-focused:text-primary-foreground data-hovered:text-primary-foreground',
                     values.isOutsideMonth &&
-                        'text-muted-foreground opacity-50 data-[selected]:bg-accent/50 data-[selected]:text-muted-foreground data-[selected]:opacity-30',
+                        'text-muted-foreground opacity-50 data-selected:bg-accent/50 data-selected:text-muted-foreground data-selected:opacity-30',
                     typeof className === 'function' ? className(values) : className
                 )
             }

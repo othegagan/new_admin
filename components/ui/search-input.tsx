@@ -56,7 +56,7 @@ export function SearchInput({ value: initialValue, onChange, debounce = 300, cla
                 type='text'
                 placeholder='Search...'
                 className={cn(
-                    'flex h-10 w-full border-0 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+                    'flex h-10 w-full border-0 bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                     className
                 )}
                 {...props}

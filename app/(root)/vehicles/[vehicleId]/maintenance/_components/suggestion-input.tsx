@@ -63,7 +63,7 @@ export function SuggestionInput({ value, onChange, suggestions, placeholder = 'T
                 onFocus={() => setIsSuggestionsVisible(true)} // Show suggestions on focus
             />
             {isSuggestionsVisible && filteredSuggestions.length > 0 && (
-                <ul className='absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-md border bg-muted shadow shadow-accent'>
+                <ul className='absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-md border bg-muted shadow-accent shadow-sm'>
                     {filteredSuggestions.map((suggestion, index) => (
                         <li
                             key={index}

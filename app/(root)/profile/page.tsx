@@ -378,7 +378,7 @@ function ProfileDetailsComponent({ userDetails }: { userDetails: UserDetail }) {
                                         onChange={(e) => {
                                             handleInputChange('state', e.target.value);
                                         }}
-                                        className='h-9 rounded border p-1 text-sm outline-none'>
+                                        className='h-9 rounded border p-1 text-sm outline-hidden'>
                                         <option value='' disabled>
                                             Select State
                                         </option>

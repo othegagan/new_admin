@@ -30,7 +30,7 @@ export const Header = React.forwardRef<React.ElementRef<'header'>, HeaderProps>(
             className={cn(
                 'flex h-16 items-center gap-3 bg-background p-4 sm:gap-4 md:flex-row-reverse md:pr-6',
                 sticky && 'sticky top-0 z-20',
-                offset > 10 && sticky ? 'shadow' : 'shadow-none',
+                offset > 10 && sticky ? 'shadow-sm' : 'shadow-none',
                 className
             )}
             {...props}>

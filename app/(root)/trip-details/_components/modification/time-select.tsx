@@ -50,12 +50,12 @@ const TimeSelect = ({
                 <SelectTrigger className={`md:w-[150px] ${className}`}>
                     <SelectValue placeholder='Select end time' />
                 </SelectTrigger>
-                <SelectContent className='z-[99999] max-h-60'>
+                <SelectContent className='z-99999 max-h-60'>
                     {generateTimes.map((time) => (
                         <SelectItem
                             key={time.value}
                             value={time.value}
-                            className='disabled:!hidden cursor-pointer'
+                            className='disabled:hidden! cursor-pointer'
                             disabled={disableLimitTime && time.value < disableLimitTime}>
                             {time.label}
                         </SelectItem>

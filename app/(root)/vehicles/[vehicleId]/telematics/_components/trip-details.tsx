@@ -147,7 +147,7 @@ function TelematicsEvents({ events, zipcode }: { events: any[]; zipcode: string 
             <div>
                 {events.map((event, index) => (
                     <div key={index} className='group relative flex w-full rounded-lg hover:bg-muted'>
-                        <div className='after:-translate-x-[0.5px] relative after:absolute after:start-3.5 after:top-0 after:bottom-0 after:w-px after:bg-neutral-300 last:after:hidden after:dark:bg-neutral-600'>
+                        <div className='after:-translate-x-[0.5px] relative after:absolute after:start-3.5 after:top-0 after:bottom-0 after:w-px after:bg-neutral-300 last:after:hidden dark:after:bg-neutral-600'>
                             <div className='relative z-10 flex size-7 items-center justify-center'>
                                 <div className='size-2.5 rounded-full border-2 border-primary bg-primary group-hover:bg-background' />
                             </div>

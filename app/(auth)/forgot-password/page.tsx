@@ -101,7 +101,7 @@ export default function page() {
                                 </div>
                             )}
 
-                            <Button type='submit' className='!w-full flex' loading={isSubmitting} loadingText='Sending...'>
+                            <Button type='submit' className='flex w-full!' loading={isSubmitting} loadingText='Sending...'>
                                 Send password reset email
                             </Button>
                         </form>

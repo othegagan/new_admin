@@ -9,22 +9,22 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'w-full md:w-fit inline-flex items-center justify-center text-nowrap whitespace-nowrap rounded-md text-sm font-medium  focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring  disabled:pointer-events-none rounded-full',
+    'w-full md:w-fit inline-flex items-center justify-center text-nowrap whitespace-nowrap rounded-md text-sm font-medium  focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring  disabled:pointer-events-none rounded-full',
     {
         variants: {
             variant: {
-                default: 'bg-primary text-primary-foreground shadow hover:bg-primary/90',
-                destructive: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-                outline: 'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
-                secondary: 'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
+                default: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90',
+                destructive: 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90',
+                outline: 'border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground',
+                secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'text-primary underline-offset-4 hover:underline',
                 quiet: 'hover:bg-accent hover:text-accent-foreground',
-                accent: 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm',
-                success: 'bg-green-500 text-background hover:bg-green-500/90 shadow-sm',
-                warning: 'bg-amber-500 text-background hover:bg-amber-500/90 shadow-sm',
-                danger: 'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-                black: 'bg-foreground text-background shadow-sm '
+                accent: 'bg-accent text-accent-foreground hover:bg-accent/90 shadow-xs',
+                success: 'bg-green-500 text-background hover:bg-green-500/90 shadow-xs',
+                warning: 'bg-amber-500 text-background hover:bg-amber-500/90 shadow-xs',
+                danger: 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90',
+                black: 'bg-foreground text-background shadow-xs '
             },
             size: {
                 default: 'h-9 px-4 py-2 w-full',
@@ -71,7 +71,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         const renderSuffix = loading && suffix;
 
         // Adjust focus styles dynamically
-        // const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-none focus:ring focus:ring-offset-2';
+        // const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-hidden focus:ring-3 focus:ring-offset-2';
 
         const buttonContent = (
             <Comp

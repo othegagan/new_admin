@@ -74,18 +74,18 @@ export default function CreateVehiclePage() {
                             )}
 
                             {index < currentStep ? (
-                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-background'>
+                                <div className='relative z-10 inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-background'>
                                     <CircleCheckBig className='size-4 text-background' />
                                 </div>
                             ) : index === currentStep ? (
-                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-primabg-primary bg-background'>
+                                <div className='relative z-10 inline-flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-primabg-primary bg-background'>
                                     <Dot className='size-10 text-primabg-primary' />
                                 </div>
                             ) : (
-                                <div className='relative z-10 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-neutral-400 bg-background text-neutral-400' />
+                                <div className='relative z-10 inline-flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-neutral-400 bg-background text-neutral-400' />
                             )}
 
-                            <div className='flex-grow pt-1 pl-3'>
+                            <div className='grow pt-1 pl-3'>
                                 <div
                                     className={`font-medium text-sm ${index <= currentStep ? 'text-neutral-900 dark:text-neutral-200' : 'text-neutral-500 dark:text-neutral-600'}`}>
                                     {step.name}

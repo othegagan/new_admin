@@ -177,7 +177,7 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
             <div className='flex size-full flex-1'>
                 <div className='chat-text-container -mr-4 relative flex flex-1 flex-col overflow-y-hidden'>
                     <div
-                        className='chat-flex flex h-40 w-full flex-grow flex-col justify-start gap-4 overflow-y-auto py-2 pr-4 pb-4'
+                        className='chat-flex flex h-40 w-full grow flex-col justify-start gap-4 overflow-y-auto py-2 pr-4 pb-4'
                         ref={chatWindowRef}>
                         {loadingMessages || loadingBookingDetails ? (
                             <div className='flex h-full w-full items-center justify-center'>Loading messages...</div>
@@ -234,7 +234,7 @@ export default function MainMessageComponent({ tripId }: MainMessageComponentPro
                             value={inputMessage}
                             onChange={(e) => setInputMessage(e.target.value)}
                             placeholder='Type your message...'
-                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-sm placeholder:text-muted-foreground placeholder:text-sm focus-visible:outline-none'
+                            className='flex max-h-20 w-full overflow-y-auto bg-inherit text-sm placeholder:text-muted-foreground placeholder:text-sm focus-visible:outline-hidden'
                             rows={1}
                             style={{ resize: 'none' }} // Prevent scrollbars from appearing
                         />

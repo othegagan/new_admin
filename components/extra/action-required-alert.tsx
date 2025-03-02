@@ -30,7 +30,7 @@ export default function ActionRequiredAlert() {
         <Link
             href={`${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`}
             prefetch={false}
-            className='cursor-pointer rounded-lg border border-border bg-background p-4 shadow shadow-black/5'>
+            className='cursor-pointer rounded-lg border border-border bg-background p-4 shadow-black/5 shadow-sm'>
             <div className='flex gap-2'>
                 <div className='flex grow flex-col gap-3'>
                     <div className='space-y-1'>

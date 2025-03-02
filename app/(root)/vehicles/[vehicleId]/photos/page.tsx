@@ -319,7 +319,7 @@ function PhotoRearrangeForm({ vehicleId, vehicleImages }: PhotoRearrangeFormProp
                                         <img
                                             src={image.imagename}
                                             alt={` ${image.id}`}
-                                            className='aspect-[16/9] h-full w-full object-cover object-center'
+                                            className='aspect-16/9 h-full w-full object-cover object-center'
                                         />
                                     </SortableDragHandle>
                                     <div className='flex w-full justify-between px-1.5 py-0.5'>

@@ -129,7 +129,7 @@ function AllTripsSearch({ tripsData }: any) {
         <div ref={scrollRef} className='flex h-[calc(100dvh_-_100px)] w-full flex-col items-center overflow-y-auto px-4'>
             {Object.entries(allTripsObjects).map(([date, trips]) => (
                 <div key={date} className='mb-4 flex w-full flex-col md:max-w-5xl'>
-                    <div className='sticky top-0 z-20 mb-2 bg-background shadow-sm md:mb-0'>
+                    <div className='sticky top-0 z-20 mb-2 bg-background shadow-xs md:mb-0'>
                         <div className='mx-auto w-fit rounded-sm border border-black/20 bg-background p-3 py-1 text-center font-medium text-14'>
                             {formatDateToReadable(date)}
                         </div>

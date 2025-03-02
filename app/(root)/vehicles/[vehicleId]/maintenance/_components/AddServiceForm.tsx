@@ -188,7 +188,7 @@ export default function AddServiceForm({ vehicleId, refechServiceLogs }: { vehic
                                 <input
                                     type='date'
                                     {...register('date')}
-                                    className='h-9 rounded-md border bg-background px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary'
+                                    className='h-9 rounded-md border bg-background px-2 py-1 text-sm focus:outline-hidden focus:ring-1 focus:ring-primary'
                                 />
                                 {errors.date && <FormError>{errors.date.message}</FormError>}
                             </div>
@@ -198,7 +198,7 @@ export default function AddServiceForm({ vehicleId, refechServiceLogs }: { vehic
                                 <input
                                     type='time'
                                     {...register('time')}
-                                    className='h-9 rounded-md border bg-background px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary'
+                                    className='h-9 rounded-md border bg-background px-2 py-1 text-sm focus:outline-hidden focus:ring-1 focus:ring-primary'
                                 />
                                 {errors.time && <FormError>{errors.time.message}</FormError>}
                             </div>

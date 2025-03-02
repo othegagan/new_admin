@@ -147,7 +147,7 @@ export default function MapComponent({
                         <Link
                             prefetch={false}
                             href={`${PAGE_ROUTES.VEHICLES}/${carPopInfo?.id}${PAGE_ROUTES.VEHICLE_DETAILS.TELEMETICS}`}
-                            className='flex flex-col border-0 text-black outline-none focus:border-0'>
+                            className='flex flex-col border-0 text-black outline-hidden focus:border-0'>
                             <img
                                 width='100%'
                                 src={carPopInfo?.imageresponse[0]?.imagename}

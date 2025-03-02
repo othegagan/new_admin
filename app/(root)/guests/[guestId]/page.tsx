@@ -168,7 +168,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                         <ImagePreview
                             url={response?.images.selfie ? `data:image/jpeg;base64,${response?.images.selfie}` : null}
                             alt='Selfie'
-                            className='aspect-[3/2] rounded-lg border object-cover object-center'
+                            className='aspect-3/2 rounded-lg border object-cover object-center'
                         />
                     </div>
                     <div>
@@ -176,7 +176,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                         <ImagePreview
                             url={response?.images.front ? `data:image/jpeg;base64,${response?.images.front}` : null}
                             alt='Front'
-                            className='aspect-[3/2] rounded-lg border object-cover object-center'
+                            className='aspect-3/2 rounded-lg border object-cover object-center'
                         />
                     </div>
                     <div>
@@ -184,7 +184,7 @@ function DriverLicenseDetails({ requestId, channel }: { requestId: string | null
                         <ImagePreview
                             url={response?.images.back ? `data:image/jpeg;base64,${response?.images.back}` : null}
                             alt='Back'
-                            className='aspect-[3/2] rounded-lg border object-cover object-center'
+                            className='aspect-3/2 rounded-lg border object-cover object-center'
                         />
                     </div>
                 </div>

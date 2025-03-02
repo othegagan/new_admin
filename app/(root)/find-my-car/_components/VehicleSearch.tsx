@@ -112,7 +112,7 @@ function SearchableVehicleList({ vehicles }: { vehicles: any[] }) {
                             <Command>
                                 <SearchInput
                                     placeholder='Search'
-                                    className='w-full border-b px-3 outline-none'
+                                    className='w-full border-b px-3 outline-hidden'
                                     value={searchTerm}
                                     onChange={setSearchTerm}
                                     variant='command'

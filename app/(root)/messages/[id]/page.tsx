@@ -15,10 +15,10 @@ export default function MessageDetail() {
     const tripId = Number(params.id);
 
     return (
-        <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto md:border'>
+        <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-xs sm:static sm:z-auto md:border'>
             <ChatHeader tripId={tripId} />
 
-            <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-sm sm:static sm:z-auto'>
+            <div className='inset-0 left-full z-50 flex h-full w-full flex-1 flex-col rounded-md bg-background shadow-xs sm:static sm:z-auto'>
                 <MainMessageComponent tripId={tripId} className='h-full lg:h-full' />
             </div>
         </div>

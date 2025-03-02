@@ -3,7 +3,7 @@ import { ChevronLeft } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 
 export const shimmer =
-    'relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-black/10 before:to-transparent';
+    'relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-linear-to-r before:from-transparent before:via-black/10 before:to-transparent';
 
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
     return <div className={cn('rounded-md bg-neutral-200 dark:bg-neutral-700', shimmer, className)} {...props} />;
@@ -37,15 +37,15 @@ export function DrivingLicenseSkeleton() {
                 <div className='grid grid-cols-2 gap-4 md:col-span-4 md:grid-cols-3'>
                     <div>
                         <p className='mb-2 font-medium text-sm'>Selfie</p>
-                        <div className={`${shimmer} aspect-[3/2] rounded-lg bg-neutral-200 dark:bg-neutral-700`} />
+                        <div className={`${shimmer} aspect-3/2 rounded-lg bg-neutral-200 dark:bg-neutral-700`} />
                     </div>
                     <div>
                         <p className='mb-2 font-medium text-sm'>Driver's License Front</p>
-                        <div className={`${shimmer} aspect-[3/2] rounded-lg bg-neutral-200 dark:bg-neutral-700`} />
+                        <div className={`${shimmer} aspect-3/2 rounded-lg bg-neutral-200 dark:bg-neutral-700`} />
                     </div>
                     <div>
                         <p className='mb-2 font-medium text-sm'>Driver's License Back</p>
-                        <div className={`${shimmer} aspect-[3/2] rounded-lg bg-neutral-200 dark:bg-neutral-700`} />
+                        <div className={`${shimmer} aspect-3/2 rounded-lg bg-neutral-200 dark:bg-neutral-700`} />
                     </div>
                 </div>
 

@@ -106,7 +106,7 @@ export default function TelematicsTrips() {
                     className='flex h-[300px] select-none flex-col overflow-y-auto rounded-none border-1 md:w-full'>
                     {processedData.tripDateKeys.map((dateKey: any) => (
                         <div key={dateKey.key}>
-                            <div className='sticky top-0 my-3 flex items-center justify-between rounded bg-[#ffc8a1] px-4 py-2 font-medium text-sm shadow dark:bg-[#412614]'>
+                            <div className='sticky top-0 my-3 flex items-center justify-between rounded bg-[#ffc8a1] px-4 py-2 font-medium text-sm shadow-sm dark:bg-[#412614]'>
                                 <div>{dateKey.seg}</div>
                                 <div className='text-xs'>Total: {dateKey.miles.toFixed(2)} mi</div>
                             </div>
