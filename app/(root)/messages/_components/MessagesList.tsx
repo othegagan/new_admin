@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import Fuse from 'fuse.js';
 import { usePathname, useRouter } from 'next/navigation';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function MessagesList() {
     const pathname = usePathname();
@@ -144,7 +144,13 @@ function FilterMessageList({
     );
 }
 
-const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean }>(({ data, isSelected }, ref) => {
+const MessageItem = ({
+    ref,
+    data,
+    isSelected
+}: { data: any; isSelected: boolean } & {
+    ref: React.RefObject<HTMLDivElement>;
+}) => {
     const router = useRouter();
     const { tripId, message, isViewed, createdDate } = data;
 
@@ -202,4 +208,4 @@ const MessageItem = forwardRef<HTMLDivElement, { data: any; isSelected: boolean 
             </div>
         </div>
     );
-});
+};

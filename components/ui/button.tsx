@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
-import * as React from 'react';
+import type * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -58,62 +58,68 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     toolTip?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-    (
-        { className, variant, size, shape, asChild = false, loading, loadingText, prefix, suffix, href, children, toolTip, ...props },
-        ref
-    ) => {
-        const Comp = asChild ? Slot : href ? 'a' : 'button';
-        const isDisabled = loading || props.disabled;
+const Button = ({
+    ref,
+    className,
+    variant,
+    size,
+    shape,
+    asChild = false,
+    loading,
+    loadingText,
+    prefix,
+    suffix,
+    href,
+    children,
+    toolTip,
+    ...props
+}) => {
+    const Comp = asChild ? Slot : href ? 'a' : 'button';
+    const isDisabled = loading || props.disabled;
 
-        // Determine where to render the loader
-        const renderPrefix = !loading || !suffix;
-        const renderSuffix = loading && suffix;
+    // Determine where to render the loader
+    const renderPrefix = !loading || !suffix;
+    const renderSuffix = loading && suffix;
 
-        // Adjust focus styles dynamically
-        // const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-hidden focus:ring-3 focus:ring-offset-2';
+    // Adjust focus styles dynamically
+    // const focusStyles = Comp === 'a' ? 'focus:ring-blue-400' : 'focus:outline-hidden focus:ring-3 focus:ring-offset-2';
 
-        const buttonContent = (
-            <Comp
-                className={cn(
-                    'group w-auto cursor-pointer select-none gap-2 transition-all duration-300 ease-linear active:scale-95',
-                    isDisabled && 'cursor-not-allowed opacity-60',
-                    buttonVariants({ variant, size, shape, className })
-                    // focusStyles // Apply focus styles only if Comp is not 'a'
-                )}
-                //@ts-ignore
-                ref={ref}
-                href={href}
-                disabled={isDisabled}
-                {...props}>
-                {/* Conditionally render the prefix or loader */}
-                {renderPrefix && (loading ? <Loader2 className='h-4 w-4 animate-spin' /> : prefix ? <span>{prefix}</span> : null)}
+    const buttonContent = (
+        <Comp
+            className={cn(
+                'group w-auto cursor-pointer select-none gap-2 transition-all duration-300 ease-linear active:scale-95',
+                isDisabled && 'cursor-not-allowed opacity-60',
+                buttonVariants({ variant, size, shape, className })
+                // focusStyles // Apply focus styles only if Comp is not 'a'
+            )}
+            //@ts-ignore
+            ref={ref}
+            href={href}
+            disabled={isDisabled}
+            {...props}>
+            {/* Conditionally render the prefix or loader */}
+            {renderPrefix && (loading ? <Loader2 className='h-4 w-4 animate-spin' /> : prefix ? <span>{prefix}</span> : null)}
 
-                {/* Handle text or children */}
-                {typeof children === 'string' ? (
-                    <span className='truncate'>{loading && loadingText ? loadingText : children}</span>
-                ) : (
-                    children
-                )}
+            {/* Handle text or children */}
+            {typeof children === 'string' ? <span className='truncate'>{loading && loadingText ? loadingText : children}</span> : children}
 
-                {/* Conditionally render the suffix or loader */}
-                {renderSuffix && <Loader2 className='h-4 w-4 animate-spin' />}
-                {!renderSuffix && suffix && <span>{suffix}</span>}
-            </Comp>
+            {/* Conditionally render the suffix or loader */}
+            {renderSuffix && <Loader2 className='h-4 w-4 animate-spin' />}
+            {!renderSuffix && suffix && <span>{suffix}</span>}
+        </Comp>
+    );
+
+    if (toolTip) {
+        return (
+            <Tooltip>
+                <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
+                <TooltipContent>{toolTip}</TooltipContent>
+            </Tooltip>
         );
-
-        if (toolTip) {
-            return (
-                <Tooltip>
-                    <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
-                    <TooltipContent>{toolTip}</TooltipContent>
-                </Tooltip>
-            );
-        }
-
-        return buttonContent;
     }
-);
+
+    return buttonContent;
+};
 Button.displayName = 'Button';
 
 export { Button, buttonVariants };
