@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FullscreenControl, Layer, Map as MapGL, type MapRef, Marker, NavigationControl, ScaleControl, Source } from 'react-map-gl';
+import { FullscreenControl, Layer, Map as MapGL, type MapRef, Marker, NavigationControl, ScaleControl, Source } from 'react-map-gl/mapbox';
 
 interface Route {
     id: number;
