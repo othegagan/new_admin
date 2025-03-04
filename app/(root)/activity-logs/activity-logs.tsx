@@ -86,7 +86,7 @@ export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps)
         // Apply time filter
         if (timeFilter === 'today') {
             const today = new Date().toISOString().split('T')[0];
-            filtered = filtered.filter((log) => log.createdTime.startsWith(today));
+            filtered = filtered.filter((log) => new Date(log.createdTime).toISOString().split('T')[0] === today);
         }
 
         // Apply sorting
