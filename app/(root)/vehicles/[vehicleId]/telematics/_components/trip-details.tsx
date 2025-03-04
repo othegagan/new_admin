@@ -19,6 +19,10 @@ export function TripDetails({ selectedTrip, zipcode }: { selectedTrip: Telematic
         );
     }
 
+    const events = response?.data?.telematicsMessageLogs?.sort(
+        (a: any, b: any) => new Date(b.eventTime).getTime() - new Date(a.eventTime).getTime()
+    );
+
     return (
         <div className='h-full space-y-5 overflow-y-auto'>
             <div className='border-b bg-background pb-3'>
@@ -96,7 +100,7 @@ export function TripDetails({ selectedTrip, zipcode }: { selectedTrip: Telematic
             ) : !response?.success ? (
                 <div>Events Error: {response?.message}</div>
             ) : (
-                <TelematicsEvents events={response?.data?.telematicsMessageLogs} zipcode={zipcode} />
+                <TelematicsEvents events={events} zipcode={zipcode} />
             )}
         </div>
     );
@@ -156,7 +160,10 @@ function TelematicsEvents({ events, zipcode }: { events: any[]; zipcode: string 
                         <div className='grow p-2 pb-4'>
                             <div className='flex gap-x-1.5 font-semibold capitalize'>{event.eventType}</div>
                             <p className='mt-1 text-muted-foreground text-sm'>
-                                At <span className='mx-1 font-semibold uppercase'>{formatDateAndTime(event.eventTime, zipcode)}</span>
+                                At{' '}
+                                <span className='mx-1 font-semibold uppercase'>
+                                    {formatDateAndTime(event.eventTime, zipcode, 'MMM DD, YYYY ,  h:mm:ss A ')}
+                                </span>
                             </p>
                         </div>
                     </div>

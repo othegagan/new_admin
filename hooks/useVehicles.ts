@@ -208,17 +208,18 @@ export function validateBookingTimeWithDelivery(bookingDateTime: string, isCusto
 export function useTelematicsData(vehicleId: number) {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.telematicsDataByVehicleId, vehicleId],
-        queryFn: async ({ pageParam = 0 }) => {
-            const response = await getTelematicsData(vehicleId, pageParam);
+        queryFn: async ({ pageParam = 1 }) => {
+            const response = await getTelematicsData(vehicleId, 30 * pageParam);
             if (!response.success) {
                 throw new Error(response.message);
             }
             return response.data;
         },
-        getNextPageParam: (lastPage) => {
-            return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
+        getNextPageParam: (lastPage, allPages) => {
+            // Check if there are more pages to fetch
+            return allPages.length < lastPage.totalPages ? allPages.length + 1 : undefined;
         },
-        initialPageParam: 0
+        initialPageParam: 1
     });
 }
 
