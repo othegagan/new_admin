@@ -10,7 +10,7 @@ import { PAGE_ROUTES } from '@/constants/routes';
 import { useVehiclesUnderHost } from '@/hooks/useVehicles';
 import { cn, formatDateAndTime, toTitleCase } from '@/lib/utils';
 import Fuse from 'fuse.js';
-import { Plus, Star, X } from 'lucide-react';
+import { Antenna, Plus, Star, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
@@ -20,6 +20,32 @@ import { useEffect, useState } from 'react';
 const STATUS_ACTIVE = 'Active';
 const STATUS_INACTIVE = 'Inactive';
 const STATUS_IN_PROGRESS = 'In Progress';
+
+interface Vehicle {
+    status: string | null;
+    vehicleId: number;
+    make: string;
+    createdDate: string;
+    model: string;
+    zipCode: string;
+    year: string;
+    vin: string;
+    channelName: any;
+    plate: string;
+    color: string;
+    rating: number;
+    totalTrips: number;
+    updatedDate: string;
+    uploadStatus: any;
+    isActive: boolean;
+    startDate: string | null;
+    endDate: string | null;
+    statusCode: string | null;
+    image: string | null;
+    isTelematicsEnabled: boolean;
+    tripStatus: string;
+    vehicleStatus: string;
+}
 
 export default function VehiclesPage() {
     const { data: response, error, isLoading: loading } = useVehiclesUnderHost();
@@ -35,11 +61,15 @@ export default function VehiclesPage() {
     if (allHostsVehicles.length === 0) return <EmptyGarage />;
 
     // Map and add `vehicleStatus` field
-    const updatedVehicleList = allHostsVehicles.map((vehicle: any) => ({
-        ...vehicle,
-        tripStatus: vehicle.status,
-        vehicleStatus: vehicle.uploadStatus === 'inprogress' ? STATUS_IN_PROGRESS : vehicle.isActive ? STATUS_ACTIVE : STATUS_INACTIVE
-    }));
+    const updatedVehicleList = allHostsVehicles
+        .map((vehicle: Vehicle) => ({
+            ...vehicle,
+            tripStatus: vehicle.status,
+            vehicleStatus: vehicle.uploadStatus === 'inprogress' ? STATUS_IN_PROGRESS : vehicle.isActive ? STATUS_ACTIVE : STATUS_INACTIVE
+        }))
+        .sort((a: { make: string }, b: { make: string }) => {
+            return a.make?.toLowerCase() > b.make?.toLowerCase() ? 1 : -1;
+        });
 
     return (
         <Main fixed className='flex flex-col gap-4'>
@@ -48,7 +78,7 @@ export default function VehiclesPage() {
     );
 }
 
-function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
+function VehicleSearchAndFilter({ cars }: { cars: Vehicle[] }) {
     const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
     const [selectedFilter, setSelectedFilter] = useQueryState('status', { defaultValue: '' });
     const [tripStatus, setTripStatus] = useQueryState('tripStatus', { defaultValue: '' });
@@ -70,7 +100,13 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     });
 
     useEffect(() => {
-        let filtered = searchTerm ? fuse.search(searchTerm).map((result) => result.item) : cars;
+        // Create a new array from cars to ensure immutability
+        let filtered = [...cars];
+
+        // Apply search filter
+        if (searchTerm) {
+            filtered = fuse.search(searchTerm).map((result) => result.item);
+        }
 
         // Filter by vehicle status
         if (selectedFilter && selectedFilter !== 'all') {
@@ -93,16 +129,23 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             });
         }
 
-        // Sort vehicles by date
-        if (sortBy === 'last-updated' || sortBy === 'last-added') {
-            filtered.sort((a, b) =>
-                sortBy === 'last-added'
-                    ? new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
-                    : new Date(b.updatedDate).getTime() - new Date(a.updatedDate).getTime()
-            );
+        // Apply sorting
+        if (sortBy) {
+            filtered.sort((a, b) => {
+                if (sortBy === 'last-added' || sortBy === 'last-updated') {
+                    return sortBy === 'last-added'
+                        ? new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+                        : new Date(b.updatedDate).getTime() - new Date(a.updatedDate).getTime();
+                }
+                if (sortBy === 'telematics-enabled') {
+                    if (a.isTelematicsEnabled && !b.isTelematicsEnabled) return -1;
+                    if (!a.isTelematicsEnabled && b.isTelematicsEnabled) return 1;
+                    return 0;
+                }
+                return 0;
+            });
         }
 
-        // Update filteredCars
         setFilteredCars(filtered);
     }, [searchTerm, selectedFilter, tripStatus, sortBy, cars]);
 
@@ -128,7 +171,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
         setSelectedFilter('');
         setTripStatus('');
         setSortBy('');
-        setFilteredCars(cars); // Reset to the full, unsorted car list
+        setFilteredCars([...cars]); // Reset to the full, unsorted car list
     }
 
     function getVehicleLink(id: any) {
@@ -159,7 +202,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
             <div className='flex-start flex-wrap gap-4'>
                 <div className='flex-center gap-4'>
                     <Select value={tripStatus} onValueChange={setTripStatus}>
-                        <SelectTrigger className='w-[150px]'>
+                        <SelectTrigger className='w-fit'>
                             <SelectValue placeholder='Trip Status' />
                         </SelectTrigger>
                         <SelectContent>
@@ -181,7 +224,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                     </Select>
 
                     <Select value={selectedFilter} onValueChange={setSelectedFilter}>
-                        <SelectTrigger className='w-[120px] md:w-[170px]'>
+                        <SelectTrigger className='w-fit'>
                             <SelectValue placeholder='Vehicle Status' />
                         </SelectTrigger>
                         <SelectContent>
@@ -203,13 +246,14 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
                     </Select>
 
                     <Select value={sortBy} onValueChange={setSortBy}>
-                        <SelectTrigger className='w-[110px] md:w-[150px]'>
+                        <SelectTrigger className='w-fit'>
                             <SelectValue placeholder='Sort by' />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
                                 <SelectItem value='last-added'>Last Added</SelectItem>
                                 <SelectItem value='last-updated'>Last Updated</SelectItem>
+                                <SelectItem value='telematics-enabled'>Telematics Enabled</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -243,7 +287,7 @@ function VehicleSearchAndFilter({ cars }: { cars: any[] }) {
     );
 }
 
-function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
+function VehicleCard({ vehicle, link }: { vehicle: Vehicle; link: string }) {
     const {
         make,
         model,
@@ -258,7 +302,8 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
         channelName,
         vehicleId,
         vehicleStatus,
-        image
+        image,
+        isTelematicsEnabled
     } = vehicle;
 
     const vehicleName = toTitleCase(`${make} ${model} ${year}`);
@@ -269,7 +314,7 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
     const formatedEndDate = endDate ? formatDateAndTime(endDate, zipCode, 'MMM DD') : null;
 
     return (
-        <a href={link} className='group h-auto rounded-lg border hover:shadow'>
+        <a href={link} className='group h-auto rounded-lg border hover:shadow-sm'>
             <div className='relative flex items-end overflow-hidden rounded-t-lg'>
                 <div className='aspect-video h-44 w-full cursor-pointer overflow-hidden rounded-t-md group-hover:opacity-[0.95] lg:aspect-video lg:h-36'>
                     <img
@@ -280,6 +325,11 @@ function VehicleCard({ vehicle, link }: { vehicle: any; link: string }) {
                 </div>
                 <VehicleStatusBadge status={vehicleStatus} />
                 <div className='absolute top-2 left-2 inline-flex rounded bg-accent/80 px-2 text-sm'>ID: {vehicleId}</div>
+                {isTelematicsEnabled && (
+                    <div className='absolute right-1 bottom-2 inline-flex items-center rounded-md bg-primary p-2 font-semibold text-foreground text-xs capitalize'>
+                        <Antenna className='size-5' />
+                    </div>
+                )}
             </div>
             <div className='flex flex-col gap-1 p-2'>
                 <div className='truncate font-semibold text-md'>{vehicleName}</div>
@@ -349,7 +399,7 @@ function EmptyGarage() {
                     alt='Garage empty'
                     width={300}
                     height={300}
-                    className='scale-[1.6] md:scale-[2] '
+                    className='scale-[1.6] md:scale-2 '
                 />
             </div>
             <h3 className='md:-mt-12 font-bold text-2xl text-muted-foreground tracking-tight'>Your Bundee garage is looking a bit bare.</h3>
