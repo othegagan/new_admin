@@ -9,8 +9,9 @@ import { fuseSettings } from '@/constants';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useVehiclesUnderHost } from '@/hooks/useVehicles';
 import { cn, formatDateAndTime, toTitleCase } from '@/lib/utils';
+import { CarNetworkIcon } from '@/public/icons';
 import Fuse from 'fuse.js';
-import { Antenna, Plus, Star, X } from 'lucide-react';
+import { Plus, Star, X } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
@@ -251,9 +252,9 @@ function VehicleSearchAndFilter({ cars }: { cars: Vehicle[] }) {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
+                                <SelectItem value='telematics-enabled'>Telematics Enabled</SelectItem>
                                 <SelectItem value='last-added'>Last Added</SelectItem>
                                 <SelectItem value='last-updated'>Last Updated</SelectItem>
-                                <SelectItem value='telematics-enabled'>Telematics Enabled</SelectItem>
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -326,8 +327,8 @@ function VehicleCard({ vehicle, link }: { vehicle: Vehicle; link: string }) {
                 <VehicleStatusBadge status={vehicleStatus} />
                 <div className='absolute top-2 left-2 inline-flex rounded bg-accent/80 px-2 text-sm'>ID: {vehicleId}</div>
                 {isTelematicsEnabled && (
-                    <div className='absolute right-1 bottom-2 inline-flex items-center rounded-md bg-primary p-2 font-semibold text-foreground text-xs capitalize'>
-                        <Antenna className='size-5' />
+                    <div className='absolute bottom-2 left-1 flex items-center gap-1 rounded-[10px] bg-white p-2 font-semibold text-primary text-xs capitalize'>
+                        <CarNetworkIcon className='size-4' /> Telematics Enabled
                     </div>
                 )}
             </div>
