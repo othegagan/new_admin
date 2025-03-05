@@ -208,18 +208,35 @@ export function validateBookingTimeWithDelivery(bookingDateTime: string, isCusto
 export function useTelematicsData(vehicleId: number) {
     return useInfiniteQuery({
         queryKey: [QUERY_KEYS.telematicsDataByVehicleId, vehicleId],
-        queryFn: async ({ pageParam = 1 }) => {
-            const response = await getTelematicsData(vehicleId, 30 * pageParam);
+        queryFn: async ({ pageParam = 0 }) => {
+            if (pageParam === 0) {
+                // Fetch page 0 and page 1 data
+                const [page0, page1] = await Promise.all([getTelematicsData(vehicleId, 0), getTelematicsData(vehicleId, 1)]);
+
+                if (!page0.success) throw new Error(page0.message);
+                if (!page1.success && page1.message !== 'No more pages') {
+                    throw new Error(page1.message);
+                }
+
+                // Combine both pages into one structure
+                return {
+                    tripData: [...page0.data.tripData, ...(page1.data?.tripData || [])],
+                    currentPage: page1.success ? 1 : 0, // Set to page 1 if successful
+                    totalPages: page0.data.totalPages // Keep totalPages from page 0
+                };
+            }
+
+            // Fetch other pages as usual
+            const response = await getTelematicsData(vehicleId, pageParam);
             if (!response.success) {
                 throw new Error(response.message);
             }
             return response.data;
         },
-        getNextPageParam: (lastPage, allPages) => {
-            // Check if there are more pages to fetch
-            return allPages.length < lastPage.totalPages ? allPages.length + 1 : undefined;
+        getNextPageParam: (lastPage) => {
+            return lastPage.currentPage < lastPage.totalPages ? lastPage.currentPage + 1 : undefined;
         },
-        initialPageParam: 1
+        initialPageParam: 0
     });
 }
 

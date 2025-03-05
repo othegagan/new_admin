@@ -103,7 +103,7 @@ export default function TelematicsTrips() {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className='flex h-[calc(70svh-80px)] select-none flex-col overflow-y-auto rounded-none pr-2 md:w-full'>
+                    className='flex h-[calc(65dvh-100px)] select-none flex-col overflow-y-auto rounded-none pr-2 md:w-full '>
                     {processedData.tripDateKeys.map((dateKey: any) => (
                         <div key={dateKey.key}>
                             <div className='sticky top-0 my-3 flex items-center justify-between rounded bg-[#ffc8a1] px-4 py-2 font-medium text-sm shadow dark:bg-[#412614]'>

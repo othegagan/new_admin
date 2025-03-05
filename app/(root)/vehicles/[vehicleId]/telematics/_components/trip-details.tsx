@@ -85,8 +85,8 @@ export function TripDetails({ selectedTrip, zipcode }: { selectedTrip: Telematic
                 title='Incidents'
                 details={[
                     { label: 'Hard Acceleration Count', value: `${selectedTrip.hardAccelerationCount} Times` },
-                    { label: 'Hard Braking Count', value: `${selectedTrip.hardBrakingCount} Times` },
                     { label: 'Hard Turning Count', value: `${selectedTrip.hardTurningCount} Times` },
+                    { label: 'Hard Braking Count', value: `${selectedTrip.hardBrakingCount} Times` },
                     { label: 'Over Speeding Count', value: `${selectedTrip.overSpeedingCount} Times` },
                     { label: 'Impact Count', value: `${selectedTrip.impactCount} Times` },
                     { label: 'Late Night Driven', value: selectedTrip.isLateNightDriven ? 'Yes' : 'No' },
