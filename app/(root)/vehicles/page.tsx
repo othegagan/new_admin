@@ -109,6 +109,11 @@ function VehicleSearchAndFilter({ cars }: { cars: Vehicle[] }) {
             filtered = fuse.search(searchTerm).map((result) => result.item);
         }
 
+        // telematics search
+        if (searchTerm.toLowerCase().includes('tele')) {
+            filtered = filtered.filter((car) => car.isTelematicsEnabled);
+        }
+
         // Filter by vehicle status
         if (selectedFilter && selectedFilter !== 'all') {
             filtered = filtered.filter((car) => car.vehicleStatus.toLowerCase() === selectedFilter.toLowerCase());
