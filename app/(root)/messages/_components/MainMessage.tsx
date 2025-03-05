@@ -369,7 +369,14 @@ function MessageItem({ message, tripData, turoId }: MessageItemProps) {
                 </div>
             ) : (
                 <div className='overflow-wrap-anywhere flex flex-col gap-2 break-words rounded-lg rounded-tl-none bg-muted px-3 py-2 text-xs'>
-                    <span className='overflow-wrap-anywhere word-break-break-word break-words'>{message.message}</span>
+                    <span
+                        style={{
+                            wordBreak: 'break-word',
+                            overflowWrap: 'break-word',
+                            wordWrap: 'break-word'
+                        }}>
+                        {message.message}
+                    </span>
 
                     {turoId && message.message.toLowerCase() === CHAT_TRIP_APPROVAL_MESSAGE.toLowerCase() ? (
                         <a
