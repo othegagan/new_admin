@@ -168,13 +168,8 @@ function SearchableVehicleList({ vehicles }: { vehicles: any[] }) {
                             </Button>
                         )}
                     </div>
-                    {selectedVehicle && (
-                        <div className='flex gap-2 text-xs'>
-                            {selectedVehicle.fullAddress}{' '}
-                            {selectedVehicle.isTelematicsLocation && (
-                                <span className='text-muted-foreground'>( Lastknown location from telematics device )</span>
-                            )}
-                        </div>
+                    {selectedVehicle?.isTelematicsLocation && (
+                        <div className='flex gap-2 text-xs'>( Lastknown location from telematics device )</div>
                     )}
                 </div>
             </div>
