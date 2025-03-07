@@ -139,13 +139,6 @@ function TripDetailSection({ icon, title, details }: TripDetailsSectionProps) {
 function TelematicsEvents({ events, zipcode }: { events: any[]; zipcode: string }) {
     if (events?.length === 0) return null;
 
-    // const tripNote: any = {
-    //     TRIP_START: 'Trip started.',
-    //     TRIP_END: 'Trip ended.',
-    //     OVER_SPEEDING: 'Over speeding',
-    //     HARD_ACCELERATION: 'Hard acceleration'
-    // };
-
     return (
         <div className='space-y-3'>
             <h4>Events</h4>
