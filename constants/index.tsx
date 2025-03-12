@@ -1,6 +1,6 @@
-import { EmployeesIcon, GuestsIcon, HostsIcon, TripsIcon } from '@/public/icons';
-import type { ISidebar, Role } from '@/types';
-import { Car, Clock, HomeIcon, SearchIcon, SlidersHorizontal } from 'lucide-react';
+import { EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
+import type { HomePageNavItem, ISidebar, Role } from '@/types';
+import { Car, Clock, HomeIcon, MessageSquareText, SearchIcon, SlidersHorizontal } from 'lucide-react';
 import { PAGE_ROUTES } from './routes';
 
 export const ROLES = {
@@ -359,3 +359,60 @@ export function getTuroVehicleLink(vehicleId: string | number) {
 export const CHAT_CREATE_RESERVATION_MESSAGE = 'a new reservation was requested';
 
 export const CHAT_TRIP_APPROVAL_MESSAGE = 'the reservation request has been approved';
+
+export const homePageNavItems: HomePageNavItem[] = [
+    {
+        icon: <TripsIcon className='size-20' />,
+        label: 'Trips',
+        href: `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    },
+    {
+        icon: <MessageSquareText className='size-20' />,
+        label: 'Messages',
+        href: PAGE_ROUTES.MESSAGES,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    },
+    {
+        icon: <VehiclesIcon className='size-20' />,
+        label: 'Vehicles',
+        href: PAGE_ROUTES.VEHICLES,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    },
+    {
+        icon: <FindMyCarIcon className='size-20' />,
+        label: 'Find My Car',
+        href: PAGE_ROUTES.FIND_MY_CAR,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    },
+    {
+        icon: <Clock className='size-20' />,
+        label: 'Activity Logs',
+        href: PAGE_ROUTES.ACTIVITY_LOGS,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    },
+    {
+        icon: <EmployeesIcon className='size-20' />,
+        label: 'Employees',
+        href: PAGE_ROUTES.EMPLOYEES,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN]
+    },
+    {
+        icon: <GuestsIcon className='size-20' />,
+        label: 'Guests',
+        href: PAGE_ROUTES.GUESTS,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    },
+    {
+        icon: <HostsIcon className='size-20' />,
+        label: 'Hosts',
+        href: PAGE_ROUTES.HOSTS,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST]
+    },
+    {
+        icon: <SlidersHorizontal className='size-20' />,
+        label: 'Configurations',
+        href: PAGE_ROUTES.CONFIGURATIONS,
+        roles: [ROLES.SUPER_HOST, ROLES.HOST, ROLES.ADMIN, ROLES.EMPLOYEE]
+    }
+];

@@ -1,6 +1,3 @@
-import { EmployeesIcon, FindMyCarIcon, GuestsIcon, HostsIcon, TripsIcon, VehiclesIcon } from '@/public/icons';
-import { Clock, MessageSquareText, SlidersHorizontal } from 'lucide-react';
-
 export const AUTH_ROUTES = {
     SIGN_IN: '/sign-in',
     FORGOT_PASSWORD: '/forgot-password',
@@ -96,51 +93,3 @@ export const vehicleConfigTabs = {
         { id: 16, href: PAGE_ROUTES.VEHICLE_DETAILS.LOGS, label: 'Activity Logs' }
     ]
 };
-
-export const homePageItems = [
-    {
-        icon: <TripsIcon className='size-20' />,
-        label: 'Trips',
-        href: `${PAGE_ROUTES.TRIPS}${PAGE_ROUTES.TRIPS_TABS.REVIEW_REUIRED}`
-    },
-    {
-        icon: <MessageSquareText className='size-20' />,
-        label: 'Messages',
-        href: PAGE_ROUTES.MESSAGES
-    },
-    {
-        icon: <VehiclesIcon className='size-20' />,
-        label: 'Vehicles',
-        href: PAGE_ROUTES.VEHICLES
-    },
-    {
-        icon: <FindMyCarIcon className='size-20' />,
-        label: 'Find My Car',
-        href: PAGE_ROUTES.FIND_MY_CAR
-    },
-    {
-        icon: <Clock className='size-20' />,
-        label: 'Activity Logs',
-        href: PAGE_ROUTES.ACTIVITY_LOGS
-    },
-    {
-        icon: <EmployeesIcon className='size-20' />,
-        label: 'Employees',
-        href: PAGE_ROUTES.EMPLOYEES
-    },
-    {
-        icon: <GuestsIcon className='size-20' />,
-        label: 'Guests',
-        href: PAGE_ROUTES.GUESTS
-    },
-    {
-        icon: <HostsIcon className='size-20' />,
-        label: 'Hosts',
-        href: PAGE_ROUTES.HOSTS
-    },
-    {
-        icon: <SlidersHorizontal className='size-20' />,
-        label: 'Configurations',
-        href: PAGE_ROUTES.CONFIGURATIONS
-    }
-];

@@ -1,11 +1,18 @@
 import ActionRequiredAlert from '@/components/extra/action-required-alert';
 import { Main } from '@/components/layout/main';
-import { homePageItems } from '@/constants/routes';
+import { homePageNavItems } from '@/constants';
 import { auth } from '@/lib/auth';
+import type { Role } from '@/types';
 import Link from 'next/link';
+
+function getNavItems(role: Role) {
+    return homePageNavItems.filter((item) => item.roles.includes(role));
+}
 
 export default async function DashboardPage() {
     const session = await auth();
+    const navItems = getNavItems(session?.userRole);
+
     return (
         <Main>
             <div className='mx-auto max-w-7xl'>
@@ -18,7 +25,7 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-                    {homePageItems.map((item) => (
+                    {navItems.map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}

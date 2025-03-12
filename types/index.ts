@@ -25,6 +25,13 @@ export interface ISidebar {
     items: NavItem[];
 }
 
+export type HomePageNavItem = {
+    icon: React.ReactNode;
+    label: string;
+    href: string;
+    roles: Role[];
+};
+
 export type Channel = (typeof CHANNELS)[keyof typeof CHANNELS];
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
