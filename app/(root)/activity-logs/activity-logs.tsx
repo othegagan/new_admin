@@ -11,7 +11,8 @@ import { format } from 'date-fns';
 import Fuse from 'fuse.js';
 import { CircleCheck, CircleX, X } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useQueryState } from 'nuqs';
+import { useMemo } from 'react';
 
 interface ActivityLog {
     id: number;
@@ -50,9 +51,9 @@ export const searchFields = [
 ];
 
 export default function ActivityLogs({ activityLogs, users }: ActivityLogsProps) {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [timeFilter, setTimeFilter] = useState('today');
-    const [sortBy, setSortBy] = useState('newest');
+    const [searchQuery, setSearchQuery] = useQueryState('search', { defaultValue: '' });
+    const [timeFilter, setTimeFilter] = useQueryState('timeFilter', { defaultValue: 'today' });
+    const [sortBy, setSortBy] = useQueryState('sortBy', { defaultValue: 'newest' });
 
     // Configure Fuse.js for search with enhanced options
     const searchableData = activityLogs.map((log) => {
