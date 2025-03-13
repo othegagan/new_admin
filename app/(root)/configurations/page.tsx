@@ -8,9 +8,11 @@ import { FormDescription } from '@/components/ui/extension/field';
 import { JollyNumberField } from '@/components/ui/extension/numberfield';
 import { Label } from '@/components/ui/label';
 import { useHostConfigutations } from '@/hooks/useHostConfigutations';
+import { currencyFormatter } from '@/lib/utils';
 import { configurationsSchema } from '@/schemas';
 import { updateHostConfigurations } from '@/server/configurations';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useState } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
@@ -34,8 +36,8 @@ export default function ConfigurationPage() {
     return (
         <Main className='h-full'>
             <PageHeader
-                title='Tax Configurations'
-                description='Configure your tax calculations to ensure accurate earnings and tax compliance.'
+                title='Tax & Fee Configurations'
+                description='Configure your tax and fee calculations to ensure accurate earnings and compliance.'
             />
 
             <div className='my-4 h-full'>
@@ -60,6 +62,7 @@ function ConstraintForm({
         handleSubmit,
         control,
         reset,
+        watch,
         formState: { errors, isSubmitting, isDirty }
     } = useForm<FormFields>({
         resolver: zodResolver(configurationsSchema),
@@ -73,11 +76,11 @@ function ConstraintForm({
         try {
             const payload = {
                 averageRentaDays: formData.averageRentaDays,
-                concessionFee: formData.concessionFee,
-                concessionPercentage: formData.concessionPercentage, // Convert to percentage only because of the UI
                 registrationFee: formData.registrationFee,
-                stateTax: formData.stateTax, // Convert to percentage only because of the UI
                 upCharge: formData.upCharge,
+                concessionPercentage: formData.concessionPercentage,
+                concessionFee: formData.concessionFee, // Not in use and not in ui
+                stateTax: formData.stateTax,
                 constraintName: 'PriceConstraint'
             };
 
@@ -95,15 +98,60 @@ function ConstraintForm({
         }
     };
 
+    const registrationFee = watch('registrationFee');
+    const averageRentaDays = watch('averageRentaDays');
+    const [perDayRegistrationFee, setPerDayRegistrationFee] = useState(0);
+
+    useEffect(() => {
+        const fee = Number(averageRentaDays) > 0 ? Number(registrationFee) / Number(averageRentaDays) : 0;
+        setPerDayRegistrationFee(fee);
+    }, [registrationFee, averageRentaDays]);
+
     return (
-        <form className='mt-6 max-w-5xl' onSubmit={handleSubmit(onSubmit)}>
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-10'>
-                <div className=' flex flex-col gap-1'>
-                    <Label htmlFor='averageRentaDays'>Average rental days</Label>
-                    <FormDescription>Enter the average number of days your vehicle can be rented out in a year.</FormDescription>
-                    <div className='flex items-center gap-2'>
+        <form className=' flex max-w-5xl flex-col gap-5' onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex w-full flex-col gap-5 rounded-md border p-4'>
+                <h5>Registration Configuration</h5>
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-10'>
+                    <div className=' flex flex-col gap-1'>
+                        <Label htmlFor='averageRentaDays'>Average rental days</Label>
+                        <FormDescription className='text-balance'>
+                            The average number of days your vehicle can be rented out in a year.
+                        </FormDescription>
+                        <div className='flex items-center gap-2'>
+                            <Controller
+                                name='averageRentaDays'
+                                control={control}
+                                render={({ field }) => {
+                                    const value = field.value === '' ? undefined : Number(field.value);
+                                    return (
+                                        // @ts-ignore
+                                        <JollyNumberField
+                                            defaultValue={value || 0}
+                                            className='mt-1 max-w-44 sm:mt-0'
+                                            id='averageRentaDays'
+                                            isRequired
+                                            formatOptions={{
+                                                minimumFractionDigits: 0
+                                            }}
+                                            errorMessage={errors.averageRentaDays?.message}
+                                            isInvalid={!!errors.averageRentaDays?.message}
+                                            {...field}
+                                            onChange={field.onChange}
+                                        />
+                                    );
+                                }}
+                            />
+                            Day(s)
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col gap-1'>
+                        <Label htmlFor='registrationFee'>Registration Fee</Label>
+                        <FormDescription className='text-balance'>
+                            Any registration fees or licensing costs associated with your vehicle.
+                        </FormDescription>
                         <Controller
-                            name='averageRentaDays'
+                            name='registrationFee'
                             control={control}
                             render={({ field }) => {
                                 const value = field.value === '' ? undefined : Number(field.value);
@@ -112,128 +160,45 @@ function ConstraintForm({
                                     <JollyNumberField
                                         defaultValue={value || 0}
                                         className='mt-1 max-w-44 sm:mt-0'
-                                        id='averageRentaDays'
+                                        id='registrationFee'
                                         isRequired
                                         formatOptions={{
+                                            style: 'currency',
+                                            currency: 'USD',
+                                            currencyDisplay: 'symbol',
+                                            currencySign: 'standard',
                                             minimumFractionDigits: 0
                                         }}
-                                        errorMessage={errors.averageRentaDays?.message}
-                                        isInvalid={!!errors.averageRentaDays?.message}
                                         {...field}
                                         onChange={field.onChange}
+                                        errorMessage={errors.registrationFee?.message}
+                                        isInvalid={!!errors.registrationFee?.message}
                                     />
                                 );
                             }}
                         />
-                        Day(s)
+                    </div>
+
+                    <div className='flex flex-col gap-1'>
+                        <Label htmlFor='perDayRegistrationFee'>Pre Day Registration Fee</Label>
+                        <FormDescription className='text-balance'>
+                            The registration fee applied per rental day. (Auto-calculated)
+                        </FormDescription>
+                        <div className='relative mt-2 flex h-9 w-full items-center overflow-hidden rounded-md border border-input bg-transparent px-3 py-1 text-sm opacity-50 shadow-sm transition-colors md:max-w-44'>
+                            {currencyFormatter(perDayRegistrationFee)}
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div className='flex flex-col gap-1'>
-                    <Label htmlFor='concessionFee'>Concession Fee</Label>
-                    <FormDescription>Concessions that can be offered to guests.</FormDescription>
-
-                    <Controller
-                        name='concessionFee'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    defaultValue={value || 0}
-                                    className='mt-1 max-w-44 sm:mt-0'
-                                    id='concessionFee'
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'currency',
-                                        currency: 'USD',
-                                        currencyDisplay: 'symbol',
-                                        currencySign: 'standard',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.concessionFee?.message}
-                                    isInvalid={!!errors.concessionFee?.message}
-                                />
-                            );
-                        }}
-                    />
-                </div>
-
-                <div className='flex flex-col gap-1'>
-                    <Label htmlFor='concessionPercentage'>Concession Percentage</Label>
-                    <FormDescription>Specify any applicable discounts or concessions that can be offered to guests.</FormDescription>
-                    <div className='flex items-center gap-2'>
+            <div className='flex w-full flex-col gap-5 rounded-md border p-4'>
+                <h5>Additional Fees</h5>
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-10'>
+                    <div className='flex flex-col gap-1'>
+                        <Label htmlFor='upCharge'>Short Notice Fee</Label>
+                        <FormDescription className='text-balance'>The fee charged for short-notice rentals.</FormDescription>
                         <Controller
-                            name='concessionPercentage'
-                            control={control}
-                            render={({ field }) => {
-                                // Ensure field.value is a number or undefined
-                                const value = field.value === '' ? undefined : Number(field.value);
-                                return (
-                                    // @ts-ignore
-                                    <JollyNumberField
-                                        defaultValue={value || 0}
-                                        maxValue={100}
-                                        className='mt-1 max-w-44 sm:mt-0'
-                                        id='concessionPercentage'
-                                        isRequired
-                                        formatOptions={{
-                                            style: 'decimal',
-                                            minimumFractionDigits: 0,
-                                            maximumFractionDigits: 0
-                                        }}
-                                        {...field}
-                                        errorMessage={errors.concessionPercentage?.message}
-                                        isInvalid={!!errors.concessionPercentage?.message}
-                                    />
-                                );
-                            }}
-                        />
-                        <div className='mt-2 text-lg'>%</div>
-                    </div>
-                </div>
-
-                <div className='flex flex-col gap-1'>
-                    <Label htmlFor='upCharge'>Short Notice Fee</Label>
-                    <FormDescription>Enter the amount of fees that will be charged to the host for the short notice.</FormDescription>
-                    <Controller
-                        name='upCharge'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    defaultValue={value || 0}
-                                    className='mt-1 max-w-44 sm:mt-0'
-                                    id='upCharge'
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'currency',
-                                        currency: 'USD',
-                                        currencyDisplay: 'symbol',
-                                        currencySign: 'standard',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.upCharge?.message}
-                                    isInvalid={!!errors.upCharge?.message}
-                                />
-                            );
-                        }}
-                    />
-                </div>
-
-                <div className='flex flex-col gap-1'>
-                    <Label htmlFor='stateTax'>State Rental Tax</Label>
-                    <FormDescription>Enter the applicable state rental tax rate for your vehicle.</FormDescription>
-                    <div className='flex items-center gap-2'>
-                        <Controller
-                            name='stateTax'
+                            name='upCharge'
                             control={control}
                             render={({ field }) => {
                                 const value = field.value === '' ? undefined : Number(field.value);
@@ -241,64 +206,105 @@ function ConstraintForm({
                                     // @ts-ignore
                                     <JollyNumberField
                                         defaultValue={value || 0}
-                                        maxValue={100}
                                         className='mt-1 max-w-44 sm:mt-0'
-                                        id='stateTax'
+                                        id='upCharge'
                                         isRequired
                                         formatOptions={{
-                                            style: 'decimal',
-                                            minimumFractionDigits: 0,
-                                            maximumFractionDigits: 0
+                                            style: 'currency',
+                                            currency: 'USD',
+                                            currencyDisplay: 'symbol',
+                                            currencySign: 'standard',
+                                            minimumFractionDigits: 0
                                         }}
                                         {...field}
                                         onChange={field.onChange}
-                                        errorMessage={errors.stateTax?.message}
-                                        isInvalid={!!errors.stateTax?.message}
+                                        errorMessage={errors.upCharge?.message}
+                                        isInvalid={!!errors.upCharge?.message}
                                     />
                                 );
                             }}
                         />
-                        <div className='mt-2 text-lg'>%</div>
                     </div>
                 </div>
+            </div>
 
-                <div className='flex flex-col gap-1'>
-                    <Label htmlFor='registrationFee'>Registration Fee</Label>
-                    <FormDescription>Enter any registration fees or licensing costs associated with your vehicle.</FormDescription>
-                    <Controller
-                        name='registrationFee'
-                        control={control}
-                        render={({ field }) => {
-                            const value = field.value === '' ? undefined : Number(field.value);
-                            return (
-                                // @ts-ignore
-                                <JollyNumberField
-                                    defaultValue={value || 0}
-                                    className='mt-1 max-w-44 sm:mt-0'
-                                    id='registrationFee'
-                                    isRequired
-                                    formatOptions={{
-                                        style: 'currency',
-                                        currency: 'USD',
-                                        currencyDisplay: 'symbol',
-                                        currencySign: 'standard',
-                                        minimumFractionDigits: 0
-                                    }}
-                                    {...field}
-                                    onChange={field.onChange}
-                                    errorMessage={errors.registrationFee?.message}
-                                    isInvalid={!!errors.registrationFee?.message}
-                                />
-                            );
-                        }}
-                    />
+            <div className='flex w-full flex-col gap-5 rounded-md border p-4'>
+                <h5>Tax & Concession Configuration</h5>
+                <div className='grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-10'>
+                    <div className='flex flex-col gap-1'>
+                        <Label htmlFor='concessionPercentage'>Concession Percentage</Label>
+                        <FormDescription className='text-balance'>The percentage discount offered for concessions.</FormDescription>
+                        <div className='flex items-center gap-2'>
+                            <Controller
+                                name='concessionPercentage'
+                                control={control}
+                                render={({ field }) => {
+                                    // Ensure field.value is a number or undefined
+                                    const value = field.value === '' ? undefined : Number(field.value);
+                                    return (
+                                        // @ts-ignore
+                                        <JollyNumberField
+                                            defaultValue={value || 0}
+                                            maxValue={100}
+                                            className='mt-1 max-w-44 sm:mt-0'
+                                            id='concessionPercentage'
+                                            isRequired
+                                            formatOptions={{
+                                                style: 'decimal',
+                                                minimumFractionDigits: 0,
+                                                maximumFractionDigits: 0
+                                            }}
+                                            {...field}
+                                            errorMessage={errors.concessionPercentage?.message}
+                                            isInvalid={!!errors.concessionPercentage?.message}
+                                        />
+                                    );
+                                }}
+                            />
+                            <div className='mt-2 text-lg'>%</div>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col gap-1'>
+                        <Label htmlFor='stateTax'>State Tax Percentage</Label>
+                        <FormDescription className='text-balance'>The applicable state rental tax percentage.</FormDescription>
+                        <div className='flex items-center gap-2'>
+                            <Controller
+                                name='stateTax'
+                                control={control}
+                                render={({ field }) => {
+                                    const value = field.value === '' ? undefined : Number(field.value);
+                                    return (
+                                        // @ts-ignore
+                                        <JollyNumberField
+                                            defaultValue={value || 0}
+                                            maxValue={100}
+                                            className='mt-1 max-w-44 sm:mt-0'
+                                            id='stateTax'
+                                            isRequired
+                                            formatOptions={{
+                                                style: 'decimal',
+                                                minimumFractionDigits: 0,
+                                                maximumFractionDigits: 0
+                                            }}
+                                            {...field}
+                                            onChange={field.onChange}
+                                            errorMessage={errors.stateTax?.message}
+                                            isInvalid={!!errors.stateTax?.message}
+                                        />
+                                    );
+                                }}
+                            />
+                            <div className='mt-2 text-lg'>%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {errors.root?.message && <div className='text-red-500'>{errors.root?.message}</div>}
 
-            <div className='mt-6 flex items-center justify-end gap-x-6'>
-                <Button type='submit' variant='black' loading={isSubmitting} disabled={!isDirty}>
+            <div className='my-6 flex items-center justify-end gap-x-6'>
+                <Button type='submit' className='w-fit' loading={isSubmitting} disabled={!isDirty}>
                     {isSubmitting ? (isUpdate ? 'Updating...' : 'Saving...') : isUpdate ? 'Update' : 'Save Configuration'}
                 </Button>
             </div>
