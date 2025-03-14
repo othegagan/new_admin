@@ -1,9 +1,10 @@
 'use client';
 
 import { ChatHeaderSkeleton } from '@/components/skeletons';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useTripDetails } from '@/hooks/useTrips';
+import { formatDateAndTime, toTitleCase } from '@/lib/utils';
 import type { Trip } from '@/types';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -46,44 +47,54 @@ function ChatHeader({ tripId }: { tripId: number }) {
     }
 
     const trip: Trip = response?.data?.activetripresponse[0];
-    //{toTitleCase(`${booking?.vehmake} ${booking?.vehmodel} ${booking?.vehyear}`)} ({booking.vehicleNumber})
 
     return (
-        <div className='mb-1 flex flex-none justify-between rounded-t-md border-b pb-2'>
-            <div className='flex w-full gap-3'>
-                <button type='button' className='px-0 sm:hidden' onClick={() => router.back()}>
-                    <ArrowLeft /> <span className='sr-only'>Back</span>
-                </button>
-                <div className='flex items-center gap-4 md:px-4 md:py-1 lg:gap-4'>
-                    <Link href={`${PAGE_ROUTES.GUESTS}/${trip.userid}`} prefetch={false}>
-                        <Avatar className='size-10 border'>
-                            <AvatarImage src={trip.userImage || '/images/dummy_avatar.png'} alt={trip.userFirstName || 'Guest'} />
-                        </Avatar>
+        <div className='mb-1 flex w-full flex-none items-start justify-between gap-1 rounded-t-md border-b py-1'>
+            <button type='button' className='px-0 sm:hidden' onClick={() => router.back()}>
+                <ArrowLeft className='size-5' /> <span className='sr-only'>Back</span>
+            </button>
+            <div className='flex flex-1 gap-3 md:px-4 md:py-1 lg:gap-4'>
+                <Link href={`${PAGE_ROUTES.GUESTS}/${trip.userid}`} prefetch={false}>
+                    <Avatar className=' size-10 border md:size-16'>
+                        <AvatarImage src={trip.userImage || '/images/dummy_avatar.png'} alt={trip.userFirstName || 'Guest'} />
+                        <AvatarFallback>{trip?.userFirstName?.[0]}</AvatarFallback>
+                    </Avatar>
+                </Link>
+
+                <div className='flex flex-1 flex-col '>
+                    <Link
+                        href={`${PAGE_ROUTES.GUESTS}/${trip.userid}`}
+                        prefetch={false}
+                        className='w-fit font-semibold text-sm underline-offset-1 hover:underline'>
+                        <h5 className='w-fit capitalize'>{`${trip.userFirstName} ${trip.userlastName}`}</h5>
                     </Link>
 
-                    <div>
+                    <div className='mb-1 w-full flex-between gap-2 text-sm'>
                         <Link
-                            href={`${PAGE_ROUTES.GUESTS}/${trip.userid}`}
+                            href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
                             prefetch={false}
-                            className='font-semibold text-sm underline-offset-1 hover:underline'>
-                            <h5 className='capitalize'>{`${trip.userFirstName} ${trip.userlastName}`}</h5>
+                            className=' flex w-fit gap-2 text-muted-foreground underline-offset-2 hover:underline'>
+                            <span>Trip #{trip.tripid}</span> <span>({trip.channelName})</span>
                         </Link>
 
-                        <Link
-                            href={`${PAGE_ROUTES.VEHICLES}/${trip.vehicleId}${PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR}`}
-                            prefetch={false}
-                            className='text-muted-foreground underline-offset-1 hover:underline'>
-                            {trip.vehicleNumber}
-                        </Link>
+                        <div className='w-fit rounded bg-[#d1d1d1] p-1.5 font-medium text-xs md:px-5 lg:text-[14px] dark:bg-accent'>
+                            {trip.status}
+                        </div>
+                    </div>
+
+                    <Link
+                        href={`${PAGE_ROUTES.VEHICLES}/${trip.vehicleId}${PAGE_ROUTES.VEHICLE_DETAILS.CALENDAR}`}
+                        prefetch={false}
+                        className='w-fit text-muted-foreground text-sm underline-offset-1 hover:underline'>
+                        {toTitleCase(`${trip.vehmake} ${trip.vehmodel} ${trip.vehyear}`)}{' '}
+                        <span className='font-semibold'>({trip.vehicleNumber})</span>
+                    </Link>
+
+                    <div className='mt-1 w-fit text-muted-foreground text-sm'>
+                        {formatDateAndTime(trip.starttime, trip.vehzipcode, 'MMM DD, h:mm A')} -{' '}
+                        {formatDateAndTime(trip.endtime, trip.vehzipcode, 'MMM DD, h:mm A')}
                     </div>
                 </div>
-
-                <Link
-                    href={`${PAGE_ROUTES.TRIP_DETAILS}/${tripId}`}
-                    prefetch={false}
-                    className=' ml-auto flex items-center gap-2 text-sm underline underline-offset-2 md:pr-4'>
-                    <span>View Trip</span>
-                </Link>
             </div>
         </div>
     );
